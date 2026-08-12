@@ -1,9 +1,9 @@
 {
   "report_date": "2026-08-12",
-  "generated_at": "2026-08-12 13:34 CST",
+  "generated_at": "2026-08-12 13:39 CST",
   "market_date": "2026-08-11",
-  "status": "partial",
-  "status_label": "🟠 部分数据源异常",
+  "status": "ok",
+  "status_label": "🟢 数据更新正常",
   "market_data_valid": true,
   "market": {
     "sp500": {
@@ -52,7 +52,7 @@
       "ath": 7757.64013671875,
       "ath_date": "2026-08-07",
       "last_market_date": "2026-08-11",
-      "last_updated_at": "2026-08-12T13:34:28.117500+08:00",
+      "last_updated_at": "2026-08-12T13:39:07.509615+08:00",
       "current_close": 7728.2001953125,
       "current_drawdown": 0.0037949609529970285,
       "pool": 140000,
@@ -108,7 +108,7 @@
       "ath": 30660.599609375,
       "ath_date": "2026-06-02",
       "last_market_date": "2026-08-11",
-      "last_updated_at": "2026-08-12T13:34:28.117500+08:00",
+      "last_updated_at": "2026-08-12T13:39:07.509615+08:00",
       "current_close": 29525.48046875,
       "current_drawdown": 0.037022078990194274,
       "pool": 60000,
@@ -157,9 +157,52 @@
       "status_label": "🟢 未触发"
     }
   },
-  "news": [],
-  "news_degraded": true,
-  "warnings": [
-    "⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：未配置 AI 凭据。"
-  ]
+  "news": [
+    {
+      "rank": 1,
+      "candidate_id": "95824baa8e354aed",
+      "category": "AI / 科技",
+      "title_zh": "华尔街巨头向英伟达注资5000亿美元支持AI项目",
+      "summary_zh": "英伟达与六大华尔街机构达成协议，筹集超5000亿美元用于建设AI数据中心、芯片工厂和电站。CEO黄仁勋称这是英伟达和AI行业的重大里程碑，凸显AI基础设施投资热潮。",
+      "source": "BBC Business",
+      "url": "https://www.bbc.co.uk/news/articles/c78gr0jv0mdo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-11T08:44:52+00:00",
+      "original_title": "Wall Street giants hand Nvidia $500bn to fund boom in AI projects"
+    },
+    {
+      "rank": 2,
+      "candidate_id": "8740e87f6197946e",
+      "category": "AI / 科技",
+      "title_zh": "谷歌Gemini用户突破10亿成最快增长产品",
+      "summary_zh": "谷歌宣布Gemini月活用户达10亿，成为公司历史上最快达到此里程碑的产品，其中63%用户使用语音功能，每日生成超1.5亿张图像。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/11/googles-gemini-app-surges-to-one-billion-users/",
+      "published_at": "2026-08-11T18:49:12+00:00",
+      "original_title": "Google’s Gemini app surges to 1 billion users"
+    },
+    {
+      "rank": 3,
+      "candidate_id": "19e70b42b8e7a6c9",
+      "category": "全球事件",
+      "title_zh": "美军直升机导弹袭击船只以突破伊朗封锁",
+      "summary_zh": "美军中央司令部称，直升机在阿曼湾命中一艘巴拿马旗货船发动机，使其瘫痪，以解除伊朗对油轮航行的封锁，中东局势再度升级。",
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/cvg8lyyyjedo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-11T21:14:56+00:00",
+      "original_title": "US says helicopter fired missiles to disable ship breaking Iran blockade"
+    },
+    {
+      "rank": 4,
+      "candidate_id": "c0b3ca3bbd5c3817",
+      "category": "全球事件",
+      "title_zh": "特朗普换机事件凸显美伊冲突的个人风险",
+      "summary_zh": "特朗普在参加北约峰会后更换专机，因可能面临伊朗威胁。分析认为，此举反映美伊紧张关系升级，及特朗普个人面临的安全风险与地缘政治危机交织。",
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/cly8jexn1z9o?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-12T00:14:42+00:00",
+      "original_title": "Trump's dramatic plane swap hints at personal stakes of Iran war"
+    }
+  ],
+  "news_degraded": false,
+  "warnings": []
 }
