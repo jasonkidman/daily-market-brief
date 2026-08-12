@@ -318,15 +318,23 @@ def test_market_breadth_renders_health_stock_participation_sector_bars_and_toolt
     assert "不作为独立买卖信号" in html
     assert "多数股票与板块共同上涨，市场参与度良好。" in html
     assert html.index("多数股票与板块共同上涨，市场参与度良好。") < html.index('class="market-breadth-grid"')
-    assert ".market-breadth-grid" in css and "grid-template-columns: minmax(0, 32fr) minmax(0, 68fr)" in css
-    assert ".breadth-stocks{align-self:start" in compact_css
-    assert "grid-template-columns:110px64pxminmax(260px,1fr)" in compact_css
+    assert ".market-breadth-grid" in css and "grid-template-columns: minmax(0, 30fr) minmax(0, 70fr)" in css
+    assert ".breadth-stocks{display:flex;flex-direction:column;align-self:stretch" in compact_css
+    assert ".breadth-stocks{align-self:start" not in compact_css
+    assert "grid-template-columns:104px62pxminmax(300px,1fr)" in compact_css
+    assert ".sector-diverging-track{position:relative;display:block;height:10px" in compact_css
+    assert ".sector-bar{position:absolute;top:0;bottom:0" in compact_css
+    assert ".sector-name{overflow:hidden;color:var(--ink);font-size:.84rem" in compact_css
+    assert ".sector-rowstrong{color:var(--muted);text-align:right;font-size:.84rem" in compact_css
     assert ".sector-zero-line" in css and ".sector-bar-up" in css and ".sector-bar-down" in css
     assert ".sector-hover-target:hover" in css
     assert ".breadth-segment:hover" in css
     assert "@media(prefers-reduced-motion:reduce)" in compact_css
     assert "@media(max-width:760px)" in compact_css
     assert ".market-breadth-grid{grid-template-columns:1fr" in compact_css
+    assert ".breadth-stocks,.breadth-sectors{height:auto" in compact_css
+    assert ".breadth-stocks{display:block" in compact_css
+    assert "grid-template-columns:minmax(82px,1fr)58pxminmax(120px,1.5fr)" in compact_css
 
 
 def test_old_report_without_market_breadth_still_renders(tmp_path):
