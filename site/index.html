@@ -12,16 +12,17 @@
     <header class="masthead">
       <div class="masthead-copy">
         <h1>Daily Market Brief</h1>
-        <p class="dateline">报告日期：2026-08-12 · 北京时间最后更新时间：2026-08-12 18:15 CST</p>
+        <p class="dateline">报告日期：2026-08-12 · 北京时间最后更新时间：2026-08-12 18:54 CST</p>
       </div>
       <div class="masthead-tools">
         <select class="report-select" aria-label="选择日报日期" onchange="if (this.value) window.location.href = this.value">
           <option value="index.html" selected>今日 · 2026-08-12</option>
         </select>
-        <div class="health health-ok">🟢 数据更新正常</div>
+        <div class="health health-partial">🟠 部分数据源异常</div>
       </div>
     </header>
 
+    <section class="alert warning"><strong>🟠 部分数据源异常</strong><span>市场宽度数据暂不可用</span><span>板块宽度数据不足</span></section>
 
     <section class="section market-section">
       <div class="section-heading"><div><p class="section-kicker">MARKET CLOSE</p><h2>美国主要指数</h2></div>
@@ -62,8 +63,8 @@
               <h4>VIX</h4>
               <button class="context-help-button" type="button" aria-label="了解 VIX 的作用" aria-expanded="false" aria-controls="context-help-vix">?</button>
             </div>
-            <strong class="context-value">15.38</strong>
-            <span class="context-change context-change-normal up">▲ +0.7%</span>
+            <strong class="context-value">15.40</strong>
+            <span class="context-change context-change-normal up">▲ +0.8%</span>
             <div class="context-tooltip" id="context-help-vix" role="tooltip" hidden>
 <strong>VIX 的作用</strong><p>基于 S&amp;P 500 期权计算的未来约30天隐含波动率，常被称为“恐慌指数”。快速上升通常表示市场风险定价和预期波动增加，下降则表示风险情绪趋于缓和。</p>
             </div>
@@ -94,117 +95,13 @@
       <div class="market-breadth">
         <div class="breadth-heading">
           <div><p class="section-kicker">MARKET BREADTH</p><h3>市场宽度</h3></div>
-          <div class="breadth-health health-level-mixed">
-            <span>🟡 市场分化</span>
+          <div class="breadth-health health-level-unavailable">
+            <span>⚪ 数据不足</span>
             <button class="breadth-help-button" type="button" aria-label="了解市场健康度的作用" aria-expanded="false" aria-controls="breadth-health-help">?</button>
             <div class="breadth-tooltip" id="breadth-health-help" role="tooltip" hidden><strong>Market Health 的作用</strong><p>市场健康度综合 S&amp;P 500 成分股上涨比例和 11 个一级板块上涨比例，用于判断指数上涨或下跌是否得到广泛市场参与。该指标用于观察市场内部结构，不作为独立买卖信号。</p></div>
           </div>
         </div>
-        <p class="breadth-summary breadth-summary-mixed ">上涨与下跌分布较为均衡，市场内部存在明显分化。</p>
-        <div class="market-breadth-grid">
-          <article class="breadth-stocks">
-            <p class="breadth-label">S&amp;P 500 成分股</p>
-            <strong class="breadth-ratio">54.8%</strong><span class="breadth-ratio-label">上涨占比</span>
-            <dl class="breadth-mini-stats">
-              <div class="breadth-mini-metric breadth-mini-up"><dt>上涨</dt><dd>275</dd></div>
-              <div class="breadth-mini-metric breadth-mini-down"><dt>下跌</dt><dd>225</dd></div>
-              <div class="breadth-mini-metric breadth-mini-flat"><dt>平盘</dt><dd>2</dd></div>
-            </dl>
-            <div class="breadth-bar" aria-label="S&P 500 成分股上涨、平盘与下跌比例">
-              <span class="breadth-segment breadth-up" style="width: 54.8%" tabindex="0" aria-label="上涨股票 275，54.8%"><span class="breadth-segment-tooltip"><strong>上涨股票</strong><b>275</b><small>54.8%</small></span></span>
-              <span class="breadth-segment breadth-flat" style="width: 0.4%" tabindex="0" aria-label="平盘股票 2，0.4%"><span class="breadth-segment-tooltip"><strong>平盘股票</strong><b>2</b><small>0.4%</small></span></span>
-              <span class="breadth-segment breadth-down" style="width: 44.8%" tabindex="0" aria-label="下跌股票 225，44.8%"><span class="breadth-segment-tooltip"><strong>下跌股票</strong><b>225</b><small>44.8%</small></span></span>
-            </div>
-            <p class="breadth-insight">上涨与下跌并存，尚未形成广泛共振。<small>有效样本 502 / 505</small></p>
-          </article>
-          <article class="breadth-sectors">
-            <div class="sector-heading"><h4>板块表现</h4><span>4涨 / 7跌 · 固定尺度 ±3%</span></div>
-            <div class="sector-list">
-              <div class="sector-row sector-up sector-hover-target" tabindex="0">
-                <span class="sector-name">能源</span>
-                <strong>+1.2%</strong>
-                <span class="sector-diverging-track" aria-label="能源 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-up" style="width: 20.8%"></i>
-                </span>
-<span class="sector-tooltip" role="tooltip"><strong>能源 · +1.2%</strong><small>当日排名：1 / 11</small></span>              </div>
-              <div class="sector-row sector-up sector-hover-target" tabindex="0">
-                <span class="sector-name">公用事业</span>
-                <strong>+1.2%</strong>
-                <span class="sector-diverging-track" aria-label="公用事业 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-up" style="width: 19.3%"></i>
-                </span>
-<span class="sector-tooltip" role="tooltip"><strong>公用事业 · +1.2%</strong><small>当日排名：2 / 11</small></span>              </div>
-              <div class="sector-row sector-up sector-hover-target" tabindex="0">
-                <span class="sector-name">工业</span>
-                <strong>+0.6%</strong>
-                <span class="sector-diverging-track" aria-label="工业 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-up" style="width: 9.9%"></i>
-                </span>
-<span class="sector-tooltip" role="tooltip"><strong>工业 · +0.6%</strong><small>当日排名：3 / 11</small></span>              </div>
-              <div class="sector-row sector-up sector-hover-target" tabindex="0">
-                <span class="sector-name">材料</span>
-                <strong>+0.1%</strong>
-                <span class="sector-diverging-track" aria-label="材料 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-up" style="width: 1.9%"></i>
-                </span>
-<span class="sector-tooltip" role="tooltip"><strong>材料 · +0.1%</strong><small>当日排名：4 / 11</small></span>              </div>
-              <div class="sector-row sector-down sector-hover-target" tabindex="0">
-                <span class="sector-name">金融</span>
-                <strong>-0.0%</strong>
-                <span class="sector-diverging-track" aria-label="金融 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-down" style="width: 0.3%"></i>                </span>
-<span class="sector-tooltip" role="tooltip"><strong>金融 · -0.0%</strong><small>当日排名：5 / 11</small></span>              </div>
-              <div class="sector-row sector-down sector-hover-target" tabindex="0">
-                <span class="sector-name">科技</span>
-                <strong>-0.1%</strong>
-                <span class="sector-diverging-track" aria-label="科技 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-down" style="width: 2.1%"></i>                </span>
-<span class="sector-tooltip" role="tooltip"><strong>科技 · -0.1%</strong><small>当日排名：6 / 11</small></span>              </div>
-              <div class="sector-row sector-down sector-hover-target" tabindex="0">
-                <span class="sector-name">医疗保健</span>
-                <strong>-0.3%</strong>
-                <span class="sector-diverging-track" aria-label="医疗保健 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-down" style="width: 4.3%"></i>                </span>
-<span class="sector-tooltip" role="tooltip"><strong>医疗保健 · -0.3%</strong><small>当日排名：7 / 11</small></span>              </div>
-              <div class="sector-row sector-down sector-hover-target" tabindex="0">
-                <span class="sector-name">必需消费</span>
-                <strong>-0.3%</strong>
-                <span class="sector-diverging-track" aria-label="必需消费 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-down" style="width: 5.1%"></i>                </span>
-<span class="sector-tooltip" role="tooltip"><strong>必需消费 · -0.3%</strong><small>当日排名：8 / 11</small></span>              </div>
-              <div class="sector-row sector-down sector-hover-target" tabindex="0">
-                <span class="sector-name">非必需消费</span>
-                <strong>-0.4%</strong>
-                <span class="sector-diverging-track" aria-label="非必需消费 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-down" style="width: 6.0%"></i>                </span>
-<span class="sector-tooltip" role="tooltip"><strong>非必需消费 · -0.4%</strong><small>当日排名：9 / 11</small></span>              </div>
-              <div class="sector-row sector-down sector-hover-target" tabindex="0">
-                <span class="sector-name">通信服务</span>
-                <strong>-0.5%</strong>
-                <span class="sector-diverging-track" aria-label="通信服务 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-down" style="width: 8.3%"></i>                </span>
-<span class="sector-tooltip" role="tooltip"><strong>通信服务 · -0.5%</strong><small>当日排名：10 / 11</small></span>              </div>
-              <div class="sector-row sector-down sector-hover-target" tabindex="0">
-                <span class="sector-name">房地产</span>
-                <strong>-0.7%</strong>
-                <span class="sector-diverging-track" aria-label="房地产 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-down" style="width: 12.0%"></i>                </span>
-<span class="sector-tooltip" role="tooltip"><strong>房地产 · -0.7%</strong><small>当日排名：11 / 11</small></span>              </div>
-            </div>
-          </article>
-        </div>
-      </div>
+<p class="breadth-unavailable">市场宽度数据暂不可用</p>      </div>
     </section>
 
     <section class="section">
@@ -283,24 +180,24 @@
       <div class="section-heading"><div><p class="section-kicker">GLOBAL SIGNALS</p><h2>全球重要新闻</h2></div><p>RSS 候选 · DeepSeek 编辑 · 最多 8 条</p></div>
 <div class="news-list">
 <article class="news-item top-news"><div class="rank">01</div><div>
-          <div class="news-meta"><span>AI / 科技</span><span>BBC Business</span></div><h3>华尔街巨头向英伟达注资5000亿美元，助力AI项目扩张</h3><p>华尔街多家大型金融机构向英伟达提供5000亿美元资金，用于开发新的数据中心，以容纳、运营和冷却大量用于处理AI数据与任务的堆叠式计算机芯片。此巨额注资凸显AI基础设施投资的持续热潮。</p>
-          <a href="https://www.bbc.co.uk/news/articles/c78gr0jv0mdo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item top-news"><div class="rank">02</div><div>
-          <div class="news-meta"><span>全球事件</span><span>BBC News</span></div><h3>特朗普秘密换机事件凸显与伊朗冲突的个人风险</h3><p>特朗普在离开土耳其北约峰会后秘密更换飞机，连随行记者都被蒙在鼓里。这一事件是其与伊朗关系动荡历史中的又一戏剧性插曲，凸显了个人安全与地缘政治紧张的交织。</p>
-          <a href="https://www.bbc.co.uk/news/articles/cly8jexn1z9o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item top-news"><div class="rank">03</div><div>
-          <div class="news-meta"><span>全球事件</span><span>BBC News</span></div><h3>美军直升机开火瘫痪船只，以打破伊朗封锁</h3><p>美国中央司令部称，其直升机在阿曼湾击中一艘悬挂巴拿马国旗货轮的发动机舱。此举旨在解除伊朗对航运的封锁，标志着美伊冲突进一步升级。</p>
-          <a href="https://www.bbc.co.uk/news/articles/cvg8lyyyjedo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">04</div><div>
-          <div class="news-meta"><span>市场 / 宏观</span><span>Ars Technica</span></div><h3>特朗普促拆分MMR疫苗，大型药企称其荒谬并拒绝</h3><p>特朗普提出拆分MMR疫苗的建议，但大型制药集团在数小时内便公开拒绝了该建议，认为其不切实际。此举可能引发疫苗政策与制药行业的进一步博弈。</p>
-          <a href="https://arstechnica.com/health/2026/08/trump-wants-big-pharma-to-split-mmr-vaccine-big-pharma-thinks-its-idiotic/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">05</div><div>
-          <div class="news-meta"><span>市场 / 宏观</span><span>Ars Technica</span></div><h3>Meta未能阻止各州1.4万亿美元诉讼进入审判阶段</h3><p>法院裁定，Section 230为Meta提供的是抗辩理由而非诉讼豁免权，因此各州提起的1.4万亿美元诉讼将继续推进。这对Meta构成重大法律与财务风险。</p>
-          <a href="https://arstechnica.com/tech-policy/2026/08/meta-cant-stop-states-1-4-trillion-lawsuit-from-going-to-trial/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">06</div><div>
-          <div class="news-meta"><span>AI / 科技</span><span>The Verge</span></div><h3>OpenAI又一高管离职，前COO Brad Lightcap将开创事业</h3><p>OpenAI特别项目负责人、前首席运营官Brad Lightcap在任职八年后宣布离职，并表示将‘开启新事业’。这是OpenAI近期高管离职潮中的最新一例，引发对AI领导层稳定性的关注。</p>
-          <a href="https://www.theverge.com/ai-artificial-intelligence/978048/brad-lightcap-openai-executive-departure" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">07</div><div>
-          <div class="news-meta"><span>AI / 科技</span><span>TechCrunch</span></div><h3>谷歌Gemini应用用户数飙升至10亿</h3><p>谷歌CEO桑达尔·皮查伊宣布，Gemini月活跃用户已达10亿，成为谷歌历史上增长最快的产品。其中63%的用户使用语音功能，Gemini每天生成超过1.5亿张图片。</p>
-          <a href="https://techcrunch.com/2026/08/11/googles-gemini-app-surges-to-one-billion-users/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">08</div><div>
-          <div class="news-meta"><span>AI / 科技</span><span>TechCrunch</span></div><h3>Joby Aviation以5亿美元收购Resonant Sciences，拓展国防业务</h3><p>Joby Aviation达成协议收购Resonant Sciences，以此启动其新的国防业务部门。此举标志着电动垂直起降飞机公司向国防领域扩张。</p>
-          <a href="https://techcrunch.com/2026/08/11/joby-aviation-builds-out-defense-business-with-500m-acquisition/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article>      </div>    </section>
+          <div class="news-meta"><span>AI / 科技</span><span>The Guardian Business</span></div><h3>英伟达携手华尔街巨头达成5000亿美元AI融资协议</h3><p>英伟达与Apollo、黑石、高盛及KKR等六家华尔街机构达成协议，筹集超5000亿美元用于建设数据中心、芯片工厂和电站，以支持人工智能繁荣。英伟达CEO黄仁勋称这是“英伟达和AI行业的重要里程碑”。</p>
+          <a href="https://www.theguardian.com/technology/2026/aug/11/nvidia-wall-street-finance-ai-infrastructure" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item top-news"><div class="rank">02</div><div>
+          <div class="news-meta"><span>AI / 科技</span><span>TechCrunch</span></div><h3>OpenAI长期首席运营官Brad Lightcap离职创业</h3><p>OpenAI长期担任COO的Brad Lightcap即将离职，他在给员工的信中表示“兴奋地从不同视角帮助推进使命”。其离职是近期OpenAI高管离职潮的最新一例。</p>
+          <a href="https://techcrunch.com/2026/08/11/brad-lightcap-openais-longtime-coo-is-leaving-to-start-something-new/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item top-news"><div class="rank">03</div><div>
+          <div class="news-meta"><span>AI / 科技</span><span>TechCrunch</span></div><h3>General Catalyst领投River AI 11亿美元，xAI联合创始人新公司成立仅两个月</h3><p>由xAI联合创始人Igor Babuschkin创立的River AI，在成立仅两个月后便获得由General Catalyst领投的11亿美元融资，该公司旨在打造个人智能体。</p>
+          <a href="https://techcrunch.com/2026/08/11/general-catalyst-leads-1-1b-round-into-2-month-old-river-ai/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">04</div><div>
+          <div class="news-meta"><span>AI / 科技</span><span>Ars Technica</span></div><h3>谷歌Gemini用户数突破10亿，成谷歌史上增长最快产品</h3><p>谷歌CEO桑达尔·皮查伊宣布，Gemini月活用户达到10亿，成为谷歌史上增长最快的产品。此前ChatGPT也已突破10亿用户，AI应用竞争进入新阶段。</p>
+          <a href="https://arstechnica.com/ai/2026/08/google-says-gemini-has-reached-1b-users-faster-than-any-other-google-product/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">05</div><div>
+          <div class="news-meta"><span>AI / 科技</span><span>The Verge</span></div><h3>ChatGPT与Gemini双双突破10亿用户</h3><p>继ChatGPT之后，谷歌Gemini月活用户也达到10亿，成为谷歌第14个达到这一里程碑的产品。两大AI聊天机器人均实现用户数破亿，表明AI应用正快速普及。</p>
+          <a href="https://www.theverge.com/ai-artificial-intelligence/978113/chatgpt-gemini-1-billion-users" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">06</div><div>
+          <div class="news-meta"><span>AI / 科技</span><span>TechCrunch</span></div><h3>Anthropic未发布模型在黎曼猜想研究上取得进展</h3><p>Anthropic的未发布AI模型在数学领域最著名的未解问题之一黎曼猜想上取得了超出预期的进展，尽管尚未完全解决该问题，但展示了AI在科学发现中的潜力。</p>
+          <a href="https://techcrunch.com/2026/08/11/an-unreleased-anthropic-model-made-progress-on-one-of-maths-biggest-unsolved-problems/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">07</div><div>
+          <div class="news-meta"><span>全球事件</span><span>Ars Technica</span></div><h3>俄罗斯无人机接近欧洲关键海上天然气设施，罗马尼亚将其击落</h3><p>在多次无人机入侵罗马尼亚及德国遭遇失败袭击后，罗马尼亚军方击落了漂近重要欧洲海上天然气设施的俄罗斯无人机，凸显地缘政治紧张对能源基础设施的威胁。</p>
+          <a href="https://arstechnica.com/gadgets/2026/08/romania-destroys-russian-drones-drifting-near-vital-european-offshore-gas-site/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">08</div><div>
+          <div class="news-meta"><span>市场 / 宏观</span><span>Ars Technica</span></div><h3>特朗普或为共和党保留FCC多数席位，未填补民主党空缺席位</h3><p>特朗普计划让共和党在联邦通信委员会（FCC）中保持3比1的多数席位，且未填补民主党空缺席位，尽管近期最高法院裁决后他曾被建议解雇民主党委员。</p>
+          <a href="https://arstechnica.com/tech-policy/2026/08/trump-to-give-republicans-a-3-1-fcc-majority-isnt-filling-empty-democratic-seat/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article>      </div>    </section>
 
-    <footer><div><span>Market Data: Yahoo Finance via yfinance</span><span>News: RSS feeds</span><span>AI Processing: DeepSeek</span><span>Last generated: 2026-08-12 18:15 CST</span></div>
+    <footer><div><span>Market Data: Yahoo Finance via yfinance</span><span>News: RSS feeds</span><span>AI Processing: DeepSeek</span><span>Last generated: 2026-08-12 18:54 CST</span></div>
       <p>数据仅用于信息与个人投资纪律辅助，不构成投资建议。</p></footer>
   </main>
   <script>
