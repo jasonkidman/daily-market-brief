@@ -12,7 +12,7 @@
     <header class="masthead">
       <div class="masthead-copy">
         <h1>Daily Market Brief</h1>
-        <p class="dateline">报告日期：2026-08-12 · 北京时间最后更新时间：2026-08-12 15:55 CST</p>
+        <p class="dateline">报告日期：2026-08-12 · 北京时间最后更新时间：2026-08-12 17:18 CST</p>
       </div>
       <div class="masthead-tools">
         <select class="report-select" aria-label="选择日报日期" onchange="if (this.value) window.location.href = this.value">
@@ -90,6 +90,116 @@
 <strong>10Y 美债的作用</strong><p>美国10年期国债收益率是全球资产定价的重要利率基准。收益率快速上行通常会提高股票估值的折现压力，对高估值成长股尤其敏感；下降则可能缓解估值压力，但仍需结合通胀和经济增长背景判断。</p>            </div>
           </article>
         </div>
+      </div>
+      <div class="market-breadth">
+        <div class="breadth-heading">
+          <div><p class="section-kicker">MARKET BREADTH</p><h3>市场宽度</h3></div>
+          <div class="breadth-health health-level-mixed">
+            <span>🟡 市场分化</span>
+            <button class="breadth-help-button" type="button" aria-label="了解市场健康度的作用" aria-expanded="false" aria-controls="breadth-health-help">?</button>
+            <div class="breadth-tooltip" id="breadth-health-help" role="tooltip" hidden><strong>Market Health 的作用</strong><p>市场健康度综合 S&amp;P 500 成分股上涨比例和 11 个一级板块上涨比例，用于判断指数上涨或下跌是否得到广泛市场参与。该指标用于观察市场内部结构，不作为独立买卖信号。</p></div>
+          </div>
+        </div>
+        <div class="market-breadth-grid">
+          <article class="breadth-stocks">
+            <p class="breadth-label">S&amp;P 500 成分股</p>
+            <strong class="breadth-ratio">54.8%</strong><span class="breadth-ratio-label">上涨占比</span>
+            <div class="breadth-counts"><span>上涨 275</span><span>下跌 225</span><span>平盘 2</span></div>
+            <div class="breadth-bar" aria-label="S&P 500 成分股上涨、平盘与下跌比例">
+              <span class="breadth-segment breadth-up" style="width: 54.8%"></span>
+              <span class="breadth-segment breadth-flat" style="width: 0.4%"></span>
+              <span class="breadth-segment breadth-down" style="width: 44.8%"></span>
+            </div>
+            <p class="breadth-detail">275涨 · 225跌 · 2平</p>
+          </article>
+          <article class="breadth-sectors">
+            <div class="sector-heading"><h4>板块表现</h4><span>4涨 / 7跌</span></div>
+            <div class="sector-list">
+              <div class="sector-row sector-up">
+                <span class="sector-name">能源</span>
+                <strong>+1.2%</strong>
+                <span class="sector-diverging-track" aria-label="能源 相对零轴的日涨跌幅">
+                  <i class="sector-zero-line"></i>
+<i class="sector-bar sector-bar-up" style="width: 20.8%"></i>
+                </span>
+              </div>
+              <div class="sector-row sector-up">
+                <span class="sector-name">公用事业</span>
+                <strong>+1.2%</strong>
+                <span class="sector-diverging-track" aria-label="公用事业 相对零轴的日涨跌幅">
+                  <i class="sector-zero-line"></i>
+<i class="sector-bar sector-bar-up" style="width: 19.3%"></i>
+                </span>
+              </div>
+              <div class="sector-row sector-up">
+                <span class="sector-name">工业</span>
+                <strong>+0.6%</strong>
+                <span class="sector-diverging-track" aria-label="工业 相对零轴的日涨跌幅">
+                  <i class="sector-zero-line"></i>
+<i class="sector-bar sector-bar-up" style="width: 9.9%"></i>
+                </span>
+              </div>
+              <div class="sector-row sector-up">
+                <span class="sector-name">材料</span>
+                <strong>+0.1%</strong>
+                <span class="sector-diverging-track" aria-label="材料 相对零轴的日涨跌幅">
+                  <i class="sector-zero-line"></i>
+<i class="sector-bar sector-bar-up" style="width: 1.9%"></i>
+                </span>
+              </div>
+              <div class="sector-row sector-down">
+                <span class="sector-name">金融</span>
+                <strong>-0.0%</strong>
+                <span class="sector-diverging-track" aria-label="金融 相对零轴的日涨跌幅">
+                  <i class="sector-zero-line"></i>
+<i class="sector-bar sector-bar-down" style="width: 0.3%"></i>                </span>
+              </div>
+              <div class="sector-row sector-down">
+                <span class="sector-name">科技</span>
+                <strong>-0.1%</strong>
+                <span class="sector-diverging-track" aria-label="科技 相对零轴的日涨跌幅">
+                  <i class="sector-zero-line"></i>
+<i class="sector-bar sector-bar-down" style="width: 2.1%"></i>                </span>
+              </div>
+              <div class="sector-row sector-down">
+                <span class="sector-name">医疗保健</span>
+                <strong>-0.3%</strong>
+                <span class="sector-diverging-track" aria-label="医疗保健 相对零轴的日涨跌幅">
+                  <i class="sector-zero-line"></i>
+<i class="sector-bar sector-bar-down" style="width: 4.3%"></i>                </span>
+              </div>
+              <div class="sector-row sector-down">
+                <span class="sector-name">必需消费</span>
+                <strong>-0.3%</strong>
+                <span class="sector-diverging-track" aria-label="必需消费 相对零轴的日涨跌幅">
+                  <i class="sector-zero-line"></i>
+<i class="sector-bar sector-bar-down" style="width: 5.1%"></i>                </span>
+              </div>
+              <div class="sector-row sector-down">
+                <span class="sector-name">非必需消费</span>
+                <strong>-0.4%</strong>
+                <span class="sector-diverging-track" aria-label="非必需消费 相对零轴的日涨跌幅">
+                  <i class="sector-zero-line"></i>
+<i class="sector-bar sector-bar-down" style="width: 6.0%"></i>                </span>
+              </div>
+              <div class="sector-row sector-down">
+                <span class="sector-name">通信服务</span>
+                <strong>-0.5%</strong>
+                <span class="sector-diverging-track" aria-label="通信服务 相对零轴的日涨跌幅">
+                  <i class="sector-zero-line"></i>
+<i class="sector-bar sector-bar-down" style="width: 8.3%"></i>                </span>
+              </div>
+              <div class="sector-row sector-down">
+                <span class="sector-name">房地产</span>
+                <strong>-0.7%</strong>
+                <span class="sector-diverging-track" aria-label="房地产 相对零轴的日涨跌幅">
+                  <i class="sector-zero-line"></i>
+<i class="sector-bar sector-bar-down" style="width: 12.0%"></i>                </span>
+              </div>
+            </div>
+          </article>
+        </div>
+        <p class="breadth-summary ">上涨与下跌分布较为均衡，市场内部存在明显分化。</p>
       </div>
     </section>
 
@@ -169,29 +279,29 @@
       <div class="section-heading"><div><p class="section-kicker">GLOBAL SIGNALS</p><h2>全球重要新闻</h2></div><p>RSS 候选 · DeepSeek 编辑 · 最多 8 条</p></div>
 <div class="news-list">
 <article class="news-item top-news"><div class="rank">01</div><div>
-          <div class="news-meta"><span>AI / 科技</span><span>The Guardian Business</span></div><h3>英伟达联手华尔街巨头达成5000亿美元AI融资协议</h3><p>英伟达与Apollo、贝莱德、高盛、KKR等六家华尔街大型金融机构达成协议，筹集超5000亿美元用于建设AI数据中心、芯片工厂和电站。英伟达CEO黄仁勋称此举是“英伟达和AI行业的重要里程碑”。</p>
-          <a href="https://www.theguardian.com/technology/2026/aug/11/nvidia-wall-street-finance-ai-infrastructure" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item top-news"><div class="rank">02</div><div>
-          <div class="news-meta"><span>AI / 科技</span><span>Ars Technica</span></div><h3>谷歌Gemini用户突破10亿，成谷歌史上增长最快产品</h3><p>谷歌CEO皮查伊宣布，Gemini月活用户达到10亿，成为谷歌史上增长最快的产品。此前OpenAI的ChatGPT也达到10亿用户里程碑，凸显AI助手市场的快速扩张。</p>
-          <a href="https://arstechnica.com/ai/2026/08/google-says-gemini-has-reached-1b-users-faster-than-any-other-google-product/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item top-news"><div class="rank">03</div><div>
-          <div class="news-meta"><span>全球事件</span><span>BBC News</span></div><h3>特朗普确认因潜在威胁在NATO峰会后秘密换机</h3><p>特朗普确认在7月NATO峰会后因潜在安全威胁秘密更换飞机，记者和工作人员被蒙在鼓里。此举暗示美国与伊朗关系的紧张局势。</p>
-          <a href="https://www.bbc.co.uk/news/articles/c980r4wpl9lo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">04</div><div>
-          <div class="news-meta"><span>AI / 科技</span><span>TechCrunch</span></div><h3>General Catalyst领投River AI 11亿美元融资</h3><p>由xAI联合创始人Igor Babuschkin创立的River AI成立仅两个月，就获得General Catalyst领投的11亿美元融资，公司专注于个人AI代理的研发。</p>
-          <a href="https://techcrunch.com/2026/08/11/general-catalyst-leads-1-1b-round-into-2-month-old-river-ai/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">05</div><div>
-          <div class="news-meta"><span>全球事件</span><span>Ars Technica</span></div><h3>俄罗斯无人机在关键欧洲海上天然气设施附近被击落</h3><p>罗马尼亚摧毁了漂近关键欧洲海上天然气设施的俄罗斯无人机，此前该地区多次发生无人机入侵事件，凸显欧洲能源基础设施的安全威胁。</p>
-          <a href="https://arstechnica.com/gadgets/2026/08/romania-destroys-russian-drones-drifting-near-vital-european-offshore-gas-site/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">06</div><div>
-          <div class="news-meta"><span>市场 / 宏观</span><span>Ars Technica</span></div><h3>特朗普提议拆分MMR疫苗遭制药业强烈反对</h3><p>特朗普呼吁大型制药公司拆分MMR疫苗，但领先制药集团数小时内即拒绝该建议，认为其“愚蠢”。这一争议可能影响疫苗政策预期。</p>
-          <a href="https://arstechnica.com/health/2026/08/trump-wants-big-pharma-to-split-mmr-vaccine-big-pharma-thinks-its-idiotic/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">07</div><div>
-          <div class="news-meta"><span>全球事件</span><span>TechCrunch</span></div><h3>欧洲公共私人基金Scaleup Europe首投芬兰卫星公司ICEYE</h3><p>目标规模57亿美元的公共私人基金Scaleup Europe完成首笔投资，支持芬兰卫星公司ICEYE，显示欧洲对太空科技的投资兴趣。</p>
-          <a href="https://techcrunch.com/2026/08/11/whats-scaleup-europe-the-5-7b-fund-that-just-backed-satellite-company-iceye/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">08</div><div>
-          <div class="news-meta"><span>AI / 科技</span><span>TechCrunch</span></div><h3>印度Yulu融资9300万美元，电动车需求受快速商务推动</h3><p>印度电动自行车公司Yulu融资9300万美元，计划两年内将车队规模扩大至20万辆。快速商务的繁荣推动了对电动两轮车的需求。</p>
-          <a href="https://techcrunch.com/2026/08/11/indias-yulu-raises-93m-as-quick-commerce-boom-fuels-e-bike-demand/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article>      </div>    </section>
+          <div class="news-meta"><span>AI / 科技</span><span>BBC Business</span></div><h3>华尔街巨头向英伟达注资5000亿美元资助AI项目</h3><p>华尔街大型机构向英伟达提供5000亿美元资金，用于开发新数据中心，以容纳、运营和冷却处理AI数据与行动的芯片。此举有望加速AI基础设施建设，对相关产业链构成长期利好。</p>
+          <a href="https://www.bbc.co.uk/news/articles/c78gr0jv0mdo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item top-news"><div class="rank">02</div><div>
+          <div class="news-meta"><span>AI / 科技</span><span>TechCrunch</span></div><h3>谷歌Gemini用户突破10亿，成最快增长产品</h3><p>谷歌Gemini月度用户达到10亿，成为公司历史上增长最快的产品。其中63%的用户使用语音功能，每日生成超1.5亿张图像，显示AI助手应用正在快速普及，对谷歌及AI行业有重要意义。</p>
+          <a href="https://techcrunch.com/2026/08/11/googles-gemini-app-surges-to-one-billion-users/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item top-news"><div class="rank">03</div><div>
+          <div class="news-meta"><span>AI / 科技</span><span>The Verge</span></div><h3>OpenAI又一高管离职：前COO布拉德·莱特卡普将创业</h3><p>OpenAI前COO及特别项目负责人布拉德·莱特卡普宣布离职，结束八年的任职。他在内部备忘录中表示将“开创新事业”，并称会从不同角度支持公司使命。高管持续离职引发市场对OpenAI稳定性的关注。</p>
+          <a href="https://www.theverge.com/ai-artificial-intelligence/978048/brad-lightcap-openai-executive-departure" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">04</div><div>
+          <div class="news-meta"><span>全球事件</span><span>BBC News</span></div><h3>美国直升机向船只发射导弹以解除伊朗封锁</h3><p>美国中央司令部称，其直升机在阿曼湾向一艘悬挂巴拿马国旗的货船引擎室发射导弹，以解除伊朗的封锁。该事件显示中东局势紧张升级，可能导致油价波动和航运市场不确定性增加。</p>
+          <a href="https://www.bbc.co.uk/news/articles/cvg8lyyyjedo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">05</div><div>
+          <div class="news-meta"><span>AI / 科技</span><span>Ars Technica</span></div><h3>Meta未能阻止州政府1.4万亿美元诉讼进入审判</h3><p>法官裁定Meta的Section 230条款是辩护理由而非豁免权，州政府针对Meta的1.4万亿美元诉讼将继续进行。此案涉及平台责任和监管，对Meta及整个科技行业具有深远法律影响。</p>
+          <a href="https://arstechnica.com/tech-policy/2026/08/meta-cant-stop-states-1-4-trillion-lawsuit-from-going-to-trial/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">06</div><div>
+          <div class="news-meta"><span>AI / 科技</span><span>Ars Technica</span></div><h3>FBI调查DEF CON与会者被指在航班上设虚假Wi-Fi攻击</h3><p>FBI亚特兰大办公室确认正在调查达美航空航班上发生的虚假Wi-Fi热点事件，该事件疑似与DEF CON参会者有关，目前无人被捕。此事件引发对空中网络安全和旅客信息安全的担忧。</p>
+          <a href="https://arstechnica.com/information-technology/2026/08/def-con-crowd-suspected-in-fake-hotspot-attack-on-delta-flight/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">07</div><div>
+          <div class="news-meta"><span>AI / 科技</span><span>Ars Technica</span></div><h3>Chrome采用设备绑定会话凭证应对账户接管攻击</h3><p>谷歌Chrome浏览器采用设备绑定会话凭证，这可能成为抵御日益普遍的账户接管的最佳保护措施。该技术增强安全性，有助于降低用户和企业的网络风险，对科技安全和商业活动具有积极意义。</p>
+          <a href="https://arstechnica.com/security/2026/08/chrome-adopts-what-may-be-the-best-protection-yet-against-account-takeovers/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">08</div><div>
+          <div class="news-meta"><span>AI / 科技</span><span>TechCrunch</span></div><h3>Joby Aviation以5亿美元收购Resonant Sciences拓展国防业务</h3><p>电动垂直起降飞机制造商Joby Aviation达成协议以5亿美元收购Resonant Sciences，以此启动国防业务。该收购将帮助Joby进入国防市场，扩大收入来源，对航空航天和国防投资者具有相关性。</p>
+          <a href="https://techcrunch.com/2026/08/11/joby-aviation-builds-out-defense-business-with-500m-acquisition/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article>      </div>    </section>
 
-    <footer><div><span>Market Data: Yahoo Finance via yfinance</span><span>News: RSS feeds</span><span>AI Processing: DeepSeek</span><span>Last generated: 2026-08-12 15:55 CST</span></div>
+    <footer><div><span>Market Data: Yahoo Finance via yfinance</span><span>News: RSS feeds</span><span>AI Processing: DeepSeek</span><span>Last generated: 2026-08-12 17:18 CST</span></div>
       <p>数据仅用于信息与个人投资纪律辅助，不构成投资建议。</p></footer>
   </main>
   <script>
     (() => {
-      const buttons = Array.from(document.querySelectorAll('.context-help-button'));
+      const buttons = Array.from(document.querySelectorAll('.context-help-button, .breadth-help-button'));
       const closeAll = (except) => buttons.forEach((button) => {
         if (button === except) return;
         button.setAttribute('aria-expanded', 'false');
@@ -205,7 +315,7 @@
         document.getElementById(button.getAttribute('aria-controls')).hidden = !opening;
       }));
       document.addEventListener('click', (event) => {
-        if (!event.target.closest('.context-tooltip')) closeAll();
+        if (!event.target.closest('.context-tooltip, .breadth-tooltip')) closeAll();
       });
       document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') closeAll();
