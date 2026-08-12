@@ -49,7 +49,10 @@
         <div class="context-heading"><p class="section-kicker">MARKET CONTEXT</p><h3>市场环境</h3></div>
         <div class="context-grid">
           {% for key in ['russell2000', 'vix', 'dxy', 'us10y'] %}{% if key in report.market_context %}{% set item = report.market_context[key] %}
-          <article class="context-card">
+          {% if key == 'russell2000' %}{% set signal_key = 'small_cap_relative' %}{% elif key == 'vix' %}{% set signal_key = 'vix_daily_return' %}{% elif key == 'dxy' %}{% set signal_key = 'dxy_daily_return' %}{% else %}{% set signal_key = 'us10y_bp_change' %}{% endif %}
+          {% set signal_level = namespace(value='normal') %}
+          {% for signal in report.get('market_signals', {}).get('signals', []) %}{% if signal.key == signal_key and signal.level in ['significant', 'strong'] %}{% set signal_level.value = signal.level %}{% endif %}{% endfor %}
+          <article class="context-card context-{{ signal_level.value }}">
             <div class="context-card-top">
               <h4>{{ item.name }}</h4>
               <button class="context-help-button" type="button" aria-label="了解 {{ item.name }} 的作用" aria-expanded="false" aria-controls="context-help-{{ key }}">?</button>
@@ -57,9 +60,9 @@
             {% if item.valid %}
             <strong class="context-value">{{ item.close|number }}{% if key == 'us10y' %}%{% endif %}</strong>
             {% if key == 'us10y' %}
-            <span class="context-change {% if item.yield_change_bp >= 0 %}up{% else %}down{% endif %}">{{ '%+.0f'|format(item.yield_change_bp) }}bp</span>
+            <span class="context-change context-change-{{ signal_level.value }} {% if item.yield_change_bp >= 0 %}up{% else %}down{% endif %}">{% if item.yield_change_bp >= 0 %}▲{% else %}▼{% endif %} {{ '%+.0f'|format(item.yield_change_bp) }}bp</span>
             {% else %}
-            <span class="context-change {% if item.daily_return >= 0 %}up{% else %}down{% endif %}">{% if item.daily_return >= 0 %}▲{% else %}▼{% endif %} {{ item.daily_return|percent(true) }}</span>
+            <span class="context-change context-change-{{ signal_level.value }} {% if item.daily_return >= 0 %}up{% else %}down{% endif %}">{% if item.daily_return >= 0 %}▲{% else %}▼{% endif %} {{ item.daily_return|percent(true) }}</span>
             {% endif %}
             {% else %}
             <strong class="context-unavailable">数据暂不可用</strong>
@@ -82,7 +85,7 @@
       {% if report.market_data_valid %}
       <div class="drawdown-grid">
         {% for key in ['sp500', 'nasdaq100'] %}{% if key in report.drawdown %}{% set item = report.drawdown[key] %}
-        <article class="drawdown-card">
+        <article class="drawdown-card drawdown-{{ item.status }}">
           <div class="drawdown-status-layer">
             <div>
               <h3>{{ item.name }}</h3>
@@ -139,7 +142,7 @@
       <div class="section-heading"><div><p class="section-kicker">GLOBAL SIGNALS</p><h2>全球重要新闻</h2></div><p>RSS 候选 · DeepSeek 编辑 · 最多 8 条</p></div>
       {% if report.news_degraded %}<div class="alert warning"><strong>⚠️ 新闻 AI 处理暂时失败</strong><span>RSS 数据已获取，等待下一次更新</span></div>
       {% elif report.news %}<div class="news-list">
-        {% for item in report.news %}<article class="news-item"><div class="rank">{{ '%02d'|format(item.rank) }}</div><div>
+        {% for item in report.news %}<article class="news-item {% if item.rank <= 3 %}top-news{% else %}regular-news{% endif %}"><div class="rank">{{ '%02d'|format(item.rank) }}</div><div>
           <div class="news-meta"><span>{{ item.category }}</span><span>{{ item.source }}</span></div><h3>{{ item.title_zh }}</h3><p>{{ item.summary_zh }}</p>
           <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article>{% endfor %}
       </div>{% else %}<p class="empty">最近 30 小时暂无足够重要的有效新闻。</p>{% endif %}

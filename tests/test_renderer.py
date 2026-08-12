@@ -60,7 +60,7 @@ def test_drawdown_cards_render_three_action_layers_and_visual_progress(tmp_path)
     html = (site / "index.html").read_text(encoding="utf-8")
     css = (site / "style.css").read_text(encoding="utf-8")
     compact_css = "".join(css.split())
-    assert html.count('class="drawdown-card"') == 2
+    assert html.count('class="drawdown-card drawdown-') == 2
     assert html.count('class="drawdown-status-layer"') == 2
     assert html.count('class="drawdown-progress-layer"') == 2
     assert html.count('class="capital-layer"') == 2
@@ -248,3 +248,74 @@ def test_old_report_without_market_context_still_renders(tmp_path):
     render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
     html = (site / "index.html").read_text(encoding="utf-8")
     assert "MARKET CONTEXT" not in html
+
+
+def test_information_hierarchy_maps_existing_signal_levels_to_context_classes(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["market_context"] = {
+        "russell2000": {"name": "Russell 2000", "valid": True, "close": 3030, "daily_return": 0.003},
+        "vix": {"name": "VIX", "valid": True, "close": 18, "daily_return": -0.21},
+        "dxy": {"name": "美元指数", "valid": True, "close": 100.5, "daily_return": 0.001},
+        "us10y": {"name": "10Y 美债", "valid": True, "close": 4.28, "yield_change_bp": -7},
+    }
+    payload["market_signals"] = {
+        "signals": [
+            {"key": "small_cap_relative", "level": "significant"},
+            {"key": "vix_daily_return", "level": "strong"},
+            {"key": "us10y_bp_change", "level": "significant"},
+        ]
+    }
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    assert html.count('class="context-card context-significant"') == 2
+    assert html.count('class="context-card context-strong"') == 1
+    assert html.count('class="context-card context-normal"') == 1
+    assert 'class="context-change context-change-strong down">▼ -21.0%</span>' in html
+    assert 'class="context-change context-change-significant down">▼ -7bp</span>' in html
+    assert 'class="context-change context-change-normal up">▲ +0.1%</span>' in html
+
+
+def test_information_hierarchy_styles_metrics_drawdown_states_and_news_ranks(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["drawdown"]["sp500"]["status"] = "near"
+    payload["news"] = [
+        {
+            "rank": rank, "category": "市场 / 宏观", "source": "Fixture",
+            "title_zh": f"新闻 {rank}", "summary_zh": "用于验证新闻视觉层级的摘要。",
+            "url": f"https://example.com/{rank}",
+        }
+        for rank in range(1, 6)
+    ]
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    css = (site / "style.css").read_text(encoding="utf-8")
+    compact_css = "".join(css.split())
+    assert 'class="drawdown-card drawdown-near"' in html
+    assert 'class="drawdown-card drawdown-pending"' in html
+    assert html.count('class="news-item top-news"') == 3
+    assert html.count('class="news-item regular-news"') == 2
+    assert ".metricsspan{color:var(--muted);font-size:.86rem" in compact_css
+    assert ".metricsstrong{font-size:1rem;font-weight:700;line-height:1.2" in compact_css
+    assert ".context-change{display:block;margin-top:6px;font-size:.9rem;font-weight:720;line-height:1.2" in compact_css
+    assert ".status-indicator" in compact_css and "font-size:.88rem" in compact_css
+    for selector in (".status-normal", ".status-near", ".status-pending", ".status-executed"):
+        assert selector in css
+    assert ".drawdown-pending" in css
+    assert ".top-news" in css and ".regular-news" in css
+    assert ".top-news.news-itemh3" in compact_css and "font-size:1.22rem" in compact_css
+    assert ".news-itemp" in compact_css and "color:#4d5c67" in compact_css
+    assert ".news-itema" in compact_css and "font-size:.8rem" in compact_css
