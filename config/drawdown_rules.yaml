@@ -1,0 +1,17 @@
+total_reserve: 200000
+sp500:
+  name: "S&P 500"
+  pool: 140000
+  tiers:
+    - {id: tier_1, threshold: 0.10, allocation: 0.20}
+    - {id: tier_2, threshold: 0.15, allocation: 0.30}
+    - {id: tier_3, threshold: 0.20, allocation: 0.30}
+    - {id: tier_4, threshold: 0.25, allocation: 0.20}
+nasdaq100:
+  name: "Nasdaq-100"
+  pool: 60000
+  tiers:
+    - {id: tier_1, threshold: 0.15, allocation: 0.20}
+    - {id: tier_2, threshold: 0.20, allocation: 0.30}
+    - {id: tier_3, threshold: 0.30, allocation: 0.30}
+    - {id: tier_4, threshold: 0.40, allocation: 0.20}

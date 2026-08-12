@@ -1,0 +1,167 @@
+{
+  "report_date": "2026-08-12",
+  "generated_at": "2026-08-12 10:00 CST",
+  "market_date": "2026-08-11",
+  "status": "partial",
+  "status_label": "🟠 部分数据源异常",
+  "market_data_valid": true,
+  "market": {
+    "sp500": {
+      "market_date": "2026-08-11",
+      "close": 7728.2001953125,
+      "daily_return": -0.003212861472107087,
+      "ytd_return": 0.12894605146629168,
+      "ath": 7757.64013671875,
+      "ath_date": "2026-08-07",
+      "drawdown": 0.0037949609529970285,
+      "name": "S&P 500",
+      "ticker": "^GSPC",
+      "valid": true
+    },
+    "nasdaq100": {
+      "market_date": "2026-08-11",
+      "close": 29525.478515625,
+      "daily_return": -0.003251735650250165,
+      "ytd_return": 0.16933284642861812,
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "drawdown": 0.0370221426916556,
+      "name": "Nasdaq-100",
+      "ticker": "^NDX",
+      "valid": true
+    },
+    "dow": {
+      "market_date": "2026-08-11",
+      "close": 53791.8515625,
+      "daily_return": -0.003411311932658756,
+      "ytd_return": 0.11918790019864756,
+      "ath": 54349.12109375,
+      "ath_date": "2026-08-05",
+      "drawdown": 0.010253515052961681,
+      "name": "Dow Jones",
+      "ticker": "^DJI",
+      "valid": true
+    }
+  },
+  "drawdown": {
+    "sp500": {
+      "index": "sp500",
+      "name": "S&P 500",
+      "cycle_id": "sp500-2026-08-07-77576401",
+      "started_at": "2026-08-12T10:00:00+08:00",
+      "ath": 7757.64013671875,
+      "ath_date": "2026-08-07",
+      "last_market_date": "2026-08-11",
+      "last_updated_at": "2026-08-12T10:00:00+08:00",
+      "current_close": 7728.2001953125,
+      "current_drawdown": 0.0037949609529970285,
+      "pool": 140000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.1,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.15,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.25,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 140000,
+      "next_threshold": 0.1,
+      "distance_to_next": 0.09620503904700298,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    },
+    "nasdaq100": {
+      "index": "nasdaq100",
+      "name": "Nasdaq-100",
+      "cycle_id": "nasdaq100-2026-06-02-306605996",
+      "started_at": "2026-08-12T10:00:00+08:00",
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "last_market_date": "2026-08-11",
+      "last_updated_at": "2026-08-12T10:00:00+08:00",
+      "current_close": 29525.478515625,
+      "current_drawdown": 0.0370221426916556,
+      "pool": 60000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.15,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.3,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.4,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 60000,
+      "next_threshold": 0.15,
+      "distance_to_next": 0.11297785730834439,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    }
+  },
+  "news": [],
+  "news_degraded": true,
+  "warnings": [
+    "Reuters RSS 获取失败：<unknown>:75:40: not well-formed (invalid token)",
+    "AP News RSS 获取失败：<unknown>:4:239: not well-formed (invalid token)",
+    "⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：未配置 AI 凭据。"
+  ]
+}

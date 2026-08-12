@@ -1,0 +1,9 @@
+sp500:
+  name: "S&P 500"
+  ticker: "^GSPC"
+nasdaq100:
+  name: "Nasdaq-100"
+  ticker: "^NDX"
+dow:
+  name: "Dow Jones"
+  ticker: "^DJI"
