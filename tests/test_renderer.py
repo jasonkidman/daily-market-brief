@@ -205,3 +205,46 @@ def test_report_select_preserves_index_and_history_relative_paths(tmp_path):
     assert ".masthead-tools{align-items:stretch" in compact_css
     assert ".report-select{width:100%;max-width:220px" in compact_css
     assert ".masthead{grid-template-columns:1fr;gap:15px;padding:20px018px" in compact_css
+
+
+def test_market_context_renders_four_accessible_tooltips_and_vanilla_js(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["market_context"] = {
+        "russell2000": {"name": "Russell 2000", "valid": True, "close": 3030, "daily_return": 0.01},
+        "vix": {"name": "VIX", "valid": True, "close": 16.5, "daily_return": 0.10},
+        "dxy": {"name": "美元指数", "valid": True, "close": 100.5, "daily_return": 0.005},
+        "us10y": {"name": "10Y 美债", "valid": True, "close": 4.28, "yield_change_bp": 8},
+    }
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+    html = (site / "index.html").read_text(encoding="utf-8")
+
+    assert "MARKET CONTEXT" in html and "市场环境" in html
+    assert html.count('class="context-help-button"') == 4
+    assert html.count('aria-expanded="false"') == 4
+    for key, label in (("russell2000", "Russell 2000"), ("vix", "VIX"),
+                       ("dxy", "美元指数"), ("us10y", "10Y 美债")):
+        assert f'aria-controls="context-help-{key}"' in html
+        assert f'aria-label="了解 {label} 的作用"' in html
+        assert f'id="context-help-{key}"' in html
+    assert "衡量美国小盘股整体表现" in html
+    assert "未来约30天隐含波动率" in html
+    assert "衡量美元相对一篮子主要货币" in html
+    assert "全球资产定价的重要利率基准" in html
+    assert "addEventListener" in html and "Escape" in html
+    assert "React" not in html and "jquery" not in html.lower()
+
+
+def test_old_report_without_market_context_still_renders(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    (reports / "2026-08-12.json").write_text(json.dumps(report("2026-08-12")), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+    html = (site / "index.html").read_text(encoding="utf-8")
+    assert "MARKET CONTEXT" not in html

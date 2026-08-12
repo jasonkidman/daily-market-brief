@@ -13,7 +13,8 @@ import yaml
 
 from .deepseek_client import select_news, validate_selection
 from .drawdown import summarize_index_state, update_drawdown_state
-from .market import calculate_market_snapshot, fetch_market
+from .market import calculate_context_snapshot, calculate_market_snapshot, fetch_market, fetch_market_context
+from .market_signals import build_market_context_for_ai, calculate_market_signals
 from .news_dedupe import dedupe_candidates
 from .report import load_reports, retain_latest_reports, write_report
 from .renderer import render_site
@@ -39,19 +40,67 @@ def _write_json(path: Path, payload) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def _offline_market(now: datetime, market_config: dict):
-    raw = {
+def _offline_market(now: datetime, core_config: dict, context_config: dict):
+    core_raw = {
         "sp500": [("2025-12-31", 6800), ("2026-08-07", 7140), ("2026-08-10", 7200), ("2026-08-11", 7164)],
         "nasdaq100": [("2025-12-31", 25000), ("2026-08-07", 27000), ("2026-08-10", 27200), ("2026-08-11", 26880)],
         "dow": [("2025-12-31", 48000), ("2026-08-07", 50500), ("2026-08-10", 50700), ("2026-08-11", 50900)],
     }
+    context_raw = {
+        "russell2000": [("2026-08-10", 3000), ("2026-08-11", 3030)],
+        "vix": [("2026-08-10", 15), ("2026-08-11", 16.5)],
+        "dxy": [("2026-08-10", 100), ("2026-08-11", 100.5)],
+        "us10y": [("2026-08-10", 4.20), ("2026-08-11", 4.28)],
+    }
     snapshots, histories = {}, {}
-    for key, pairs in raw.items():
+    for key, pairs in core_raw.items():
         history = [{"date": day, "close": close} for day, close in pairs]
         snapshot = calculate_market_snapshot(history, now)
-        snapshot.update({"name": market_config[key]["name"], "ticker": market_config[key]["ticker"], "valid": True})
+        snapshot.update({"name": core_config[key]["name"], "ticker": core_config[key]["ticker"], "valid": True})
         snapshots[key], histories[key] = snapshot, history
-    return snapshots, histories, ["当前报告由离线测试夹具生成，不代表真实市场行情或新闻。"]
+    context_snapshots = {}
+    for key, pairs in context_raw.items():
+        rows = [{"date": day, "close": close} for day, close in pairs]
+        snapshot = calculate_context_snapshot(rows, now, is_yield=(key == "us10y"))
+        snapshot.update({
+            "name": context_config[key]["name"], "ticker": context_config[key]["ticker"], "valid": True,
+        })
+        context_snapshots[key] = snapshot
+    return snapshots, histories, context_snapshots, [
+        "当前报告由离线测试夹具生成，不代表真实市场行情或新闻。"
+    ]
+
+
+def assess_market_validity(core: dict, context: dict) -> dict:
+    drawdown_by_index = {
+        "sp500": bool(core.get("sp500", {}).get("valid")),
+        "nasdaq100": bool(core.get("nasdaq100", {}).get("valid")),
+    }
+    return {
+        "core_market_valid": all(core.get(key, {}).get("valid") for key in ("sp500", "nasdaq100", "dow")),
+        "context_market_valid": all(
+            context.get(key, {}).get("valid") for key in ("russell2000", "vix", "dxy", "us10y")
+        ),
+        "context_any_valid": any(item.get("valid") for item in context.values()),
+        "drawdown_by_index": drawdown_by_index,
+        "drawdown_market_valid": all(drawdown_by_index.values()),
+    }
+
+
+def _log_market_status(core: dict, context: dict, market_signals: dict) -> None:
+    print("[MARKET CORE]")
+    for key in ("sp500", "nasdaq100", "dow"):
+        print(f"{core.get(key, {}).get('name', key)} {'OK' if core.get(key, {}).get('valid') else 'FAILED'}")
+    print("[MARKET CONTEXT]")
+    for key in ("russell2000", "vix", "dxy", "us10y"):
+        print(f"{context.get(key, {}).get('name', key)} {'OK' if context.get(key, {}).get('valid') else 'FAILED'}")
+    print("[MARKET SIGNALS]")
+    small = market_signals.get("small_cap_relative")
+    vix = market_signals.get("vix_daily_return")
+    us10y = market_signals.get("us10y_bp_change")
+    print(f"Small-cap relative: {small * 100:+.2f}pct" if small is not None else "Small-cap relative: unavailable")
+    print(f"VIX: {vix:+.1%}" if vix is not None else "VIX: unavailable")
+    print(f"10Y: {us10y:+.0f}bp" if us10y is not None else "10Y: unavailable")
 
 
 def _recent_news(reports: list[dict]) -> list[dict]:
@@ -79,6 +128,8 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
     base_dir = Path(base_dir)
     config_root = ROOT / "config"
     market_config = _load_yaml(config_root / "market.yaml")
+    core_config = market_config["core"]
+    context_config = market_config["context"]
     drawdown_rules = _load_yaml(config_root / "drawdown_rules.yaml")
     news_sources = _load_yaml(config_root / "news_sources.yaml")["sources"]
     if report_date:
@@ -88,18 +139,24 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         report_date = now.date().isoformat()
 
     if offline_fixture:
-        snapshots, histories, market_warnings = _offline_market(now, market_config)
+        snapshots, histories, context_snapshots, market_warnings = _offline_market(
+            now, core_config, context_config
+        )
     else:
-        snapshots, histories, market_warnings = fetch_market(market_config, now)
-    market_data_valid = all(snapshots.get(key, {}).get("valid") for key in market_config)
+        snapshots, histories, market_warnings = fetch_market(core_config, now)
+        context_snapshots, context_warnings = fetch_market_context(context_config, now)
+        market_warnings.extend(context_warnings)
+    validity_summary = assess_market_validity(snapshots, context_snapshots)
+    market_signals = calculate_market_signals(snapshots, context_snapshots)
+    _log_market_status(snapshots, context_snapshots, market_signals)
 
     state_path = base_dir / "state" / "drawdown_state.json"
     history_path = base_dir / "state" / "drawdown_history.json"
     state = _read_json(state_path, {"version": 1, "indices": {}, "executions": []})
     history = _read_json(history_path, {"cycles": []})
-    validity = {key: market_data_valid for key in ("sp500", "nasdaq100")}
+    validity = validity_summary["drawdown_by_index"]
     updated_state, archived = update_drawdown_state(state, histories, validity, drawdown_rules, snapshots, now)
-    if market_data_valid:
+    if any(validity.values()):
         _write_json(state_path, updated_state)
         if archived:
             history.setdefault("cycles", []).extend(archived)
@@ -118,12 +175,25 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         if not api_key:
             news, ai_warning = [], "⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：未配置 AI 凭据。"
         else:
-            news, ai_warning = select_news(candidates, api_key, _recent_news(retained))
+            ai_market_context = None
+            if validity_summary["context_any_valid"]:
+                ai_market_context = {
+                    "core_market": snapshots,
+                    "market_context": context_snapshots,
+                    "market_signals": market_signals,
+                    "market_context_text": build_market_context_for_ai(
+                        snapshots, context_snapshots, market_signals
+                    ),
+                }
+                print("[NEWS]\nMarket-driven context generated")
+            news, ai_warning = select_news(
+                candidates, api_key, _recent_news(retained), market_context=ai_market_context
+            )
         if ai_warning:
             warnings.append(ai_warning)
             news_degraded = True
 
-    if not market_data_valid:
+    if not validity_summary["drawdown_market_valid"]:
         status, status_label = "critical", "🔴 行情数据校验失败"
     elif warnings:
         status, status_label = "partial", "🟠 部分数据源异常"
@@ -136,8 +206,13 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         "market_date": max(valid_market_dates) if valid_market_dates else None,
         "status": status,
         "status_label": status_label,
-        "market_data_valid": market_data_valid,
+        "market_data_valid": validity_summary["drawdown_market_valid"],
+        "core_market_valid": validity_summary["core_market_valid"],
+        "context_market_valid": validity_summary["context_market_valid"],
+        "drawdown_market_valid": validity_summary["drawdown_market_valid"],
         "market": snapshots,
+        "market_context": context_snapshots,
+        "market_signals": market_signals,
         "drawdown": {key: summarize_index_state(value) for key, value in updated_state.get("indices", {}).items()},
         "news": news,
         "news_degraded": news_degraded,

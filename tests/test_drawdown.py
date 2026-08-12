@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 
 import pytest
 
-from src.drawdown import create_index_state, summarize_index_state, update_index_state
+from src.drawdown import create_index_state, summarize_index_state, update_drawdown_state, update_index_state
 
 
 NOW = datetime(2026, 8, 12, 10, 0, tzinfo=ZoneInfo("Asia/Shanghai"))
@@ -78,6 +78,48 @@ def test_invalid_market_data_does_not_mutate_state():
         state, [{"date": "2026-08-11", "close": 50}], False, SP_RULES, NOW
     )
     assert updated == before
+    assert archived == []
+
+
+@pytest.mark.parametrize(
+    ("invalid_key", "valid_key", "valid_close", "expected_pending"),
+    [
+        ("sp500", "nasdaq100", 80, ["tier_1", "tier_2"]),
+        ("nasdaq100", "sp500", 80, ["tier_1", "tier_2", "tier_3"]),
+    ],
+)
+def test_one_invalid_drawdown_index_does_not_block_the_other_index(
+    invalid_key, valid_key, valid_close, expected_pending
+):
+    state = {
+        "version": 1,
+        "indices": {
+            "sp500": create_index_state("sp500", SP_RULES, 100, "2026-01-01", NOW),
+            "nasdaq100": create_index_state("nasdaq100", NDX_RULES, 100, "2026-01-01", NOW),
+        },
+        "executions": [],
+    }
+    histories = {invalid_key: [{"date": "2026-08-11", "close": 50}],
+                 valid_key: [{"date": "2026-08-11", "close": valid_close}]}
+    snapshots = {
+        invalid_key: {"valid": False, "close": 50},
+        valid_key: {"valid": True, "close": valid_close},
+    }
+    rules = {"sp500": SP_RULES, "nasdaq100": NDX_RULES}
+
+    updated, archived = update_drawdown_state(
+        state,
+        histories,
+        {invalid_key: False, valid_key: True},
+        rules,
+        snapshots,
+        NOW,
+    )
+
+    assert updated["indices"][invalid_key] == state["indices"][invalid_key]
+    pending = [key for key, tier in updated["indices"][valid_key]["tiers"].items()
+               if tier["status"] == "pending"]
+    assert pending == expected_pending
     assert archived == []
 
 

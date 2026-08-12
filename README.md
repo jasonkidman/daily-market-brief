@@ -1,11 +1,11 @@
 # Daily Market Brief
 
-一个每天生成的个人投资日报静态站点：展示美国三大指数、最多 8 条全球重要新闻，以及 S&P 500 / Nasdaq-100 的独立回撤加仓状态。系统只管理 ¥200,000 回撤备用金，不包含固定月度定投，也不提供投资建议或自动交易。
+一个每天生成的个人投资日报静态站点：展示美国三大指数、四项 Market Context、最多 8 条全球重要新闻，以及 S&P 500 / Nasdaq-100 的独立回撤加仓状态。系统只管理 ¥200,000 回撤备用金，不包含固定月度定投，也不提供投资建议或自动交易。
 
 ## 工作方式
 
-- 行情：yfinance 日线 `Close`，由本地程序计算单日涨跌、YTD、历史最高收盘价和回撤。
-- 新闻：仅从 `config/news_sources.yaml` 中的 RSS 获取候选，本地先去重，再交给 DeepSeek 筛选、分类、翻译与摘要。模型只返回候选 ID，原文 URL 由程序映射回来。
+- 行情：yfinance 日线 `Close`，由本地程序计算单日涨跌、YTD、历史最高收盘价和回撤；Russell 2000、VIX、美元指数和 10Y 美债作为独立的市场环境数据，不参与回撤判断。
+- 新闻：仅从 `config/news_sources.yaml` 中的 RSS 获取候选，本地先去重，再结合程序计算的 Market Context / Market Signals 交给 DeepSeek 筛选、分类、翻译与摘要。模型只返回候选 ID，原文 URL 由程序映射回来。
 - 状态：`state/drawdown_state.json` 保存当前两个独立回撤周期，`state/drawdown_history.json` 保存已结束周期。行情校验失败时不会产生或修改任何新回撤信号。
 - 输出：`data/reports/YYYY-MM-DD.json` 保存日报，`site/` 是唯一 Pages 发布目录。仅保留最近 7 个自然日。
 
@@ -17,7 +17,7 @@
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-pytest -v
+python -m pytest -v
 ```
 
 真实数据完整生成（需要联网；未配置 Secret 时新闻区会安全降级）：
@@ -62,7 +62,7 @@ python -m src.smoke --base-dir work/smoke
 
 ## 配置
 
-- `config/market.yaml`：固定三个指数名称与 yfinance ticker。
+- `config/market.yaml`：分别配置三个核心指数与四项 Market Context 的名称和 yfinance ticker。
 - `config/drawdown_rules.yaml`：总备用金、70/30 资金池与各档阈值/比例。
 - `config/news_sources.yaml`：RSS URL 与 P0/P1/P2 优先级。单源失败只产生 warning，不会改用网页爬虫。
 

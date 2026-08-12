@@ -1,9 +1,24 @@
-sp500:
-  name: "S&P 500"
-  ticker: "^GSPC"
-nasdaq100:
-  name: "Nasdaq-100"
-  ticker: "^NDX"
-dow:
-  name: "Dow Jones"
-  ticker: "^DJI"
+core:
+  sp500:
+    name: "S&P 500"
+    ticker: "^GSPC"
+  nasdaq100:
+    name: "Nasdaq-100"
+    ticker: "^NDX"
+  dow:
+    name: "Dow Jones"
+    ticker: "^DJI"
+
+context:
+  russell2000:
+    name: "Russell 2000"
+    ticker: "^RUT"
+  vix:
+    name: "VIX"
+    ticker: "^VIX"
+  dxy:
+    name: "美元指数"
+    ticker: "DX-Y.NYB"
+  us10y:
+    name: "10Y 美债"
+    ticker: "^TNX"

@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 import os
 import time
 from types import SimpleNamespace
@@ -154,3 +155,50 @@ def test_three_ai_failures_degrade_without_raising():
     assert "新闻 AI 处理暂时失败" in warning
     assert len(attempts) == 3
     assert sleeps == [5, 10]
+
+
+def test_deepseek_payload_includes_market_driven_context_and_selection_reason():
+    captured = {}
+
+    def model(system_prompt, user_payload, api_key):
+        captured["prompt"] = system_prompt
+        captured["payload"] = json.loads(user_payload)
+        return json.dumps({"news": [{
+            "rank": 1, "candidate_id": "1", "category": "市场 / 宏观",
+            "title_zh": "标题", "summary_zh": "摘要",
+            "selection_reason": "与利率明显上升相关",
+        }]})
+
+    market_context = {
+        "core_market": {"sp500": {"daily_return": -0.003}},
+        "market_context": {"us10y": {"close": 4.32, "yield_change_bp": 7}},
+        "market_signals": {"us10y_bp_change": 7, "signals": ["利率明显上升"]},
+        "market_context_text": "【市场环境】\n10Y 美债 4.32% +7bp",
+    }
+    news, warning = select_news(
+        [candidate("1", "Title", "https://x/1")], "key", market_context=market_context,
+        call_model=model, sleep_fn=lambda _: None,
+    )
+
+    assert warning is None
+    assert captured["payload"]["core_market"] == market_context["core_market"]
+    assert captured["payload"]["market_context"] == market_context["market_context"]
+    assert captured["payload"]["market_signals"] == market_context["market_signals"]
+    assert "不得根据时间共现" in captured["prompt"]
+    assert news[0]["selection_reason"] == "与利率明显上升相关"
+
+
+def test_deepseek_still_runs_without_market_context():
+    calls = []
+
+    def model(system_prompt, user_payload, api_key):
+        calls.append(json.loads(user_payload))
+        return json.dumps({"news": []})
+
+    news, warning = select_news(
+        [candidate("1", "Title", "https://x/1")], "key",
+        call_model=model, sleep_fn=lambda _: None,
+    )
+    assert news == []
+    assert warning is None
+    assert "market_context" not in calls[0]

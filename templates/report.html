@@ -44,6 +44,37 @@
           {% else %}<p class="unavailable">行情不可用</p><small>{{ item.error }}</small>{% endif %}
         </article>{% endfor %}
       </div>
+      {% if report.market_context %}
+      <div class="market-context">
+        <div class="context-heading"><p class="section-kicker">MARKET CONTEXT</p><h3>市场环境</h3></div>
+        <div class="context-grid">
+          {% for key in ['russell2000', 'vix', 'dxy', 'us10y'] %}{% if key in report.market_context %}{% set item = report.market_context[key] %}
+          <article class="context-card">
+            <div class="context-card-top">
+              <h4>{{ item.name }}</h4>
+              <button class="context-help-button" type="button" aria-label="了解 {{ item.name }} 的作用" aria-expanded="false" aria-controls="context-help-{{ key }}">?</button>
+            </div>
+            {% if item.valid %}
+            <strong class="context-value">{{ item.close|number }}{% if key == 'us10y' %}%{% endif %}</strong>
+            {% if key == 'us10y' %}
+            <span class="context-change {% if item.yield_change_bp >= 0 %}up{% else %}down{% endif %}">{{ '%+.0f'|format(item.yield_change_bp) }}bp</span>
+            {% else %}
+            <span class="context-change {% if item.daily_return >= 0 %}up{% else %}down{% endif %}">{% if item.daily_return >= 0 %}▲{% else %}▼{% endif %} {{ item.daily_return|percent(true) }}</span>
+            {% endif %}
+            {% else %}
+            <strong class="context-unavailable">数据暂不可用</strong>
+            {% endif %}
+            <div class="context-tooltip" id="context-help-{{ key }}" role="tooltip" hidden>
+              {% if key == 'russell2000' %}<strong>Russell 2000 的作用</strong><p>衡量美国小盘股整体表现。相对 S&amp;P 500 更强时，通常意味着市场上涨参与度扩大或风险偏好改善；明显落后时，则可能反映行情更集中于大型权重股。单日变化不作为独立买卖信号。</p>
+              {% elif key == 'vix' %}<strong>VIX 的作用</strong><p>基于 S&amp;P 500 期权计算的未来约30天隐含波动率，常被称为“恐慌指数”。快速上升通常表示市场风险定价和预期波动增加，下降则表示风险情绪趋于缓和。</p>
+              {% elif key == 'dxy' %}<strong>美元指数的作用</strong><p>衡量美元相对一篮子主要货币的强弱。美元快速走强通常意味着全球金融条件趋紧，并可能对风险资产及美国跨国公司的海外收入换算形成压力，但不能单独作为交易信号。</p>
+              {% else %}<strong>10Y 美债的作用</strong><p>美国10年期国债收益率是全球资产定价的重要利率基准。收益率快速上行通常会提高股票估值的折现压力，对高估值成长股尤其敏感；下降则可能缓解估值压力，但仍需结合通胀和经济增长背景判断。</p>{% endif %}
+            </div>
+          </article>
+          {% endif %}{% endfor %}
+        </div>
+      </div>
+      {% endif %}
     </section>
 
     <section class="section">
@@ -117,5 +148,28 @@
     <footer><div><span>Market Data: Yahoo Finance via yfinance</span><span>News: RSS feeds</span><span>AI Processing: DeepSeek</span><span>Last generated: {{ report.generated_at }}</span></div>
       <p>数据仅用于信息与个人投资纪律辅助，不构成投资建议。</p></footer>
   </main>
+  <script>
+    (() => {
+      const buttons = Array.from(document.querySelectorAll('.context-help-button'));
+      const closeAll = (except) => buttons.forEach((button) => {
+        if (button === except) return;
+        button.setAttribute('aria-expanded', 'false');
+        document.getElementById(button.getAttribute('aria-controls')).hidden = true;
+      });
+      buttons.forEach((button) => button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const opening = button.getAttribute('aria-expanded') !== 'true';
+        closeAll(opening ? button : null);
+        button.setAttribute('aria-expanded', String(opening));
+        document.getElementById(button.getAttribute('aria-controls')).hidden = !opening;
+      }));
+      document.addEventListener('click', (event) => {
+        if (!event.target.closest('.context-tooltip')) closeAll();
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeAll();
+      });
+    })();
+  </script>
 </body>
 </html>

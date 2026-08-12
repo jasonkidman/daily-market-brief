@@ -63,6 +63,7 @@ def validate_selection(payload: Any, candidates: list[dict]) -> list[dict]:
             "url": source["url"],
             "published_at": source["published_at"],
             "original_title": source["title"],
+            "selection_reason": str(item.get("selection_reason", "")).strip(),
         })
     if sorted(item["rank"] for item in validated) != list(range(1, len(validated) + 1)):
         raise NewsSelectionError("rank 必须从 1 连续排列。")
@@ -83,12 +84,15 @@ def call_deepseek(system_prompt: str, user_payload: str, api_key: str) -> str:
 
 
 def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict] = None,
+                market_context: dict = None,
                 call_model: Callable = call_deepseek, sleep_fn: Callable = time.sleep
                 ) -> tuple[list[dict], Optional[str]]:
     if not candidates:
         return [], None
-    user_payload = json.dumps({"candidates": candidates, "recent_7_days": recent_selected or []},
-                              ensure_ascii=False)
+    payload = {"candidates": candidates, "recent_7_days": recent_selected or []}
+    if market_context:
+        payload.update(market_context)
+    user_payload = json.dumps(payload, ensure_ascii=False)
     last_error = None
     for attempt in range(3):
         try:

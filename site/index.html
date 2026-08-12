@@ -141,5 +141,28 @@
     <footer><div><span>Market Data: Yahoo Finance via yfinance</span><span>News: RSS feeds</span><span>AI Processing: DeepSeek</span><span>Last generated: 2026-08-12 14:46 CST</span></div>
       <p>数据仅用于信息与个人投资纪律辅助，不构成投资建议。</p></footer>
   </main>
+  <script>
+    (() => {
+      const buttons = Array.from(document.querySelectorAll('.context-help-button'));
+      const closeAll = (except) => buttons.forEach((button) => {
+        if (button === except) return;
+        button.setAttribute('aria-expanded', 'false');
+        document.getElementById(button.getAttribute('aria-controls')).hidden = true;
+      });
+      buttons.forEach((button) => button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const opening = button.getAttribute('aria-expanded') !== 'true';
+        closeAll(opening ? button : null);
+        button.setAttribute('aria-expanded', String(opening));
+        document.getElementById(button.getAttribute('aria-controls')).hidden = !opening;
+      }));
+      document.addEventListener('click', (event) => {
+        if (!event.target.closest('.context-tooltip')) closeAll();
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeAll();
+      });
+    })();
+  </script>
 </body>
 </html>

@@ -76,6 +76,24 @@ def calculate_market_snapshot(rows: Iterable[dict[str, Any]], now: datetime) -> 
     }
 
 
+def calculate_context_snapshot(rows: Iterable[dict[str, Any]], now: datetime,
+                               is_yield: bool = False) -> dict[str, Any]:
+    """Calculate a compact context snapshot without requiring YTD history."""
+    validation = validate_close_rows(rows, now)
+    if not validation["valid"]:
+        raise MarketDataError(validation["error"])
+    latest, previous = validation["rows"][-1], validation["rows"][-2]
+    snapshot = {
+        "market_date": latest["date"].isoformat(),
+        "close": latest["close"],
+    }
+    if is_yield:
+        snapshot["yield_change_bp"] = (latest["close"] - previous["close"]) * 100
+    else:
+        snapshot["daily_return"] = latest["close"] / previous["close"] - 1
+    return snapshot
+
+
 def fetch_close_history(ticker: str) -> list[dict[str, Any]]:
     """Fetch the complete daily close history for one ticker via yfinance."""
     import yfinance as yf
@@ -103,3 +121,20 @@ def fetch_market(config: dict[str, Any], now: datetime) -> tuple[dict[str, Any],
             warnings.append(f"{item['name']} 行情获取或校验失败：{exc}")
             snapshots[key] = {"name": item["name"], "ticker": item["ticker"], "valid": False, "error": str(exc)}
     return snapshots, histories, warnings
+
+
+def fetch_market_context(config: dict[str, Any], now: datetime) -> tuple[dict[str, Any], list[str]]:
+    """Fetch each context indicator independently so one failure cannot block peers."""
+    snapshots, warnings = {}, []
+    for key, item in config.items():
+        try:
+            history = fetch_close_history(item["ticker"])
+            snapshot = calculate_context_snapshot(history, now, is_yield=(key == "us10y"))
+            snapshot.update({"name": item["name"], "ticker": item["ticker"], "valid": True})
+            snapshots[key] = snapshot
+        except Exception as exc:
+            warnings.append(f"{item['name']} 行情获取或校验失败：{exc}")
+            snapshots[key] = {
+                "name": item["name"], "ticker": item["ticker"], "valid": False, "error": str(exc)
+            }
+    return snapshots, warnings
