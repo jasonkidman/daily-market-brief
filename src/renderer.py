@@ -43,8 +43,7 @@ def render_site(reports_dir: Path, template_path: Path, style_path: Path, site_d
                for path in sorted(reports_dir.glob("????-??-??.json"), reverse=True)]
     if not reports:
         raise ValueError("没有可渲染的日报 JSON。")
-    nav = [{"date": item["report_date"], "label": "今日" if i == 0 else item["report_date"][5:]}
-           for i, item in enumerate(reports)]
+    nav = [{"date": item["report_date"]} for item in reports[:7]]
     latest = reports[0]
     (site_dir / "index.html").write_text(
         template.render(report=latest, nav=nav, is_index=True, asset_prefix="", current_date=latest["report_date"]),

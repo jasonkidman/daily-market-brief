@@ -15,11 +15,11 @@
         <p class="dateline">报告日期：{{ report.report_date }} · 北京时间最后更新时间：{{ report.generated_at }}</p>
       </div>
       <div class="masthead-tools">
-        <nav class="history-nav" aria-label="最近七天日报">
+        <select class="report-select" aria-label="选择日报日期" onchange="if (this.value) window.location.href = this.value">
           {% for item in nav %}
-          <a class="{% if item.date == current_date %}active{% endif %}" href="{% if is_index and loop.first %}index.html{% elif is_index %}history/{{ item.date }}.html{% elif loop.first %}../index.html{% else %}{{ item.date }}.html{% endif %}">{{ item.label }}</a>
+          <option value="{% if is_index and loop.first %}index.html{% elif is_index %}history/{{ item.date }}.html{% elif loop.first %}../index.html{% else %}{{ item.date }}.html{% endif %}"{% if item.date == current_date %} selected{% endif %}>{% if loop.first %}今日 · {{ item.date }}{% else %}{{ item.date }}{% endif %}</option>
           {% endfor %}
-        </nav>
+        </select>
         <div class="health health-{{ report.status }}">{{ report.status_label }}</div>
       </div>
     </header>

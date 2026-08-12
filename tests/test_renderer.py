@@ -1,4 +1,5 @@
 import json
+import re
 
 from src.renderer import render_site
 
@@ -125,10 +126,48 @@ def test_desktop_density_uses_compact_spacing_without_shrinking_primary_numbers(
     assert ".section{padding:32px0" in compact_css
 
 
-def test_compact_header_contains_history_navigation_status_and_preserves_links(tmp_path):
+def _date_options(html):
+    select = re.search(r'<select class="report-select".*?</select>', html, re.S).group(0)
+    return re.findall(r'<option value="([^"]+)"( selected)?>([^<]+)</option>', select)
+
+
+def test_single_report_header_select_only_contains_today(tmp_path):
     reports = tmp_path / "reports"
     reports.mkdir()
-    for date in ("2026-08-11", "2026-08-12"):
+    (reports / "2026-08-12.json").write_text(json.dumps(report("2026-08-12")), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    assert _date_options(html) == [("index.html", " selected", "今日 · 2026-08-12")]
+    assert 'aria-label="选择日报日期"' in html
+    assert "window.location.href = this.value" in html
+
+
+def test_report_select_limits_to_latest_seven_existing_reports(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    for day in range(1, 9):
+        date = f"2026-08-{day:02d}"
+        (reports / f"{date}.json").write_text(json.dumps(report(date)), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    options = _date_options((site / "index.html").read_text(encoding="utf-8"))
+    assert len(options) == 7
+    assert options[0] == ("index.html", " selected", "今日 · 2026-08-08")
+    assert options[-1] == ("history/2026-08-02.html", "", "2026-08-02")
+    assert all("2026-08-01" not in option for option in options)
+
+
+def test_report_select_preserves_index_and_history_relative_paths(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    for date in ("2026-08-10", "2026-08-11", "2026-08-12"):
         (reports / f"{date}.json").write_text(json.dumps(report(date)), encoding="utf-8")
     root = __import__("pathlib").Path(__file__).parents[1]
     site = tmp_path / "site"
@@ -144,18 +183,25 @@ def test_compact_header_contains_history_navigation_status_and_preserves_links(t
     assert "PERSONAL INVESTMENT DISCIPLINE" not in index_html
     assert 'class="masthead-copy"' in header_html
     assert 'class="masthead-tools"' in header_html
-    assert 'class="history-nav"' in header_html
+    assert 'class="report-select"' in header_html
     assert 'class="health health-ok"' in header_html
-    assert 'href="index.html"' in header_html
-    assert 'href="history/2026-08-11.html"' in header_html
-    assert 'href="../index.html"' in history_html
-    assert 'href="2026-08-11.html"' in history_html
+    assert _date_options(index_html) == [
+        ("index.html", " selected", "今日 · 2026-08-12"),
+        ("history/2026-08-11.html", "", "2026-08-11"),
+        ("history/2026-08-10.html", "", "2026-08-10"),
+    ]
+    assert _date_options(history_html) == [
+        ("../index.html", "", "今日 · 2026-08-12"),
+        ("2026-08-11.html", " selected", "2026-08-11"),
+        ("2026-08-10.html", "", "2026-08-10"),
+    ]
     assert ".masthead{display:grid;grid-template-columns:minmax(0,1fr)auto" in compact_css
     assert ".masthead-tools{display:flex;flex-direction:column;align-items:flex-end" in compact_css
-    assert ".history-nava" in compact_css and "height:32px" in compact_css
+    assert ".report-select" in compact_css and "height:34px" in compact_css
     assert ".mastheadh1" in compact_css and "font-size:36px" in compact_css and "line-height:1.12" in compact_css
     assert ".health" in compact_css and "font-size:.82rem" in compact_css and "padding:6px10px" in compact_css
     assert "@media(max-width:760px)" in compact_css
     assert ".masthead{grid-template-columns:1fr" in compact_css
     assert ".masthead-tools{align-items:stretch" in compact_css
-    assert ".history-nav{max-width:100%;overflow-x:auto" in compact_css
+    assert ".report-select{width:100%;max-width:220px" in compact_css
+    assert ".masthead{grid-template-columns:1fr;gap:15px;padding:20px018px" in compact_css
