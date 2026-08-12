@@ -1,10 +1,13 @@
 {
   "report_date": "2026-08-12",
-  "generated_at": "2026-08-12 14:46 CST",
+  "generated_at": "2026-08-12 15:26 CST",
   "market_date": "2026-08-11",
   "status": "ok",
   "status_label": "🟢 数据更新正常",
   "market_data_valid": true,
+  "core_market_valid": true,
+  "context_market_valid": true,
+  "drawdown_market_valid": true,
   "market": {
     "sp500": {
       "market_date": "2026-08-11",
@@ -43,6 +46,55 @@
       "valid": true
     }
   },
+  "market_context": {
+    "russell2000": {
+      "market_date": "2026-08-11",
+      "close": 3027.1201171875,
+      "daily_return": 0.0032213876709545897,
+      "name": "Russell 2000",
+      "ticker": "^RUT",
+      "valid": true
+    },
+    "vix": {
+      "market_date": "2026-08-11",
+      "close": 15.279999732971191,
+      "daily_return": -0.011642969258191305,
+      "name": "VIX",
+      "ticker": "^VIX",
+      "valid": true
+    },
+    "dxy": {
+      "market_date": "2026-08-12",
+      "close": 99.85399627685547,
+      "daily_return": 0.0003405788633057405,
+      "name": "美元指数",
+      "ticker": "DX-Y.NYB",
+      "valid": true
+    },
+    "us10y": {
+      "market_date": "2026-08-11",
+      "close": 4.684000015258789,
+      "yield_change_bp": -1.4999866485595703,
+      "name": "10Y 美债",
+      "ticker": "^TNX",
+      "valid": true
+    }
+  },
+  "market_signals": {
+    "tech_relative": -3.880824275270811e-05,
+    "small_cap_relative": 0.006434249143061677,
+    "vix_daily_return": -0.011642969258191305,
+    "dxy_daily_return": 0.0003405788633057405,
+    "us10y_bp_change": -1.4999866485595703,
+    "signals": [
+      {
+        "key": "small_cap_relative",
+        "value": 0.006434249143061677,
+        "level": "significant",
+        "message": "Russell 2000 比 S&P 500 领先 0.64 个百分点，小盘相对占优"
+      }
+    ]
+  },
   "drawdown": {
     "sp500": {
       "index": "sp500",
@@ -52,7 +104,7 @@
       "ath": 7757.64013671875,
       "ath_date": "2026-08-07",
       "last_market_date": "2026-08-11",
-      "last_updated_at": "2026-08-12T14:46:57.054856+08:00",
+      "last_updated_at": "2026-08-12T15:26:03.541972+08:00",
       "current_close": 7728.2001953125,
       "current_drawdown": 0.0037949609529970285,
       "pool": 140000,
@@ -108,7 +160,7 @@
       "ath": 30660.599609375,
       "ath_date": "2026-06-02",
       "last_market_date": "2026-08-11",
-      "last_updated_at": "2026-08-12T14:46:57.054856+08:00",
+      "last_updated_at": "2026-08-12T15:26:03.541972+08:00",
       "current_close": 29525.48046875,
       "current_drawdown": 0.037022078990194274,
       "pool": 60000,
@@ -160,91 +212,99 @@
   "news": [
     {
       "rank": 1,
-      "candidate_id": "9c1446025e4f5ef4",
+      "candidate_id": "95824baa8e354aed",
       "category": "AI / 科技",
-      "title_zh": "英伟达携手华尔街巨头达成5000亿美元AI融资协议",
-      "summary_zh": "英伟达与Apollo、贝莱德、高盛、KKR等六家华尔街机构达成协议，筹集超5000亿美元用于建设数据中心、芯片工厂和电站等AI基础设施，为AI热潮提供资金支持。",
-      "source": "The Guardian Business",
-      "url": "https://www.theguardian.com/technology/2026/aug/11/nvidia-wall-street-finance-ai-infrastructure",
-      "published_at": "2026-08-11T08:34:37+00:00",
-      "original_title": "Nvidia links with Wall Street firms for $500bn AI financing deal"
+      "title_zh": "华尔街巨头向英伟达注资5000亿美元支持AI项目扩张",
+      "summary_zh": "华尔街大型金融机构向英伟达提供5000亿美元资金，用于开发新数据中心以容纳、运营和冷却处理AI数据的芯片。该投资表明市场对AI基础设施的持续强劲需求，对AI及半导体行业具有长期影响。",
+      "source": "BBC Business",
+      "url": "https://www.bbc.co.uk/news/articles/c78gr0jv0mdo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-11T08:44:52+00:00",
+      "original_title": "Wall Street giants hand Nvidia $500bn to fund boom in AI projects",
+      "selection_reason": "涉及AI基础设施的巨额融资，对科技行业和整体市场有重大影响。"
     },
     {
       "rank": 2,
-      "candidate_id": "1d2d44cb50e6b115",
+      "candidate_id": "8740e87f6197946e",
       "category": "AI / 科技",
-      "title_zh": "谷歌Gemini用户破10亿，成谷歌史上增长最快产品",
-      "summary_zh": "谷歌CEO皮查伊宣布Gemini月活用户达10亿，成为谷歌史上增长最快的产品。此前ChatGPT也已达到10亿用户，AI助手竞争进入新阶段。",
-      "source": "Ars Technica",
-      "url": "https://arstechnica.com/ai/2026/08/google-says-gemini-has-reached-1b-users-faster-than-any-other-google-product/",
-      "published_at": "2026-08-11T19:48:12+00:00",
-      "original_title": "Gemini becomes Google's fastest-growing product ever as it hits 1B users"
+      "title_zh": "谷歌Gemini应用用户数突破10亿大关",
+      "summary_zh": "谷歌CEO桑达尔·皮查伊宣布，Gemini每月用户数已达到10亿，成为谷歌历史上增长最快的产品。其中63%的用户使用语音功能，Gemini每天生成超过1.5亿张图片。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/11/googles-gemini-app-surges-to-one-billion-users/",
+      "published_at": "2026-08-11T18:49:12+00:00",
+      "original_title": "Google’s Gemini app surges to 1 billion users",
+      "selection_reason": "AI助手用户规模迅速增长，显示AI产品普及趋势，影响大型科技公司估值。"
     },
     {
       "rank": 3,
-      "candidate_id": "0deb7f666bec5423",
+      "candidate_id": "a134bfd1c67f2748",
       "category": "AI / 科技",
-      "title_zh": "xAI联创新公司River AI获11亿美元融资，主打个人AI代理",
-      "summary_zh": "由xAI联创Igor Babuschkin创立的初创公司River AI成立仅两个月，便获得由General Catalyst领投的11亿美元融资，专注研发个人AI代理。",
+      "title_zh": "OpenAI长期COO布拉德·莱特卡普离职创业",
+      "summary_zh": "OpenAI长期担任COO的布拉德·莱特卡普宣布离职，表示将“开始新的尝试”。他在OpenAI工作了八年，离职前担任特别项目负责人。这是OpenAI近期又一次高管变动。",
       "source": "TechCrunch",
-      "url": "https://techcrunch.com/2026/08/11/general-catalyst-leads-1-1b-round-into-2-month-old-river-ai/",
-      "published_at": "2026-08-11T17:41:22+00:00",
-      "original_title": "General Catalyst leads $1.1B round into 2-month-old River AI"
+      "url": "https://techcrunch.com/2026/08/11/brad-lightcap-openais-longtime-coo-is-leaving-to-start-something-new/",
+      "published_at": "2026-08-11T17:41:34+00:00",
+      "original_title": "Brad Lightcap, OpenAI’s longtime COO, is leaving to ‘start something new’",
+      "selection_reason": "OpenAI核心高管变动可能影响公司战略方向，对AI行业有长期影响。"
     },
     {
       "rank": 4,
-      "candidate_id": "995ebf25fa230f8d",
+      "candidate_id": "920c2d7dc4fb9df9",
       "category": "AI / 科技",
-      "title_zh": "Anthropic未发布模型在黎曼猜想研究上取得进展",
-      "summary_zh": "Anthropic的未发布AI模型在数学界长期未解的黎曼猜想上取得了超出预期的进展，尽管尚未完全解决，但展示了AI在基础数学研究中的潜力。",
-      "source": "TechCrunch",
-      "url": "https://techcrunch.com/2026/08/11/an-unreleased-anthropic-model-made-progress-on-one-of-maths-biggest-unsolved-problems/",
-      "published_at": "2026-08-11T16:25:20+00:00",
-      "original_title": "An unreleased Anthropic model made progress on one of math’s biggest unsolved problems"
+      "title_zh": "法院裁定Meta必须面对各州1.4万亿美元诉讼",
+      "summary_zh": "美国法院驳回Meta终止诉讼的动议，裁定其不能避免各州提起的1.4万亿美元诉讼。法官认为Section 230提供的是辩护而非豁免权。",
+      "source": "Ars Technica",
+      "url": "https://arstechnica.com/tech-policy/2026/08/meta-cant-stop-states-1-4-trillion-lawsuit-from-going-to-trial/",
+      "published_at": "2026-08-11T20:27:16+00:00",
+      "original_title": "Meta can't stop states' $1.4 trillion lawsuit from going to trial",
+      "selection_reason": "重大监管诉讼影响大型科技公司法律风险，对投资者重要。"
     },
     {
       "rank": 5,
-      "candidate_id": "a8454b5b8a77d055",
+      "candidate_id": "7e2fd05e1d29a435",
       "category": "市场 / 宏观",
-      "title_zh": "特朗普因潜在威胁中途换机，白宫工作人员毫不知情",
-      "summary_zh": "特朗普在参加北约峰会后因潜在安全威胁秘密更换飞机，随行的记者和白宫工作人员起初并不知情，此事凸显美伊紧张局势下领导人的安全风险。",
-      "source": "BBC News",
-      "url": "https://www.bbc.co.uk/news/articles/c980r4wpl9lo?at_medium=RSS&at_campaign=rss",
-      "published_at": "2026-08-12T03:44:55+00:00",
-      "original_title": "Trump confirms he switched planes after Nato summit because of possible threat"
+      "title_zh": "英国首相承认生活成本支持不足并暗示进一步援助",
+      "summary_zh": "英国首相承认当前生活成本支持措施不足，并暗示未来将提供更多援助。自上任三周以来，首相已宣布一系列援助措施，但公众压力依然巨大。",
+      "source": "BBC Business",
+      "url": "https://www.bbc.co.uk/news/articles/cgmkee248vdo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-12T04:13:45+00:00",
+      "original_title": "PM admits cost of living help is not enough and hints at further support",
+      "selection_reason": "英国财政政策可能影响全球市场情绪，但优先级略低于美国市场新闻。"
     },
     {
       "rank": 6,
-      "candidate_id": "e535056a14ac5def",
-      "category": "全球事件",
-      "title_zh": "罗马尼亚击落俄无人机，接近欧洲重要海上天然气设施",
-      "summary_zh": "罗马尼亚军方摧毁了漂近欧洲关键海上天然气设施的俄罗斯无人机，此前已发生多起俄无人机侵入罗马尼亚领空的事件，凸显欧洲能源基础设施面临的安全威胁。",
+      "candidate_id": "4e68373279f18d0e",
+      "category": "市场 / 宏观",
+      "title_zh": "特朗普将给予共和党3比1的FCC多数席位",
+      "summary_zh": "特朗普决定不填补联邦通信委员会（FCC）空缺的民主党席位，从而使共和党在委员会中占据3比1的多数。此举可能影响美国电信和媒体监管政策。",
       "source": "Ars Technica",
-      "url": "https://arstechnica.com/gadgets/2026/08/romania-destroys-russian-drones-drifting-near-vital-european-offshore-gas-site/",
-      "published_at": "2026-08-11T21:20:11+00:00",
-      "original_title": "Russian drones found near vital European offshore gas site, get blown up"
+      "url": "https://arstechnica.com/tech-policy/2026/08/trump-to-give-republicans-a-3-1-fcc-majority-isnt-filling-empty-democratic-seat/",
+      "published_at": "2026-08-11T15:28:43+00:00",
+      "original_title": "Trump to give Republicans a 3-1 FCC majority, isn't filling empty Democratic seat",
+      "selection_reason": "FCC政策方向影响科技和电信行业，对投资者有长期影响。"
     },
     {
       "rank": 7,
-      "candidate_id": "a186f971f207454b",
+      "candidate_id": "19e70b42b8e7a6c9",
       "category": "全球事件",
-      "title_zh": "哥伦比亚7.4级地震已致180人遇难，救援持续进行",
-      "summary_zh": "哥伦比亚卡利市发生7.4级地震，已造成至少180人死亡，救援人员在倒塌建筑中搜寻幸存者，地震后多次余震加剧了救援难度。",
+      "title_zh": "美军直升机向破坏伊朗封锁的船只发射导弹",
+      "summary_zh": "美国中央司令部表示，其直升机在阿曼湾向一艘悬挂巴拿马国旗的货船发动机室发射导弹，以使其失效。此举与伊朗关系紧张有关，可能影响全球地缘政治和能源市场。",
       "source": "BBC News",
-      "url": "https://www.bbc.co.uk/news/videos/ckge0e0g95no?at_medium=RSS&at_campaign=rss",
-      "published_at": "2026-08-11T19:15:48+00:00",
-      "original_title": "In shattered Cali, residents search for loved ones and signs of hope"
+      "url": "https://www.bbc.co.uk/news/articles/cvg8lyyyjedo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-11T21:14:56+00:00",
+      "original_title": "US says helicopter fired missiles to disable ship breaking Iran blockade",
+      "selection_reason": "中东冲突可能影响能源价格和市场风险情绪，虽未直接影响当日美股，但长期投资者需关注。"
     },
     {
       "rank": 8,
-      "candidate_id": "d8e5f9323ec9d773",
-      "category": "市场 / 宏观",
-      "title_zh": "特朗普要求拆分MMR疫苗遭制药业强烈反对",
-      "summary_zh": "特朗普建议拆分麻疹-腮腺炎-风疹三联疫苗，但制药行业组织迅速回应称该建议不科学且危险，凸显政府与医药行业在公共卫生政策上的分歧。",
-      "source": "Ars Technica",
-      "url": "https://arstechnica.com/health/2026/08/trump-wants-big-pharma-to-split-mmr-vaccine-big-pharma-thinks-its-idiotic/",
-      "published_at": "2026-08-11T22:31:45+00:00",
-      "original_title": "Trump wants Big Pharma to split MMR vaccine; Big Pharma thinks it's idiotic"
+      "candidate_id": "36e1cd1e3a226e00",
+      "category": "全球事件",
+      "title_zh": "新西兰总理在选举前再次面临领导权挑战但成功留任",
+      "summary_zh": "新西兰总理克里斯托弗·卢克森在信任投票中表示获得党的“全力支持”，得以在距大选12周时保住职位。此前他刚经历第二次领导权挑战，政局不确定性增加。",
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/cx2ve2jk5qeo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-12T02:51:02+00:00",
+      "original_title": "New Zealand PM survives second leadership challenge ahead of election",
+      "selection_reason": "新西兰政治不确定性可能影响该国市场，但对全球投资者影响相对较小。"
     }
   ],
   "news_degraded": false,
