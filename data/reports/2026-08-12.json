@@ -1,9 +1,9 @@
 {
   "report_date": "2026-08-12",
-  "generated_at": "2026-08-12 18:54 CST",
+  "generated_at": "2026-08-12 19:30 CST",
   "market_date": "2026-08-11",
-  "status": "partial",
-  "status_label": "🟠 部分数据源异常",
+  "status": "ok",
+  "status_label": "🟢 数据更新正常",
   "market_data_valid": true,
   "core_market_valid": true,
   "context_market_valid": true,
@@ -57,16 +57,16 @@
     },
     "vix": {
       "market_date": "2026-08-12",
-      "close": 15.399999618530273,
-      "daily_return": 0.007853395789016115,
+      "close": 15.390000343322754,
+      "daily_return": 0.007198992949862593,
       "name": "VIX",
       "ticker": "^VIX",
       "valid": true
     },
     "dxy": {
       "market_date": "2026-08-12",
-      "close": 99.83599853515625,
-      "daily_return": 0.00016027690223352486,
+      "close": 99.8499984741211,
+      "daily_return": 0.00030052874562791487,
       "name": "美元指数",
       "ticker": "DX-Y.NYB",
       "valid": true
@@ -83,8 +83,8 @@
   "market_signals": {
     "tech_relative": -3.880824275270811e-05,
     "small_cap_relative": 0.006434249143061677,
-    "vix_daily_return": 0.007853395789016115,
-    "dxy_daily_return": 0.00016027690223352486,
+    "vix_daily_return": 0.007198992949862593,
+    "dxy_daily_return": 0.00030052874562791487,
     "us10y_bp_change": -1.4999866485595703,
     "signals": [
       {
@@ -101,16 +101,16 @@
       "market_date": "2026-08-11",
       "constituent_date": "2026-08-10",
       "total_constituents": 505,
-      "valid_count": 436,
-      "invalid_count": 69,
-      "advancers": 235,
-      "decliners": 199,
+      "valid_count": 502,
+      "invalid_count": 3,
+      "advancers": 275,
+      "decliners": 225,
       "unchanged": 2,
-      "advance_ratio": 0.5389908256880734,
-      "decline_ratio": 0.45642201834862384,
-      "unchanged_ratio": 0.0045871559633027525,
-      "coverage_ratio": 0.8633663366336634,
-      "status": "invalid"
+      "advance_ratio": 0.547808764940239,
+      "decline_ratio": 0.448207171314741,
+      "unchanged_ratio": 0.00398406374501992,
+      "coverage_ratio": 0.994059405940594,
+      "status": "ok"
     },
     "sectors": {
       "market_date": "2026-08-11",
@@ -200,34 +200,34 @@
           "key": "communication_services",
           "name": "通信服务",
           "ticker": "XLC",
-          "valid": false,
-          "daily_return": null,
-          "direction": null,
-          "bar_strength": null
+          "valid": true,
+          "daily_return": -0.005007647132424298,
+          "direction": "down",
+          "bar_strength": 0.16692157108080993
         },
         {
           "key": "real_estate",
           "name": "房地产",
           "ticker": "XLRE",
-          "valid": false,
-          "daily_return": null,
-          "direction": null,
-          "bar_strength": null
+          "valid": true,
+          "daily_return": -0.007207200086191579,
+          "direction": "down",
+          "bar_strength": 0.24024000287305264
         }
       ],
-      "valid_count": 9,
+      "valid_count": 11,
       "advancers": 4,
-      "decliners": 5,
+      "decliners": 7,
       "unchanged": 0,
-      "advance_ratio": 0.4444444444444444
+      "advance_ratio": 0.36363636363636365
     },
     "health": {
-      "valid": false,
-      "score": null,
-      "level": "unavailable",
-      "label": "数据不足",
+      "valid": true,
+      "score": 0.47413980441868886,
+      "level": "mixed",
+      "label": "市场分化",
       "divergence": null,
-      "summary": "市场宽度数据暂不可用。"
+      "summary": "上涨与下跌分布较为均衡，市场内部存在明显分化。"
     }
   },
   "drawdown": {
@@ -239,7 +239,7 @@
       "ath": 7757.64013671875,
       "ath_date": "2026-08-07",
       "last_market_date": "2026-08-11",
-      "last_updated_at": "2026-08-12T18:54:05.979183+08:00",
+      "last_updated_at": "2026-08-12T19:30:59.962320+08:00",
       "current_close": 7728.2001953125,
       "current_drawdown": 0.0037949609529970285,
       "pool": 140000,
@@ -295,7 +295,7 @@
       "ath": 30660.599609375,
       "ath_date": "2026-06-02",
       "last_market_date": "2026-08-11",
-      "last_updated_at": "2026-08-12T18:54:05.979183+08:00",
+      "last_updated_at": "2026-08-12T19:30:59.962320+08:00",
       "current_close": 29525.48046875,
       "current_drawdown": 0.037022078990194274,
       "pool": 60000,
@@ -347,104 +347,101 @@
   "news": [
     {
       "rank": 1,
-      "candidate_id": "9c1446025e4f5ef4",
+      "candidate_id": "95824baa8e354aed",
       "category": "AI / 科技",
-      "title_zh": "英伟达携手华尔街巨头达成5000亿美元AI融资协议",
-      "summary_zh": "英伟达与Apollo、黑石、高盛及KKR等六家华尔街机构达成协议，筹集超5000亿美元用于建设数据中心、芯片工厂和电站，以支持人工智能繁荣。英伟达CEO黄仁勋称这是“英伟达和AI行业的重要里程碑”。",
-      "source": "The Guardian Business",
-      "url": "https://www.theguardian.com/technology/2026/aug/11/nvidia-wall-street-finance-ai-infrastructure",
-      "published_at": "2026-08-11T08:34:37+00:00",
-      "original_title": "Nvidia links with Wall Street firms for $500bn AI financing deal",
-      "selection_reason": "巨额AI基础设施融资协议，对AI产业及金融市场具有重大长期影响。"
+      "title_zh": "华尔街巨头向英伟达注资5000亿美元支持AI项目",
+      "summary_zh": "华尔街大型金融机构向英伟达提供5000亿美元资金，用于开发新的数据中心，以容纳、运营和冷却处理AI数据的芯片。此举凸显AI基础设施投资的巨大规模。",
+      "source": "BBC Business",
+      "url": "https://www.bbc.co.uk/news/articles/c78gr0jv0mdo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-11T08:44:52+00:00",
+      "original_title": "Wall Street giants hand Nvidia $500bn to fund boom in AI projects",
+      "selection_reason": "巨额资金投入AI基础设施，对AI和科技板块有重大长期影响，且是当日重要科技新闻。"
     },
     {
       "rank": 2,
-      "candidate_id": "a134bfd1c67f2748",
+      "candidate_id": "8740e87f6197946e",
       "category": "AI / 科技",
-      "title_zh": "OpenAI长期首席运营官Brad Lightcap离职创业",
-      "summary_zh": "OpenAI长期担任COO的Brad Lightcap即将离职，他在给员工的信中表示“兴奋地从不同视角帮助推进使命”。其离职是近期OpenAI高管离职潮的最新一例。",
+      "title_zh": "谷歌Gemini应用用户激增至10亿",
+      "summary_zh": "谷歌宣布其Gemini应用用户数突破10亿，成为谷歌史上增长最快的产品。其中63%的用户使用语音功能，Gemini每天生成超过1.5亿张图片。",
       "source": "TechCrunch",
-      "url": "https://techcrunch.com/2026/08/11/brad-lightcap-openais-longtime-coo-is-leaving-to-start-something-new/",
-      "published_at": "2026-08-11T17:41:34+00:00",
-      "original_title": "Brad Lightcap, OpenAI’s longtime COO, is leaving to ‘start something new’",
-      "selection_reason": "OpenAI核心高管变动，影响AI领域最具影响力公司之一的管理层稳定性。"
+      "url": "https://techcrunch.com/2026/08/11/googles-gemini-app-surges-to-one-billion-users/",
+      "published_at": "2026-08-11T18:49:12+00:00",
+      "original_title": "Google’s Gemini app surges to 1 billion users",
+      "selection_reason": "谷歌AI产品达到里程碑，对科技巨头竞争格局有重要影响。"
     },
     {
       "rank": 3,
-      "candidate_id": "0deb7f666bec5423",
+      "candidate_id": "0cccc9a6cf1b43b7",
       "category": "AI / 科技",
-      "title_zh": "General Catalyst领投River AI 11亿美元，xAI联合创始人新公司成立仅两个月",
-      "summary_zh": "由xAI联合创始人Igor Babuschkin创立的River AI，在成立仅两个月后便获得由General Catalyst领投的11亿美元融资，该公司旨在打造个人智能体。",
-      "source": "TechCrunch",
-      "url": "https://techcrunch.com/2026/08/11/general-catalyst-leads-1-1b-round-into-2-month-old-river-ai/",
-      "published_at": "2026-08-11T17:41:22+00:00",
-      "original_title": "General Catalyst leads $1.1B round into 2-month-old River AI",
-      "selection_reason": "AI初创巨额融资，显示资本对AI代理方向的浓厚兴趣。"
+      "title_zh": "OpenAI又一高管离职",
+      "summary_zh": "OpenAI特别项目负责人、前首席运营官Brad Lightcap宣布离职，结束八年任期。他在内部备忘录中表示将\"开创一番新事业\"。",
+      "source": "The Verge",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/978048/brad-lightcap-openai-executive-departure",
+      "published_at": "2026-08-11T17:50:01+00:00",
+      "original_title": "Another OpenAI executive takes off",
+      "selection_reason": "OpenAI高层变动持续，可能影响公司战略和AI行业动态。"
     },
     {
       "rank": 4,
-      "candidate_id": "1d2d44cb50e6b115",
-      "category": "AI / 科技",
-      "title_zh": "谷歌Gemini用户数突破10亿，成谷歌史上增长最快产品",
-      "summary_zh": "谷歌CEO桑达尔·皮查伊宣布，Gemini月活用户达到10亿，成为谷歌史上增长最快的产品。此前ChatGPT也已突破10亿用户，AI应用竞争进入新阶段。",
+      "candidate_id": "920c2d7dc4fb9df9",
+      "category": "市场 / 宏观",
+      "title_zh": "Meta无法阻止各州1.4万亿美元诉讼进入审判",
+      "summary_zh": "法院裁定Meta不能阻止各州提起的1.4万亿美元诉讼进入审判，认为Section 230提供的是辩护而非豁免。此案涉及社交平台责任问题。",
       "source": "Ars Technica",
-      "url": "https://arstechnica.com/ai/2026/08/google-says-gemini-has-reached-1b-users-faster-than-any-other-google-product/",
-      "published_at": "2026-08-11T19:48:12+00:00",
-      "original_title": "Gemini becomes Google's fastest-growing product ever as it hits 1B users",
-      "selection_reason": "Gemini用户数里程碑，反映AI主流化进程及谷歌在AI领域的竞争力。"
+      "url": "https://arstechnica.com/tech-policy/2026/08/meta-cant-stop-states-1-4-trillion-lawsuit-from-going-to-trial/",
+      "published_at": "2026-08-11T20:27:16+00:00",
+      "original_title": "Meta can't stop states' $1.4 trillion lawsuit from going to trial",
+      "selection_reason": "重大监管法律进展，对Meta及整个科技行业具有长期影响。"
     },
     {
       "rank": 5,
-      "candidate_id": "7d86757ea2a6f978",
-      "category": "AI / 科技",
-      "title_zh": "ChatGPT与Gemini双双突破10亿用户",
-      "summary_zh": "继ChatGPT之后，谷歌Gemini月活用户也达到10亿，成为谷歌第14个达到这一里程碑的产品。两大AI聊天机器人均实现用户数破亿，表明AI应用正快速普及。",
-      "source": "The Verge",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/978113/chatgpt-gemini-1-billion-users",
-      "published_at": "2026-08-11T19:41:42+00:00",
-      "original_title": "ChatGPT and Gemini both just passed 1 billion users",
-      "selection_reason": "AI应用用户数突破具有标志性意义，反映行业快速增长趋势。"
+      "candidate_id": "a8454b5b8a77d055",
+      "category": "全球事件",
+      "title_zh": "特朗普因潜在威胁在北约峰会后秘密更换飞机",
+      "summary_zh": "特朗普在北约峰会后因可能面临威胁而秘密更换飞机，机上记者和白宫工作人员未察觉总统已离开。此事引发对美伊紧张关系的关注。",
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/c980r4wpl9lo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-12T03:44:55+00:00",
+      "original_title": "Trump confirms he switched planes after Nato summit because of possible threat",
+      "selection_reason": "涉及美国总统安全及地缘政治紧张，对全球市场有潜在影响。"
     },
     {
       "rank": 6,
-      "candidate_id": "995ebf25fa230f8d",
-      "category": "AI / 科技",
-      "title_zh": "Anthropic未发布模型在黎曼猜想研究上取得进展",
-      "summary_zh": "Anthropic的未发布AI模型在数学领域最著名的未解问题之一黎曼猜想上取得了超出预期的进展，尽管尚未完全解决该问题，但展示了AI在科学发现中的潜力。",
-      "source": "TechCrunch",
-      "url": "https://techcrunch.com/2026/08/11/an-unreleased-anthropic-model-made-progress-on-one-of-maths-biggest-unsolved-problems/",
-      "published_at": "2026-08-11T16:25:20+00:00",
-      "original_title": "An unreleased Anthropic model made progress on one of math’s biggest unsolved problems",
-      "selection_reason": "AI在基础科学问题上的突破性进展，凸显AI长期投资价值。"
+      "candidate_id": "19e70b42b8e7a6c9",
+      "category": "全球事件",
+      "title_zh": "美军称直升机发射导弹使船只失去动力以打破伊朗封锁",
+      "summary_zh": "美国中央司令部表示，其直升机在阿曼湾击中一艘巴拿马旗货船的发动机舱，以打破伊朗的封锁。此事件加剧中东紧张局势。",
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/cvg8lyyyjedo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-11T21:14:56+00:00",
+      "original_title": "US says helicopter fired missiles to disable ship breaking Iran blockade",
+      "selection_reason": "中东军事冲突升级，可能影响油价和全球市场风险情绪。"
     },
     {
       "rank": 7,
-      "candidate_id": "e535056a14ac5def",
+      "candidate_id": "3a9617d76eed21a9",
       "category": "全球事件",
-      "title_zh": "俄罗斯无人机接近欧洲关键海上天然气设施，罗马尼亚将其击落",
-      "summary_zh": "在多次无人机入侵罗马尼亚及德国遭遇失败袭击后，罗马尼亚军方击落了漂近重要欧洲海上天然气设施的俄罗斯无人机，凸显地缘政治紧张对能源基础设施的威胁。",
-      "source": "Ars Technica",
-      "url": "https://arstechnica.com/gadgets/2026/08/romania-destroys-russian-drones-drifting-near-vital-european-offshore-gas-site/",
-      "published_at": "2026-08-11T21:20:11+00:00",
-      "original_title": "Russian drones found near vital European offshore gas site, get blown up",
-      "selection_reason": "地缘冲突升级可能影响欧洲能源供应，与当日能源板块领涨相关。"
+      "title_zh": "Joby Aviation以5亿美元收购拓展国防业务",
+      "summary_zh": "Joby Aviation达成协议收购Resonant Sciences，以此启动其新的国防业务。此举标志着电动垂直起降飞机公司向国防领域扩张。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/11/joby-aviation-builds-out-defense-business-with-500m-acquisition/",
+      "published_at": "2026-08-11T16:06:08+00:00",
+      "original_title": "Joby Aviation builds out defense business with $500M acquisition",
+      "selection_reason": "航空航天科技公司重大收购，对国防和先进空中交通领域有长期影响。"
     },
     {
       "rank": 8,
-      "candidate_id": "4e68373279f18d0e",
+      "candidate_id": "0b2da1c59a0601da",
       "category": "市场 / 宏观",
-      "title_zh": "特朗普或为共和党保留FCC多数席位，未填补民主党空缺席位",
-      "summary_zh": "特朗普计划让共和党在联邦通信委员会（FCC）中保持3比1的多数席位，且未填补民主党空缺席位，尽管近期最高法院裁决后他曾被建议解雇民主党委员。",
-      "source": "Ars Technica",
-      "url": "https://arstechnica.com/tech-policy/2026/08/trump-to-give-republicans-a-3-1-fcc-majority-isnt-filling-empty-democratic-seat/",
-      "published_at": "2026-08-11T15:28:43+00:00",
-      "original_title": "Trump to give Republicans a 3-1 FCC majority, isn't filling empty Democratic seat",
-      "selection_reason": "FCC组成影响美国电信与科技监管政策，对相关行业有长期影响。"
+      "title_zh": "英国宣布输电塔附近家庭每年减免250英镑电费",
+      "summary_zh": "英国政府宣布，居住在升级输电塔1600英尺以内的家庭每年可减免250英镑电费，首批地点已公布。此举旨在补偿基础设施对居民的影响。",
+      "source": "BBC Business",
+      "url": "https://www.bbc.co.uk/news/articles/c8rn42jp7d6o?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-12T07:30:16+00:00",
+      "original_title": "Homes near pylons to get £250 a year off energy bills – first sites revealed",
+      "selection_reason": "英国能源政策新动向，影响公用事业和房地产领域。"
     }
   ],
   "news_degraded": false,
-  "warnings": [
-    "市场宽度数据暂不可用",
-    "板块宽度数据不足"
-  ]
+  "warnings": []
 }
