@@ -254,20 +254,33 @@ def test_market_breadth_renders_health_stock_participation_sector_bars_and_toolt
     reports = tmp_path / "reports"
     reports.mkdir()
     payload = report("2026-08-12")
+    sector_values = [
+        ("technology", "科技", "XLK", 0.012),
+        ("financials", "金融", "XLF", -0.004),
+        ("consumer_discretionary", "非必需消费", "XLY", 0.025),
+        ("communication_services", "通信服务", "XLC", -0.020),
+        ("industrials", "工业", "XLI", 0.003),
+        ("health_care", "医疗保健", "XLV", -0.001),
+        ("consumer_staples", "必需消费", "XLP", 0.0),
+        ("energy", "能源", "XLE", 0.040),
+        ("utilities", "公用事业", "XLU", -0.011),
+        ("real_estate", "房地产", "XLRE", 0.008),
+        ("materials", "材料", "XLB", -0.035),
+    ]
+    sector_items = [
+        {"key": key, "name": name, "ticker": ticker, "valid": True,
+         "daily_return": daily_return,
+         "direction": "up" if daily_return > 0 else "down" if daily_return < 0 else "flat",
+         "bar_strength": min(abs(daily_return) / 0.03, 1.0)}
+        for key, name, ticker, daily_return in sector_values
+    ]
     payload["market_breadth"] = {
         "market_date": "2026-08-11",
         "stocks": {"status": "ok", "total_constituents": 503, "valid_count": 497, "invalid_count": 6,
                    "advancers": 322, "decliners": 169, "unchanged": 6, "advance_ratio": 0.648,
                    "decline_ratio": 0.340, "unchanged_ratio": 0.012, "coverage_ratio": 0.988},
-        "sectors": {"valid_count": 11, "advancers": 8, "decliners": 3, "unchanged": 0,
-                    "advance_ratio": 8 / 11, "items": [
-                        {"key": "technology", "name": "科技", "ticker": "XLK", "valid": True,
-                         "daily_return": 0.012, "direction": "up", "bar_strength": 0.4},
-                        {"key": "utilities", "name": "公用事业", "ticker": "XLU", "valid": True,
-                         "daily_return": -0.011, "direction": "down", "bar_strength": 0.3667},
-                        {"key": "real_estate", "name": "房地产", "ticker": "XLRE", "valid": False,
-                         "daily_return": None, "direction": None, "bar_strength": None},
-                    ]},
+        "sectors": {"valid_count": 11, "advancers": 5, "decliners": 5, "unchanged": 1,
+                    "advance_ratio": 5 / 11, "items": sector_items},
         "health": {"valid": True, "score": 0.68, "level": "healthy", "label": "市场健康",
                    "divergence": None, "summary": "多数股票与板块共同上涨，市场参与度良好。"},
     }
@@ -279,18 +292,41 @@ def test_market_breadth_renders_health_stock_participation_sector_bars_and_toolt
 
     html = (site / "index.html").read_text(encoding="utf-8")
     css = (site / "style.css").read_text(encoding="utf-8")
+    compact_css = "".join(css.split())
     assert "MARKET BREADTH" in html and "市场宽度" in html
     assert "市场健康" in html and "64.8%" in html
-    assert "322涨 · 169跌 · 6平" in html
+    assert "上涨" in html and "322" in html
+    assert "下跌" in html and "169" in html
+    assert "平盘" in html and "6" in html
+    assert html.count('class="breadth-mini-metric') == 3
     assert 'class="breadth-segment breadth-up" style="width: 64.8%"' in html
-    assert 'class="sector-row sector-up"' in html
-    assert 'class="sector-row sector-down"' in html
-    assert 'class="sector-row sector-unavailable"' in html
+    assert 'class="breadth-segment breadth-flat" style="width: 1.2%"' in html
+    assert 'class="breadth-segment breadth-down" style="width: 34.0%"' in html
+    assert "上涨股票" in html and "64.8%" in html
+    assert "下跌股票" in html and "34.0%" in html
+    assert "平盘股票" in html and "1.2%" in html
+    assert html.count('class="sector-row sector-') == 11
+    assert 'class="sector-row sector-up sector-hover-target"' in html
+    assert 'class="sector-row sector-down sector-hover-target"' in html
+    assert 'class="sector-row sector-flat sector-hover-target"' in html
+    assert html.index("能源") < html.index("非必需消费") < html.index("科技") < html.index("材料")
+    assert "能源 · +4.0%" in html and "当日排名：1 / 11" in html
+    assert "材料 · -3.5%" in html and "当日排名：11 / 11" in html
+    assert 'class="sector-bar sector-bar-up" style="width: 50.0%"' in html
+    assert 'class="sector-bar sector-bar-down" style="width: 50.0%"' in html
     assert 'aria-controls="breadth-health-help"' in html
     assert "不作为独立买卖信号" in html
     assert "多数股票与板块共同上涨，市场参与度良好。" in html
-    assert ".market-breadth-grid" in css and "grid-template-columns: minmax(0, 38fr) minmax(0, 62fr)" in css
+    assert html.index("多数股票与板块共同上涨，市场参与度良好。") < html.index('class="market-breadth-grid"')
+    assert ".market-breadth-grid" in css and "grid-template-columns: minmax(0, 32fr) minmax(0, 68fr)" in css
+    assert ".breadth-stocks{align-self:start" in compact_css
+    assert "grid-template-columns:110px64pxminmax(260px,1fr)" in compact_css
     assert ".sector-zero-line" in css and ".sector-bar-up" in css and ".sector-bar-down" in css
+    assert ".sector-hover-target:hover" in css
+    assert ".breadth-segment:hover" in css
+    assert "@media(prefers-reduced-motion:reduce)" in compact_css
+    assert "@media(max-width:760px)" in compact_css
+    assert ".market-breadth-grid{grid-template-columns:1fr" in compact_css
 
 
 def test_old_report_without_market_breadth_still_renders(tmp_path):
