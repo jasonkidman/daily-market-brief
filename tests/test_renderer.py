@@ -102,3 +102,24 @@ def test_drawdown_card_replaces_progress_with_last_tier_message(tmp_path):
     html = (site / "index.html").read_text(encoding="utf-8")
     assert 'class="status-indicator status-executed"' in html
     assert "已到最后一档" in html
+
+
+def test_desktop_density_uses_compact_spacing_without_shrinking_primary_numbers():
+    root = __import__("pathlib").Path(__file__).parents[1]
+    css = (root / "static" / "style.css").read_text(encoding="utf-8")
+    compact_css = "".join(css.split())
+
+    assert ".section{padding:30px0" in compact_css
+    assert ".section-kicker{margin-bottom:5px" in compact_css
+    assert ".section-heading" in css and "margin-bottom: 15px" in css
+    assert ".market-card{padding:18px" in compact_css
+    assert ".close{margin:14px011px" in compact_css
+    assert "font-size:2.2rem" in compact_css
+    assert ".drawdown-status-layer" in css and "padding: 18px 20px 16px" in css
+    assert ".drawdown-progress{margin-top:12px" in compact_css
+    assert ".capital-layer" in css and "padding: 13px 20px" in css
+    assert ".news-item" in css and "padding: 17px 20px" in css
+    assert ".news-itemp" in compact_css and "line-height:1.55" in compact_css
+    assert ".section-heading{display:flex;justify-content:space-between" in compact_css
+    assert "@media(max-width:760px)" in compact_css
+    assert ".section{padding:32px0" in compact_css
