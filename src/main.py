@@ -14,6 +14,8 @@ import yaml
 from .deepseek_client import select_news, validate_selection
 from .drawdown import summarize_index_state, update_drawdown_state
 from .market import calculate_context_snapshot, calculate_market_snapshot, fetch_market, fetch_market_context
+from .market_breadth import build_market_breadth, build_offline_market_breadth, unavailable_market_breadth
+from .market_health import build_market_breadth_text
 from .market_signals import build_market_context_for_ai, calculate_market_signals
 from .news_dedupe import dedupe_candidates
 from .report import load_reports, retain_latest_reports, write_report
@@ -103,6 +105,40 @@ def _log_market_status(core: dict, context: dict, market_signals: dict) -> None:
     print(f"10Y: {us10y:+.0f}bp" if us10y is not None else "10Y: unavailable")
 
 
+def _log_market_breadth(market_breadth: dict) -> None:
+    stocks = market_breadth["stocks"]
+    sectors = market_breadth["sectors"]
+    health = market_breadth["health"]
+    print("[MARKET BREADTH]")
+    print(f"Constituents: {stocks['total_constituents']}")
+    print(f"Valid: {stocks['valid_count']}")
+    print(f"Advancers: {stocks['advancers']}")
+    print(f"Decliners: {stocks['decliners']}")
+    print(f"Unchanged: {stocks['unchanged']}")
+    print(f"Coverage: {stocks['coverage_ratio']:.1%}")
+    ratio = stocks.get("advance_ratio")
+    print(f"Advance ratio: {ratio:.1%}" if ratio is not None else "Advance ratio: unavailable")
+    print("[SECTOR BREADTH]")
+    print(f"Valid: {sectors['valid_count']}/{len(sectors['items'])}")
+    print(f"Advancers: {sectors['advancers']}")
+    print(f"Decliners: {sectors['decliners']}")
+    valid_items = [item for item in sectors["items"] if item.get("valid")]
+    leading = sorted(valid_items, key=lambda item: item["daily_return"], reverse=True)[:3]
+    lagging = sorted(valid_items, key=lambda item: item["daily_return"])[:3]
+    if leading:
+        print("Leading:")
+        for item in leading:
+            print(f"{item['name']} {item['daily_return']:+.2%}")
+    if lagging:
+        print("Lagging:")
+        for item in lagging:
+            print(f"{item['name']} {item['daily_return']:+.2%}")
+    print("[MARKET HEALTH]")
+    print(f"Score: {health['score'] * 100:.1f}" if health["score"] is not None else "Score: unavailable")
+    print(f"Level: {health['level']}")
+    print(f"Divergence: {health['divergence'] or 'none'}")
+
+
 def _recent_news(reports: list[dict]) -> list[dict]:
     selected = []
     for report in reports[:7]:
@@ -128,6 +164,7 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
     base_dir = Path(base_dir)
     config_root = ROOT / "config"
     market_config = _load_yaml(config_root / "market.yaml")
+    breadth_config = _load_yaml(config_root / "market_breadth.yaml")
     core_config = market_config["core"]
     context_config = market_config["context"]
     drawdown_rules = _load_yaml(config_root / "drawdown_rules.yaml")
@@ -149,6 +186,30 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
     validity_summary = assess_market_validity(snapshots, context_snapshots)
     market_signals = calculate_market_signals(snapshots, context_snapshots)
     _log_market_status(snapshots, context_snapshots, market_signals)
+    target_market_date = snapshots.get("sp500", {}).get("market_date")
+    try:
+        if not target_market_date:
+            raise ValueError("S&P 500 缺少有效交易日")
+        if offline_fixture:
+            market_breadth = build_offline_market_breadth(
+                breadth_config, target_market_date, snapshots["sp500"].get("daily_return")
+            )
+        else:
+            market_breadth = build_market_breadth(
+                ROOT / breadth_config["constituents"]["reference_file"], breadth_config, target_market_date,
+                snapshots["sp500"].get("daily_return"),
+            )
+        breadth_warnings = []
+        if market_breadth["stocks"]["status"] == "partial":
+            breadth_warnings.append("部分成分股行情缺失")
+        elif market_breadth["stocks"]["status"] == "invalid":
+            breadth_warnings.append("市场宽度数据暂不可用")
+        if market_breadth["sectors"]["valid_count"] < breadth_config["sector_minimum_valid"]:
+            breadth_warnings.append("板块宽度数据不足")
+    except Exception as exc:
+        market_breadth = unavailable_market_breadth(target_market_date)
+        breadth_warnings = [f"市场宽度数据暂不可用：{exc}"]
+    _log_market_breadth(market_breadth)
 
     state_path = base_dir / "state" / "drawdown_state.json"
     history_path = base_dir / "state" / "drawdown_history.json"
@@ -163,7 +224,7 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         _write_json(history_path, history)
 
     retained = load_reports(base_dir / "data" / "reports") if (base_dir / "data" / "reports").exists() else []
-    warnings = list(market_warnings)
+    warnings = [*market_warnings, *breadth_warnings]
     news_degraded = False
     if offline_fixture:
         news = _offline_news()
@@ -176,13 +237,17 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
             news, ai_warning = [], "⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：未配置 AI 凭据。"
         else:
             ai_market_context = None
-            if validity_summary["context_any_valid"]:
+            if validity_summary["context_any_valid"] or market_breadth["health"].get("valid"):
                 ai_market_context = {
                     "core_market": snapshots,
                     "market_context": context_snapshots,
                     "market_signals": market_signals,
                     "market_context_text": build_market_context_for_ai(
                         snapshots, context_snapshots, market_signals
+                    ),
+                    "market_breadth": market_breadth,
+                    "market_breadth_text": build_market_breadth_text(
+                        market_breadth["stocks"], market_breadth["sectors"], market_breadth["health"]
                     ),
                 }
                 print("[NEWS]\nMarket-driven context generated")
@@ -213,6 +278,7 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         "market": snapshots,
         "market_context": context_snapshots,
         "market_signals": market_signals,
+        "market_breadth": market_breadth,
         "drawdown": {key: summarize_index_state(value) for key, value in updated_state.get("indices", {}).items()},
         "news": news,
         "news_degraded": news_degraded,

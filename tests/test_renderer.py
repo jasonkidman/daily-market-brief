@@ -250,6 +250,61 @@ def test_old_report_without_market_context_still_renders(tmp_path):
     assert "MARKET CONTEXT" not in html
 
 
+def test_market_breadth_renders_health_stock_participation_sector_bars_and_tooltip(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["market_breadth"] = {
+        "market_date": "2026-08-11",
+        "stocks": {"status": "ok", "total_constituents": 503, "valid_count": 497, "invalid_count": 6,
+                   "advancers": 322, "decliners": 169, "unchanged": 6, "advance_ratio": 0.648,
+                   "decline_ratio": 0.340, "unchanged_ratio": 0.012, "coverage_ratio": 0.988},
+        "sectors": {"valid_count": 11, "advancers": 8, "decliners": 3, "unchanged": 0,
+                    "advance_ratio": 8 / 11, "items": [
+                        {"key": "technology", "name": "科技", "ticker": "XLK", "valid": True,
+                         "daily_return": 0.012, "direction": "up", "bar_strength": 0.4},
+                        {"key": "utilities", "name": "公用事业", "ticker": "XLU", "valid": True,
+                         "daily_return": -0.011, "direction": "down", "bar_strength": 0.3667},
+                        {"key": "real_estate", "name": "房地产", "ticker": "XLRE", "valid": False,
+                         "daily_return": None, "direction": None, "bar_strength": None},
+                    ]},
+        "health": {"valid": True, "score": 0.68, "level": "healthy", "label": "市场健康",
+                   "divergence": None, "summary": "多数股票与板块共同上涨，市场参与度良好。"},
+    }
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    css = (site / "style.css").read_text(encoding="utf-8")
+    assert "MARKET BREADTH" in html and "市场宽度" in html
+    assert "市场健康" in html and "64.8%" in html
+    assert "322涨 · 169跌 · 6平" in html
+    assert 'class="breadth-segment breadth-up" style="width: 64.8%"' in html
+    assert 'class="sector-row sector-up"' in html
+    assert 'class="sector-row sector-down"' in html
+    assert 'class="sector-row sector-unavailable"' in html
+    assert 'aria-controls="breadth-health-help"' in html
+    assert "不作为独立买卖信号" in html
+    assert "多数股票与板块共同上涨，市场参与度良好。" in html
+    assert ".market-breadth-grid" in css and "grid-template-columns: minmax(0, 38fr) minmax(0, 62fr)" in css
+    assert ".sector-zero-line" in css and ".sector-bar-up" in css and ".sector-bar-down" in css
+
+
+def test_old_report_without_market_breadth_still_renders(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    (reports / "2026-08-12.json").write_text(json.dumps(report("2026-08-12")), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    assert "MARKET BREADTH" not in (site / "index.html").read_text(encoding="utf-8")
+
+
 def test_information_hierarchy_maps_existing_signal_levels_to_context_classes(tmp_path):
     reports = tmp_path / "reports"
     reports.mkdir()

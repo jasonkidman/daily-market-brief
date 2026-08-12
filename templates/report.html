@@ -78,6 +78,50 @@
         </div>
       </div>
       {% endif %}
+      {% if report.market_breadth %}{% set breadth = report.market_breadth %}{% set stocks = breadth.stocks %}{% set sectors = breadth.sectors %}{% set health = breadth.health %}
+      <div class="market-breadth">
+        <div class="breadth-heading">
+          <div><p class="section-kicker">MARKET BREADTH</p><h3>市场宽度</h3></div>
+          <div class="breadth-health health-level-{{ health.level }}">
+            <span>{% if health.level == 'very_healthy' or health.level == 'healthy' %}🟢{% elif health.level == 'mixed' %}🟡{% elif health.level == 'weak' %}🟠{% elif health.level == 'very_weak' %}🔴{% else %}⚪{% endif %} {{ health.label }}</span>
+            <button class="breadth-help-button" type="button" aria-label="了解市场健康度的作用" aria-expanded="false" aria-controls="breadth-health-help">?</button>
+            <div class="breadth-tooltip" id="breadth-health-help" role="tooltip" hidden><strong>Market Health 的作用</strong><p>市场健康度综合 S&amp;P 500 成分股上涨比例和 11 个一级板块上涨比例，用于判断指数上涨或下跌是否得到广泛市场参与。该指标用于观察市场内部结构，不作为独立买卖信号。</p></div>
+          </div>
+        </div>
+        {% if health.valid %}
+        <div class="market-breadth-grid">
+          <article class="breadth-stocks">
+            <p class="breadth-label">S&amp;P 500 成分股</p>
+            <strong class="breadth-ratio">{{ stocks.advance_ratio|percent }}</strong><span class="breadth-ratio-label">上涨占比</span>
+            <div class="breadth-counts"><span>上涨 {{ stocks.advancers }}</span><span>下跌 {{ stocks.decliners }}</span><span>平盘 {{ stocks.unchanged }}</span></div>
+            <div class="breadth-bar" aria-label="S&P 500 成分股上涨、平盘与下跌比例">
+              <span class="breadth-segment breadth-up" style="width: {{ (stocks.advance_ratio * 100)|round(1) }}%"></span>
+              <span class="breadth-segment breadth-flat" style="width: {{ (stocks.unchanged_ratio * 100)|round(1) }}%"></span>
+              <span class="breadth-segment breadth-down" style="width: {{ (stocks.decline_ratio * 100)|round(1) }}%"></span>
+            </div>
+            <p class="breadth-detail">{{ stocks.advancers }}涨 · {{ stocks.decliners }}跌 · {{ stocks.unchanged }}平{% if stocks.status == 'partial' %}<small>部分成分股行情缺失</small>{% endif %}</p>
+          </article>
+          <article class="breadth-sectors">
+            <div class="sector-heading"><h4>板块表现</h4><span>{{ sectors.advancers }}涨 / {{ sectors.decliners }}跌</span></div>
+            <div class="sector-list">
+              {% for item in sectors["items"] %}
+              <div class="sector-row {% if item.valid %}sector-{{ item.direction }}{% else %}sector-unavailable{% endif %}">
+                <span class="sector-name">{{ item.name }}</span>
+                <strong>{% if item.valid %}{{ item.daily_return|percent(true) }}{% else %}—{% endif %}</strong>
+                <span class="sector-diverging-track" aria-label="{{ item.name }} 相对零轴的日涨跌幅">
+                  <i class="sector-zero-line"></i>
+                  {% if item.valid and item.direction == 'up' %}<i class="sector-bar sector-bar-up" style="width: {{ (item.bar_strength * 50)|round(1) }}%"></i>
+                  {% elif item.valid and item.direction == 'down' %}<i class="sector-bar sector-bar-down" style="width: {{ (item.bar_strength * 50)|round(1) }}%"></i>{% endif %}
+                </span>
+              </div>
+              {% endfor %}
+            </div>
+          </article>
+        </div>
+        <p class="breadth-summary {% if health.divergence %}breadth-divergence breadth-divergence-{{ health.divergence }}{% endif %}">{% if health.divergence == 'narrow_rally' %}🟠 {% elif health.divergence == 'positive_breadth' %}🟢 {% endif %}{{ health.summary }}</p>
+        {% else %}<p class="breadth-unavailable">市场宽度数据暂不可用</p>{% endif %}
+      </div>
+      {% endif %}
     </section>
 
     <section class="section">
@@ -153,7 +197,7 @@
   </main>
   <script>
     (() => {
-      const buttons = Array.from(document.querySelectorAll('.context-help-button'));
+      const buttons = Array.from(document.querySelectorAll('.context-help-button, .breadth-help-button'));
       const closeAll = (except) => buttons.forEach((button) => {
         if (button === except) return;
         button.setAttribute('aria-expanded', 'false');
@@ -167,7 +211,7 @@
         document.getElementById(button.getAttribute('aria-controls')).hidden = !opening;
       }));
       document.addEventListener('click', (event) => {
-        if (!event.target.closest('.context-tooltip')) closeAll();
+        if (!event.target.closest('.context-tooltip, .breadth-tooltip')) closeAll();
       });
       document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') closeAll();

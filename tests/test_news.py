@@ -188,6 +188,31 @@ def test_deepseek_payload_includes_market_driven_context_and_selection_reason():
     assert news[0]["selection_reason"] == "与利率明显上升相关"
 
 
+def test_deepseek_payload_accepts_breadth_context_and_prompt_has_sector_rotation_rule():
+    captured = {}
+
+    def model(system_prompt, user_payload, api_key):
+        captured["prompt"] = system_prompt
+        captured["payload"] = json.loads(user_payload)
+        return json.dumps({"news": []})
+
+    market_context = {
+        "market_breadth": {"stocks": {"advance_ratio": 0.65}, "health": {"level": "healthy"}},
+        "market_breadth_text": "【市场宽度】\n领先板块：科技 +1.2%",
+    }
+    news, warning = select_news(
+        [candidate("1", "Title", "https://x/1")], "key", market_context=market_context,
+        call_model=model, sleep_fn=lambda _: None,
+    )
+
+    assert news == [] and warning is None
+    assert captured["payload"]["market_breadth"] == market_context["market_breadth"]
+    assert captured["payload"]["market_breadth_text"] == market_context["market_breadth_text"]
+    assert "市场宽度" in captured["prompt"]
+    assert "板块轮动" in captured["prompt"]
+    assert "不得无依据建立因果关系" in captured["prompt"]
+
+
 def test_deepseek_still_runs_without_market_context():
     calls = []
 

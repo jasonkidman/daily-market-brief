@@ -1,0 +1,42 @@
+constituents:
+  source: "state_street_spy"
+  download_url: "https://www.ssga.com/library-content/products/fund-data/etfs/us/holdings-daily-us-en-spy.xlsx"
+  reference_file: "data/reference/sp500_constituents.csv"
+  batch_size: 100
+  lookback_calendar_days: 10
+  normal_coverage: 0.95
+  minimum_coverage: 0.90
+  minimum_constituents: 480
+
+sectors:
+  technology: {name: "科技", ticker: "XLK"}
+  financials: {name: "金融", ticker: "XLF"}
+  consumer_discretionary: {name: "非必需消费", ticker: "XLY"}
+  communication_services: {name: "通信服务", ticker: "XLC"}
+  industrials: {name: "工业", ticker: "XLI"}
+  health_care: {name: "医疗保健", ticker: "XLV"}
+  consumer_staples: {name: "必需消费", ticker: "XLP"}
+  energy: {name: "能源", ticker: "XLE"}
+  utilities: {name: "公用事业", ticker: "XLU"}
+  real_estate: {name: "房地产", ticker: "XLRE"}
+  materials: {name: "材料", ticker: "XLB"}
+
+sector_minimum_valid: 10
+
+visual:
+  sector_full_scale: 0.03
+
+health:
+  stock_weight: 0.60
+  sector_weight: 0.40
+  very_healthy: 0.80
+  healthy: 0.65
+  mixed: 0.45
+  weak: 0.30
+
+divergence:
+  index_move_threshold: 0.003
+  narrow_rally_stock_threshold: 0.45
+  narrow_rally_sector_threshold: 0.45
+  positive_breadth_stock_threshold: 0.60
+  positive_breadth_sector_threshold: 0.60
