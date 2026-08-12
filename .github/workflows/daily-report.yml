@@ -37,7 +37,7 @@ jobs:
         run: python -m src.main
 
       - name: Run tests
-        run: pytest -v
+        run: python -m pytest -v
 
       - name: Smoke-check generated report and HTML
         run: python -m src.smoke
