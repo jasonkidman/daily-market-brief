@@ -5,6 +5,7 @@ from types import SimpleNamespace
 from zoneinfo import ZoneInfo
 
 import pytest
+import yaml
 
 from src.deepseek_client import NewsSelectionError, select_news, validate_selection
 from src.news_dedupe import dedupe_candidates
@@ -65,6 +66,57 @@ def test_rss_failure_does_not_block_other_sources():
     assert len(candidates) == 1
     assert candidates[0]["source"] == "Good"
     assert len(warnings) == 1
+
+
+def test_disabled_rss_source_is_not_requested_and_produces_no_warning():
+    now = datetime(2026, 8, 12, tzinfo=ZoneInfo("UTC"))
+    requested = []
+
+    def parser(url):
+        requested.append(url)
+        raise RuntimeError("disabled source must never be called")
+
+    candidates, warnings = fetch_candidates(
+        [{"name": "Disabled", "url": "https://disabled/rss", "priority": "P0", "enabled": False}],
+        now,
+        parser=parser,
+    )
+
+    assert requested == []
+    assert candidates == []
+    assert warnings == []
+
+
+def test_news_source_config_keeps_disabled_sources_and_adds_macro_feeds():
+    config_path = __import__("pathlib").Path(__file__).parents[1] / "config" / "news_sources.yaml"
+    sources = yaml.safe_load(config_path.read_text(encoding="utf-8"))["sources"]
+    by_name = {source["name"]: source for source in sources}
+
+    assert by_name["Reuters"]["enabled"] is False
+    assert by_name["AP News"]["enabled"] is False
+    assert {name for name, source in by_name.items() if source.get("enabled", True)} == {
+        "BBC News", "BBC Business", "Federal Reserve - Monetary Policy", "TechCrunch",
+        "Ars Technica", "The Guardian Business", "SEC Press Releases", "The Verge",
+    }
+    assert by_name["Federal Reserve - Monetary Policy"]["category_hint"] == "市场 / 宏观"
+    assert by_name["SEC Press Releases"]["category_hint"] == "市场 / 宏观"
+
+
+def test_category_hint_is_preserved_without_forcing_selection():
+    now = datetime(2026, 8, 12, tzinfo=ZoneInfo("UTC"))
+    entry = SimpleNamespace(title="Policy release", link="https://official/policy", summary="Summary",
+                            published_parsed=now.timetuple())
+
+    candidates, warnings = fetch_candidates(
+        [{"name": "Official", "url": "https://official/rss", "priority": "P1", "enabled": True,
+          "category_hint": "市场 / 宏观"}],
+        now,
+        parser=lambda url: SimpleNamespace(entries=[entry]),
+    )
+
+    assert warnings == []
+    assert candidates[0]["category_hint"] == "市场 / 宏观"
+    assert "selected" not in candidates[0]
 
 
 def test_rss_30_hour_window_uses_feed_gmt_not_runner_timezone(monkeypatch):

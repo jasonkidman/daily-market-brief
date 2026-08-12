@@ -75,6 +75,13 @@ def test_drawdown_cards_render_three_action_layers_and_visual_progress(tmp_path)
     assert ".capital-layer{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))" in compact_css
     assert "@media(max-width:760px)" in compact_css
     assert ".drawdown-grid{grid-template-columns:1fr}" in compact_css
+    assert '--paper:#f4f6f8' in compact_css.lower()
+    assert '--surface:#fcfdfe' in compact_css.lower()
+    assert '.close{' in compact_css
+    assert 'font-family:Inter,Arial,Helvetica,sans-serif' in compact_css
+    assert '.close' in css and 'font-variant-numeric: tabular-nums' in css
+    assert '.masthead h1' in css and 'font-size: 40px' in css
+    assert '@media(max-width:760px)' in compact_css and 'font-size:30px' in compact_css
 
 
 def test_drawdown_card_replaces_progress_with_last_tier_message(tmp_path):

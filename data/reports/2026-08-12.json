@@ -1,6 +1,6 @@
 {
   "report_date": "2026-08-12",
-  "generated_at": "2026-08-12 13:23 CST",
+  "generated_at": "2026-08-12 13:34 CST",
   "market_date": "2026-08-11",
   "status": "partial",
   "status_label": "🟠 部分数据源异常",
@@ -52,7 +52,7 @@
       "ath": 7757.64013671875,
       "ath_date": "2026-08-07",
       "last_market_date": "2026-08-11",
-      "last_updated_at": "2026-08-12T13:23:52.994324+08:00",
+      "last_updated_at": "2026-08-12T13:34:28.117500+08:00",
       "current_close": 7728.2001953125,
       "current_drawdown": 0.0037949609529970285,
       "pool": 140000,
@@ -108,7 +108,7 @@
       "ath": 30660.599609375,
       "ath_date": "2026-06-02",
       "last_market_date": "2026-08-11",
-      "last_updated_at": "2026-08-12T13:23:52.994324+08:00",
+      "last_updated_at": "2026-08-12T13:34:28.117500+08:00",
       "current_close": 29525.48046875,
       "current_drawdown": 0.037022078990194274,
       "pool": 60000,
@@ -157,99 +157,9 @@
       "status_label": "🟢 未触发"
     }
   },
-  "news": [
-    {
-      "rank": 1,
-      "candidate_id": "995ebf25fa230f8d",
-      "category": "AI / 科技",
-      "title_zh": "Anthropic未发布模型在黎曼猜想上取得进展",
-      "summary_zh": "Anthropic的一个未发布模型在数学领域最重大的未解难题之一黎曼猜想上取得了超出预期的进展，尽管尚未解决该问题，但这一突破显示了AI在科学发现中的潜力。",
-      "source": "TechCrunch",
-      "url": "https://techcrunch.com/2026/08/11/an-unreleased-anthropic-model-made-progress-on-one-of-maths-biggest-unsolved-problems/",
-      "published_at": "2026-08-11T16:25:20+00:00",
-      "original_title": "An unreleased Anthropic model made progress on one of math’s biggest unsolved problems"
-    },
-    {
-      "rank": 2,
-      "candidate_id": "058f2854de9b7d4d",
-      "category": "AI / 科技",
-      "title_zh": "Uber出售所持机器人公司Serve全部股份",
-      "summary_zh": "Uber出人意料地出售了其在机器人公司Serve的全部股份，两家公司曾在业务上紧密合作，此举标志着双方在业务方向上出现分歧。",
-      "source": "TechCrunch",
-      "url": "https://techcrunch.com/2026/08/11/uber-surprised-robotics-company-serve-by-selling-its-entire-stake/",
-      "published_at": "2026-08-11T20:02:02+00:00",
-      "original_title": "Uber surprised robotics company Serve by selling its entire stake"
-    },
-    {
-      "rank": 3,
-      "candidate_id": "3a9617d76eed21a9",
-      "category": "AI / 科技",
-      "title_zh": "Joby Aviation以5亿美元收购Resonant Sciences，拓展国防业务",
-      "summary_zh": "Joby Aviation达成协议收购Resonant Sciences，以启动其新的国防业务，此举是该公司在电动垂直起降飞机领域之外多元化布局的重要一步。",
-      "source": "TechCrunch",
-      "url": "https://techcrunch.com/2026/08/11/joby-aviation-builds-out-defense-business-with-500m-acquisition/",
-      "published_at": "2026-08-11T16:06:08+00:00",
-      "original_title": "Joby Aviation builds out defense business with $500M acquisition"
-    },
-    {
-      "rank": 4,
-      "candidate_id": "d91cde2ff17a93e3",
-      "category": "市场 / 宏观",
-      "title_zh": "印度Yulu融资9300万美元，快速商务推动电动自行车需求",
-      "summary_zh": "印度电动自行车公司Yulu获得9300万美元融资，计划在未来两年内将车队规模扩大至20万辆，并推出更快的电动两轮车，以满足快速商务物流需求。",
-      "source": "TechCrunch",
-      "url": "https://techcrunch.com/2026/08/11/indias-yulu-raises-93m-as-quick-commerce-boom-fuels-e-bike-demand/",
-      "published_at": "2026-08-12T04:30:00+00:00",
-      "original_title": "India’s Yulu raises $93M as quick-commerce boom fuels e-bike demand"
-    },
-    {
-      "rank": 5,
-      "candidate_id": "a591185c5595ed6b",
-      "category": "市场 / 宏观",
-      "title_zh": "Accel在19个月内再度关闭超额认购的5.5亿美元印度基金",
-      "summary_zh": "美国风投公司Accel在几周内关闭了超额认购的5.5亿美元印度基金，距上次基金关闭仅19个月，且前一只6.5亿美元基金仍有超过55%待部署，显示印度市场吸引力。",
-      "source": "TechCrunch",
-      "url": "https://techcrunch.com/2026/08/11/accel-closes-oversubscribed-550m-india-fund-within-weeks-19-months-after-its-last/",
-      "published_at": "2026-08-11T21:39:11+00:00",
-      "original_title": "Accel closes oversubscribed $550M India fund within weeks, 19 months after its last"
-    },
-    {
-      "rank": 6,
-      "candidate_id": "0b6fce20def28382",
-      "category": "市场 / 宏观",
-      "title_zh": "57亿美元公私基金Scaleup Europe首次投资卫星公司ICEYE",
-      "summary_zh": "目标规模57亿美元的公私合作基金Scaleup Europe完成首笔投资，支持芬兰卫星公司ICEYE，该基金旨在推动欧洲科技企业规模化发展。",
-      "source": "TechCrunch",
-      "url": "https://techcrunch.com/2026/08/11/whats-scaleup-europe-the-5-7b-fund-that-just-backed-satellite-company-iceye/",
-      "published_at": "2026-08-11T17:41:49+00:00",
-      "original_title": "What’s Scaleup Europe, the $5.7B fund that just backed satellite company ICEYE?"
-    },
-    {
-      "rank": 7,
-      "candidate_id": "36e1cd1e3a226e00",
-      "category": "全球事件",
-      "title_zh": "新西兰总理在选举前再次面临领导权挑战",
-      "summary_zh": "新西兰总理克里斯托弗·卢克森在一次不信任投票中幸存，并称获得党内“全力支持”，此事件发生在大选前12周，增加了政治不确定性。",
-      "source": "BBC News",
-      "url": "https://www.bbc.co.uk/news/articles/cx2ve2jk5qeo?at_medium=RSS&at_campaign=rss",
-      "published_at": "2026-08-12T02:51:02+00:00",
-      "original_title": "New Zealand PM survives second leadership challenge ahead of election"
-    },
-    {
-      "rank": 8,
-      "candidate_id": "c9580ebd81c3a0e6",
-      "category": "全球事件",
-      "title_zh": "马来西亚森林城市被指沦为诈骗中心",
-      "summary_zh": "马来西亚森林城市曾被宣传为“天堂”，但上月警方突袭该地，涉嫌诈骗活动，这个一度空置的海滨公寓项目成为关注焦点。",
-      "source": "BBC News",
-      "url": "https://www.bbc.co.uk/news/articles/cx2kvlye1k5o?at_medium=RSS&at_campaign=rss",
-      "published_at": "2026-08-11T23:31:18+00:00",
-      "original_title": "These seaside apartments were a ghost city - then police say scammers moved in"
-    }
-  ],
-  "news_degraded": false,
+  "news": [],
+  "news_degraded": true,
   "warnings": [
-    "Reuters RSS 获取失败：<unknown>:75:40: not well-formed (invalid token)",
-    "AP News RSS 获取失败：<unknown>:4:239: not well-formed (invalid token)"
+    "⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：未配置 AI 凭据。"
   ]
 }

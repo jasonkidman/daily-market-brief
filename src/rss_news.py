@@ -14,6 +14,13 @@ import feedparser
 from .news_dedupe import canonical_url
 
 
+RSS_USER_AGENT = "daily-market-brief/1.0 (github.com/jasonkidman/daily-market-brief)"
+
+
+def _parse_feed(url: str):
+    return feedparser.parse(url, agent=RSS_USER_AGENT)
+
+
 def _entry_datetime(entry: Any) -> Optional[datetime]:
     parsed = getattr(entry, "published_parsed", None) or getattr(entry, "updated_parsed", None)
     if not parsed:
@@ -26,11 +33,13 @@ def _plain_text(value: str) -> str:
 
 
 def fetch_candidates(sources: list[dict], now: datetime, hours: int = 30,
-                     parser=feedparser.parse) -> tuple[list[dict], list[str]]:
+                     parser=_parse_feed) -> tuple[list[dict], list[str]]:
     now_utc = now.astimezone(timezone.utc)
     cutoff = now_utc - timedelta(hours=hours)
     candidates, warnings = [], []
     for source in sources:
+        if source.get("enabled", True) is False:
+            continue
         try:
             feed = parser(source["url"])
             if getattr(feed, "bozo", False) and not getattr(feed, "entries", []):
@@ -45,7 +54,7 @@ def fetch_candidates(sources: list[dict], now: datetime, hours: int = 30,
                     continue
                 summary = _plain_text(getattr(entry, "summary", "") or getattr(entry, "description", ""))
                 identity = canonical_url(url) or title
-                candidates.append({
+                candidate = {
                     "candidate_id": hashlib.sha256(identity.encode("utf-8")).hexdigest()[:16],
                     "source": source["name"],
                     "title": title,
@@ -53,7 +62,10 @@ def fetch_candidates(sources: list[dict], now: datetime, hours: int = 30,
                     "published_at": published.isoformat(),
                     "url": url,
                     "priority": source["priority"],
-                })
+                }
+                if source.get("category_hint"):
+                    candidate["category_hint"] = source["category_hint"]
+                candidates.append(candidate)
         except Exception as exc:
             warnings.append(f"{source['name']} RSS 获取失败：{exc}")
     candidates.sort(key=lambda item: item["published_at"], reverse=True)

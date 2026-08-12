@@ -21,14 +21,14 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-family: Inter, Arial, Helvetica, "PingFang SC", "Microsoft YaHei", sans-serif;
   line-height: 1.55;
 }
 
 .shell { width: min(1200px, calc(100% - 40px)); margin: auto; }
 .masthead { display: flex; justify-content: space-between; align-items: flex-end; padding: 52px 0 28px; border-bottom: 1px solid var(--line); }
 .eyebrow, .section-kicker { margin: 0 0 7px; color: var(--steel); font-size: .7rem; font-weight: 800; letter-spacing: .16em; }
-.masthead h1 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(2.25rem, 5vw, 4.4rem); font-weight: 500; letter-spacing: -.04em; }
+.masthead h1 { margin: 0; color: var(--navy); font-family: Georgia, "Times New Roman", serif; font-size: 40px; font-weight: 500; letter-spacing: -.04em; }
 .dateline { margin: 10px 0 0; color: var(--muted); font-size: .88rem; }
 .health { padding: 8px 12px; border: 1px solid var(--line); border-radius: 3px; background: var(--surface); font-size: .86rem; font-weight: 700; }
 .health-critical { color: var(--red); }
@@ -51,7 +51,7 @@ body {
 .card-top { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
 .card-top h3 { margin: 0; font-size: 1rem; }
 .card-top span { color: var(--muted); font-size: .78rem; }
-.close { margin: 22px 0 16px; font-family: Georgia, serif; font-size: 2.2rem; line-height: 1; }
+.close { margin: 22px 0 16px; font-family: Inter, Arial, Helvetica, sans-serif; font-size: 2.2rem; font-weight: 620; letter-spacing: -.035em; line-height: 1; font-variant-numeric: tabular-nums; }
 .metrics { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); padding-top: 14px; }
 .metrics div { display: flex; justify-content: space-between; }
 .metrics div + div { margin-left: 14px; padding-left: 14px; border-left: 1px solid var(--line); }
@@ -119,6 +119,7 @@ footer p { margin: 14px 0 0; color: var(--ink); font-weight: 600; }
 @media(max-width:760px) {
   .shell { width: min(100% - 24px, 1200px); }
   .masthead { display: block; padding-top: 30px; }
+  .masthead h1 { font-size: 30px; }
   .health { display: inline-block; margin-top: 18px; }
   .section { padding: 34px 0; }
   .section-heading { display: block; }

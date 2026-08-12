@@ -1,19 +1,43 @@
 sources:
   - name: "BBC News"
+    enabled: true
     priority: "P0"
     url: "https://feeds.bbci.co.uk/news/world/rss.xml"
   - name: "Reuters"
+    enabled: false
     priority: "P0"
     url: "https://www.reutersagency.com/feed/?best-topics=business-finance&post_type=best"
+  - name: "BBC Business"
+    enabled: true
+    priority: "P0"
+    url: "https://feeds.bbci.co.uk/news/business/rss.xml"
+  - name: "Federal Reserve - Monetary Policy"
+    enabled: true
+    priority: "P0"
+    category_hint: "市场 / 宏观"
+    url: "https://www.federalreserve.gov/feeds/press_monetary.xml"
   - name: "TechCrunch"
+    enabled: true
     priority: "P0"
     url: "https://techcrunch.com/feed/"
   - name: "Ars Technica"
+    enabled: true
     priority: "P1"
     url: "https://feeds.arstechnica.com/arstechnica/index"
   - name: "AP News"
+    enabled: false
     priority: "P1"
     url: "https://apnews.com/hub/ap-top-news?output=rss"
+  - name: "The Guardian Business"
+    enabled: true
+    priority: "P1"
+    url: "https://www.theguardian.com/business/rss"
+  - name: "SEC Press Releases"
+    enabled: true
+    priority: "P1"
+    category_hint: "市场 / 宏观"
+    url: "https://www.sec.gov/news/pressreleases.rss"
   - name: "The Verge"
+    enabled: true
     priority: "P2"
     url: "https://www.theverge.com/rss/index.xml"
