@@ -50,22 +50,66 @@
       <div class="section-heading"><div><p class="section-kicker">DRAWDOWN RESERVE</p><h2>回撤加仓预警</h2></div><p>专项备用金 ¥200,000 · 不含月度定投</p></div>
       <div class="drawdown-grid">
         <article class="drawdown-card">
-          <div class="card-top"><div><h3>S&amp;P 500</h3><span>🟢 未触发</span></div><p class="drawdown-value">-0.4%</p></div>
-          <dl class="facts">
-            <div><dt>当前 ATH</dt><dd>7,757.64<small>2026-08-07</small></dd></div>
-            <div><dt>下一档</dt><dd>-10.0%</dd></div>
-            <div><dt>距离下一档</dt><dd>9.6个百分点</dd></div>
+          <div class="drawdown-status-layer">
+            <div>
+              <h3>S&amp;P 500</h3>
+              <span class="status-indicator status-normal">
+未触发              </span>
+            </div>
+            <div class="drawdown-reading"><span>当前回撤</span><strong>-0.4%</strong></div>
+          </div>
+
+          <div class="drawdown-progress-layer">
+            <dl class="progress-facts">
+              <div><dt>当前 ATH</dt><dd>7,757.64<small>2026-08-07</small></dd></div>
+              <div><dt>下一档触发值</dt><dd>-10.0%</dd></div>
+              <div><dt>距离下一档</dt><dd>9.6个百分点</dd></div>
+            </dl>
+            <div class="drawdown-progress" aria-label="当前回撤相对下一档触发线的视觉进度">
+              <div class="progress-labels"><span>ATH / 0%</span><span>触发线 -10.0%</span></div>
+              <div class="progress-track">
+                <span class="progress-fill" style="width: 3.8%"></span>
+                <span class="progress-marker" style="left: 3.8%"></span>
+                <span class="trigger-marker"></span>
+              </div>
+            </div>
+
+          </div>
+
+          <dl class="capital-layer">
             <div><dt>资金池</dt><dd>¥140,000</dd></div>
             <div><dt>已执行</dt><dd>¥0</dd></div>
             <div><dt>待执行</dt><dd>¥0</dd></div>
             <div><dt>剩余资金</dt><dd>¥140,000</dd></div>
           </dl>
         </article>        <article class="drawdown-card">
-          <div class="card-top"><div><h3>Nasdaq-100</h3><span>🟢 未触发</span></div><p class="drawdown-value">-3.7%</p></div>
-          <dl class="facts">
-            <div><dt>当前 ATH</dt><dd>30,660.60<small>2026-06-02</small></dd></div>
-            <div><dt>下一档</dt><dd>-15.0%</dd></div>
-            <div><dt>距离下一档</dt><dd>11.3个百分点</dd></div>
+          <div class="drawdown-status-layer">
+            <div>
+              <h3>Nasdaq-100</h3>
+              <span class="status-indicator status-normal">
+未触发              </span>
+            </div>
+            <div class="drawdown-reading"><span>当前回撤</span><strong>-3.7%</strong></div>
+          </div>
+
+          <div class="drawdown-progress-layer">
+            <dl class="progress-facts">
+              <div><dt>当前 ATH</dt><dd>30,660.60<small>2026-06-02</small></dd></div>
+              <div><dt>下一档触发值</dt><dd>-15.0%</dd></div>
+              <div><dt>距离下一档</dt><dd>11.3个百分点</dd></div>
+            </dl>
+            <div class="drawdown-progress" aria-label="当前回撤相对下一档触发线的视觉进度">
+              <div class="progress-labels"><span>ATH / 0%</span><span>触发线 -15.0%</span></div>
+              <div class="progress-track">
+                <span class="progress-fill" style="width: 24.7%"></span>
+                <span class="progress-marker" style="left: 24.7%"></span>
+                <span class="trigger-marker"></span>
+              </div>
+            </div>
+
+          </div>
+
+          <dl class="capital-layer">
             <div><dt>资金池</dt><dd>¥60,000</dd></div>
             <div><dt>已执行</dt><dd>¥0</dd></div>
             <div><dt>待执行</dt><dd>¥0</dd></div>

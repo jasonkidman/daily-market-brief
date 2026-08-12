@@ -52,21 +52,53 @@
       <div class="drawdown-grid">
         {% for key in ['sp500', 'nasdaq100'] %}{% if key in report.drawdown %}{% set item = report.drawdown[key] %}
         <article class="drawdown-card">
-          <div class="card-top"><div><h3>{{ item.name }}</h3><span>{{ item.status_label }}</span></div><p class="drawdown-value">-{{ item.current_drawdown|percent }}</p></div>
-          <dl class="facts">
-            <div><dt>当前 ATH</dt><dd>{{ item.ath|number }}<small>{{ item.ath_date }}</small></dd></div>
-            <div><dt>下一档</dt><dd>{% if item.next_threshold is not none %}-{{ item.next_threshold|percent }}{% else %}无{% endif %}</dd></div>
-            <div><dt>距离下一档</dt><dd>{% if item.distance_to_next is not none %}{{ (item.distance_to_next * 100)|round(1) }}个百分点{% else %}—{% endif %}</dd></div>
+          <div class="drawdown-status-layer">
+            <div>
+              <h3>{{ item.name }}</h3>
+              <span class="status-indicator status-{{ item.status }}">
+                {% if item.status == 'near' %}接近触发{% elif item.status == 'pending' %}待执行{% elif item.status == 'executed' %}已执行{% else %}未触发{% endif %}
+              </span>
+            </div>
+            <div class="drawdown-reading"><span>当前回撤</span><strong>-{{ item.current_drawdown|percent }}</strong></div>
+          </div>
+
+          <div class="drawdown-progress-layer">
+            <dl class="progress-facts">
+              <div><dt>当前 ATH</dt><dd>{{ item.ath|number }}<small>{{ item.ath_date }}</small></dd></div>
+              <div><dt>下一档触发值</dt><dd>{% if item.next_threshold is not none %}-{{ item.next_threshold|percent }}{% else %}无{% endif %}</dd></div>
+              <div><dt>距离下一档</dt><dd>{% if item.distance_to_next is not none %}{{ (item.distance_to_next * 100)|round(1) }}个百分点{% else %}—{% endif %}</dd></div>
+            </dl>
+            {% if item.next_threshold is not none %}
+            {% set marker_position = (item.current_drawdown / item.next_threshold * 100) %}
+            {% if marker_position > 100 %}{% set marker_position = 100 %}{% endif %}
+            <div class="drawdown-progress" aria-label="当前回撤相对下一档触发线的视觉进度">
+              <div class="progress-labels"><span>ATH / 0%</span><span>触发线 -{{ item.next_threshold|percent }}</span></div>
+              <div class="progress-track">
+                <span class="progress-fill" style="width: {{ marker_position|round(1) }}%"></span>
+                <span class="progress-marker" style="left: {{ marker_position|round(1) }}%"></span>
+                <span class="trigger-marker"></span>
+              </div>
+            </div>
+            {% else %}
+            <div class="last-tier-state last-tier-{{ item.status }}">
+              <span class="last-tier-icon">{% if item.status == 'executed' %}✓{% endif %}</span><strong>已到最后一档</strong>
+            </div>
+            {% endif %}
+
+            {% if item.pending_tiers %}
+            <div class="triggered-tiers">
+              {% for tier in item.pending_tiers %}<span><strong>{{ tier.label }}</strong>{{ tier.amount|money }} · 待执行</span>{% endfor %}
+            </div>
+            <p class="execution-note">累计待执行：<strong>{{ item.pending_amount|money }}</strong><small>完成实际买入后：GitHub → Actions → 确认回撤加仓</small></p>
+            {% endif %}
+          </div>
+
+          <dl class="capital-layer">
             <div><dt>资金池</dt><dd>{{ item.pool|money }}</dd></div>
             <div><dt>已执行</dt><dd>{{ item.executed_amount|money }}</dd></div>
             <div><dt>待执行</dt><dd>{{ item.pending_amount|money }}</dd></div>
             <div><dt>剩余资金</dt><dd>{{ item.remaining_amount|money }}</dd></div>
           </dl>
-          {% if item.pending_tiers %}<div class="pending-list">
-            {% for tier in item.pending_tiers %}<div><strong>{{ tier.label }}</strong><span>{{ tier.amount|money }}</span><em>待执行</em></div>{% endfor %}
-            <p>累计待执行：<strong>{{ item.pending_amount|money }}</strong></p>
-            <small>完成实际买入后：GitHub → Actions → 确认回撤加仓</small>
-          </div>{% endif %}
         </article>{% endif %}{% endfor %}
       </div>
       {% else %}<div class="alert critical"><strong>🔴 行情数据校验失败</strong><span>今日暂停回撤预警判断；现有档位状态未被修改。</span></div>{% endif %}
