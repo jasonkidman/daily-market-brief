@@ -10,19 +10,19 @@
 <body>
   <main class="shell">
     <header class="masthead">
-      <div>
-        <p class="eyebrow">PERSONAL INVESTMENT DISCIPLINE</p>
+      <div class="masthead-copy">
         <h1>Daily Market Brief</h1>
         <p class="dateline">报告日期：{{ report.report_date }} · 北京时间最后更新时间：{{ report.generated_at }}</p>
       </div>
-      <div class="health health-{{ report.status }}">{{ report.status_label }}</div>
+      <div class="masthead-tools">
+        <nav class="history-nav" aria-label="最近七天日报">
+          {% for item in nav %}
+          <a class="{% if item.date == current_date %}active{% endif %}" href="{% if is_index and loop.first %}index.html{% elif is_index %}history/{{ item.date }}.html{% elif loop.first %}../index.html{% else %}{{ item.date }}.html{% endif %}">{{ item.label }}</a>
+          {% endfor %}
+        </nav>
+        <div class="health health-{{ report.status }}">{{ report.status_label }}</div>
+      </div>
     </header>
-
-    <nav class="history-nav" aria-label="最近七天日报">
-      {% for item in nav %}
-      <a class="{% if item.date == current_date %}active{% endif %}" href="{% if is_index and loop.first %}index.html{% elif is_index %}history/{{ item.date }}.html{% elif loop.first %}../index.html{% else %}{{ item.date }}.html{% endif %}">{{ item.label }}</a>
-      {% endfor %}
-    </nav>
 
     {% if report.status == 'critical' %}
     <section class="alert critical"><strong>🔴 行情数据校验失败</strong><span>今日暂停回撤预警判断</span></section>
@@ -30,7 +30,7 @@
     <section class="alert warning"><strong>🟠 部分数据源异常</strong>{% for warning in report.warnings %}<span>{{ warning }}</span>{% endfor %}</section>
     {% endif %}
 
-    <section class="section">
+    <section class="section market-section">
       <div class="section-heading"><div><p class="section-kicker">MARKET CLOSE</p><h2>美国主要指数</h2></div>
         <p>行情数据日期：{{ report.market_date or '—' }} 美股收盘</p></div>
       <div class="market-grid">

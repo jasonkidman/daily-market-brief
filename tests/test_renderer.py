@@ -80,8 +80,8 @@ def test_drawdown_cards_render_three_action_layers_and_visual_progress(tmp_path)
     assert '.close{' in compact_css
     assert 'font-family:Inter,Arial,Helvetica,sans-serif' in compact_css
     assert '.close' in css and 'font-variant-numeric: tabular-nums' in css
-    assert '.masthead h1' in css and 'font-size: 40px' in css
-    assert '@media(max-width:760px)' in compact_css and 'font-size:30px' in compact_css
+    assert '.masthead h1' in css and 'font-size: 36px' in css
+    assert '@media(max-width:760px)' in compact_css and 'font-size:27px' in compact_css
 
 
 def test_drawdown_card_replaces_progress_with_last_tier_message(tmp_path):
@@ -123,3 +123,39 @@ def test_desktop_density_uses_compact_spacing_without_shrinking_primary_numbers(
     assert ".section-heading{display:flex;justify-content:space-between" in compact_css
     assert "@media(max-width:760px)" in compact_css
     assert ".section{padding:32px0" in compact_css
+
+
+def test_compact_header_contains_history_navigation_status_and_preserves_links(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    for date in ("2026-08-11", "2026-08-12"):
+        (reports / f"{date}.json").write_text(json.dumps(report(date)), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    index_html = (site / "index.html").read_text(encoding="utf-8")
+    history_html = (site / "history" / "2026-08-11.html").read_text(encoding="utf-8")
+    css = (site / "style.css").read_text(encoding="utf-8")
+    compact_css = "".join(css.split())
+    header_html = index_html[index_html.index('<header class="masthead">'):index_html.index("</header>")]
+
+    assert "PERSONAL INVESTMENT DISCIPLINE" not in index_html
+    assert 'class="masthead-copy"' in header_html
+    assert 'class="masthead-tools"' in header_html
+    assert 'class="history-nav"' in header_html
+    assert 'class="health health-ok"' in header_html
+    assert 'href="index.html"' in header_html
+    assert 'href="history/2026-08-11.html"' in header_html
+    assert 'href="../index.html"' in history_html
+    assert 'href="2026-08-11.html"' in history_html
+    assert ".masthead{display:grid;grid-template-columns:minmax(0,1fr)auto" in compact_css
+    assert ".masthead-tools{display:flex;flex-direction:column;align-items:flex-end" in compact_css
+    assert ".history-nava" in compact_css and "height:32px" in compact_css
+    assert ".mastheadh1" in compact_css and "font-size:36px" in compact_css and "line-height:1.12" in compact_css
+    assert ".health" in compact_css and "font-size:.82rem" in compact_css and "padding:6px10px" in compact_css
+    assert "@media(max-width:760px)" in compact_css
+    assert ".masthead{grid-template-columns:1fr" in compact_css
+    assert ".masthead-tools{align-items:stretch" in compact_css
+    assert ".history-nav{max-width:100%;overflow-x:auto" in compact_css
