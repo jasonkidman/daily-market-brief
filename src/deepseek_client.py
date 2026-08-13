@@ -64,6 +64,8 @@ def validate_selection(payload: Any, candidates: list[dict]) -> list[dict]:
             "published_at": source["published_at"],
             "original_title": source["title"],
             "selection_reason": str(item.get("selection_reason", "")).strip(),
+            "event_summary": source.get("event_summary", source["title"]),
+            "topic_group": source.get("topic_group"),
         })
     if sorted(item["rank"] for item in validated) != list(range(1, len(validated) + 1)):
         raise NewsSelectionError("rank 必须从 1 连续排列。")
@@ -89,7 +91,15 @@ def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict
                 ) -> tuple[list[dict], Optional[str]]:
     if not candidates:
         return [], None
-    payload = {"candidates": candidates, "recent_7_days": recent_selected or []}
+    event_fields = (
+        "candidate_id", "event_summary", "topic_group", "source", "title", "summary", "published_at",
+    )
+    events = [{
+        **{field: candidate.get(field) for field in event_fields},
+        "event_summary": candidate.get("event_summary", candidate.get("title", "")),
+        "topic_group": candidate.get("topic_group", "OTHER_SYSTEMIC"),
+    } for candidate in candidates]
+    payload = {"events": events, "recent_7_days_events": recent_selected or []}
     if market_context:
         payload.update(market_context)
     user_payload = json.dumps(payload, ensure_ascii=False)

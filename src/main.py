@@ -18,6 +18,12 @@ from .market_breadth import build_market_breadth, build_offline_market_breadth, 
 from .market_health import build_market_breadth_text
 from .market_signals import build_market_context_for_ai, calculate_market_signals
 from .news_dedupe import dedupe_candidates
+from .news_events import (
+    build_event_representatives,
+    cluster_news_events,
+    event_selection_candidates,
+    validate_event_clusters,
+)
 from .report import load_reports, retain_latest_reports, write_report
 from .renderer import render_site
 from .rss_news import fetch_candidates
@@ -147,16 +153,83 @@ def _recent_news(reports: list[dict]) -> list[dict]:
     return selected
 
 
+def _recent_news_events(reports: list[dict]) -> list[dict]:
+    """Load seven days of event summaries while preserving legacy report compatibility."""
+    events = []
+    for report in reports[:7]:
+        for item in report.get("news", []):
+            original_title = item.get("original_title", item.get("title_zh", ""))
+            events.append({
+                "report_date": report.get("report_date"),
+                "event_summary": item.get("event_summary") or original_title,
+                "topic_group": item.get("topic_group"),
+                "original_title": original_title,
+            })
+    return events
+
+
+def _log_news_pipeline(rss_count: int, deduped_count: int, event_representatives: list[dict],
+                       recent_events: list[dict], selected: list[dict]) -> None:
+    print("[NEWS PIPELINE]")
+    print(f"RSS candidates: {rss_count}")
+    print(f"After deterministic dedupe: {deduped_count}")
+    print("[EVENT CLUSTERING]")
+    print(f"Events: {len(event_representatives)}")
+    print(f"Duplicates collapsed: {max(deduped_count - len(event_representatives), 0)}")
+    print("Largest clusters:")
+    for event in sorted(event_representatives, key=lambda item: len(item["candidate_ids"]), reverse=True)[:5]:
+        print(f"{event['event_summary']}: {len(event['candidate_ids'])} articles")
+    print("[EVENT HISTORY]")
+    print(f"Recent events checked: {len(recent_events)}")
+    print("[TOPIC DISTRIBUTION]")
+    distribution = {}
+    for item in selected:
+        topic = item.get("topic_group") or "OTHER_SYSTEMIC"
+        distribution[topic] = distribution.get(topic, 0) + 1
+    for topic, count in sorted(distribution.items()):
+        print(f"{topic}: {count}")
+    print("[NEWS SELECTED]")
+    print(f"{len(selected)} events")
+    for item in selected:
+        print(f"{item['rank']}. {item['source']} | {item['original_title']} | {item.get('topic_group')}")
+
+
 def _offline_news():
-    candidate = {
-        "candidate_id": "offline-fixture-1", "source": "Offline Fixture", "title": "Offline generation smoke test",
-        "summary": "Deterministic candidate for local pipeline verification only.",
-        "published_at": "2026-08-12T00:00:00+00:00", "url": "https://example.com/offline-fixture",
-        "priority": "P0",
-    }
-    payload = {"news": [{"rank": 1, "candidate_id": candidate["candidate_id"], "category": "市场 / 宏观",
-                          "title_zh": "离线生成流程验证", "summary_zh": "此条目仅用于验证本地日报从候选数据到静态页面的完整流程，不代表真实新闻或投资信息。"}]}
-    return validate_selection(payload, [candidate])
+    candidates = [
+        {"candidate_id": "offline-fed-reuters", "source": "Reuters", "priority": "P0",
+         "title": "Fed holds rates", "summary": "Federal Reserve held interest rates unchanged after its meeting.",
+         "published_at": "2026-08-12T01:00:00+00:00", "url": "https://example.com/offline-fed-reuters"},
+        {"candidate_id": "offline-fed-bbc", "source": "BBC News", "priority": "P0",
+         "title": "Federal Reserve leaves rates unchanged", "summary": "Fed leaves benchmark rates unchanged.",
+         "published_at": "2026-08-12T00:30:00+00:00", "url": "https://example.com/offline-fed-bbc"},
+        {"candidate_id": "offline-nvidia-techcrunch", "source": "TechCrunch", "priority": "P0",
+         "title": "Nvidia launches AI chip", "summary": "Nvidia introduced a new AI chip for data centers.",
+         "published_at": "2026-08-12T02:00:00+00:00", "url": "https://example.com/offline-nvidia-techcrunch"},
+        {"candidate_id": "offline-nvidia-ars", "source": "Ars Technica", "priority": "P1",
+         "title": "Nvidia unveils new AI processor", "summary": "Nvidia revealed its latest AI processor.",
+         "published_at": "2026-08-12T02:10:00+00:00", "url": "https://example.com/offline-nvidia-ars"},
+        {"candidate_id": "offline-oil-bbc", "source": "BBC News", "priority": "P0",
+         "title": "Oil rises after Middle East escalation", "summary": "Oil prices rose following a Middle East escalation.",
+         "published_at": "2026-08-12T03:00:00+00:00", "url": "https://example.com/offline-oil-bbc"},
+    ]
+    events = validate_event_clusters({"events": [
+        {"event_id": "event_001", "candidate_ids": ["offline-fed-reuters", "offline-fed-bbc"],
+         "event_summary": "Federal Reserve held rates unchanged after its meeting.", "topic_group": "US_MARKET_MACRO"},
+        {"event_id": "event_002", "candidate_ids": ["offline-nvidia-techcrunch", "offline-nvidia-ars"],
+         "event_summary": "Nvidia introduced a new AI processor for data centers.", "topic_group": "AI_CHIPS"},
+        {"event_id": "event_003", "candidate_ids": ["offline-oil-bbc"],
+         "event_summary": "Oil prices rose after a Middle East escalation.", "topic_group": "GEOPOLITICS"},
+    ]}, candidates)
+    selection_candidates = event_selection_candidates(build_event_representatives(events, candidates))
+    payload = {"news": [
+        {"rank": 1, "candidate_id": "offline-fed-reuters", "category": "市场 / 宏观",
+         "title_zh": "美联储维持利率", "summary_zh": "此条目仅用于验证事件级新闻去重后的离线日报生成流程，不代表真实新闻或投资信息。"},
+        {"rank": 2, "candidate_id": "offline-nvidia-techcrunch", "category": "AI / 科技",
+         "title_zh": "英伟达推出新 AI 芯片", "summary_zh": "此条目仅用于验证同一公司同一次事件被合并为单一代表文章，不代表真实新闻或投资信息。"},
+        {"rank": 3, "candidate_id": "offline-oil-bbc", "category": "全球事件",
+         "title_zh": "中东局势升级推动油价上涨", "summary_zh": "此条目仅用于验证独立地缘事件保留为单独新闻事件，不代表真实新闻或投资信息。"},
+    ]}
+    return validate_selection(payload, selection_candidates)
 
 
 def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
@@ -231,11 +304,19 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
     else:
         candidates, rss_warnings = fetch_candidates(news_sources, now)
         warnings.extend(rss_warnings)
-        candidates = dedupe_candidates(candidates, _recent_news(retained))
+        rss_candidate_count = len(candidates)
+        candidates = dedupe_candidates(candidates)
+        recent_events = _recent_news_events(retained)
         api_key = os.environ.get("DEEPSEEK_API_KEY")
         if not api_key:
             news, ai_warning = [], "⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：未配置 AI 凭据。"
+            event_representatives = []
         else:
+            events, clustering_warning = cluster_news_events(candidates, api_key)
+            if clustering_warning:
+                warnings.append(clustering_warning)
+            event_representatives = build_event_representatives(events, candidates)
+            selection_candidates = event_selection_candidates(event_representatives)
             ai_market_context = None
             if validity_summary["context_any_valid"] or market_breadth["health"].get("valid"):
                 ai_market_context = {
@@ -252,8 +333,9 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
                 }
                 print("[NEWS]\nMarket-driven context generated")
             news, ai_warning = select_news(
-                candidates, api_key, _recent_news(retained), market_context=ai_market_context
+                selection_candidates, api_key, recent_events, market_context=ai_market_context
             )
+        _log_news_pipeline(rss_candidate_count, len(candidates), event_representatives, recent_events, news)
         if ai_warning:
             warnings.append(ai_warning)
             news_degraded = True

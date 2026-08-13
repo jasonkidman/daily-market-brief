@@ -10,6 +10,8 @@ import yaml
 
 from src.deepseek_client import NewsSelectionError, select_news, validate_selection
 from src.news_dedupe import dedupe_candidates
+from src.news_events import build_event_representatives, cluster_news_events, event_selection_candidates
+from src.main import _recent_news_events
 from src.rss_news import fetch_candidates
 
 
@@ -227,3 +229,88 @@ def test_deepseek_still_runs_without_market_context():
     assert news == []
     assert warning is None
     assert "market_context" not in calls[0]
+
+
+def test_selection_uses_program_owned_event_metadata_and_excludes_urls_from_stage_b_payload():
+    captured = {}
+    event_candidate = {
+        **candidate("1", "Fed holds rates", "https://secret.example/fed"),
+        "event_summary": "Fed held rates after its meeting.",
+        "topic_group": "US_MARKET_MACRO",
+    }
+
+    def model(system_prompt, user_payload, api_key):
+        captured["payload"] = json.loads(user_payload)
+        return json.dumps({"news": [{
+            "rank": 1, "candidate_id": "1", "category": "市场 / 宏观",
+            "title_zh": "美联储维持利率", "summary_zh": "摘要",
+            "selection_reason": "重大宏观事件",
+            "event_summary": "模型伪造摘要", "topic_group": "AI_CHIPS",
+        }]})
+
+    news, warning = select_news(
+        [event_candidate], "key", recent_selected=[{"event_summary": "历史事件", "topic_group": "US_MARKET_MACRO"}],
+        call_model=model, sleep_fn=lambda _: None,
+    )
+
+    assert warning is None
+    assert captured["payload"]["events"][0]["event_summary"] == "Fed held rates after its meeting."
+    assert captured["payload"]["recent_7_days_events"][0]["event_summary"] == "历史事件"
+    assert "url" not in captured["payload"]["events"][0]
+    assert news[0]["event_summary"] == "Fed held rates after its meeting."
+    assert news[0]["topic_group"] == "US_MARKET_MACRO"
+
+
+def test_recent_news_events_supports_legacy_and_v2_reports():
+    events = _recent_news_events([
+        {"report_date": "2026-08-12", "news": [{
+            "original_title": "Legacy Fed headline", "url": "https://legacy.example",
+        }]},
+        {"report_date": "2026-08-11", "news": [{
+            "original_title": "New headline", "event_summary": "Fed held rates", "topic_group": "US_MARKET_MACRO",
+        }]},
+    ])
+
+    assert events == [
+        {"report_date": "2026-08-12", "event_summary": "Legacy Fed headline", "topic_group": None,
+         "original_title": "Legacy Fed headline"},
+        {"report_date": "2026-08-11", "event_summary": "Fed held rates", "topic_group": "US_MARKET_MACRO",
+         "original_title": "New headline"},
+    ]
+
+
+def test_event_selection_prompt_has_topic_concentration_contract():
+    from src.news_prompt import SYSTEM_PROMPT
+
+    assert "同一 topic_group 通常最多2条" in SYSTEM_PROMPT
+    assert "重大独立事件允许突破" in SYSTEM_PROMPT
+    assert "突破必须说明理由" in SYSTEM_PROMPT
+
+
+def test_stage_a_fallback_still_feeds_stage_b_selection():
+    pool = [candidate("a", "Fed holds rates", "https://x/a"), candidate("b", "Oil rises", "https://x/b")]
+    events, clustering_warning = cluster_news_events(
+        pool, "key", call_model=lambda *args: "not json", sleep_fn=lambda _: None
+    )
+
+    def editor(system_prompt, user_payload, api_key):
+        return json.dumps({"news": [{
+            "rank": 1, "candidate_id": "a", "category": "市场 / 宏观",
+            "title_zh": "美联储维持利率", "summary_zh": "摘要",
+        }]})
+
+    selected, selection_warning = select_news(
+        event_selection_candidates(build_event_representatives(events, pool)), "key",
+        call_model=editor, sleep_fn=lambda _: None,
+    )
+
+    assert "事件级去重暂时失败" in clustering_warning
+    assert selection_warning is None
+    assert selected[0]["candidate_id"] == "a"
+
+
+def test_event_selection_prompt_strengthens_market_structure_relevance():
+    from src.news_prompt import SYSTEM_PROMPT
+
+    assert "市场结构相关性" in SYSTEM_PROMPT
+    assert "不得把相关性写成确定因果" in SYSTEM_PROMPT

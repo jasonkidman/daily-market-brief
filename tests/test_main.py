@@ -27,6 +27,13 @@ def test_offline_fixture_runs_complete_pipeline(tmp_path):
     assert report["market_breadth"]["sectors"]["advance_ratio"] == pytest.approx(7 / 11)
     assert report["market_breadth"]["health"]["score"] == pytest.approx(0.61454545)
     assert report["market_breadth"]["health"]["level"] == "mixed"
+    assert [item["candidate_id"] for item in report["news"]] == [
+        "offline-fed-reuters", "offline-nvidia-techcrunch", "offline-oil-bbc",
+    ]
+    assert [item["topic_group"] for item in report["news"]] == [
+        "US_MARKET_MACRO", "AI_CHIPS", "GEOPOLITICS",
+    ]
+    assert all(item["event_summary"] for item in report["news"])
     assert "Daily Market Brief" in index_path.read_text(encoding="utf-8")
     assert result == report_path
 
