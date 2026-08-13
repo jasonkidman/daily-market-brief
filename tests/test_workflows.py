@@ -13,7 +13,8 @@ def load_workflow(name):
 def test_daily_workflow_uses_edgeone_commit_flow_without_github_pages():
     workflow = load_workflow("daily-report.yml")
     text = (ROOT / ".github" / "workflows" / "daily-report.yml").read_text(encoding="utf-8")
-    assert 'timezone: "Asia/Shanghai"' in text
+    assert 'cron: "0 2 * * *"' in text
+    assert "timezone:" not in text
     assert workflow["concurrency"]["group"] == "investment-report-state"
     assert workflow["concurrency"]["cancel-in-progress"] is False
     assert workflow["permissions"] == {"contents": "write"}
