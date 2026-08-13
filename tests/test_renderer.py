@@ -69,20 +69,77 @@ def test_renders_today_in_one_line_after_header_and_omits_it_for_legacy_reports(
     legacy_html = (site / "history" / "2026-08-11.html").read_text(encoding="utf-8")
     css = (site / "style.css").read_text(encoding="utf-8")
     compact_css = "".join(css.split())
-    assert "TODAY IN ONE LINE" in index_html and "今日市场一句话" in index_html
+    assert "TODAY IN ONE LINE" not in index_html and "今日市场一句话" in index_html
+    assert 'class="summary-icon"' in index_html
     assert "基于市场数据 · Market Breadth · Top News" in index_html
-    assert index_html.index("TODAY IN ONE LINE") > index_html.index("</header>")
-    assert index_html.index("TODAY IN ONE LINE") < index_html.index("MARKET CLOSE")
+    assert index_html.index("今日市场一句话") > index_html.index("</header>")
+    assert index_html.index("今日市场一句话") < index_html.index("美国主要指数")
     assert "标普500小幅上涨" in index_html
-    assert "TODAY IN ONE LINE" not in legacy_html
-    assert ".today-summary" in css
-    assert "border-left:2pxsolidvar(--steel)" in compact_css
-    assert "font-size:1.02rem" in compact_css
-    assert "line-height:1.75" in compact_css
-    assert "@media(max-width:760px)" in compact_css
+    assert "今日市场一句话" not in legacy_html
+    assert ".summary" in css
+    assert ".summary{margin-top:13px;padding:12px15px" in compact_css
+    assert ".summaryp" in compact_css and "font-size:11px" in compact_css
+    assert "line-height:1.6" in compact_css
+    assert "@media(max-width:900px)" in compact_css
 
 
-def test_drawdown_cards_render_three_action_layers_and_visual_progress(tmp_path):
+def test_dashboard_visual_structure_maps_existing_data_without_changing_it(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["market_summary"] = {
+        "market": "标普500小幅上涨，纳指100相对更强。",
+        "drivers": "市场同时关注利率预期。",
+        "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
+    }
+    for key, ticker, daily, ytd in (
+        ("sp500", "^GSPC", 0.003, 0.132), ("nasdaq100", "^NDX", -0.002, 0.101), ("dow", "^DJI", 0, -0.01),
+    ):
+        payload["market"][key].update({"ticker": ticker, "valid": True, "daily_return": daily, "ytd_return": ytd})
+    payload["market_context"] = {
+        "russell2000": {"name": "Russell 2000", "valid": True, "close": 3045.48, "daily_return": 0.006},
+        "vix": {"name": "VIX", "valid": True, "close": 14.55, "daily_return": -0.048},
+        "dxy": {"name": "美元指数", "valid": True, "close": 100.01, "daily_return": 0.002},
+        "us10y": {"name": "10Y 美债", "valid": True, "close": 4.68, "yield_change_bp": 8},
+    }
+    payload["market_breadth"] = {
+        "stocks": {"advance_ratio": .519, "advancers": 261, "decliners": 230, "unchanged": 12, "unchanged_ratio": .024, "decline_ratio": .457, "valid_count": 503, "total_constituents": 503, "status": "ok"},
+        "sectors": {"advancers": 6, "decliners": 5, "items": []},
+        "health": {"valid": True, "level": "mixed", "label": "市场分化", "summary": "上涨与下跌分布较为均衡。", "divergence": None},
+    }
+    payload["news"] = [{
+        "rank": rank, "category": "市场 / 宏观", "source": "Fixture", "title_zh": f"新闻标题 {rank}",
+        "summary_zh": f"新闻摘要 {rank}", "url": f"https://example.com/{rank}", "published_at": "2026-08-12T10:00:00+00:00",
+    } for rank in range(1, 9)]
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    css = (site / "style.css").read_text(encoding="utf-8")
+    compact_css = "".join(css.split())
+    assert 'class="summary-icon"' in html and "TODAY IN ONE LINE" not in html
+    assert html.count('class="market-line"') == 3
+    assert 'class="market-value up">100.00 <span class="arrow">▲</span>' in html
+    assert 'class="market-value down">100.00 <span class="arrow">▼</span>' in html
+    assert 'class="market-value flat">100.00 <span class="arrow">→</span>' in html
+    assert html.count('class="icon-wrap"') == 4
+    assert html.count('class="context-info"') == 4
+    assert html.count('class="draw-layout"') == 2
+    assert 'class="news-layout news-count-4"' in html
+    assert html.count('class="card news-card"') == 3
+    assert html.count('class="nrow"') == 5
+    assert '.page{width:min(1440px,calc(100%-34px))' in compact_css
+    assert '.market-line{display:grid;grid-template-columns:minmax(0,1.25fr).62fr.78fr' in compact_css
+    assert '.breadth-grid{display:grid;grid-template-columns:32%68%' in compact_css
+    assert '.news-layout{display:grid;grid-template-columns:1fr1fr1fr.9fr' in compact_css
+    assert '.draw-layout{display:grid;grid-template-columns:100px1fr105px' in compact_css
+    assert '@media(max-width:900px)' in compact_css
+
+
+def test_drawdown_cards_render_three_action_zones_and_visual_progress(tmp_path):
     reports = tmp_path / "reports"
     reports.mkdir()
     payload = report("2026-08-12")
@@ -95,29 +152,33 @@ def test_drawdown_cards_render_three_action_layers_and_visual_progress(tmp_path)
     html = (site / "index.html").read_text(encoding="utf-8")
     css = (site / "style.css").read_text(encoding="utf-8")
     compact_css = "".join(css.split())
-    assert html.count('class="drawdown-card drawdown-') == 2
-    assert html.count('class="drawdown-status-layer"') == 2
-    assert html.count('class="drawdown-progress-layer"') == 2
-    assert html.count('class="capital-layer"') == 2
-    assert 'class="status-indicator status-normal"' in html
-    assert 'class="status-indicator status-pending"' in html
+    assert html.count('class="card draw-card draw-') == 2
+    assert html.count('class="draw-layout"') == 2
+    assert html.count('class="draw-index"') == 2
+    assert html.count('class="draw-mid"') == 2
+    assert html.count('class="cash"') == 2
+    assert 'class="draw-status status-normal"' in html
+    assert 'class="draw-status status-pending"' in html
     assert "未触发" in html
     assert "待执行" in html
-    assert 'class="progress-marker" style="left: 60.0%"' in html
-    assert 'class="progress-marker" style="left: 85.0%"' in html
+    assert html.count("历史高点 ATH") == 2
+    assert html.index("历史高点 ATH") < html.index("下一档触发值") < html.index('class="dtrack"') < html.index("可用金额")
+    assert '<b style="left:60.0%"></b>' in html
+    assert '<b style="left:85.0%"></b>' in html
     assert "第一档" in html
     assert "完成实际买入后" in html
     assert "font-variant-numeric:tabular-nums" in compact_css
-    assert ".capital-layer{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))" in compact_css
-    assert "@media(max-width:760px)" in compact_css
-    assert ".drawdown-grid{grid-template-columns:1fr}" in compact_css
-    assert '--paper:#f4f6f8' in compact_css.lower()
-    assert '--surface:#fcfdfe' in compact_css.lower()
-    assert '.close{' in compact_css
-    assert 'font-family:Inter,Arial,Helvetica,sans-serif' in compact_css
-    assert '.close' in css and 'font-variant-numeric: tabular-nums' in css
-    assert '.masthead h1' in css and 'font-size: 36px' in css
-    assert '@media(max-width:760px)' in compact_css and 'font-size:27px' in compact_css
+    assert ".draw-layout{display:grid;grid-template-columns:100px1fr105px" in compact_css
+    assert ".draw-mid{display:grid;grid-template-columns:repeat(3,1fr)" in compact_css
+    assert ".dd{margin-top:5px;font-size:25px" in compact_css
+    assert ".cashstrong{font-size:14px}" in compact_css
+    assert "@media(max-width:900px)" in compact_css
+    assert ".draw-grid" in css and "grid-template-columns:1fr" in compact_css
+    assert '--bg:#f5f7f9' in compact_css.lower()
+    assert '--surface:#fff' in compact_css.lower()
+    assert '.market-value{' in compact_css and 'font-variant-numeric:tabular-nums' in compact_css
+    assert 'font-family:Inter,Arial,"PingFangSC","MicrosoftYaHei",sans-serif' in compact_css
+    assert 'h1{margin:0;font:50031px/1.05Georgia' in compact_css
 
 
 def test_drawdown_card_replaces_progress_with_last_tier_message(tmp_path):
@@ -136,8 +197,8 @@ def test_drawdown_card_replaces_progress_with_last_tier_message(tmp_path):
     render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
 
     html = (site / "index.html").read_text(encoding="utf-8")
-    assert 'class="status-indicator status-executed"' in html
-    assert "已到最后一档" in html
+    assert 'class="draw-status status-executed"' in html
+    assert 'class="dtrack complete" aria-label="已到最后一档"' in html
 
 
 def test_desktop_density_uses_compact_spacing_without_shrinking_primary_numbers():
@@ -145,20 +206,14 @@ def test_desktop_density_uses_compact_spacing_without_shrinking_primary_numbers(
     css = (root / "static" / "style.css").read_text(encoding="utf-8")
     compact_css = "".join(css.split())
 
-    assert ".section{padding:30px0" in compact_css
-    assert ".section-kicker{margin-bottom:5px" in compact_css
-    assert ".section-heading" in css and "margin-bottom: 15px" in css
-    assert ".market-card{padding:18px" in compact_css
-    assert ".close{margin:14px011px" in compact_css
-    assert "font-size:2.2rem" in compact_css
-    assert ".drawdown-status-layer" in css and "padding: 18px 20px 16px" in css
-    assert ".drawdown-progress{margin-top:12px" in compact_css
-    assert ".capital-layer" in css and "padding: 13px 20px" in css
-    assert ".news-item" in css and "padding: 17px 20px" in css
-    assert ".news-itemp" in compact_css and "line-height:1.55" in compact_css
-    assert ".section-heading{display:flex;justify-content:space-between" in compact_css
-    assert "@media(max-width:760px)" in compact_css
-    assert ".section{padding:32px0" in compact_css
+    assert ".section{padding:18px0" in compact_css
+    assert ".section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}" in compact_css
+    assert ".market-card{padding:13px14px}" in compact_css
+    assert ".market-value{font-size:28px" in compact_css
+    assert ".draw-card{padding:13px14px}" in compact_css
+    assert ".news-card{padding:12px13px}" in compact_css
+    assert ".news-cardp" in compact_css and "line-height:1.5" in compact_css
+    assert "@media(max-width:900px)" in compact_css
 
 
 def _date_options(html):
@@ -178,7 +233,8 @@ def test_single_report_header_select_only_contains_today(tmp_path):
     html = (site / "index.html").read_text(encoding="utf-8")
     assert _date_options(html) == [("index.html", " selected", "今日 · 2026-08-12")]
     assert 'aria-label="选择日报日期"' in html
-    assert "window.location.href = this.value" in html
+    assert "window.location.href = select.value" in html
+    assert 'id="archive-loading"' in html
 
 
 def test_report_select_limits_to_latest_seven_existing_reports(tmp_path):
@@ -213,13 +269,13 @@ def test_report_select_preserves_index_and_history_relative_paths(tmp_path):
     history_html = (site / "history" / "2026-08-11.html").read_text(encoding="utf-8")
     css = (site / "style.css").read_text(encoding="utf-8")
     compact_css = "".join(css.split())
-    header_html = index_html[index_html.index('<header class="masthead">'):index_html.index("</header>")]
+    header_html = index_html[index_html.index('<header>'):index_html.index("</header>")]
 
     assert "PERSONAL INVESTMENT DISCIPLINE" not in index_html
-    assert 'class="masthead-copy"' in header_html
-    assert 'class="masthead-tools"' in header_html
+    assert 'class="header-meta"' in header_html
+    assert 'class="header-tools"' in header_html
     assert 'class="report-select"' in header_html
-    assert 'class="health health-ok"' in header_html
+    assert 'class="status status-ok"' in header_html
     assert _date_options(index_html) == [
         ("index.html", " selected", "今日 · 2026-08-12"),
         ("history/2026-08-11.html", "", "2026-08-11"),
@@ -230,16 +286,15 @@ def test_report_select_preserves_index_and_history_relative_paths(tmp_path):
         ("2026-08-11.html", " selected", "2026-08-11"),
         ("2026-08-10.html", "", "2026-08-10"),
     ]
-    assert ".masthead{display:grid;grid-template-columns:minmax(0,1fr)auto" in compact_css
-    assert ".masthead-tools{display:flex;flex-direction:column;align-items:flex-end" in compact_css
-    assert ".report-select" in compact_css and "height:34px" in compact_css
-    assert ".mastheadh1" in compact_css and "font-size:36px" in compact_css and "line-height:1.12" in compact_css
-    assert ".health" in compact_css and "font-size:.82rem" in compact_css and "padding:6px10px" in compact_css
-    assert "@media(max-width:760px)" in compact_css
-    assert ".masthead{grid-template-columns:1fr" in compact_css
-    assert ".masthead-tools{align-items:stretch" in compact_css
-    assert ".report-select{width:100%;max-width:220px" in compact_css
-    assert ".masthead{grid-template-columns:1fr;gap:15px;padding:20px018px" in compact_css
+    assert "header{display:grid;grid-template-columns:1frauto" in compact_css
+    assert ".header-tools{display:flex;flex-direction:column;align-items:flex-end" in compact_css
+    assert "select{height:31px;min-width:174px" in compact_css
+    assert "h1{margin:0;font:50031px/1.05Georgia" in compact_css
+    assert ".status{color:var(--green);font-size:10px" in compact_css
+    assert "@media(max-width:600px)" in compact_css
+    assert "header{grid-template-columns:1fr;gap:10px}" in compact_css
+    assert ".header-tools{align-items:stretch}" in compact_css
+    assert ".report-select{width:100%}" in compact_css
 
 
 def test_market_context_renders_four_accessible_tooltips_and_vanilla_js(tmp_path):
@@ -258,8 +313,8 @@ def test_market_context_renders_four_accessible_tooltips_and_vanilla_js(tmp_path
     render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
     html = (site / "index.html").read_text(encoding="utf-8")
 
-    assert "MARKET CONTEXT" in html and "市场环境" in html
-    assert html.count('class="context-help-button"') == 4
+    assert "市场环境" in html
+    assert html.count('context-help-button"') == 4
     assert html.count('aria-expanded="false"') == 4
     for key, label in (("russell2000", "Russell 2000"), ("vix", "VIX"),
                        ("dxy", "美元指数"), ("us10y", "10Y 美债")):
@@ -282,7 +337,7 @@ def test_old_report_without_market_context_still_renders(tmp_path):
     site = tmp_path / "site"
     render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
     html = (site / "index.html").read_text(encoding="utf-8")
-    assert "MARKET CONTEXT" not in html
+    assert "市场环境" not in html
 
 
 def test_market_breadth_renders_health_stock_participation_sector_bars_and_tooltip(tmp_path):
@@ -328,48 +383,43 @@ def test_market_breadth_renders_health_stock_participation_sector_bars_and_toolt
     html = (site / "index.html").read_text(encoding="utf-8")
     css = (site / "style.css").read_text(encoding="utf-8")
     compact_css = "".join(css.split())
-    assert "MARKET BREADTH" in html and "市场宽度" in html
+    assert "市场宽度" in html
     assert "市场健康" in html and "64.8%" in html
+    assert 'class="card breadth-left"' in html
+    assert 'class="breadth-copy"' in html
+    assert 'class="badge health-level-healthy">市场健康</span>' in html
     assert "上涨" in html and "322" in html
     assert "下跌" in html and "169" in html
     assert "平盘" in html and "6" in html
-    assert html.count('class="breadth-mini-metric') == 3
-    assert 'class="breadth-segment breadth-up" style="width: 64.8%"' in html
-    assert 'class="breadth-segment breadth-flat" style="width: 1.2%"' in html
-    assert 'class="breadth-segment breadth-down" style="width: 34.0%"' in html
-    assert "上涨股票" in html and "64.8%" in html
-    assert "下跌股票" in html and "34.0%" in html
-    assert "平盘股票" in html and "1.2%" in html
-    assert html.count('class="sector-row sector-') == 11
-    assert 'class="sector-row sector-up sector-hover-target"' in html
-    assert 'class="sector-row sector-down sector-hover-target"' in html
-    assert 'class="sector-row sector-flat sector-hover-target"' in html
+    assert html.count('class="mini"') == 1
+    assert 'class="g" style="width:64.8%"' in html
+    assert 'class="n" style="width:1.2%"' in html
+    assert 'class="r" style="width:34.0%"' in html
+    assert html.count('class="sector-row"') == 11
     assert html.index("能源") < html.index("非必需消费") < html.index("科技") < html.index("材料")
     assert "能源 · +4.0%" in html and "当日排名：1 / 11" in html
     assert "材料 · -3.5%" in html and "当日排名：11 / 11" in html
-    assert 'class="sector-bar sector-bar-up" style="width: 50.0%"' in html
-    assert 'class="sector-bar sector-bar-down" style="width: 50.0%"' in html
+    assert 'class="sector-cols"' in html
+    assert html.count('class="sector-list"') == 2
+    assert 'class="fill up" style="width:100.0%"' in html
+    assert 'class="fill down" style="width:100.0%"' in html
     assert 'aria-controls="breadth-health-help"' in html
     assert "不作为独立买卖信号" in html
     assert "多数股票与板块共同上涨，市场参与度良好。" in html
-    assert html.index("多数股票与板块共同上涨，市场参与度良好。") < html.index('class="market-breadth-grid"')
-    assert ".market-breadth-grid" in css and "grid-template-columns: minmax(0, 30fr) minmax(0, 70fr)" in css
-    assert ".breadth-stocks{display:flex;flex-direction:column;align-self:stretch" in compact_css
-    assert ".breadth-stocks{align-self:start" not in compact_css
-    assert "grid-template-columns:104px62pxminmax(300px,1fr)" in compact_css
-    assert ".sector-diverging-track{position:relative;display:block;height:10px" in compact_css
-    assert ".sector-bar{position:absolute;top:0;bottom:0" in compact_css
-    assert ".sector-name{overflow:hidden;color:var(--ink);font-size:.84rem" in compact_css
-    assert ".sector-rowstrong{color:var(--muted);text-align:right;font-size:.84rem" in compact_css
-    assert ".sector-zero-line" in css and ".sector-bar-up" in css and ".sector-bar-down" in css
-    assert ".sector-hover-target:hover" in css
-    assert ".breadth-segment:hover" in css
+    assert html.index("多数股票与板块共同上涨，市场参与度良好。") > html.index('class="card breadth-left"')
+    assert ".breadth-grid{display:grid;grid-template-columns:32%68%;gap:12px;align-items:stretch}" in compact_css
+    assert ".breadth-left{padding:13px14px;display:grid;grid-template-columns:1fr1.15fr" in compact_css
+    assert ".sector-cols{display:grid;grid-template-columns:1fr1fr" in compact_css
+    assert "grid-template-columns:78px1fr42px" in compact_css
+    assert ".track{height:5px" in compact_css
+    assert ".sector-name{font-size:9px" in compact_css
+    assert ".sret{font-size:9px" in compact_css
+    assert ".sector-row:hover.sector-tooltip" in compact_css
     assert "@media(prefers-reduced-motion:reduce)" in compact_css
-    assert "@media(max-width:760px)" in compact_css
-    assert ".market-breadth-grid{grid-template-columns:1fr" in compact_css
-    assert ".breadth-stocks,.breadth-sectors{height:auto" in compact_css
-    assert ".breadth-stocks{display:block" in compact_css
-    assert "grid-template-columns:minmax(82px,1fr)58pxminmax(120px,1.5fr)" in compact_css
+    assert "@media(max-width:900px)" in compact_css
+    assert ".market-grid,.context-grid,.breadth-grid,.draw-grid,.news-layout" in compact_css
+    assert ".sector-cols{grid-template-columns:1fr" in compact_css
+    assert ".bbar{grid-column:1/2;display:flex;height:6px" in compact_css
 
 
 def test_old_report_without_market_breadth_still_renders(tmp_path):
@@ -381,7 +431,7 @@ def test_old_report_without_market_breadth_still_renders(tmp_path):
 
     render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
 
-    assert "MARKET BREADTH" not in (site / "index.html").read_text(encoding="utf-8")
+    assert "市场宽度" not in (site / "index.html").read_text(encoding="utf-8")
 
 
 def test_information_hierarchy_maps_existing_signal_levels_to_context_classes(tmp_path):
@@ -408,12 +458,12 @@ def test_information_hierarchy_maps_existing_signal_levels_to_context_classes(tm
     render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
 
     html = (site / "index.html").read_text(encoding="utf-8")
-    assert html.count('class="context-card context-significant"') == 2
-    assert html.count('class="context-card context-strong"') == 1
-    assert html.count('class="context-card context-normal"') == 1
-    assert 'class="context-change context-change-strong down">▼ -21.0%</span>' in html
-    assert 'class="context-change context-change-significant down">▼ -7bp</span>' in html
-    assert 'class="context-change context-change-normal up">▲ +0.1%</span>' in html
+    assert html.count('class="card context-card context-significant"') == 2
+    assert html.count('class="card context-card context-strong"') == 1
+    assert html.count('class="card context-card context-normal"') == 1
+    assert 'class="context-change down">▼ -21.0%</span>' in html
+    assert 'class="context-change down">▼ -7bp</span>' in html
+    assert 'class="context-change up">▲ +0.1%</span>' in html
 
 
 def test_information_hierarchy_styles_metrics_drawdown_states_and_news_ranks(tmp_path):
@@ -438,18 +488,196 @@ def test_information_hierarchy_styles_metrics_drawdown_states_and_news_ranks(tmp
     html = (site / "index.html").read_text(encoding="utf-8")
     css = (site / "style.css").read_text(encoding="utf-8")
     compact_css = "".join(css.split())
-    assert 'class="drawdown-card drawdown-near"' in html
-    assert 'class="drawdown-card drawdown-pending"' in html
-    assert html.count('class="news-item top-news"') == 3
-    assert html.count('class="news-item regular-news"') == 2
-    assert ".metricsspan{color:var(--muted);font-size:.86rem" in compact_css
-    assert ".metricsstrong{font-size:1rem;font-weight:700;line-height:1.2" in compact_css
-    assert ".context-change{display:block;margin-top:6px;font-size:.9rem;font-weight:720;line-height:1.2" in compact_css
-    assert ".status-indicator" in compact_css and "font-size:.88rem" in compact_css
+    assert 'class="card draw-card draw-near"' in html
+    assert 'class="card draw-card draw-pending"' in html
+    assert html.count('class="card news-card"') == 3
+    assert html.count('class="nrow"') == 2
+    assert ".statspan{font-size:9px;color:var(--muted)}" in compact_css
+    assert ".statstrong{font-size:12px}" in compact_css
+    assert ".context-change{display:block;margin-top:3px;padding:0;font-size:11.5px" in compact_css
+    assert ".draw-status{font-size:8px" in compact_css
     for selector in (".status-normal", ".status-near", ".status-pending", ".status-executed"):
         assert selector in css
-    assert ".drawdown-pending" in css
-    assert ".top-news" in css and ".regular-news" in css
-    assert ".top-news.news-itemh3" in compact_css and "font-size:1.22rem" in compact_css
-    assert ".news-itemp" in compact_css and "color:#4d5c67" in compact_css
-    assert ".news-itema" in compact_css and "font-size:.8rem" in compact_css
+    assert ".draw-pending" in css
+    assert ".news-card" in css and ".nrow" in css
+    assert ".news-cardh3" in compact_css and "font-size:12px" in compact_css
+    assert ".news-cardp" in compact_css and "color:#5b6b76" in compact_css
+    assert ".news-carda" in compact_css and "font-size:8px" in compact_css
+
+
+def test_final_ui_diff_fix_uses_compact_warning_and_adaptive_news_grid(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["warnings"] = ["当前报告由离线测试数据生成，不代表真实市场行情或新闻。"]
+    payload["news"] = [
+        {"rank": rank, "category": "市场 / 宏观", "source": "Fixture", "title_zh": f"新闻 {rank}",
+         "summary_zh": "摘要", "url": f"https://example.com/{rank}"}
+        for rank in range(1, 4)
+    ]
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    css = (site / "style.css").read_text(encoding="utf-8")
+    compact_css = "".join(css.split())
+    assert 'class="alert warning"' in html
+    assert "🟠 部分数据源异常 · 当前报告由离线测试数据生成" in html
+    assert html.count('class="card news-card"') == 3
+    assert 'class="card news-list"' not in html
+    assert 'class="news-layout news-count-3"' in html
+    assert ".alert{display:flex;gap:8px;align-items:center;margin-top:13px;padding:8px11px" in compact_css
+    assert ".news-layout.news-count-3{grid-template-columns:repeat(3,1fr)}" in compact_css
+    assert ".draw-layout{display:grid;grid-template-columns:100px1fr105px" in compact_css
+
+
+def test_v5_news_layout_keeps_one_two_and_eight_news_adaptive(tmp_path):
+    root = __import__("pathlib").Path(__file__).parents[1]
+    for count, grid_class in ((1, "news-count-1"), (2, "news-count-2"), (8, "news-count-4")):
+        reports = tmp_path / f"reports-{count}"
+        reports.mkdir()
+        payload = report("2026-08-12")
+        payload["news"] = [
+            {"rank": rank, "category": "市场 / 宏观", "source": "Fixture", "title_zh": f"新闻 {rank}",
+             "summary_zh": "摘要", "url": f"https://example.com/{rank}"}
+            for rank in range(1, count + 1)
+        ]
+        (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+        site = tmp_path / f"site-{count}"
+        render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+        html = (site / "index.html").read_text(encoding="utf-8")
+        assert f'class="news-layout {grid_class}"' in html
+        assert html.count('class="card news-card"') == min(count, 3)
+        assert html.count('class="nrow"') == max(count - 3, 0)
+
+
+def test_reference_style_maps_breadth_drawdown_and_news_without_changing_data(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["market_breadth"] = {
+        "stocks": {
+            "advance_ratio": .648, "advancers": 322, "decliners": 169,
+            "unchanged": 6, "unchanged_ratio": .012, "decline_ratio": .34,
+            "valid_count": 497, "total_constituents": 503, "status": "ok",
+        },
+        "sectors": {"advancers": 8, "decliners": 3, "items": []},
+        "health": {
+            "valid": True, "level": "healthy", "label": "市场健康",
+            "summary": "多数股票与板块共同上涨，市场参与度良好。", "divergence": None,
+        },
+    }
+    payload["news"] = [
+        {
+            "rank": rank, "category": "市场 / 宏观", "source": "Fixture",
+            "title_zh": f"新闻 {rank}", "summary_zh": "摘要",
+            "url": f"https://example.com/{rank}", "published_at": "2026-08-12T10:00:00+00:00",
+        }
+        for rank in range(1, 9)
+    ]
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    compact_css = "".join((site / "style.css").read_text(encoding="utf-8").split())
+    assert 'class="card breadth-left"' in html
+    assert 'class="breadth-copy"' in html
+    assert html.index('class="ratio-label"') < html.index('class="breadth-copy"')
+    assert ".breadth-left{padding:13px14px;display:grid;grid-template-columns:1fr1.15fr" in compact_css
+
+    assert html.count('class="draw-mid"') == 2
+    assert html.count('class="draw-layout"') == 2
+    assert ".draw-layout{display:grid;grid-template-columns:100px1fr105px" in compact_css
+
+    assert '<div class="nmeta"><span class="rank">01</span>' in html
+    assert ".news-layout{display:grid;grid-template-columns:1fr1fr1fr.9fr" in compact_css
+    assert ".news-card{padding:12px13px}" in compact_css
+
+
+def test_v5_visual_contract_is_the_rendered_dom_and_css_baseline(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["market_summary"] = {
+        "market": "标普500上涨。", "drivers": "市场关注利率。",
+        "action": "备用金保持待命。",
+    }
+    payload["market_context"] = {
+        "russell2000": {"name": "Russell 2000", "valid": True, "close": 3045.48, "daily_return": .006},
+        "vix": {"name": "VIX", "valid": True, "close": 14.55, "daily_return": -.048},
+        "dxy": {"name": "美元指数", "valid": True, "close": 100.01, "daily_return": .002},
+        "us10y": {"name": "10Y 美债", "valid": True, "close": 4.68, "yield_change_bp": 8},
+    }
+    payload["market_breadth"] = {
+        "stocks": {
+            "advance_ratio": .519, "advancers": 261, "decliners": 241,
+            "unchanged": 1, "unchanged_ratio": .002, "decline_ratio": .479,
+            "valid_count": 503, "total_constituents": 503, "status": "ok",
+        },
+        "sectors": {"advancers": 1, "decliners": 1, "valid_count": 2, "items": [
+            {"name": "科技", "valid": True, "daily_return": .01, "bar_strength": 1 / 3},
+            {"name": "能源", "valid": True, "daily_return": -.01, "bar_strength": 1 / 3},
+        ]},
+        "health": {"valid": True, "level": "mixed", "label": "市场分化", "summary": "上涨股票略占优势，但板块扩散不足。", "divergence": None},
+    }
+    payload["news"] = [
+        {"rank": rank, "category": "市场 / 宏观", "source": "Fixture", "title_zh": f"新闻 {rank}",
+         "summary_zh": "摘要", "url": f"https://example.com/{rank}", "published_at": "2026-08-12T10:00:00+00:00"}
+        for rank in range(1, 9)
+    ]
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    compact_css = "".join((site / "style.css").read_text(encoding="utf-8").split())
+    for class_name in (
+        "page", "summary", "section-title", "section-left", "marker", "note",
+        "market-line", "icon-wrap", "context-info", "help", "breadth-grid",
+        "breadth-left", "ratio-label", "ratio", "breadth-copy", "mini", "bbar",
+        "formula", "sector-card", "sector-head", "track", "fill", "sret",
+        "draw-grid", "draw-card", "draw-layout", "draw-index", "dd", "small",
+        "draw-mid", "distance", "dtrack", "cash", "news-layout", "news-card",
+        "nmeta", "news-list", "nrow", "nnum", "ntitle", "ntime",
+    ):
+        assert re.search(rf'class="[^"]*\b{re.escape(class_name)}\b', html)
+    assert 'class="market-breadth-grid"' not in html
+    assert 'class="drawdown-dashboard"' not in html
+    assert 'class="news-dashboard' not in html
+    for token in (
+        "--bg:#f5f7f9", "--surface:#fff", "--ink:#14293a", "--muted:#6f7f8b",
+        "--line:#dfe5e9", "--soft:#e9eef1", "--navy:#234f6d", "--blue:#4f8fbd",
+        "--green:#24845b", "--red:#d34742", "--amber:#c78320",
+        "--icon-bg:#eef3f6", "--icon-fg:#66869e",
+    ):
+        assert token in compact_css
+    assert ".page{width:min(1440px,calc(100%-34px))" in compact_css
+    assert ".section{padding:18px0" in compact_css
+    assert ".breadth-grid{display:grid;grid-template-columns:32%68%;gap:12px;align-items:stretch}" in compact_css
+    assert ".draw-layout{display:grid;grid-template-columns:100px1fr105px;gap:14px;align-items:center}" in compact_css
+    assert ".news-layout{display:grid;grid-template-columns:1fr1fr1fr.9fr;gap:10px}" in compact_css
+    assert "@media(max-width:900px)" in compact_css
+
+
+def test_drawdown_index_titles_stay_aligned_without_wrapping_on_desktop(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    (reports / "2026-08-12.json").write_text(json.dumps(report("2026-08-12")), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    compact_css = "".join((site / "style.css").read_text(encoding="utf-8").split())
+    assert ".draw-layout{display:grid;grid-template-columns:100px1fr105px" in compact_css
+    assert ".draw-index{width:100px;min-width:100px}" in compact_css
+    assert "font-size:12px;white-space:nowrap" in compact_css
+    assert "@media(max-width:900px)" in compact_css
+    assert ".draw-index{width:auto;min-width:0}" in compact_css

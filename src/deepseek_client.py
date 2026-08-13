@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import inspect
 import time
 from typing import Any, Callable, Optional
 
@@ -14,6 +15,19 @@ ALLOWED_CATEGORIES = {"市场 / 宏观", "AI / 科技", "全球事件"}
 
 class NewsSelectionError(ValueError):
     """Raised when model output violates the candidate-only contract."""
+
+
+def invoke_model(call_model: Callable, system_prompt: str, user_payload: str, api_key: str, *,
+                 thinking_enabled: bool, reasoning_effort: str | None) -> str:
+    """Call production transport with reasoning settings while supporting legacy test injectables."""
+    parameters = inspect.signature(call_model).parameters.values()
+    accepts_keywords = any(parameter.kind is inspect.Parameter.VAR_KEYWORD for parameter in parameters)
+    if accepts_keywords or {"thinking_enabled", "reasoning_effort"}.issubset(inspect.signature(call_model).parameters):
+        return call_model(
+            system_prompt, user_payload, api_key,
+            thinking_enabled=thinking_enabled, reasoning_effort=reasoning_effort,
+        )
+    return call_model(system_prompt, user_payload, api_key)
 
 
 def _parse_payload(payload: Any) -> dict:
@@ -72,16 +86,21 @@ def validate_selection(payload: Any, candidates: list[dict]) -> list[dict]:
     return sorted(validated, key=lambda item: item["rank"])
 
 
-def call_deepseek(system_prompt: str, user_payload: str, api_key: str) -> str:
+def call_deepseek(system_prompt: str, user_payload: str, api_key: str, *,
+                  thinking_enabled: bool = False, reasoning_effort: str | None = None) -> str:
+    """Call DeepSeek and return only final content, never reasoning content."""
     from openai import OpenAI
 
     client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
-    response = client.chat.completions.create(
-        model="deepseek-v4-flash",
-        messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": user_payload}],
-        response_format={"type": "json_object"},
-        extra_body={"thinking": {"type": "disabled"}},
-    )
+    request = {
+        "model": "deepseek-v4-flash",
+        "messages": [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_payload}],
+        "response_format": {"type": "json_object"},
+        "extra_body": {"thinking": {"type": "enabled" if thinking_enabled else "disabled"}},
+    }
+    if reasoning_effort is not None:
+        request["reasoning_effort"] = reasoning_effort
+    response = client.chat.completions.create(**request)
     return response.choices[0].message.content
 
 
@@ -106,7 +125,9 @@ def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict
     last_error = None
     for attempt in range(3):
         try:
-            raw = call_model(SYSTEM_PROMPT, user_payload, api_key)
+            raw = invoke_model(
+                call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=True, reasoning_effort="high"
+            )
             return validate_selection(raw, candidates), None
         except Exception as exc:
             last_error = exc

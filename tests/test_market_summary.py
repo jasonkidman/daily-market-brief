@@ -65,9 +65,10 @@ def test_derives_hold_pending_and_executed_actions_from_drawdown_state():
 def test_generates_valid_summary_from_existing_inputs_and_program_owned_action():
     captured = {}
 
-    def model(system_prompt, user_payload, api_key):
+    def model(system_prompt, user_payload, api_key, **kwargs):
         captured["prompt"] = system_prompt
         captured["payload"] = json.loads(user_payload)
+        captured["kwargs"] = kwargs
         return model_response()
 
     result = generate_market_summary(
@@ -84,6 +85,7 @@ def test_generates_valid_summary_from_existing_inputs_and_program_owned_action()
     assert captured["payload"]["final_news"][0]["event_summary"] == "Federal Reserve held interest rates unchanged."
     assert "url" not in json.dumps(captured["payload"], ensure_ascii=False)
     assert "不得无依据建立因果关系" in captured["prompt"]
+    assert captured["kwargs"] == {"thinking_enabled": True, "reasoning_effort": "high"}
 
 
 def test_pending_and_executed_actions_use_only_program_owned_action_copy():

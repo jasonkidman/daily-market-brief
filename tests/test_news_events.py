@@ -107,9 +107,10 @@ def test_cluster_calls_shared_transport_without_urls_and_returns_validated_event
     captured = {}
     pool = [candidate("a"), candidate("b")]
 
-    def model(system_prompt, user_payload, api_key):
+    def model(system_prompt, user_payload, api_key, **kwargs):
         captured["prompt"] = system_prompt
         captured["payload"] = __import__("json").loads(user_payload)
+        captured["kwargs"] = kwargs
         return cluster_payload(event("event_001", ["a", "b"], "Fed held rates"))
 
     events, warning = cluster_news_events(pool, "key", call_model=model, sleep_fn=lambda _: None)
@@ -121,6 +122,7 @@ def test_cluster_calls_shared_transport_without_urls_and_returns_validated_event
     } for item in pool]}
     assert "https://example.com" not in __import__("json").dumps(captured["payload"])
     assert "现实世界事件聚类" in captured["prompt"]
+    assert captured["kwargs"] == {"thinking_enabled": True, "reasoning_effort": "high"}
 
 
 def test_cluster_skips_model_when_at_most_one_candidate():

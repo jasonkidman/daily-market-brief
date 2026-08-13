@@ -162,9 +162,10 @@ def test_three_ai_failures_degrade_without_raising():
 def test_deepseek_payload_includes_market_driven_context_and_selection_reason():
     captured = {}
 
-    def model(system_prompt, user_payload, api_key):
+    def model(system_prompt, user_payload, api_key, **kwargs):
         captured["prompt"] = system_prompt
         captured["payload"] = json.loads(user_payload)
+        captured["kwargs"] = kwargs
         return json.dumps({"news": [{
             "rank": 1, "candidate_id": "1", "category": "市场 / 宏观",
             "title_zh": "标题", "summary_zh": "摘要",
@@ -188,6 +189,7 @@ def test_deepseek_payload_includes_market_driven_context_and_selection_reason():
     assert captured["payload"]["market_signals"] == market_context["market_signals"]
     assert "不得根据时间共现" in captured["prompt"]
     assert news[0]["selection_reason"] == "与利率明显上升相关"
+    assert captured["kwargs"] == {"thinking_enabled": True, "reasoning_effort": "high"}
 
 
 def test_deepseek_payload_accepts_breadth_context_and_prompt_has_sector_rotation_rule():

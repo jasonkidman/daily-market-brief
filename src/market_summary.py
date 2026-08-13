@@ -6,7 +6,7 @@ import json
 import time
 from typing import Any, Callable
 
-from .deepseek_client import call_deepseek
+from .deepseek_client import call_deepseek, invoke_model
 from .market_summary_prompt import SYSTEM_PROMPT
 
 
@@ -139,7 +139,10 @@ def generate_market_summary(market_data: dict, market_context: dict, market_brea
     )
     for attempt in range(3):
         try:
-            return _parse_model_summary(call_model(SYSTEM_PROMPT, user_payload, api_key), drawdown_action)
+            raw = invoke_model(
+                call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=True, reasoning_effort="high"
+            )
+            return _parse_model_summary(raw, drawdown_action)
         except Exception:
             if attempt < 2:
                 sleep_fn((5, 10)[attempt])

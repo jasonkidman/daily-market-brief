@@ -7,7 +7,7 @@ import time
 from datetime import datetime
 from typing import Any, Callable, Optional
 
-from .deepseek_client import call_deepseek
+from .deepseek_client import call_deepseek, invoke_model
 from .news_event_prompt import SYSTEM_PROMPT
 
 
@@ -144,7 +144,9 @@ def cluster_news_events(candidates: list[dict], api_key: str,
     last_error = None
     for attempt in range(3):
         try:
-            raw = call_model(SYSTEM_PROMPT, user_payload, api_key)
+            raw = invoke_model(
+                call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=True, reasoning_effort="high"
+            )
             return validate_event_clusters(raw, cluster_input), None
         except Exception as exc:
             last_error = exc
