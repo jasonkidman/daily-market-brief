@@ -1,0 +1,440 @@
+{
+  "report_date": "2026-08-13",
+  "generated_at": "2026-08-13 10:09 CST",
+  "market_date": "2026-08-12",
+  "status": "ok",
+  "status_label": "🟢 数据更新正常",
+  "market_data_valid": true,
+  "core_market_valid": true,
+  "context_market_valid": true,
+  "drawdown_market_valid": true,
+  "market": {
+    "sp500": {
+      "market_date": "2026-08-12",
+      "close": 7748.5,
+      "daily_return": 0.0026267182752088836,
+      "ytd_return": 0.13191147469140319,
+      "ath": 7757.64013671875,
+      "ath_date": "2026-08-07",
+      "drawdown": 0.001178210971077065,
+      "name": "S&P 500",
+      "ticker": "^GSPC",
+      "valid": true
+    },
+    "nasdaq100": {
+      "market_date": "2026-08-12",
+      "close": 29742.603515625,
+      "daily_return": 0.007353751519972862,
+      "ytd_return": 0.1779319075461696,
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "drawdown": 0.0299405786398681,
+      "name": "Nasdaq-100",
+      "ticker": "^NDX",
+      "valid": true
+    },
+    "dow": {
+      "market_date": "2026-08-12",
+      "close": 53770.26953125,
+      "daily_return": -0.00040121376422452837,
+      "ytd_return": 0.11873886660833421,
+      "ath": 54349.12109375,
+      "ath_date": "2026-08-05",
+      "drawdown": 0.01065061496581532,
+      "name": "Dow Jones",
+      "ticker": "^DJI",
+      "valid": true
+    }
+  },
+  "market_context": {
+    "russell2000": {
+      "market_date": "2026-08-12",
+      "close": 3045.48291015625,
+      "daily_return": 0.006066093269470496,
+      "name": "Russell 2000",
+      "ticker": "^RUT",
+      "valid": true
+    },
+    "vix": {
+      "market_date": "2026-08-12",
+      "close": 14.550000190734863,
+      "daily_return": -0.047774839986491235,
+      "name": "VIX",
+      "ticker": "^VIX",
+      "valid": true
+    },
+    "dxy": {
+      "market_date": "2026-08-12",
+      "close": 99.9749984741211,
+      "daily_return": 0.0015527828067596339,
+      "name": "美元指数",
+      "ticker": "DX-Y.NYB",
+      "valid": true
+    },
+    "us10y": {
+      "market_date": "2026-08-12",
+      "close": 4.682000160217285,
+      "yield_change_bp": -0.19998550415039062,
+      "name": "10Y 美债",
+      "ticker": "^TNX",
+      "valid": true
+    }
+  },
+  "market_signals": {
+    "tech_relative": 0.0047270332447639785,
+    "small_cap_relative": 0.0034393749942616125,
+    "vix_daily_return": -0.047774839986491235,
+    "dxy_daily_return": 0.0015527828067596339,
+    "us10y_bp_change": -0.19998550415039062,
+    "signals": []
+  },
+  "market_breadth": {
+    "market_date": "2026-08-12",
+    "stocks": {
+      "market_date": "2026-08-12",
+      "constituent_date": "2026-08-10",
+      "total_constituents": 505,
+      "valid_count": 503,
+      "invalid_count": 2,
+      "advancers": 261,
+      "decliners": 241,
+      "unchanged": 1,
+      "advance_ratio": 0.5188866799204771,
+      "decline_ratio": 0.47912524850894633,
+      "unchanged_ratio": 0.0019880715705765406,
+      "coverage_ratio": 0.996039603960396,
+      "status": "ok"
+    },
+    "sectors": {
+      "market_date": "2026-08-12",
+      "items": [
+        {
+          "key": "technology",
+          "name": "科技",
+          "ticker": "XLK",
+          "valid": true,
+          "daily_return": 0.014885293820046774,
+          "direction": "up",
+          "bar_strength": 0.49617646066822585
+        },
+        {
+          "key": "utilities",
+          "name": "公用事业",
+          "ticker": "XLU",
+          "valid": true,
+          "daily_return": 0.004813180823553198,
+          "direction": "up",
+          "bar_strength": 0.16043936078510662
+        },
+        {
+          "key": "consumer_staples",
+          "name": "必需消费",
+          "ticker": "XLP",
+          "valid": true,
+          "daily_return": 0.004605022770170164,
+          "direction": "up",
+          "bar_strength": 0.15350075900567214
+        },
+        {
+          "key": "health_care",
+          "name": "医疗保健",
+          "ticker": "XLV",
+          "valid": true,
+          "daily_return": 0.002559418776439726,
+          "direction": "up",
+          "bar_strength": 0.08531395921465754
+        },
+        {
+          "key": "financials",
+          "name": "金融",
+          "ticker": "XLF",
+          "valid": true,
+          "daily_return": 0.0020761061153755644,
+          "direction": "up",
+          "bar_strength": 0.06920353717918548
+        },
+        {
+          "key": "real_estate",
+          "name": "房地产",
+          "ticker": "XLRE",
+          "valid": true,
+          "daily_return": 0.0020270303940290724,
+          "direction": "up",
+          "bar_strength": 0.06756767980096909
+        },
+        {
+          "key": "energy",
+          "name": "能源",
+          "ticker": "XLE",
+          "valid": true,
+          "daily_return": 0.0016412025869068092,
+          "direction": "up",
+          "bar_strength": 0.05470675289689364
+        },
+        {
+          "key": "industrials",
+          "name": "工业",
+          "ticker": "XLI",
+          "valid": true,
+          "daily_return": 0.0009693480750054828,
+          "direction": "up",
+          "bar_strength": 0.032311602500182765
+        },
+        {
+          "key": "consumer_discretionary",
+          "name": "非必需消费",
+          "ticker": "XLY",
+          "valid": true,
+          "daily_return": -0.011321691532261258,
+          "direction": "down",
+          "bar_strength": 0.37738971774204194
+        },
+        {
+          "key": "materials",
+          "name": "材料",
+          "ticker": "XLB",
+          "valid": true,
+          "daily_return": -0.012396690958014212,
+          "direction": "down",
+          "bar_strength": 0.41322303193380705
+        },
+        {
+          "key": "communication_services",
+          "name": "通信服务",
+          "ticker": "XLC",
+          "valid": true,
+          "daily_return": -0.013949791312218962,
+          "direction": "down",
+          "bar_strength": 0.4649930437406321
+        }
+      ],
+      "valid_count": 11,
+      "advancers": 8,
+      "decliners": 3,
+      "unchanged": 0,
+      "advance_ratio": 0.7272727272727273
+    },
+    "health": {
+      "valid": true,
+      "score": 0.6022410988613772,
+      "level": "mixed",
+      "label": "市场分化",
+      "divergence": null,
+      "summary": "上涨与下跌分布较为均衡，市场内部存在明显分化。"
+    }
+  },
+  "drawdown": {
+    "sp500": {
+      "index": "sp500",
+      "name": "S&P 500",
+      "cycle_id": "sp500-2026-08-07-77576401",
+      "started_at": "2026-08-12T10:00:00+08:00",
+      "ath": 7757.64013671875,
+      "ath_date": "2026-08-07",
+      "last_market_date": "2026-08-12",
+      "last_updated_at": "2026-08-13T10:09:51.778351+08:00",
+      "current_close": 7748.5,
+      "current_drawdown": 0.001178210971077065,
+      "pool": 140000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.1,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.15,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.25,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 140000,
+      "next_threshold": 0.1,
+      "distance_to_next": 0.09882178902892294,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    },
+    "nasdaq100": {
+      "index": "nasdaq100",
+      "name": "Nasdaq-100",
+      "cycle_id": "nasdaq100-2026-06-02-306605996",
+      "started_at": "2026-08-12T10:00:00+08:00",
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "last_market_date": "2026-08-12",
+      "last_updated_at": "2026-08-13T10:09:51.778351+08:00",
+      "current_close": 29742.603515625,
+      "current_drawdown": 0.0299405786398681,
+      "pool": 60000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.15,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.3,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.4,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 60000,
+      "next_threshold": 0.15,
+      "distance_to_next": 0.1200594213601319,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    }
+  },
+  "news": [
+    {
+      "rank": 1,
+      "candidate_id": "e96a3b3561bf7757",
+      "category": "市场 / 宏观",
+      "title_zh": "美国通胀回落至3.4%，食品和能源成本降温",
+      "summary_zh": "美国7月年化通胀率降至3.4%，食品和燃料成本下降，但住房价格仍使物价保持高位。通胀数据与当前市场表现相关，对美联储政策预期有重要影响。",
+      "source": "BBC Business",
+      "url": "https://www.bbc.co.uk/news/articles/c0qv2nn1gpeo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-12T17:03:05+00:00",
+      "original_title": "US inflation eases as food and fuel costs cool",
+      "selection_reason": "核心通胀数据，直接关系美联储货币政策，对市场有重大影响。"
+    },
+    {
+      "rank": 2,
+      "candidate_id": "e2b80c2178c21750",
+      "category": "市场 / 宏观",
+      "title_zh": "日元疲软与特朗普政策：全球套利交易支撑美科技繁荣",
+      "summary_zh": "日元疲软为全球套利交易提供资金，支持美股科技板块和AI投资。特朗普政府干预汇率以维持这一机制，但日元再度贬值引发关注，对全球金融稳定有潜在影响。",
+      "source": "The Guardian Business",
+      "url": "https://www.theguardian.com/commentisfree/2026/aug/12/the-guardian-view-on-japans-yen-trump-wants-to-keep-the-easy-money-machine-running",
+      "published_at": "2026-08-12T17:39:46+00:00",
+      "original_title": "The Guardian view on Japan’s yen: Trump wants to keep the easy-money machine running | Editorial",
+      "selection_reason": "分析日元套利交易与美股科技繁荣的联系，对长期投资者有重要参考价值。"
+    },
+    {
+      "rank": 3,
+      "candidate_id": "f7305f0adcc8d210",
+      "category": "全球事件",
+      "title_zh": "伊朗战争威胁英国明年经济增长，油价和供应链受扰",
+      "summary_zh": "中东冲突推高油价并扰乱供应链，可能影响英国经济增长。这一地缘政治风险对全球市场有潜在影响，与当前全球通胀和能源价格相关。",
+      "source": "BBC Business",
+      "url": "https://www.bbc.co.uk/news/articles/c5y3egv4m4mo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-12T14:17:26+00:00",
+      "original_title": "Burnham warned Iran war could hit UK growth next year",
+      "selection_reason": "地缘政治冲突对能源价格和全球经济的潜在影响重大，属于重要国际事件。"
+    },
+    {
+      "rank": 4,
+      "candidate_id": "28a46bff448f1e7b",
+      "category": "全球事件",
+      "title_zh": "乌克兰黑海港口遭袭，俄罗斯大型谷物出口终端受损",
+      "summary_zh": "俄乌互相攻击对方航运设施，导致两国谷物出口下降。此举加剧全球粮食供应担忧，对大宗商品市场和通胀有潜在影响。",
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/c5y49xp2wrno?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-12T17:47:01+00:00",
+      "original_title": "Major Russian grain export terminals hit in Ukraine Black Sea port attack",
+      "selection_reason": "影响全球粮食供应和价格，对通胀和市场有系统性影响。"
+    },
+    {
+      "rank": 5,
+      "candidate_id": "673a451fcc9b0701",
+      "category": "市场 / 宏观",
+      "title_zh": "美国7月通胀放缓至3.4%，但价格压力仍存",
+      "summary_zh": "美国7月年化通胀率降至3.4%，较6月下降0.7个百分点，但仍高于伊朗战争前的水平。能源价格回落，但燃油价格仍比战前高近1美元，整体物价压力依然存在。",
+      "source": "The Guardian Business",
+      "url": "https://www.theguardian.com/business/2026/aug/12/inflation-data-july",
+      "published_at": "2026-08-12T12:39:46+00:00",
+      "original_title": "US inflation cooled slightly to 3.4% in July but prices still elevated",
+      "selection_reason": "详细解读通胀数据及其背景，对市场判断和投资决策有重要参考。"
+    },
+    {
+      "rank": 6,
+      "candidate_id": "185e252c5e1150e1",
+      "category": "AI / 科技",
+      "title_zh": "AI编程初创Cognition据悉洽谈400亿美元估值融资",
+      "summary_zh": "Cognition在数月前完成260亿美元估值融资后，据报正洽谈以400亿美元估值进行新一轮融资，反映AI编程领域持续火热。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/12/ai-coding-startup-cognition-reportedly-already-in-talks-to-raise-at-40b-valuation/",
+      "published_at": "2026-08-12T18:19:12+00:00",
+      "original_title": "AI coding startup Cognition reportedly already in talks to raise at $40B valuation",
+      "selection_reason": "AI领域重大融资动态，显示市场对AI编程赛道的高度热情。"
+    },
+    {
+      "rank": 7,
+      "candidate_id": "314e77618c7f28cb",
+      "category": "AI / 科技",
+      "title_zh": "AI安全担忧加剧之际，三位先驱主张保持开放",
+      "summary_zh": "Geoffrey Hinton、李飞飞和吴恩达在Ai4会议上就AI监管、开源访问和全球竞争进行辩论，主张保持AI的开放性以应对安全挑战。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/12/as-ai-safety-concerns-mount-three-pioneers-make-the-case-for-staying-open/",
+      "published_at": "2026-08-12T17:51:00+00:00",
+      "original_title": "As AI safety concerns mount, three pioneers make the case for staying open",
+      "selection_reason": "AI领域顶级专家的观点对政策方向有重要影响，值得关注。"
+    },
+    {
+      "rank": 8,
+      "candidate_id": "60602c0cc73a2a3a",
+      "category": "市场 / 宏观",
+      "title_zh": "美国信用卡债务攀升至1.26万亿美元，接近历史纪录",
+      "summary_zh": "纽约联储报告显示，美国信用卡债务在4月至6月期间增至1.26万亿美元，接近去年创下的1.28万亿美元纪录，反映消费者财务压力。",
+      "source": "The Guardian Business",
+      "url": "https://www.theguardian.com/business/2026/aug/12/credit-card-debt-increase-fed-report",
+      "published_at": "2026-08-12T14:58:36+00:00",
+      "original_title": "US credit card debt climbs to $1.26tn, nearing last year’s record high",
+      "selection_reason": "消费者债务水平影响经济健康，对长期市场有重要影响。"
+    }
+  ],
+  "news_degraded": false,
+  "warnings": []
+}
