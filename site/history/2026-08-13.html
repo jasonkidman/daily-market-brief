@@ -2,340 +2,181 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
   <title>Daily Market Brief · 2026-08-13</title>
   <link rel="stylesheet" href="../style.css">
 </head>
 <body>
-  <main class="shell">
-    <header class="masthead">
-      <div class="masthead-copy">
-        <h1>Daily Market Brief</h1>
-        <p class="dateline">报告日期：2026-08-13 · 北京时间最后更新时间：2026-08-13 11:30 CST</p>
-      </div>
-      <div class="masthead-tools">
-        <select class="report-select" aria-label="选择日报日期" onchange="if (this.value) window.location.href = this.value">
-          <option value="../index.html" selected>今日 · 2026-08-13</option>
-          <option value="2026-08-12.html">2026-08-12</option>
-        </select>
-        <div class="health health-ok">🟢 数据更新正常</div>
-      </div>
-    </header>
+<div class="page">
+  <header>
+    <div>
+      <h1>Daily Market Brief</h1>
+      <div class="header-meta">报告日期：2026-08-13　更新时间：2026-08-13 16:56 CST</div>
+    </div>
+    <div class="header-tools">
+      <select class="report-select" aria-label="选择日报日期">
+        <option value="../index.html" selected>今日 · 2026-08-13</option>
+        <option value="2026-08-12.html">2026-08-12</option>
+      </select>
+      <div class="status status-ok">🟢 数据更新正常</div>
+    </div>
+  </header>
 
-    <section class="today-summary" aria-labelledby="today-summary-title">
-      <div class="today-summary-heading"><p class="section-kicker">TODAY IN ONE LINE</p><h2 id="today-summary-title">今日市场一句话</h2></div>
-      <p class="today-summary-copy"><span>标普500微涨0.26%至7748.5点，接近历史高点，纳指100上涨0.74%，而道指微跌0.04%，市场内部分化，科技与公用事业领涨，非必需消费与通信服务走弱。</span><span>美国7月通胀率降至3.4%与AI初创企业高估值融资事件受到市场同时关注，地缘政治风险对能源供应的影响亦具相关性。</span><strong>未触发额外回撤加仓，维持正常定投，备用金保持不动。</strong></p>
-      <p class="today-summary-source">基于市场数据 · Market Breadth · Top News</p>
-    </section>
+  <section class="summary" aria-labelledby="today-summary-title">
+    <div class="summary-icon" aria-hidden="true">☼</div>
+    <div><h2 id="today-summary-title">今日市场一句话</h2><p><strong>标普500当日上涨0.26%，收于7748.5点，距历史高点仅0.12%；纳斯达克100涨0.74%，道指微跌0.04%。市场宽度接近均衡，503只成分股中上涨261只、下跌241只，行业表现分化，科技领涨而材料、通信服务跌幅居前。</strong> 市场同时关注美国7月CPI同比降至3.4%的通胀数据，以及AI领域投融资热度，如Cognition洽谈400亿美元估值融资。 <strong>未触发额外回撤加仓，维持正常定投，备用金保持不动。</strong></p></div>
+    <div class="summary-src">基于市场数据 · Market Breadth · Top News</div>
+  </section>
 
 
-    <section class="section market-section">
-      <div class="section-heading"><div><p class="section-kicker">MARKET CLOSE</p><h2>美国主要指数</h2></div>
-        <p>行情数据日期：2026-08-12 美股收盘</p></div>
-      <div class="market-grid">
-        <article class="market-card">
-          <div class="card-top"><h3>S&amp;P 500</h3><span>^GSPC</span></div>
-          <p class="close">7,748.50</p>
-          <div class="metrics"><div><span>单日</span><strong class="up">+0.3%</strong></div>
-          <div><span>YTD</span><strong class="up">+13.2%</strong></div></div>
-        </article>        <article class="market-card">
-          <div class="card-top"><h3>Nasdaq-100</h3><span>^NDX</span></div>
-          <p class="close">29,742.60</p>
-          <div class="metrics"><div><span>单日</span><strong class="up">+0.7%</strong></div>
-          <div><span>YTD</span><strong class="up">+17.8%</strong></div></div>
-        </article>        <article class="market-card">
-          <div class="card-top"><h3>Dow Jones</h3><span>^DJI</span></div>
-          <p class="close">53,770.27</p>
-          <div class="metrics"><div><span>单日</span><strong class="down">-0.0%</strong></div>
-          <div><span>YTD</span><strong class="up">+11.9%</strong></div></div>
-        </article>      </div>
-      <div class="market-context">
-        <div class="context-heading"><p class="section-kicker">MARKET CONTEXT</p><h3>市场环境</h3></div>
-        <div class="context-grid">
-          <article class="context-card context-normal">
-            <div class="context-card-top">
-              <h4>Russell 2000</h4>
-              <button class="context-help-button" type="button" aria-label="了解 Russell 2000 的作用" aria-expanded="false" aria-controls="context-help-russell2000">?</button>
-            </div>
-            <strong class="context-value">3,045.48</strong>
-            <span class="context-change context-change-normal up">▲ +0.6%</span>
-            <div class="context-tooltip" id="context-help-russell2000" role="tooltip" hidden>
+  <section class="section">
+    <div class="section-title"><div class="section-left"><span class="marker"></span><h2>美国主要指数</h2></div><div class="note">行情数据日期：2026-08-12 美股收盘</div></div>
+    <div class="market-grid">
+      <article class="card market-card">
+        <div class="market-top"><h3>S&amp;P 500</h3><span class="ticker">^GSPC</span></div>
+        <div class="market-line"><div class="market-value up">7,748.50 <span class="arrow">▲</span></div><div class="stat"><span>单日</span><strong class="up">+0.3%</strong></div><div class="stat"><span>YTD</span><strong class="up">+13.2%</strong></div></div>
+      </article>
+      <article class="card market-card">
+        <div class="market-top"><h3>Nasdaq-100</h3><span class="ticker">^NDX</span></div>
+        <div class="market-line"><div class="market-value up">29,742.60 <span class="arrow">▲</span></div><div class="stat"><span>单日</span><strong class="up">+0.7%</strong></div><div class="stat"><span>YTD</span><strong class="up">+17.8%</strong></div></div>
+      </article>
+      <article class="card market-card">
+        <div class="market-top"><h3>Dow Jones</h3><span class="ticker">^DJI</span></div>
+        <div class="market-line"><div class="market-value down">53,770.27 <span class="arrow">▼</span></div><div class="stat"><span>单日</span><strong class="down">-0.0%</strong></div><div class="stat"><span>YTD</span><strong class="up">+11.9%</strong></div></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title"><div class="section-left"><span class="marker"></span><h2>市场环境</h2></div></div>
+    <div class="context-grid">
+      <article class="card context-card context-normal">
+        <div class="icon-wrap" aria-hidden="true">
+<svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 19V5M4 19H20"/><path d="M7 15l4-4 3 2 5-6"/><path d="M16 7h3v3"/></svg>
+        </div>
+        <div class="context-info"><div class="context-name">Russell 2000</div>
+<strong class="context-value">3,045.48</strong>
+<span class="context-change up">▲ +0.6%</span>        </div>
+        <button class="help context-help-button" type="button" aria-label="了解 Russell 2000 的作用" aria-expanded="false" aria-controls="context-help-russell2000">?</button>
+        <div class="tooltip context-tooltip" id="context-help-russell2000" role="tooltip" hidden>
 <strong>Russell 2000 的作用</strong><p>衡量美国小盘股整体表现。相对 S&amp;P 500 更强时，通常意味着市场上涨参与度扩大或风险偏好改善；明显落后时，则可能反映行情更集中于大型权重股。单日变化不作为独立买卖信号。</p>
-            </div>
-          </article>
-          <article class="context-card context-normal">
-            <div class="context-card-top">
-              <h4>VIX</h4>
-              <button class="context-help-button" type="button" aria-label="了解 VIX 的作用" aria-expanded="false" aria-controls="context-help-vix">?</button>
-            </div>
-            <strong class="context-value">14.55</strong>
-            <span class="context-change context-change-normal down">▼ -4.8%</span>
-            <div class="context-tooltip" id="context-help-vix" role="tooltip" hidden>
-<strong>VIX 的作用</strong><p>基于 S&amp;P 500 期权计算的未来约30天隐含波动率，常被称为“恐慌指数”。快速上升通常表示市场风险定价和预期波动增加，下降则表示风险情绪趋于缓和。</p>
-            </div>
-          </article>
-          <article class="context-card context-normal">
-            <div class="context-card-top">
-              <h4>美元指数</h4>
-              <button class="context-help-button" type="button" aria-label="了解 美元指数 的作用" aria-expanded="false" aria-controls="context-help-dxy">?</button>
-            </div>
-            <strong class="context-value">100.01</strong>
-            <span class="context-change context-change-normal up">▲ +0.2%</span>
-            <div class="context-tooltip" id="context-help-dxy" role="tooltip" hidden>
-<strong>美元指数的作用</strong><p>衡量美元相对一篮子主要货币的强弱。美元快速走强通常意味着全球金融条件趋紧，并可能对风险资产及美国跨国公司的海外收入换算形成压力，但不能单独作为交易信号。</p>
-            </div>
-          </article>
-          <article class="context-card context-normal">
-            <div class="context-card-top">
-              <h4>10Y 美债</h4>
-              <button class="context-help-button" type="button" aria-label="了解 10Y 美债 的作用" aria-expanded="false" aria-controls="context-help-us10y">?</button>
-            </div>
-            <strong class="context-value">4.68%</strong>
-            <span class="context-change context-change-normal down">▼ -0bp</span>
-            <div class="context-tooltip" id="context-help-us10y" role="tooltip" hidden>
-<strong>10Y 美债的作用</strong><p>美国10年期国债收益率是全球资产定价的重要利率基准。收益率快速上行通常会提高股票估值的折现压力，对高估值成长股尤其敏感；下降则可能缓解估值压力，但仍需结合通胀和经济增长背景判断。</p>            </div>
-          </article>
         </div>
-      </div>
-      <div class="market-breadth">
-        <div class="breadth-heading">
-          <div><p class="section-kicker">MARKET BREADTH</p><h3>市场宽度</h3></div>
-          <div class="breadth-health health-level-mixed">
-            <span>🟡 市场分化</span>
-            <button class="breadth-help-button" type="button" aria-label="了解市场健康度的作用" aria-expanded="false" aria-controls="breadth-health-help">?</button>
-            <div class="breadth-tooltip" id="breadth-health-help" role="tooltip" hidden><strong>Market Health 的作用</strong><p>市场健康度综合 S&amp;P 500 成分股上涨比例和 11 个一级板块上涨比例，用于判断指数上涨或下跌是否得到广泛市场参与。该指标用于观察市场内部结构，不作为独立买卖信号。</p></div>
-          </div>
+      </article>
+      <article class="card context-card context-normal">
+        <div class="icon-wrap" aria-hidden="true">
+<svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 13h3l2-6 4 11 3-9 2 4h4"/></svg>
         </div>
-        <p class="breadth-summary breadth-summary-mixed ">上涨与下跌分布较为均衡，市场内部存在明显分化。</p>
-        <div class="market-breadth-grid">
-          <article class="breadth-stocks">
-            <p class="breadth-label">S&amp;P 500 成分股</p>
-            <strong class="breadth-ratio">51.9%</strong><span class="breadth-ratio-label">上涨占比</span>
-            <dl class="breadth-mini-stats">
-              <div class="breadth-mini-metric breadth-mini-up"><dt>上涨</dt><dd>261</dd></div>
-              <div class="breadth-mini-metric breadth-mini-down"><dt>下跌</dt><dd>241</dd></div>
-              <div class="breadth-mini-metric breadth-mini-flat"><dt>平盘</dt><dd>1</dd></div>
-            </dl>
-            <div class="breadth-bar" aria-label="S&P 500 成分股上涨、平盘与下跌比例">
-              <span class="breadth-segment breadth-up" style="width: 51.9%" tabindex="0" aria-label="上涨股票 261，51.9%"><span class="breadth-segment-tooltip"><strong>上涨股票</strong><b>261</b><small>51.9%</small></span></span>
-              <span class="breadth-segment breadth-flat" style="width: 0.2%" tabindex="0" aria-label="平盘股票 1，0.2%"><span class="breadth-segment-tooltip"><strong>平盘股票</strong><b>1</b><small>0.2%</small></span></span>
-              <span class="breadth-segment breadth-down" style="width: 47.9%" tabindex="0" aria-label="下跌股票 241，47.9%"><span class="breadth-segment-tooltip"><strong>下跌股票</strong><b>241</b><small>47.9%</small></span></span>
-            </div>
-            <p class="breadth-insight">上涨与下跌并存，尚未形成广泛共振。<small>有效样本 503 / 505</small></p>
-          </article>
-          <article class="breadth-sectors">
-            <div class="sector-heading"><h4>板块表现</h4><span>8涨 / 3跌 · 固定尺度 ±3%</span></div>
-            <div class="sector-list">
-              <div class="sector-row sector-up sector-hover-target" tabindex="0">
-                <span class="sector-name">科技</span>
-                <strong>+1.5%</strong>
-                <span class="sector-diverging-track" aria-label="科技 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-up" style="width: 24.8%"></i>
-                </span>
-<span class="sector-tooltip" role="tooltip"><strong>科技 · +1.5%</strong><small>当日排名：1 / 11</small></span>              </div>
-              <div class="sector-row sector-up sector-hover-target" tabindex="0">
-                <span class="sector-name">公用事业</span>
-                <strong>+0.5%</strong>
-                <span class="sector-diverging-track" aria-label="公用事业 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-up" style="width: 8.0%"></i>
-                </span>
-<span class="sector-tooltip" role="tooltip"><strong>公用事业 · +0.5%</strong><small>当日排名：2 / 11</small></span>              </div>
-              <div class="sector-row sector-up sector-hover-target" tabindex="0">
-                <span class="sector-name">必需消费</span>
-                <strong>+0.5%</strong>
-                <span class="sector-diverging-track" aria-label="必需消费 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-up" style="width: 7.7%"></i>
-                </span>
-<span class="sector-tooltip" role="tooltip"><strong>必需消费 · +0.5%</strong><small>当日排名：3 / 11</small></span>              </div>
-              <div class="sector-row sector-up sector-hover-target" tabindex="0">
-                <span class="sector-name">医疗保健</span>
-                <strong>+0.3%</strong>
-                <span class="sector-diverging-track" aria-label="医疗保健 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-up" style="width: 4.3%"></i>
-                </span>
-<span class="sector-tooltip" role="tooltip"><strong>医疗保健 · +0.3%</strong><small>当日排名：4 / 11</small></span>              </div>
-              <div class="sector-row sector-up sector-hover-target" tabindex="0">
-                <span class="sector-name">金融</span>
-                <strong>+0.2%</strong>
-                <span class="sector-diverging-track" aria-label="金融 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-up" style="width: 3.5%"></i>
-                </span>
-<span class="sector-tooltip" role="tooltip"><strong>金融 · +0.2%</strong><small>当日排名：5 / 11</small></span>              </div>
-              <div class="sector-row sector-up sector-hover-target" tabindex="0">
-                <span class="sector-name">房地产</span>
-                <strong>+0.2%</strong>
-                <span class="sector-diverging-track" aria-label="房地产 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-up" style="width: 3.4%"></i>
-                </span>
-<span class="sector-tooltip" role="tooltip"><strong>房地产 · +0.2%</strong><small>当日排名：6 / 11</small></span>              </div>
-              <div class="sector-row sector-up sector-hover-target" tabindex="0">
-                <span class="sector-name">能源</span>
-                <strong>+0.2%</strong>
-                <span class="sector-diverging-track" aria-label="能源 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-up" style="width: 2.7%"></i>
-                </span>
-<span class="sector-tooltip" role="tooltip"><strong>能源 · +0.2%</strong><small>当日排名：7 / 11</small></span>              </div>
-              <div class="sector-row sector-up sector-hover-target" tabindex="0">
-                <span class="sector-name">工业</span>
-                <strong>+0.1%</strong>
-                <span class="sector-diverging-track" aria-label="工业 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-up" style="width: 1.6%"></i>
-                </span>
-<span class="sector-tooltip" role="tooltip"><strong>工业 · +0.1%</strong><small>当日排名：8 / 11</small></span>              </div>
-              <div class="sector-row sector-down sector-hover-target" tabindex="0">
-                <span class="sector-name">非必需消费</span>
-                <strong>-1.1%</strong>
-                <span class="sector-diverging-track" aria-label="非必需消费 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-down" style="width: 18.9%"></i>                </span>
-<span class="sector-tooltip" role="tooltip"><strong>非必需消费 · -1.1%</strong><small>当日排名：9 / 11</small></span>              </div>
-              <div class="sector-row sector-down sector-hover-target" tabindex="0">
-                <span class="sector-name">材料</span>
-                <strong>-1.2%</strong>
-                <span class="sector-diverging-track" aria-label="材料 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-down" style="width: 20.7%"></i>                </span>
-<span class="sector-tooltip" role="tooltip"><strong>材料 · -1.2%</strong><small>当日排名：10 / 11</small></span>              </div>
-              <div class="sector-row sector-down sector-hover-target" tabindex="0">
-                <span class="sector-name">通信服务</span>
-                <strong>-1.4%</strong>
-                <span class="sector-diverging-track" aria-label="通信服务 相对零轴的日涨跌幅">
-                  <i class="sector-zero-line"></i>
-<i class="sector-bar sector-bar-down" style="width: 23.2%"></i>                </span>
-<span class="sector-tooltip" role="tooltip"><strong>通信服务 · -1.4%</strong><small>当日排名：11 / 11</small></span>              </div>
-            </div>
-          </article>
+        <div class="context-info"><div class="context-name">VIX</div>
+<strong class="context-value">14.69</strong>
+<span class="context-change up">▲ +1.0%</span>        </div>
+        <button class="help context-help-button" type="button" aria-label="了解 VIX 的作用" aria-expanded="false" aria-controls="context-help-vix">?</button>
+        <div class="tooltip context-tooltip" id="context-help-vix" role="tooltip" hidden>
+<strong>VIX 的作用</strong><p>基于 S&amp;P 500 期权计算的未来约30天隐含波动率。快速上升通常表示市场风险定价和预期波动增加，下降则表示风险情绪趋于缓和。</p>
         </div>
-      </div>
-    </section>
+      </article>
+      <article class="card context-card context-normal">
+        <div class="icon-wrap" aria-hidden="true">
+<div class="icon-dollar">$</div>
+        </div>
+        <div class="context-info"><div class="context-name">美元指数</div>
+<strong class="context-value">99.97</strong>
+<span class="context-change down">▼ -0.0%</span>        </div>
+        <button class="help context-help-button" type="button" aria-label="了解 美元指数 的作用" aria-expanded="false" aria-controls="context-help-dxy">?</button>
+        <div class="tooltip context-tooltip" id="context-help-dxy" role="tooltip" hidden>
+<strong>美元指数的作用</strong><p>衡量美元相对一篮子主要货币的强弱。美元快速走强通常意味着全球金融条件趋紧，但不能单独作为交易信号。</p>
+        </div>
+      </article>
+      <article class="card context-card context-normal">
+        <div class="icon-wrap" aria-hidden="true">
+<svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 9l9-5 9 5"/><path d="M5 10h14"/><path d="M6 10v7M10 10v7M14 10v7M18 10v7"/><path d="M4 18h16M3 20h18"/></svg>        </div>
+        <div class="context-info"><div class="context-name">10Y 美债</div>
+<strong class="context-value">4.68%</strong>
+<span class="context-change down">▼ -0bp</span>
+        </div>
+        <button class="help context-help-button" type="button" aria-label="了解 10Y 美债 的作用" aria-expanded="false" aria-controls="context-help-us10y">?</button>
+        <div class="tooltip context-tooltip" id="context-help-us10y" role="tooltip" hidden>
+<strong>10Y 美债的作用</strong><p>美国10年期国债收益率是全球资产定价的重要利率基准。快速上行通常会提高股票估值的折现压力。</p>        </div>
+      </article>
+    </div>
+  </section>
 
-    <section class="section">
-      <div class="section-heading"><div><p class="section-kicker">DRAWDOWN RESERVE</p><h2>回撤加仓预警</h2></div><p>专项备用金 ¥200,000 · 不含月度定投</p></div>
-      <div class="drawdown-grid">
-        <article class="drawdown-card drawdown-normal">
-          <div class="drawdown-status-layer">
-            <div>
-              <h3>S&amp;P 500</h3>
-              <span class="status-indicator status-normal">
-未触发              </span>
-            </div>
-            <div class="drawdown-reading"><span>当前回撤</span><strong>-0.1%</strong></div>
-          </div>
+  <section class="section">
+    <div class="section-title"><div class="section-left breadth-title"><span class="marker"></span><h2>市场宽度</h2><button class="help breadth-help-button" type="button" aria-label="了解市场健康度的作用" aria-expanded="false" aria-controls="breadth-health-help">?</button><div class="tooltip breadth-tooltip" id="breadth-health-help" role="tooltip" hidden><strong>Market Health 的作用</strong><p>市场健康度综合 S&amp;P 500 成分股上涨比例和 11 个一级板块上涨比例，用于判断指数上涨或下跌是否得到广泛市场参与。该指标用于观察市场内部结构，不作为独立买卖信号。</p></div></div></div>
+    <div class="breadth-grid">
+      <article class="card breadth-left">
+        <div><div class="ratio-label">上涨占比</div><div class="ratio">51.9%</div><div class="breadth-status">市场状态：<span class="badge health-level-mixed">市场分化</span></div></div>
+        <div class="breadth-copy">上涨与下跌分布较为均衡，市场内部存在明显分化。</div>
+        <div class="mini"><div><span>上涨</span><strong class="up">261</strong></div><div><span>下跌</span><strong class="down">241</strong></div><div><span>平盘</span><strong>1</strong></div></div>
+        <div class="bbar" aria-label="S&P 500 成分股上涨、平盘与下跌比例"><span class="g" style="width:51.9%"></span><span class="n" style="width:0.2%"></span><span class="r" style="width:47.9%"></span></div>
+        <div class="formula">有效样本 503 / 505</div>
+      </article>
+      <article class="card sector-card">
+        <div class="sector-head"><strong>板块表现（11个板块）</strong><span>8涨 / 3跌 · 固定尺度 ±3%</span></div>
+        <div class="sector-cols">
+          <div class="sector-list"><div class="sector-row" tabindex="0"><span class="sector-name">科技</span><div class="track"><div class="fill up" style="width:49.6%"></div></div><span class="sret up">+1.5%</span><span class="sector-tooltip" role="tooltip"><strong>科技 · +1.5%</strong><small>当日排名：1 / 11</small></span></div><div class="sector-row" tabindex="0"><span class="sector-name">公用事业</span><div class="track"><div class="fill up" style="width:16.0%"></div></div><span class="sret up">+0.5%</span><span class="sector-tooltip" role="tooltip"><strong>公用事业 · +0.5%</strong><small>当日排名：2 / 11</small></span></div><div class="sector-row" tabindex="0"><span class="sector-name">必需消费</span><div class="track"><div class="fill up" style="width:15.4%"></div></div><span class="sret up">+0.5%</span><span class="sector-tooltip" role="tooltip"><strong>必需消费 · +0.5%</strong><small>当日排名：3 / 11</small></span></div><div class="sector-row" tabindex="0"><span class="sector-name">医疗保健</span><div class="track"><div class="fill up" style="width:8.5%"></div></div><span class="sret up">+0.3%</span><span class="sector-tooltip" role="tooltip"><strong>医疗保健 · +0.3%</strong><small>当日排名：4 / 11</small></span></div><div class="sector-row" tabindex="0"><span class="sector-name">金融</span><div class="track"><div class="fill up" style="width:6.9%"></div></div><span class="sret up">+0.2%</span><span class="sector-tooltip" role="tooltip"><strong>金融 · +0.2%</strong><small>当日排名：5 / 11</small></span></div><div class="sector-row" tabindex="0"><span class="sector-name">房地产</span><div class="track"><div class="fill up" style="width:6.8%"></div></div><span class="sret up">+0.2%</span><span class="sector-tooltip" role="tooltip"><strong>房地产 · +0.2%</strong><small>当日排名：6 / 11</small></span></div><div class="sector-row" tabindex="0"><span class="sector-name">能源</span><div class="track"><div class="fill up" style="width:5.5%"></div></div><span class="sret up">+0.2%</span><span class="sector-tooltip" role="tooltip"><strong>能源 · +0.2%</strong><small>当日排名：7 / 11</small></span></div><div class="sector-row" tabindex="0"><span class="sector-name">工业</span><div class="track"><div class="fill up" style="width:3.2%"></div></div><span class="sret up">+0.1%</span><span class="sector-tooltip" role="tooltip"><strong>工业 · +0.1%</strong><small>当日排名：8 / 11</small></span></div></div>
+          <div class="sector-list"><div class="sector-row" tabindex="0"><span class="sector-name">非必需消费</span><div class="track"><div class="fill down" style="width:37.7%"></div></div><span class="sret down">-1.1%</span><span class="sector-tooltip" role="tooltip"><strong>非必需消费 · -1.1%</strong><small>当日排名：9 / 11</small></span></div><div class="sector-row" tabindex="0"><span class="sector-name">材料</span><div class="track"><div class="fill down" style="width:41.3%"></div></div><span class="sret down">-1.2%</span><span class="sector-tooltip" role="tooltip"><strong>材料 · -1.2%</strong><small>当日排名：10 / 11</small></span></div><div class="sector-row" tabindex="0"><span class="sector-name">通信服务</span><div class="track"><div class="fill down" style="width:46.5%"></div></div><span class="sret down">-1.4%</span><span class="sector-tooltip" role="tooltip"><strong>通信服务 · -1.4%</strong><small>当日排名：11 / 11</small></span></div></div>
+        </div>
+      </article>
+    </div>
+  </section>
 
-          <div class="drawdown-progress-layer">
-            <dl class="progress-facts">
-              <div><dt>当前 ATH</dt><dd>7,757.64<small>2026-08-07</small></dd></div>
-              <div><dt>下一档触发值</dt><dd>-10.0%</dd></div>
-              <div><dt>距离下一档</dt><dd>9.9个百分点</dd></div>
-            </dl>
-            <div class="drawdown-progress" aria-label="当前回撤相对下一档触发线的视觉进度">
-              <div class="progress-labels"><span>ATH / 0%</span><span>触发线 -10.0%</span></div>
-              <div class="progress-track">
-                <span class="progress-fill" style="width: 1.2%"></span>
-                <span class="progress-marker" style="left: 1.2%"></span>
-                <span class="trigger-marker"></span>
-              </div>
-            </div>
+  <section class="section">
+    <div class="section-title"><div class="section-left"><span class="marker"></span><h2>回撤加仓预警</h2></div><div class="note">专项备用金 ¥200,000 · 不含月度定投</div></div>
+<div class="draw-grid">
+      <article class="card draw-card draw-normal">
+        <div class="draw-layout">
+          <div class="draw-index"><h3>S&amp;P 500 <span class="draw-status status-normal">● 未触发</span></h3><div class="dd">-0.1%</div><div class="small">当前回撤</div></div>
+          <div class="draw-mid"><div><span>历史高点 ATH</span><strong title="ATH 日期：2026-08-07">7,757.64</strong></div><div><span>下一档触发值</span><strong>-10.0%</strong></div><div><span>距离下一档</span><strong class="distance">9.9 个百分点</strong></div><div class="dtrack" aria-label="当前回撤相对下一档触发线的视觉进度"><i style="width:1.2%"></i><b style="left:1.2%"></b></div></div>
+          <div class="cash"><span>可用金额</span><strong>¥140,000</strong></div>
+        </div>
+      </article>
+      <article class="card draw-card draw-normal">
+        <div class="draw-layout">
+          <div class="draw-index"><h3>Nasdaq-100 <span class="draw-status status-normal">● 未触发</span></h3><div class="dd">-3.0%</div><div class="small">当前回撤</div></div>
+          <div class="draw-mid"><div><span>历史高点 ATH</span><strong title="ATH 日期：2026-06-02">30,660.60</strong></div><div><span>下一档触发值</span><strong>-15.0%</strong></div><div><span>距离下一档</span><strong class="distance">12.0 个百分点</strong></div><div class="dtrack" aria-label="当前回撤相对下一档触发线的视觉进度"><i style="width:20.0%"></i><b style="left:20.0%"></b></div></div>
+          <div class="cash"><span>可用金额</span><strong>¥60,000</strong></div>
+        </div>
+      </article>
+    </div>  </section>
 
-          </div>
+  <section class="section">
+    <div class="section-title"><div class="section-left"><span class="marker"></span><h2>全球重要新闻 <span class="title-note">（Top 8）</span></h2></div></div>
+<div class="news-layout news-count-4">
+<article class="card news-card"><div class="nmeta"><span class="rank">01</span>市场 / 宏观　BBC BUSINESS</div><h3>美国7月通胀放缓至3.4% 食品与燃料价格降温</h3><p>美国7月CPI同比降至3.4%，食品和燃料成本上涨放缓，但住房价格仍对整体通胀形成一定支撑，数据或影响美联储未来利率路径。</p><a href="https://www.bbc.co.uk/news/articles/c0qv2nn1gpeo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">查看原文 →</a></article><article class="card news-card"><div class="nmeta"><span class="rank">02</span>AI / 科技　TECHCRUNCH</div><h3>AI编程公司Cognition传将以400亿美元估值融资</h3><p>Cognition在数月前刚完成10亿美元融资、估值260亿美元后，据称已在洽谈新一轮融资，目标估值达400亿美元，显示AI应用层投资热度持续升温。</p><a href="https://techcrunch.com/2026/08/12/ai-coding-startup-cognition-reportedly-already-in-talks-to-raise-at-40b-valuation/" target="_blank" rel="noopener noreferrer">查看原文 →</a></article><article class="card news-card"><div class="nmeta"><span class="rank">03</span>AI / 科技　TECHCRUNCH</div><h3>三位AI先驱呼吁保持开源 为开放模式辩护</h3><p>Hinton、李飞飞和吴恩达在Ai4会议上就AI监管、开源访问及中美AI竞争展开讨论，主张在安全顾虑下继续维持开放模式。</p><a href="https://techcrunch.com/2026/08/12/as-ai-safety-concerns-mount-three-pioneers-make-the-case-for-staying-open/" target="_blank" rel="noopener noreferrer">查看原文 →</a></article><article class="card news-list" aria-label="第 4 至第 8 条新闻"><a class="nrow" href="https://techcrunch.com/2026/08/12/google-unveils-pixel-11-lineup-new-airtag-rival-and-gemini-features-at-made-by-google-2026/" target="_blank" rel="noopener noreferrer"><span class="nnum">04</span><span class="ntitle">谷歌发布Pixel 11、Pixel Watch 5与多项Gemini新功能</span><span class="ntime" title="2026-08-12T14:20:33+00:00">TechCrunch</span></a><a class="nrow" href="https://techcrunch.com/2026/08/12/tesla-wants-to-build-a-10b-solar-factory-in-texas/" target="_blank" rel="noopener noreferrer"><span class="nnum">05</span><span class="ntitle">特斯拉拟在得州投建100亿美元太阳能工厂</span><span class="ntime" title="2026-08-12T16:18:31+00:00">TechCrunch</span></a><a class="nrow" href="https://www.bbc.co.uk/news/articles/c5y49xp2wrno?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer"><span class="nnum">06</span><span class="ntitle">乌克兰袭击俄黑海粮食出口码头 全球粮运承压</span><span class="ntime" title="2026-08-13T03:28:56+00:00">BBC News</span></a><a class="nrow" href="https://www.bbc.co.uk/news/articles/c4g306eln8wo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer"><span class="nnum">07</span><span class="ntitle">涉伊朗安全顾虑 特朗普北约峰会后秘密换机离场</span><span class="ntime" title="2026-08-12T23:19:57+00:00">BBC News</span></a><a class="nrow" href="https://techcrunch.com/2026/08/12/form-energy-raises-750m-to-build-more-100-hour-batteries-for-the-grid/" target="_blank" rel="noopener noreferrer"><span class="nnum">08</span><span class="ntitle">Form Energy融资7.5亿美元 扩大百小时长时储能产能</span><span class="ntime" title="2026-08-12T16:18:23+00:00">TechCrunch</span></a></article>    </div>  </section>
 
-          <dl class="capital-layer">
-            <div><dt>资金池</dt><dd>¥140,000</dd></div>
-            <div><dt>已执行</dt><dd>¥0</dd></div>
-            <div><dt>待执行</dt><dd>¥0</dd></div>
-            <div><dt>剩余资金</dt><dd>¥140,000</dd></div>
-          </dl>
-        </article>        <article class="drawdown-card drawdown-normal">
-          <div class="drawdown-status-layer">
-            <div>
-              <h3>Nasdaq-100</h3>
-              <span class="status-indicator status-normal">
-未触发              </span>
-            </div>
-            <div class="drawdown-reading"><span>当前回撤</span><strong>-3.0%</strong></div>
-          </div>
+  <footer>Market Data: Yahoo Finance via yfinance　　News: RSS feeds　　AI Processing: DeepSeek　　Last generated: 2026-08-13 16:56 CST　　<span>数据仅用于信息与个人投资纪律辅助，不构成投资建议。</span></footer>
+</div>
 
-          <div class="drawdown-progress-layer">
-            <dl class="progress-facts">
-              <div><dt>当前 ATH</dt><dd>30,660.60<small>2026-06-02</small></dd></div>
-              <div><dt>下一档触发值</dt><dd>-15.0%</dd></div>
-              <div><dt>距离下一档</dt><dd>12.0个百分点</dd></div>
-            </dl>
-            <div class="drawdown-progress" aria-label="当前回撤相对下一档触发线的视觉进度">
-              <div class="progress-labels"><span>ATH / 0%</span><span>触发线 -15.0%</span></div>
-              <div class="progress-track">
-                <span class="progress-fill" style="width: 20.0%"></span>
-                <span class="progress-marker" style="left: 20.0%"></span>
-                <span class="trigger-marker"></span>
-              </div>
-            </div>
+<div class="archive-loading" id="archive-loading" role="status" aria-live="polite" hidden><div class="archive-loading-card"><span class="archive-spinner" aria-hidden="true"></span><strong>正在加载日报…</strong></div></div>
+<script>
+(() => {
+  const select = document.querySelector('.report-select');
+  const loading = document.getElementById('archive-loading');
+  select?.addEventListener('change', () => {
+    if (!select.value) return;
+    loading.hidden = false;
+    window.requestAnimationFrame(() => { window.location.href = select.value; });
+  });
 
-          </div>
-
-          <dl class="capital-layer">
-            <div><dt>资金池</dt><dd>¥60,000</dd></div>
-            <div><dt>已执行</dt><dd>¥0</dd></div>
-            <div><dt>待执行</dt><dd>¥0</dd></div>
-            <div><dt>剩余资金</dt><dd>¥60,000</dd></div>
-          </dl>
-        </article>      </div>
-    </section>
-
-    <section class="section news-section">
-      <div class="section-heading"><div><p class="section-kicker">GLOBAL SIGNALS</p><h2>全球重要新闻</h2></div><p>RSS 候选 · DeepSeek 编辑 · 最多 8 条</p></div>
-<div class="news-list">
-<article class="news-item top-news"><div class="rank">01</div><div>
-          <div class="news-meta"><span>市场 / 宏观</span><span>BBC Business</span></div><h3>美国7月通胀放缓至3.4% 食品和燃料成本降温</h3><p>美国7月年度通胀率降至3.4%，食品成本增长放缓，住房成本仍略推高物价。这一数据可能影响美联储下一步政策路径，对长期投资者而言是评估通胀趋势的关键指标。</p>
-          <a href="https://www.bbc.co.uk/news/articles/c0qv2nn1gpeo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item top-news"><div class="rank">02</div><div>
-          <div class="news-meta"><span>AI / 科技</span><span>TechCrunch</span></div><h3>AI编程初创公司Cognition据悉洽谈以400亿美元估值融资</h3><p>Cognition在数月前以260亿美元估值融资10亿美元后，据报已开始洽谈新一轮巨额融资，估值或达400亿美元。这凸显AI编程赛道的高估值热潮，对长期投资者评估AI产业泡沫风险具有参考意义。</p>
-          <a href="https://techcrunch.com/2026/08/12/ai-coding-startup-cognition-reportedly-already-in-talks-to-raise-at-40b-valuation/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item top-news"><div class="rank">03</div><div>
-          <div class="news-meta"><span>AI / 科技</span><span>TechCrunch</span></div><h3>OpenAI支持的Thrive Holdings融资20亿美元 估值达120亿</h3><p>Thrive Holdings获SoftBank、D1 Capital和Altimeter Capital等投资20亿美元，估值120亿美元，专注企业级AI应用。这一融资事件反映投资者对AI商业化前景的巨大热情。</p>
-          <a href="https://techcrunch.com/2026/08/12/openai-backed-thrive-holdings-raises-2b-to-bring-ai-to-the-enterprise/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">04</div><div>
-          <div class="news-meta"><span>全球事件</span><span>BBC News</span></div><h3>俄罗斯黑海港口遭袭 两国谷物出口双双下滑</h3><p>俄乌互相攻击对方航运设施和港口，导致两国谷物出口减少。这一事件可能影响全球粮食供应和价格，对通胀预期和地缘政治风险有重要影响。</p>
-          <a href="https://www.bbc.co.uk/news/articles/c5y49xp2wrno?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">05</div><div>
-          <div class="news-meta"><span>全球事件</span><span>BBC Business</span></div><h3>英国官员警告伊朗战争可能拖累明年英国经济增长</h3><p>Burnham警告称，中东冲突推高油价并扰乱供应链，可能对明年英国经济增长造成负面影响。这一警告凸显地缘政治风险对全球经济的潜在冲击。</p>
-          <a href="https://www.bbc.co.uk/news/articles/c5y3egv4m4mo?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">06</div><div>
-          <div class="news-meta"><span>AI / 科技</span><span>TechCrunch</span></div><h3>特斯拉拟在德州建100亿美元太阳能工厂 寻求州激励</h3><p>特斯拉计划在得克萨斯州建设一座大型太阳能工厂，并请求州政府提供激励以降低成本。这一投资凸显新能源和科技制造业的扩张趋势，对长期投资者有参考意义。</p>
-          <a href="https://techcrunch.com/2026/08/12/tesla-wants-to-build-a-10b-solar-factory-in-texas/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">07</div><div>
-          <div class="news-meta"><span>AI / 科技</span><span>TechCrunch</span></div><h3>Form Energy融资7.5亿美元 打造100小时电网级电池</h3><p>Form Energy已获Google和Crusoe作为客户，并融资7.5亿美元以扩大生产，提供100小时长时储能电池。这代表储能技术的重大进展，对能源转型和电力基础设施投资有深远影响。</p>
-          <a href="https://techcrunch.com/2026/08/12/form-energy-raises-750m-to-build-more-100-hour-batteries-for-the-grid/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article><article class="news-item regular-news"><div class="rank">08</div><div>
-          <div class="news-meta"><span>AI / 科技</span><span>TechCrunch</span></div><h3>AI先驱Hinton、李飞飞、吴恩达呼吁保持AI开放性</h3><p>在Ai4大会上，Geoffrey Hinton、李飞飞和Andrew Ng就AI监管和开源访问展开辩论，强调在安全担忧中保持开放。这场辩论对AI监管政策和行业未来方向有重要指导意义。</p>
-          <a href="https://techcrunch.com/2026/08/12/as-ai-safety-concerns-mount-three-pioneers-make-the-case-for-staying-open/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div></article>      </div>    </section>
-
-    <footer><div><span>Market Data: Yahoo Finance via yfinance</span><span>News: RSS feeds</span><span>AI Processing: DeepSeek</span><span>Last generated: 2026-08-13 11:30 CST</span></div>
-      <p>数据仅用于信息与个人投资纪律辅助，不构成投资建议。</p></footer>
-  </main>
-  <script>
-    (() => {
-      const buttons = Array.from(document.querySelectorAll('.context-help-button, .breadth-help-button'));
-      const closeAll = (except) => buttons.forEach((button) => {
-        if (button === except) return;
-        button.setAttribute('aria-expanded', 'false');
-        document.getElementById(button.getAttribute('aria-controls')).hidden = true;
-      });
-      buttons.forEach((button) => button.addEventListener('click', (event) => {
-        event.stopPropagation();
-        const opening = button.getAttribute('aria-expanded') !== 'true';
-        closeAll(opening ? button : null);
-        button.setAttribute('aria-expanded', String(opening));
-        document.getElementById(button.getAttribute('aria-controls')).hidden = !opening;
-      }));
-      document.addEventListener('click', (event) => {
-        if (!event.target.closest('.context-tooltip, .breadth-tooltip')) closeAll();
-      });
-      document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') closeAll();
-      });
-    })();
-  </script>
+  const buttons = Array.from(document.querySelectorAll('.context-help-button, .breadth-help-button'));
+  const closeAll = (except) => buttons.forEach((button) => {
+    if (button === except) return;
+    button.setAttribute('aria-expanded', 'false');
+    document.getElementById(button.getAttribute('aria-controls')).hidden = true;
+  });
+  buttons.forEach((button) => button.addEventListener('click', (event) => {
+    event.stopPropagation();
+    const opening = button.getAttribute('aria-expanded') !== 'true';
+    closeAll(opening ? button : null);
+    button.setAttribute('aria-expanded', String(opening));
+    document.getElementById(button.getAttribute('aria-controls')).hidden = !opening;
+  }));
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.tooltip')) closeAll();
+  });
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeAll(); });
+})();
+</script>
 </body>
 </html>
