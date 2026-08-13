@@ -34,6 +34,11 @@ def test_offline_fixture_runs_complete_pipeline(tmp_path):
         "US_MARKET_MACRO", "AI_CHIPS", "GEOPOLITICS",
     ]
     assert all(item["event_summary"] for item in report["news"])
+    assert report["portfolio_action"] == "hold"
+    assert report["market_summary"]["degraded"] is True
+    assert "标普500当日下跌0.5%" in report["market_summary"]["market"]
+    assert report["market_summary"]["drivers"].startswith("市场同时关注")
+    assert report["market_summary"]["action"] == "未触发额外回撤加仓，维持正常定投，备用金保持不动。"
     assert "Daily Market Brief" in index_path.read_text(encoding="utf-8")
     assert result == report_path
 

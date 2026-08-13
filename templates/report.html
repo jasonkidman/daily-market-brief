@@ -24,6 +24,14 @@
       </div>
     </header>
 
+    {% if report.market_summary %}
+    <section class="today-summary" aria-labelledby="today-summary-title">
+      <div class="today-summary-heading"><p class="section-kicker">TODAY IN ONE LINE</p><h2 id="today-summary-title">今日市场一句话</h2></div>
+      <p class="today-summary-copy"><span>{{ report.market_summary.market }}</span><span>{{ report.market_summary.drivers }}</span><strong>{{ report.market_summary.action }}</strong></p>
+      <p class="today-summary-source">基于市场数据 · Market Breadth · Top News</p>
+    </section>
+    {% endif %}
+
     {% if report.status == 'critical' %}
     <section class="alert critical"><strong>🔴 行情数据校验失败</strong><span>今日暂停回撤预警判断</span></section>
     {% elif report.warnings %}

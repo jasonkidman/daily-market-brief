@@ -47,6 +47,41 @@ def test_renders_index_and_history_pages(tmp_path):
     assert (site / "history" / "2026-08-11.html").exists()
 
 
+def test_renders_today_in_one_line_after_header_and_omits_it_for_legacy_reports(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["market_summary"] = {
+        "market": "标普500小幅上涨，纳指100相对更强，市场内部仍有分化。",
+        "drivers": "市场同时关注利率预期与人工智能相关事件。",
+        "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
+        "degraded": False,
+    }
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    legacy = report("2026-08-11")
+    (reports / "2026-08-11.json").write_text(json.dumps(legacy), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    index_html = (site / "index.html").read_text(encoding="utf-8")
+    legacy_html = (site / "history" / "2026-08-11.html").read_text(encoding="utf-8")
+    css = (site / "style.css").read_text(encoding="utf-8")
+    compact_css = "".join(css.split())
+    assert "TODAY IN ONE LINE" in index_html and "今日市场一句话" in index_html
+    assert "基于市场数据 · Market Breadth · Top News" in index_html
+    assert index_html.index("TODAY IN ONE LINE") > index_html.index("</header>")
+    assert index_html.index("TODAY IN ONE LINE") < index_html.index("MARKET CLOSE")
+    assert "标普500小幅上涨" in index_html
+    assert "TODAY IN ONE LINE" not in legacy_html
+    assert ".today-summary" in css
+    assert "border-left:2pxsolidvar(--steel)" in compact_css
+    assert "font-size:1.02rem" in compact_css
+    assert "line-height:1.75" in compact_css
+    assert "@media(max-width:760px)" in compact_css
+
+
 def test_drawdown_cards_render_three_action_layers_and_visual_progress(tmp_path):
     reports = tmp_path / "reports"
     reports.mkdir()

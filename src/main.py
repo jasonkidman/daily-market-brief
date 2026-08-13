@@ -17,6 +17,7 @@ from .market import calculate_context_snapshot, calculate_market_snapshot, fetch
 from .market_breadth import build_market_breadth, build_offline_market_breadth, unavailable_market_breadth
 from .market_health import build_market_breadth_text
 from .market_signals import build_market_context_for_ai, calculate_market_signals
+from .market_summary import derive_portfolio_action, generate_market_summary
 from .news_dedupe import dedupe_candidates
 from .news_events import (
     build_event_representatives,
@@ -299,6 +300,7 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
     retained = load_reports(base_dir / "data" / "reports") if (base_dir / "data" / "reports").exists() else []
     warnings = [*market_warnings, *breadth_warnings]
     news_degraded = False
+    api_key = os.environ.get("DEEPSEEK_API_KEY")
     if offline_fixture:
         news = _offline_news()
     else:
@@ -307,7 +309,6 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         rss_candidate_count = len(candidates)
         candidates = dedupe_candidates(candidates)
         recent_events = _recent_news_events(retained)
-        api_key = os.environ.get("DEEPSEEK_API_KEY")
         if not api_key:
             news, ai_warning = [], "⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：未配置 AI 凭据。"
             event_representatives = []
@@ -340,6 +341,19 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
             warnings.append(ai_warning)
             news_degraded = True
 
+    drawdown_summary = {
+        key: summarize_index_state(value) for key, value in updated_state.get("indices", {}).items()
+    }
+    portfolio_action = derive_portfolio_action(drawdown_summary)
+    market_summary = generate_market_summary(
+        snapshots,
+        {"items": context_snapshots, "signals": market_signals},
+        market_breadth,
+        news,
+        portfolio_action,
+        api_key,
+    )
+
     if not validity_summary["drawdown_market_valid"]:
         status, status_label = "critical", "🔴 行情数据校验失败"
     elif warnings:
@@ -361,7 +375,9 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         "market_context": context_snapshots,
         "market_signals": market_signals,
         "market_breadth": market_breadth,
-        "drawdown": {key: summarize_index_state(value) for key, value in updated_state.get("indices", {}).items()},
+        "drawdown": drawdown_summary,
+        "portfolio_action": portfolio_action,
+        "market_summary": market_summary,
         "news": news,
         "news_degraded": news_degraded,
         "warnings": warnings,
