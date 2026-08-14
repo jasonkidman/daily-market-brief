@@ -20,6 +20,105 @@ def candidate(cid, title, url, source="BBC News", summary="full summary", priori
             "summary": summary, "published_at": "2026-08-12T00:00:00+00:00", "priority": priority}
 
 
+def enriched_selection(cid="1", rank=1, score=92, category="美联储 / 利率"):
+    return {
+        "rank": rank,
+        "candidate_id": cid,
+        "category": category,
+        "title_zh": "美联储维持政策利率不变",
+        "summary_zh": "委员会维持政策利率不变，并继续关注通胀和就业数据。",
+        "investment_impact": "通胀回落 → 降息空间增加 → 长端利率压力缓解 → 成长股估值获得支撑。",
+        "focus": "FOMC · 官员讲话 · 10Y 美债",
+        "tags": ["Fed", "10Y 美债", "成长股估值"],
+        "investment_relevance_score": score,
+        "selection_reason": "美国利率路径直接影响股票折现率。",
+    }
+
+
+def test_validates_enriched_investment_fields_and_keeps_source_metadata_program_owned():
+    pool = [candidate("1", "Fed holds rates", "https://trusted.example/fed", source="Reuters")]
+    item = {**enriched_selection(), "source": "Fake", "url": "https://fake.example"}
+
+    news = validate_selection({"news": [item]}, pool)
+
+    assert news[0]["source"] == "Reuters"
+    assert news[0]["url"] == "https://trusted.example/fed"
+    assert news[0]["investment_relevance_score"] == 92
+    assert news[0]["tags"] == ["Fed", "10Y 美债", "成长股估值"]
+
+
+@pytest.mark.parametrize("patch", [
+    {"investment_relevance_score": 49},
+    {"investment_relevance_score": 92.5},
+    {"investment_impact": "利好科技股"},
+    {"tags": []},
+    {"tags": ["x"] * 5},
+    {"title_zh": "标" * 71},
+    {"summary_zh": "摘" * 181},
+    {"investment_impact": "10Y 美债 → " + "影" * 221},
+    {"focus": "关" * 81},
+    {"selection_reason": "理" * 121},
+])
+def test_rejects_invalid_investment_contract(patch):
+    pool = [candidate("1", "Fed holds rates", "https://x/1")]
+
+    with pytest.raises(NewsSelectionError):
+        validate_selection({"news": [{**enriched_selection(), **patch}]}, pool)
+
+
+def test_rejects_boolean_investment_relevance_score():
+    pool = [candidate("1", "Fed holds rates", "https://x/1")]
+
+    with pytest.raises(NewsSelectionError):
+        validate_selection(
+            {"news": [{**enriched_selection(), "investment_relevance_score": True}]}, pool
+        )
+
+
+@pytest.mark.parametrize("field", [
+    "investment_impact", "focus", "tags", "investment_relevance_score",
+])
+def test_rejects_missing_required_enriched_field(field):
+    pool = [candidate("1", "Fed holds rates", "https://x/1")]
+    item = enriched_selection()
+    item.pop(field)
+
+    with pytest.raises(NewsSelectionError):
+        validate_selection({"news": [item]}, pool)
+
+
+def test_requires_non_increasing_scores():
+    pool = [candidate(str(i), f"Title {i}", f"https://x/{i}") for i in range(1, 3)]
+    payload = {"news": [enriched_selection("1", 1, 70), enriched_selection("2", 2, 90)]}
+
+    with pytest.raises(NewsSelectionError):
+        validate_selection(payload, pool)
+
+
+def test_rejects_third_same_topic_without_high_score_exception_reason():
+    pool = [{**candidate(str(i), f"Title {i}", f"https://x/{i}"), "topic_group": "AI_CHIPS"}
+            for i in range(1, 4)]
+    payload = {"news": [enriched_selection(str(i), i, 90 - i) for i in range(1, 4)]}
+
+    with pytest.raises(NewsSelectionError):
+        validate_selection(payload, pool)
+
+
+def test_allows_third_same_topic_with_high_score_and_exception_reason():
+    pool = [{**candidate(str(i), f"Title {i}", f"https://x/{i}"), "topic_group": "AI_CHIPS"}
+            for i in range(1, 4)]
+    payload = {"news": [
+        enriched_selection("1", 1, 95),
+        enriched_selection("2", 2, 90),
+        enriched_selection("3", 3, 85),
+    ]}
+    payload["news"][2]["selection_reason"] = "主题上限例外：该事件具有独立系统性影响。"
+
+    news = validate_selection(payload, pool)
+
+    assert [item["candidate_id"] for item in news] == ["1", "2", "3"]
+
+
 def test_dedupes_canonical_url_and_normalized_title():
     items = [
         candidate("1", "Fed holds rates", "https://example.com/a?utm_source=x"),
@@ -39,7 +138,7 @@ def test_similar_title_prefers_higher_priority_or_more_complete_item():
 
 def test_rejects_invalid_candidate_category_duplicates_and_more_than_eight():
     pool = [candidate(str(i), f"title {i}", f"https://x/{i}") for i in range(9)]
-    base = {"rank": 1, "candidate_id": "0", "category": "市场 / 宏观", "title_zh": "标题", "summary_zh": "摘要"}
+    base = enriched_selection("0")
     with pytest.raises(NewsSelectionError):
         validate_selection({"news": [{**base, "candidate_id": "missing"}]}, pool)
     with pytest.raises(NewsSelectionError):
@@ -167,8 +266,7 @@ def test_deepseek_payload_includes_market_driven_context_and_selection_reason():
         captured["payload"] = json.loads(user_payload)
         captured["kwargs"] = kwargs
         return json.dumps({"news": [{
-            "rank": 1, "candidate_id": "1", "category": "市场 / 宏观",
-            "title_zh": "标题", "summary_zh": "摘要",
+            **enriched_selection(),
             "selection_reason": "与利率明显上升相关",
         }]})
 
@@ -244,8 +342,9 @@ def test_selection_uses_program_owned_event_metadata_and_excludes_urls_from_stag
     def model(system_prompt, user_payload, api_key):
         captured["payload"] = json.loads(user_payload)
         return json.dumps({"news": [{
-            "rank": 1, "candidate_id": "1", "category": "市场 / 宏观",
-            "title_zh": "美联储维持利率", "summary_zh": "摘要",
+            **enriched_selection(),
+            "title_zh": "美联储维持利率",
+            "summary_zh": "摘要",
             "selection_reason": "重大宏观事件",
             "event_summary": "模型伪造摘要", "topic_group": "AI_CHIPS",
         }]})
@@ -297,8 +396,9 @@ def test_stage_a_fallback_still_feeds_stage_b_selection():
 
     def editor(system_prompt, user_payload, api_key):
         return json.dumps({"news": [{
-            "rank": 1, "candidate_id": "a", "category": "市场 / 宏观",
-            "title_zh": "美联储维持利率", "summary_zh": "摘要",
+            **enriched_selection("a"),
+            "title_zh": "美联储维持利率",
+            "summary_zh": "摘要",
         }]})
 
     selected, selection_warning = select_news(

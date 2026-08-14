@@ -10,7 +10,22 @@ from typing import Any, Callable, Optional
 from .news_prompt import SYSTEM_PROMPT
 
 
-ALLOWED_CATEGORIES = {"市场 / 宏观", "AI / 科技", "全球事件"}
+ALLOWED_CATEGORIES = {
+    "美联储 / 利率",
+    "就业 / 通胀",
+    "美国经济",
+    "美债 / 美元",
+    "金融市场",
+    "AI / 资本开支",
+    "半导体",
+    "地缘政治",
+    "政策 / 监管",
+}
+TITLE_ZH_LIMIT = 70
+SUMMARY_ZH_LIMIT = 180
+INVESTMENT_IMPACT_LIMIT = 220
+FOCUS_LIMIT = 80
+SELECTION_REASON_LIMIT = 120
 
 
 class NewsSelectionError(ValueError):
@@ -41,6 +56,33 @@ def _parse_payload(payload: Any) -> dict:
         raise NewsSelectionError("DeepSeek 输出无法解析为 JSON。") from exc
 
 
+def _required_text(item: dict, key: str, limit: int) -> str:
+    value = str(item.get(key, "")).strip()
+    if not value or len(value) > limit:
+        raise NewsSelectionError(f"{key} 不合法。")
+    return value
+
+
+def _has_impact_path(value: str) -> bool:
+    if value == "短期资产价格影响有限，暂以观察为主。":
+        return True
+    variables = (
+        "SPY", "Nasdaq", "纳指", "科技股", "美债", "收益率", "美元", "信用", "AI", "半导体",
+        "估值", "通胀", "油价",
+    )
+    connectors = ("→", "若", "如果", "导致", "使得", "进而", "从而", "有利于", "压制")
+    return any(term in value for term in variables) and any(term in value for term in connectors)
+
+
+def _validated_tags(item: dict) -> list[str]:
+    tags = item.get("tags")
+    if not isinstance(tags, list) or not 1 <= len(tags) <= 4:
+        raise NewsSelectionError("tags 不合法。")
+    if any(not isinstance(tag, str) or not tag.strip() for tag in tags):
+        raise NewsSelectionError("tags 不合法。")
+    return [tag.strip() for tag in tags]
+
+
 def validate_selection(payload: Any, candidates: list[dict]) -> list[dict]:
     data = _parse_payload(payload)
     news = data.get("news")
@@ -63,27 +105,56 @@ def validate_selection(payload: Any, candidates: list[dict]) -> list[dict]:
             raise NewsSelectionError("candidate_id 不得重复。")
         if item.get("category") not in ALLOWED_CATEGORIES:
             raise NewsSelectionError("category 不合法。")
-        if not str(item.get("title_zh", "")).strip() or not str(item.get("summary_zh", "")).strip():
-            raise NewsSelectionError("中文标题和摘要不能为空。")
+        title_zh = _required_text(item, "title_zh", TITLE_ZH_LIMIT)
+        summary_zh = _required_text(item, "summary_zh", SUMMARY_ZH_LIMIT)
+        investment_impact = _required_text(item, "investment_impact", INVESTMENT_IMPACT_LIMIT)
+        if not _has_impact_path(investment_impact):
+            raise NewsSelectionError("investment_impact 不合法。")
+        focus = _required_text(item, "focus", FOCUS_LIMIT)
+        tags = _validated_tags(item)
+        score = item.get("investment_relevance_score")
+        if not isinstance(score, int) or isinstance(score, bool) or not 50 <= score <= 100:
+            raise NewsSelectionError("investment_relevance_score 不合法。")
+        selection_reason = _required_text(item, "selection_reason", SELECTION_REASON_LIMIT)
         seen.add(candidate_id)
         source = pool[candidate_id]
         validated.append({
             "rank": rank,
             "candidate_id": candidate_id,
             "category": item["category"],
-            "title_zh": str(item["title_zh"]).strip(),
-            "summary_zh": str(item["summary_zh"]).strip(),
+            "title_zh": title_zh,
+            "summary_zh": summary_zh,
+            "investment_impact": investment_impact,
+            "focus": focus,
+            "tags": tags,
+            "investment_relevance_score": score,
             "source": source["source"],
             "url": source["url"],
             "published_at": source["published_at"],
             "original_title": source["title"],
-            "selection_reason": str(item.get("selection_reason", "")).strip(),
+            "selection_reason": selection_reason,
             "event_summary": source.get("event_summary", source["title"]),
             "topic_group": source.get("topic_group"),
         })
     if sorted(item["rank"] for item in validated) != list(range(1, len(validated) + 1)):
         raise NewsSelectionError("rank 必须从 1 连续排列。")
-    return sorted(validated, key=lambda item: item["rank"])
+    validated.sort(key=lambda item: item["rank"])
+    if any(
+        item["investment_relevance_score"] < next_item["investment_relevance_score"]
+        for item, next_item in zip(validated, validated[1:])
+    ):
+        raise NewsSelectionError("investment_relevance_score 必须按 rank 非递增排列。")
+    topic_counts: dict[str, int] = {}
+    for item in validated:
+        topic_group = item["topic_group"]
+        if not topic_group:
+            continue
+        topic_counts[topic_group] = topic_counts.get(topic_group, 0) + 1
+        if topic_counts[topic_group] > 2 and (
+            item["investment_relevance_score"] < 85 or "主题上限例外" not in item["selection_reason"]
+        ):
+            raise NewsSelectionError("topic_group 超过主题上限。")
+    return validated
 
 
 def call_deepseek(system_prompt: str, user_payload: str, api_key: str, *,
