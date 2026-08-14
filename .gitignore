@@ -11,3 +11,4 @@ secrets.json
 *.py[cod]
 .DS_Store
 work/
+.worktrees/
