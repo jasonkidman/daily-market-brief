@@ -388,6 +388,23 @@ def test_event_selection_prompt_has_topic_concentration_contract():
     assert "突破必须说明理由" in SYSTEM_PROMPT
 
 
+def test_investment_priority_prompt_has_selection_contract():
+    from src.news_prompt import SYSTEM_PROMPT
+
+    for phrase in (
+        "长期持有 SPY 与 Nasdaq-100",
+        "美国资产定价的重要程度",
+        "investment_relevance_score",
+        "宏观/政策重要性 0-30",
+        "低于50分不得入选",
+        "普通产品更新",
+        "普通公司融资",
+        "短期资产价格影响有限，暂以观察为主。",
+        "不要返回URL",
+    ):
+        assert phrase in SYSTEM_PROMPT
+
+
 def test_stage_a_fallback_still_feeds_stage_b_selection():
     pool = [candidate("a", "Fed holds rates", "https://x/a"), candidate("b", "Oil rises", "https://x/b")]
     events, clustering_warning = cluster_news_events(
