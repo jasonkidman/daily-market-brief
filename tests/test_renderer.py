@@ -72,14 +72,22 @@ def test_renders_today_in_one_line_after_header_and_omits_it_for_legacy_reports(
     assert "TODAY IN ONE LINE" not in index_html and "今日市场一句话" in index_html
     assert 'class="summary-icon"' in index_html
     assert "基于市场数据 · Market Breadth · Top News" in index_html
+    assert 'class="summary-inner"' in index_html
+    assert 'class="market-summary"' in index_html
+    assert 'class="summary-focus-label">今日关注</div>' in index_html
+    assert 'class="summary-focus-text">市场同时关注利率预期与人工智能相关事件。</div>' in index_html
+    assert 'class="summary-strategy">策略：未触发额外回撤加仓，维持正常定投，备用金保持不动。</div>' in index_html
     assert index_html.index("今日市场一句话") > index_html.index("</header>")
     assert index_html.index("今日市场一句话") < index_html.index("美国主要指数")
     assert "标普500小幅上涨" in index_html
     assert "今日市场一句话" not in legacy_html
     assert ".summary" in css
-    assert ".summary{margin-top:13px;padding:20px15px" in compact_css
-    assert ".summaryp" in compact_css and "font-size:16px" in compact_css
-    assert "line-height:1.7" in compact_css
+    assert ".summary{margin-top:18px;padding:20px22px16px" in compact_css
+    assert ".summary-inner{display:grid;grid-template-columns:46pxminmax(0,1fr)" in compact_css
+    assert ".summary-content{max-width:1180px}" in compact_css
+    assert ".summary-focus{margin-top:12px;display:flex" in compact_css
+    assert ".summary-strategy{margin-top:14px" in compact_css
+    assert ".page{width:min(1440px,calc(100%-34px))" in compact_css
     assert "@media(max-width:900px)" in compact_css
 
 
@@ -101,13 +109,21 @@ def test_today_summary_is_the_readable_primary_visual_focus(tmp_path):
     html = (site / "index.html").read_text(encoding="utf-8")
     compact_css = "".join((site / "style.css").read_text(encoding="utf-8").split())
     assert "标普500小幅上涨，纳指100相对更强。" in html
-    assert ".summary{margin-top:13px;padding:20px15px" in compact_css
-    assert ".summaryh2{margin:0" in compact_css
-    assert "font-size:19px;font-weight:700" in compact_css
-    assert ".summaryp{margin:0;color:#495b67;font-size:16px;line-height:1.7}" in compact_css
-    assert ".summary-icon{width:38px;height:38px" in compact_css
-    assert "font-size:20px" in compact_css
-    assert ".summary-src{align-self:end;color:var(--muted);font-size:12px" in compact_css
+    assert 'class="summary-inner"' in html
+    assert 'class="market-summary"' in html
+    assert 'class="summary-focus-label">今日关注</div>' in html
+    assert 'class="summary-focus-text">市场同时关注利率预期。</div>' in html
+    assert 'class="summary-strategy">策略：未触发额外回撤加仓，维持正常定投，备用金保持不动。</div>' in html
+    assert ".summary{margin-top:18px;padding:20px22px16px" in compact_css
+    assert ".summary-inner{display:grid;grid-template-columns:46pxminmax(0,1fr)" in compact_css
+    assert ".summaryh2{margin:2px010px" in compact_css
+    assert "font-size:19px;line-height:1.3;font-weight:700" in compact_css
+    assert ".market-summary{margin:0;color:#243d50;font-size:16px;line-height:1.72" in compact_css
+    assert ".summary-icon{width:44px;height:44px" in compact_css
+    assert "font-size:22px" in compact_css
+    assert ".summary-focus-label{flex:00auto" in compact_css
+    assert ".summary-strategy{margin-top:14px" in compact_css
+    assert ".summary-src{margin-top:11px;text-align:right" in compact_css
     assert "@media(max-width:600px)" in compact_css
 
 

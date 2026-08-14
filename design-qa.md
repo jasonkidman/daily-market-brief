@@ -1,64 +1,43 @@
-# Design QA — v5 visual migration
+# Design QA — 今日市场一句话原型重构
 
 ## Source of truth
 
-- Reference: `/Users/mayansen/Downloads/daily_market_brief_screenshot_matched_v5.html`
-- Dynamic implementation: `http://127.0.0.1:8765/`
-- Render fixture: `work/v5-final-preview`, report date `2026-08-12`
+- Source visual truth: `/Users/mayansen/Downloads/daily-market-brief-summary-prototype (1).html`
+- Source screenshot: `/tmp/market-summary-prototype.png`
+- Implementation: `http://127.0.0.1:8765/index.html`
+- Implementation screenshot: `/tmp/market-summary-current.png`
+- Side-by-side comparison: `/tmp/market-summary-comparison.png`
 
 ## Compared state
 
-- Desktop viewport: 1440 × 1000
-- Mobile viewport: 375 × 812
-- Reference and implementation were inspected at the same desktop viewport.
-- Full-page evidence:
-  - `work/design-qa/v5-reference-1440.png`
-  - `work/design-qa/v5-implementation-1440.png`
-  - `work/design-qa/v5-side-by-side-1440.png`
+- Desktop viewport override: 1440 × 900.
+- Mobile viewport override: 390 × 844.
+- State: latest rendered report, summary present, no alert covering the module.
+- Full-view comparison evidence: the prototype and implementation were captured at the same desktop viewport and placed in one side-by-side image.
+- Focused region comparison evidence: the combined image crops the page header, complete summary card, and the beginning of the next section; no additional crop was needed because all summary typography and spacing remained readable.
 
-## Geometry verification
+## Fidelity review
 
-At 1440px, the reference and implementation matched these measured values:
+- Fonts and typography: the summary title, 16px main text, 15px focus/strategy text, weights, and line heights follow the prototype. The implementation intentionally retains the site's existing global font stack.
+- Spacing and layout rhythm: the 46px icon/content grid, 16px gap, 20px 22px 16px card padding, 12px focus gap, 14px strategy separation, 7px radius, and right-aligned source match the source module. The existing 1440px page width is intentionally preserved instead of adopting the prototype's 1840px width.
+- Colors and tokens: existing `--surface`, `--line`, `--icon-bg`, `--icon-fg`, and `--blue` tokens replace equivalent prototype colors; overall page palette is unchanged.
+- Image quality and asset fidelity: the module contains no raster imagery. The existing sun glyph is retained because it is present in both the source prototype and the current product.
+- Copy and content: the existing `market`, `drivers`, and `action` fields map respectively to the main summary, “今日关注”, and “策略：” blocks without modifying the persisted data.
+- Responsiveness: at the measured mobile viewport the document `scrollWidth` equals `clientWidth` (325px), and the 291px summary card has no horizontal overflow.
 
-- page width: 1406px at x=17px
-- header: 1406px wide, 86px high, 18px 0 14px padding
-- title: 31px, 32.5px rendered height
-- market cards: 460.7px wide, 84.8px high, 13px 14px padding
-- context cards: 344px wide, 94.3px high, 15px 14px padding
-- breadth grid: 449.9px / 956.1px columns with 12px gap
-- drawdown grid: two 697px columns with 12px gap
-- all module borders, radii, colors, typography, and desktop grid ratios use the v5 CSS baseline
+## Findings
 
-Dynamic-content height differences are expected and limited to the market summary text, market-health summary, retained drawdown status labels, and actual news count.
+- No actionable P0, P1, or P2 mismatch remains.
+- The narrower current page and denser surrounding dashboard differ from the standalone prototype by explicit requirement; the target module itself retains the prototype's hierarchy and proportions.
 
-## Responsive verification
+## Patches made
 
-At 375px:
+- Split the single summary paragraph into main summary, focus, and strategy regions.
+- Rebuilt only summary-scoped desktop and mobile CSS.
+- Added renderer assertions for semantic mapping, placement, responsive classes, legacy omission, and unchanged `.page` width.
 
-- viewport width: 375px
-- document scroll width: 375px
-- page width: 341px with 17px side gutters
-- header, market, context, breadth, drawdown, and news grids become single-column
-- breadth summary remains a compact two-column internal grid
-- sector groups become a single column
-- drawdown cards keep all fields readable without overflow
+## Follow-up polish
 
-## Interaction verification
+- None required for the approved scope.
 
-- Market Context help opens on click, reports `aria-expanded=true`, and closes with Escape.
-- Market Breadth help opens on click, reports `aria-expanded=true`, and closes with Escape.
-- History select retains relative targets and invokes the archive loading overlay before navigation.
-- Sector rows retain hover/focus tooltips.
-- Browser console log: empty.
-
-## Findings and patches
-
-- Replaced the legacy presentation DOM with the v5 module DOM instead of adapting the old layout.
-- Migrated the v5 stylesheet as the baseline and added only functional state, tooltip, archive loading, dynamic-count, and mobile compatibility rules.
-- Replaced every static example value with Jinja fields from the report schema.
-- Preserved required interactions inside the v5 DOM.
-- No P0, P1, or P2 visual defects remain in the inspected desktop and mobile states.
-
-## Final result
-
-passed
+final result: passed

@@ -28,9 +28,21 @@
 
   {% if report.market_summary %}
   <section class="summary" aria-labelledby="today-summary-title">
-    <div class="summary-icon" aria-hidden="true">☼</div>
-    <div><h2 id="today-summary-title">今日市场一句话</h2><p><strong>{{ report.market_summary.market }}</strong> {{ report.market_summary.drivers }} <strong>{{ report.market_summary.action }}</strong></p></div>
-    <div class="summary-src">基于市场数据 · Market Breadth · Top News</div>
+    <div class="summary-inner">
+      <div class="summary-icon" aria-hidden="true">☼</div>
+      <div>
+        <h2 id="today-summary-title">今日市场一句话</h2>
+        <div class="summary-content">
+          <p class="market-summary"><strong>{{ report.market_summary.market }}</strong></p>
+          <div class="summary-focus">
+            <div class="summary-focus-label">今日关注</div>
+            <div class="summary-focus-text">{{ report.market_summary.drivers }}</div>
+          </div>
+          <div class="summary-strategy">策略：{{ report.market_summary.action }}</div>
+        </div>
+        <div class="summary-src">基于市场数据 · Market Breadth · Top News</div>
+      </div>
+    </div>
   </section>
   {% endif %}
 
