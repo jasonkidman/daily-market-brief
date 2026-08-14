@@ -1,0 +1,449 @@
+{
+  "report_date": "2026-08-14",
+  "generated_at": "2026-08-14 10:42 CST",
+  "market_date": "2026-08-13",
+  "status": "ok",
+  "status_label": "🟢 数据更新正常",
+  "market_data_valid": true,
+  "core_market_valid": true,
+  "context_market_valid": true,
+  "drawdown_market_valid": true,
+  "market": {
+    "sp500": {
+      "market_date": "2026-08-13",
+      "close": 7798.990234375,
+      "daily_return": 0.0065161301380911585,
+      "ytd_return": 0.13928715716529116,
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "drawdown": 0.0,
+      "name": "S&P 500",
+      "ticker": "^GSPC",
+      "valid": true
+    },
+    "nasdaq100": {
+      "market_date": "2026-08-13",
+      "close": 30084.501953125,
+      "daily_return": 0.011495375261086238,
+      "ytd_return": 0.19147252037314888,
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "drawdown": 0.01878951043324828,
+      "name": "Nasdaq-100",
+      "ticker": "^NDX",
+      "valid": true
+    },
+    "dow": {
+      "market_date": "2026-08-13",
+      "close": 53839.98828125,
+      "daily_return": 0.0012966040640634002,
+      "ytd_return": 0.12018942796940424,
+      "ath": 54349.12109375,
+      "ath_date": "2026-08-05",
+      "drawdown": 0.009367820532401372,
+      "name": "Dow Jones",
+      "ticker": "^DJI",
+      "valid": true
+    }
+  },
+  "market_context": {
+    "russell2000": {
+      "market_date": "2026-08-13",
+      "close": 3052.846923828125,
+      "daily_return": 0.00241897612416464,
+      "name": "Russell 2000",
+      "ticker": "^RUT",
+      "valid": true
+    },
+    "vix": {
+      "market_date": "2026-08-13",
+      "close": 14.630000114440918,
+      "daily_return": 0.005498276471294972,
+      "name": "VIX",
+      "ticker": "^VIX",
+      "valid": true
+    },
+    "dxy": {
+      "market_date": "2026-08-13",
+      "close": 99.90299987792969,
+      "daily_return": -0.0010699155685950368,
+      "name": "美元指数",
+      "ticker": "DX-Y.NYB",
+      "valid": true
+    },
+    "us10y": {
+      "market_date": "2026-08-13",
+      "close": 4.640999794006348,
+      "yield_change_bp": -4.10003662109375,
+      "name": "10Y 美债",
+      "ticker": "^TNX",
+      "valid": true
+    }
+  },
+  "market_signals": {
+    "tech_relative": 0.00497924512299508,
+    "small_cap_relative": -0.004097154013926518,
+    "vix_daily_return": 0.005498276471294972,
+    "dxy_daily_return": -0.0010699155685950368,
+    "us10y_bp_change": -4.10003662109375,
+    "signals": []
+  },
+  "market_breadth": {
+    "market_date": "2026-08-13",
+    "stocks": {
+      "market_date": "2026-08-13",
+      "constituent_date": "2026-08-10",
+      "total_constituents": 505,
+      "valid_count": 503,
+      "invalid_count": 2,
+      "advancers": 319,
+      "decliners": 183,
+      "unchanged": 1,
+      "advance_ratio": 0.6341948310139165,
+      "decline_ratio": 0.36381709741550694,
+      "unchanged_ratio": 0.0019880715705765406,
+      "coverage_ratio": 0.996039603960396,
+      "status": "ok"
+    },
+    "sectors": {
+      "market_date": "2026-08-13",
+      "items": [
+        {
+          "key": "communication_services",
+          "name": "通信服务",
+          "ticker": "XLC",
+          "valid": true,
+          "daily_return": 0.02067658001361483,
+          "direction": "up",
+          "bar_strength": 0.689219333787161
+        },
+        {
+          "key": "real_estate",
+          "name": "房地产",
+          "ticker": "XLRE",
+          "valid": true,
+          "daily_return": 0.014160423233314567,
+          "direction": "up",
+          "bar_strength": 0.47201410777715225
+        },
+        {
+          "key": "consumer_staples",
+          "name": "必需消费",
+          "ticker": "XLP",
+          "valid": true,
+          "daily_return": 0.010813330384879194,
+          "direction": "up",
+          "bar_strength": 0.3604443461626398
+        },
+        {
+          "key": "technology",
+          "name": "科技",
+          "ticker": "XLK",
+          "valid": true,
+          "daily_return": 0.010113330805552767,
+          "direction": "up",
+          "bar_strength": 0.3371110268517589
+        },
+        {
+          "key": "financials",
+          "name": "金融",
+          "ticker": "XLF",
+          "valid": true,
+          "daily_return": 0.0058701685658923974,
+          "direction": "up",
+          "bar_strength": 0.19567228552974658
+        },
+        {
+          "key": "consumer_discretionary",
+          "name": "非必需消费",
+          "ticker": "XLY",
+          "valid": true,
+          "daily_return": 0.004750170171287094,
+          "direction": "up",
+          "bar_strength": 0.1583390057095698
+        },
+        {
+          "key": "utilities",
+          "name": "公用事业",
+          "ticker": "XLU",
+          "valid": true,
+          "daily_return": 0.004562061182557864,
+          "direction": "up",
+          "bar_strength": 0.15206870608526213
+        },
+        {
+          "key": "energy",
+          "name": "能源",
+          "ticker": "XLE",
+          "valid": true,
+          "daily_return": 0.0004916040405413824,
+          "direction": "up",
+          "bar_strength": 0.016386801351379415
+        },
+        {
+          "key": "health_care",
+          "name": "医疗保健",
+          "ticker": "XLV",
+          "valid": true,
+          "daily_return": -0.0003561954270014933,
+          "direction": "down",
+          "bar_strength": 0.011873180900049778
+        },
+        {
+          "key": "industrials",
+          "name": "工业",
+          "ticker": "XLI",
+          "valid": true,
+          "daily_return": -0.0004842457193631189,
+          "direction": "down",
+          "bar_strength": 0.016141523978770632
+        },
+        {
+          "key": "materials",
+          "name": "材料",
+          "ticker": "XLB",
+          "valid": true,
+          "daily_return": -0.0051350408589032615,
+          "direction": "down",
+          "bar_strength": 0.17116802863010872
+        }
+      ],
+      "valid_count": 11,
+      "advancers": 8,
+      "decliners": 3,
+      "unchanged": 0,
+      "advance_ratio": 0.7272727272727273
+    },
+    "health": {
+      "valid": true,
+      "score": 0.6714259895174408,
+      "level": "healthy",
+      "label": "市场健康",
+      "divergence": null,
+      "summary": "多数股票与板块共同上涨，市场参与度良好。"
+    }
+  },
+  "drawdown": {
+    "sp500": {
+      "index": "sp500",
+      "name": "S&P 500",
+      "cycle_id": "sp500-2026-08-13-77989902",
+      "started_at": "2026-08-14T10:42:09.022326+08:00",
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "last_market_date": "2026-08-13",
+      "last_updated_at": "2026-08-14T10:42:09.022326+08:00",
+      "current_close": 7798.990234375,
+      "current_drawdown": 0.0,
+      "pool": 140000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.1,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.15,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.25,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 140000,
+      "next_threshold": 0.1,
+      "distance_to_next": 0.1,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    },
+    "nasdaq100": {
+      "index": "nasdaq100",
+      "name": "Nasdaq-100",
+      "cycle_id": "nasdaq100-2026-06-02-306605996",
+      "started_at": "2026-08-12T10:00:00+08:00",
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "last_market_date": "2026-08-13",
+      "last_updated_at": "2026-08-14T10:42:09.022326+08:00",
+      "current_close": 30084.501953125,
+      "current_drawdown": 0.01878951043324828,
+      "pool": 60000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.15,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.3,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.4,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 60000,
+      "next_threshold": 0.15,
+      "distance_to_next": 0.13121048956675171,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    }
+  },
+  "portfolio_action": "hold",
+  "market_summary": {
+    "market": "标普500上涨0.65%并创收盘新高，纳指100涨1.15%，道指微涨0.13%；个股涨多跌少，8个板块收涨，市场宽度良好。",
+    "drivers": "市场同时关注AI产业相关消息：OpenAI推出Ultrafast模式、Databricks融资50亿美元、微软合并Copilot应用；此外，罗马尼亚因多瑙河水位关闭核电站等能源供应消息亦受关注。",
+    "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
+    "degraded": false
+  },
+  "news": [
+    {
+      "rank": 1,
+      "candidate_id": "d796dd4f41b1239b",
+      "category": "AI / 科技",
+      "title_zh": "OpenAI推出“Ultrafast”模式，GPT-5.6 Sol提速14倍",
+      "summary_zh": "OpenAI发布“Ultrafast”预览模式，使最新最强模型GPT-5.6 Sol运行速度提升14倍，主要面向企业用户。此举旨在提升模型响应效率，降低使用成本，进一步巩固其在生成式AI市场的领先地位。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/13/openai-introduces-ultrafast-a-new-mode-that-makes-gpt-5-6-sol-work-at-14x-the-speed/",
+      "published_at": "2026-08-13T19:22:40+00:00",
+      "original_title": "OpenAI introduces ‘Ultrafast,’ a new mode that makes GPT-5.6 Sol work at 14x the speed",
+      "selection_reason": "OpenAI核心产品性能重大升级，直接影响AI商业化进程与科技板块情绪。",
+      "event_summary": "OpenAI introduced 'Ultrafast,' a preview mode that makes GPT-5.6 Sol work at 14 times the speed.",
+      "topic_group": "AI_CHIPS"
+    },
+    {
+      "rank": 2,
+      "candidate_id": "31b6cf628065b150",
+      "category": "AI / 科技",
+      "title_zh": "Databricks融资50亿美元，估值达1900亿美元",
+      "summary_zh": "Databricks在最新一轮融资中筹集50亿美元，估值升至1900亿美元。CEO透露原计划融资10亿，但投资者需求高达150亿美元。AI基础设施热潮持续，资金大量涌入数据与AI平台。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/13/databricks-wanted-to-raise-1b-investors-wanted-15b-it-settled-on-5b-at-a-190b-valuation/",
+      "published_at": "2026-08-13T20:14:39+00:00",
+      "original_title": "Databricks wanted to raise $1B, investors wanted $15B. It settled on $5B at a $190B valuation.",
+      "selection_reason": "巨额融资凸显AI资本开支热潮，是评估AI长期需求和估值的重要信号。",
+      "event_summary": "Databricks raised $5 billion at a $190 billion valuation after investors wanted $15 billion.",
+      "topic_group": "AI_CHIPS"
+    },
+    {
+      "rank": 3,
+      "candidate_id": "8e77a85b47ddb894",
+      "category": "AI / 科技",
+      "title_zh": "微软合并Copilot应用，砍掉多项未达预期的AI功能",
+      "summary_zh": "微软将消费者和企业版Copilot合并为单一应用，并停用AI生成播客、群聊、深度研究及Mico角色等未成功功能。此举旨在简化AI产品线，聚焦更具价值的商业化方向，反映AI应用市场正在整合。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/13/microsoft-kills-off-unsuccessful-ai-features-while-merging-its-separate-copilot-apps/",
+      "published_at": "2026-08-13T15:30:52+00:00",
+      "original_title": "Microsoft kills off unsuccessful AI features while merging its separate Copilot apps",
+      "selection_reason": "微软作为AI商业化核心标的，其产品战略调整对科技股有重要参考意义。",
+      "event_summary": "Microsoft is merging its consumer and business Copilot apps and dropping unsuccessful AI features.",
+      "topic_group": "MEGA_CAP_TECH"
+    },
+    {
+      "rank": 4,
+      "candidate_id": "f40d536e546cb368",
+      "category": "AI / 科技",
+      "title_zh": "苹果洽谈向出版商付费，为Siri提供即时新闻",
+      "summary_zh": "据WSJ报道，苹果正与出版商谈判，计划以九位数预算为Siri获取最新新闻内容。此举有望增强Siri的信息时效性与AI问答能力，也是苹果在生成式AI竞争中补足内容生态的重要动作。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/13/apple-in-talks-to-pay-publishers-to-provide-siri-with-current-news-report/",
+      "published_at": "2026-08-13T14:34:43+00:00",
+      "original_title": "Apple in talks to pay publishers to provide Siri with current news: report",
+      "selection_reason": "苹果AI布局新进展，涉及内容授权市场，可能影响媒体与科技行业格局。",
+      "event_summary": "Apple is in talks to pay publishers to provide Siri with current news, with a nine-figure budget considered.",
+      "topic_group": "MEGA_CAP_TECH"
+    },
+    {
+      "rank": 5,
+      "candidate_id": "2ca168fdd0f2673e",
+      "category": "市场 / 宏观",
+      "title_zh": "美国首次允许部分私营公司实施网络攻击",
+      "summary_zh": "美国新规首次允许部分私营企业开展“反击式”网络攻击或进攻性网络行动，推翻持续数十年的禁止政策。该政策将重塑网络安全行业规则，对全球网络空间稳定与企业安全策略产生系统性影响。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/13/in-a-first-us-will-allow-some-private-firms-to-carry-out-cyberattacks/",
+      "published_at": "2026-08-13T14:09:05+00:00",
+      "original_title": "In a first, US will allow some private firms to carry out cyberattacks",
+      "selection_reason": "重大监管政策历史性转变，对网络安全、金融及企业风险管理的长期影响显著。",
+      "event_summary": "For the first time, the US will allow some private firms to carry out cyberattacks under a new order.",
+      "topic_group": "GEOPOLITICS"
+    },
+    {
+      "rank": 6,
+      "candidate_id": "28a46bff448f1e7b",
+      "category": "全球事件",
+      "title_zh": "乌克兰袭击俄黑海港口粮食出口终端，两国粮食出口双双下滑",
+      "summary_zh": "乌克兰对俄罗斯黑海港口发动攻击，击中主要粮食出口终端。由于双方互相袭击航运设施，俄罗斯与乌克兰的粮食出口均出现下降，全球粮食供应面临新的不确定性，可能推高国际粮价。",
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/c5y49xp2wrno?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-13T03:28:56+00:00",
+      "original_title": "Major Russian grain export terminals hit in Ukraine Black Sea port attack",
+      "selection_reason": "地缘冲突直接冲击全球粮食贸易，对通胀与农产品市场具有长期影响。",
+      "event_summary": "Russian grain export terminals were hit in a Ukrainian Black Sea port attack, and grain exports from both countries are falling.",
+      "topic_group": "GEOPOLITICS"
+    },
+    {
+      "rank": 7,
+      "candidate_id": "598e73e16c55acb5",
+      "category": "全球事件",
+      "title_zh": "多瑙河水位骤降，罗马尼亚关闭唯一核电站",
+      "summary_zh": "因高温导致多瑙河水位大幅下降，罗马尼亚关闭其唯一核电站切尔纳沃德。该电站供应全国约20%电力，预计未来10天无法重启，加剧欧洲能源紧张局势，可能影响区域内电价与天然气需求。",
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/cqlxpq5q799o?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-13T19:46:27+00:00",
+      "original_title": "Romania shuts only nuclear plant as heat causes huge drop in Danube River level",
+      "selection_reason": "欧洲能源供应再受冲击，短期电力紧张可能外溢至天然气市场。",
+      "event_summary": "Romania shut its only nuclear plant, Cernavodă, because of a huge drop in the Danube River level caused by heat.",
+      "topic_group": "ENERGY_COMMODITIES"
+    }
+  ],
+  "news_degraded": false,
+  "warnings": []
+}

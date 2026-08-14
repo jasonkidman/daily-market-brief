@@ -1,3 +1,56 @@
 {
-  "cycles": []
+  "cycles": [
+    {
+      "index": "sp500",
+      "name": "S&P 500",
+      "cycle_id": "sp500-2026-08-07-77576401",
+      "started_at": "2026-08-12T10:00:00+08:00",
+      "ath": 7757.64013671875,
+      "ath_date": "2026-08-07",
+      "last_market_date": "2026-08-12",
+      "last_updated_at": "2026-08-13T17:51:14.392004+08:00",
+      "current_close": 7748.5,
+      "current_drawdown": 0.001178210971077065,
+      "pool": 140000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.1,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.15,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.25,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "ended_at": "2026-08-14T10:42:09.022326+08:00",
+      "ended_by_new_ath": {
+        "ath": 7798.990234375,
+        "date": "2026-08-13"
+      }
+    }
+  ]
 }
