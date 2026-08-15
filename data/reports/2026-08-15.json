@@ -1,0 +1,462 @@
+{
+  "report_date": "2026-08-15",
+  "generated_at": "2026-08-15 10:40 CST",
+  "market_date": "2026-08-14",
+  "status": "ok",
+  "status_label": "🟢 数据更新正常",
+  "market_data_valid": true,
+  "core_market_valid": true,
+  "context_market_valid": true,
+  "drawdown_market_valid": true,
+  "market": {
+    "sp500": {
+      "market_date": "2026-08-14",
+      "close": 7785.759765625,
+      "daily_return": -0.0016964335577297485,
+      "ytd_return": 0.13735443219998533,
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "drawdown": 0.0016964335577297485,
+      "name": "S&P 500",
+      "ticker": "^GSPC",
+      "valid": true
+    },
+    "nasdaq100": {
+      "market_date": "2026-08-14",
+      "close": 30046.140625,
+      "daily_return": -0.0012750544300220712,
+      "ytd_return": 0.18995325080447967,
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "drawdown": 0.020040670834993057,
+      "name": "Nasdaq-100",
+      "ticker": "^NDX",
+      "valid": true
+    },
+    "dow": {
+      "market_date": "2026-08-14",
+      "close": 53732.41015625,
+      "daily_return": -0.001998108254370967,
+      "ytd_return": 0.11795116822691964,
+      "ath": 54349.12109375,
+      "ath_date": "2026-08-05",
+      "drawdown": 0.011347210867241109,
+      "name": "Dow Jones",
+      "ticker": "^DJI",
+      "valid": true
+    }
+  },
+  "market_context": {
+    "russell2000": {
+      "market_date": "2026-08-14",
+      "close": 3068.415283203125,
+      "daily_return": 0.00509857511799372,
+      "name": "Russell 2000",
+      "ticker": "^RUT",
+      "valid": true
+    },
+    "vix": {
+      "market_date": "2026-08-14",
+      "close": 14.25,
+      "daily_return": -0.025974033593193835,
+      "name": "VIX",
+      "ticker": "^VIX",
+      "valid": true
+    },
+    "dxy": {
+      "market_date": "2026-08-14",
+      "close": 99.63600158691406,
+      "daily_return": -0.0032412715138662174,
+      "name": "美元指数",
+      "ticker": "DX-Y.NYB",
+      "valid": true
+    },
+    "us10y": {
+      "market_date": "2026-08-14",
+      "close": 4.696000099182129,
+      "yield_change_bp": 5.500030517578125,
+      "name": "10Y 美债",
+      "ticker": "^TNX",
+      "valid": true
+    }
+  },
+  "market_signals": {
+    "tech_relative": 0.00042137912770767727,
+    "small_cap_relative": 0.0067950086757234684,
+    "vix_daily_return": -0.025974033593193835,
+    "dxy_daily_return": -0.0032412715138662174,
+    "us10y_bp_change": 5.500030517578125,
+    "signals": [
+      {
+        "key": "small_cap_relative",
+        "value": 0.0067950086757234684,
+        "level": "significant",
+        "message": "Russell 2000 比 S&P 500 领先 0.68 个百分点，小盘相对占优"
+      },
+      {
+        "key": "us10y_bp_change",
+        "value": 5.500030517578125,
+        "level": "significant",
+        "message": "10Y 美债收益率明显上升"
+      }
+    ]
+  },
+  "market_breadth": {
+    "market_date": "2026-08-14",
+    "stocks": {
+      "market_date": "2026-08-14",
+      "constituent_date": "2026-08-10",
+      "total_constituents": 505,
+      "valid_count": 503,
+      "invalid_count": 2,
+      "advancers": 250,
+      "decliners": 245,
+      "unchanged": 8,
+      "advance_ratio": 0.4970178926441352,
+      "decline_ratio": 0.4870775347912525,
+      "unchanged_ratio": 0.015904572564612324,
+      "coverage_ratio": 0.996039603960396,
+      "status": "ok"
+    },
+    "sectors": {
+      "market_date": "2026-08-14",
+      "items": [
+        {
+          "key": "energy",
+          "name": "能源",
+          "ticker": "XLE",
+          "valid": true,
+          "daily_return": 0.013920708401636173,
+          "direction": "up",
+          "bar_strength": 0.46402361338787246
+        },
+        {
+          "key": "utilities",
+          "name": "公用事业",
+          "ticker": "XLU",
+          "valid": true,
+          "daily_return": 0.006130800457555763,
+          "direction": "up",
+          "bar_strength": 0.20436001525185876
+        },
+        {
+          "key": "materials",
+          "name": "材料",
+          "ticker": "XLB",
+          "valid": true,
+          "daily_return": 0.004396855977789382,
+          "direction": "up",
+          "bar_strength": 0.14656186592631276
+        },
+        {
+          "key": "industrials",
+          "name": "工业",
+          "ticker": "XLI",
+          "valid": true,
+          "daily_return": 0.0038753498397205988,
+          "direction": "up",
+          "bar_strength": 0.12917832799068663
+        },
+        {
+          "key": "communication_services",
+          "name": "通信服务",
+          "ticker": "XLC",
+          "valid": true,
+          "daily_return": 0.003553921684928074,
+          "direction": "up",
+          "bar_strength": 0.11846405616426914
+        },
+        {
+          "key": "real_estate",
+          "name": "房地产",
+          "ticker": "XLRE",
+          "valid": true,
+          "daily_return": 0.003324501982044703,
+          "direction": "up",
+          "bar_strength": 0.11081673273482344
+        },
+        {
+          "key": "consumer_staples",
+          "name": "必需消费",
+          "ticker": "XLP",
+          "valid": true,
+          "daily_return": 0.0010464690452398617,
+          "direction": "up",
+          "bar_strength": 0.03488230150799539
+        },
+        {
+          "key": "financials",
+          "name": "金融",
+          "ticker": "XLF",
+          "valid": true,
+          "daily_return": -0.0017164173876079714,
+          "direction": "down",
+          "bar_strength": 0.057213912920265717
+        },
+        {
+          "key": "consumer_discretionary",
+          "name": "非必需消费",
+          "ticker": "XLY",
+          "valid": true,
+          "daily_return": -0.00211059524222057,
+          "direction": "down",
+          "bar_strength": 0.07035317474068567
+        },
+        {
+          "key": "technology",
+          "name": "科技",
+          "ticker": "XLK",
+          "valid": true,
+          "daily_return": -0.003983906005157634,
+          "direction": "down",
+          "bar_strength": 0.1327968668385878
+        },
+        {
+          "key": "health_care",
+          "name": "医疗保健",
+          "ticker": "XLV",
+          "valid": true,
+          "daily_return": -0.005998394918256156,
+          "direction": "down",
+          "bar_strength": 0.1999464972752052
+        }
+      ],
+      "valid_count": 11,
+      "advancers": 7,
+      "decliners": 4,
+      "unchanged": 0,
+      "advance_ratio": 0.6363636363636364
+    },
+    "health": {
+      "valid": true,
+      "score": 0.5527561901319357,
+      "level": "mixed",
+      "label": "市场分化",
+      "divergence": null,
+      "summary": "上涨与下跌分布较为均衡，市场内部存在明显分化。"
+    }
+  },
+  "drawdown": {
+    "sp500": {
+      "index": "sp500",
+      "name": "S&P 500",
+      "cycle_id": "sp500-2026-08-13-77989902",
+      "started_at": "2026-08-14T10:42:09.022326+08:00",
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "last_market_date": "2026-08-14",
+      "last_updated_at": "2026-08-15T10:40:36.820223+08:00",
+      "current_close": 7785.759765625,
+      "current_drawdown": 0.0016964335577297485,
+      "pool": 140000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.1,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.15,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.25,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 140000,
+      "next_threshold": 0.1,
+      "distance_to_next": 0.09830356644227026,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    },
+    "nasdaq100": {
+      "index": "nasdaq100",
+      "name": "Nasdaq-100",
+      "cycle_id": "nasdaq100-2026-06-02-306605996",
+      "started_at": "2026-08-12T10:00:00+08:00",
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "last_market_date": "2026-08-14",
+      "last_updated_at": "2026-08-15T10:40:36.820223+08:00",
+      "current_close": 30046.140625,
+      "current_drawdown": 0.020040670834993057,
+      "pool": 60000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.15,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.3,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.4,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 60000,
+      "next_threshold": 0.15,
+      "distance_to_next": 0.12995932916500694,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    }
+  },
+  "portfolio_action": "hold",
+  "market_summary": {
+    "market": "美股主要指数小幅回落，标普500距历史高点不到0.2%，罗素2000逆势上涨0.5%；市场内部分化，上涨与下跌家数接近持平，能源领涨而科技与医疗回落，同时10年期美债收益率上行约5.5个基点。",
+    "drivers": "市场同时关注AI热潮下保持投资纪律的提醒，以及天然气价格可能推高数据中心成本。",
+    "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
+    "degraded": false
+  },
+  "news": [
+    {
+      "rank": 1,
+      "candidate_id": "72878d74ff8ad162",
+      "category": "市场 / 宏观",
+      "title_zh": "美国部分地区天然气价格或涨至三倍，推高AI数据中心成本",
+      "summary_zh": "预测显示美国部分地区天然气价格可能涨至目前三倍，推高AI数据中心电力成本；大型科技公司或面临巨额电费负担，影响AI基础设施扩张的经济性。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/14/hyperscalers-might-regret-embracing-natural-gas-if-new-forecast-proves-correct/",
+      "published_at": "2026-08-14T14:05:00+00:00",
+      "original_title": "Hyperscalers might regret embracing natural gas if new forecast proves correct",
+      "selection_reason": "与当日能源板块领涨及10年期美债收益率上行背景相关，直接影响AI基础设施成本与大型科技公司资本开支预期。",
+      "event_summary": "Natural gas prices could triple in parts of the US, increasing costs for hyperscalers' data centers.",
+      "topic_group": "ENERGY_COMMODITIES"
+    },
+    {
+      "rank": 2,
+      "candidate_id": "0c40305c3f304134",
+      "category": "AI / 科技",
+      "title_zh": "Thrive创始人警告硅谷VC勿因AI狂热放松投资纪律",
+      "summary_zh": "Thrive Capital的Joshua Kushner在其首封投资信中警告，AI机遇巨大，但让兴奋情绪削弱投资纪律将是严重错误，暗示AI估值与资本配置需保持理性。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/14/thrives-joshua-kushner-chides-silicon-valley-vcs-over-ai-euphoria/",
+      "published_at": "2026-08-14T19:33:00+00:00",
+      "original_title": "Thrive’s Joshua Kushner chides Silicon Valley VCs over AI euphoria",
+      "selection_reason": "直接回应AI热潮下的市场情绪，影响投资者对科技股估值与风险偏好的判断。",
+      "event_summary": "Joshua Kushner warned Silicon Valley VCs against weakening investment discipline amid AI euphoria.",
+      "topic_group": "AI_CHIPS"
+    },
+    {
+      "rank": 3,
+      "candidate_id": "3155ffa03750b1b6",
+      "category": "AI / 科技",
+      "title_zh": "苹果提议对App Store外购买收取15%佣金",
+      "summary_zh": "苹果请求联邦法官允许其对iOS应用外部链接完成购买收取最高15%的佣金，此举可能重塑应用分发规则和开发者商业模式。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/14/apple-proposes-to-take-a-15-cut-of-purchases-made-outside-the-app-store/",
+      "published_at": "2026-08-14T14:54:48+00:00",
+      "original_title": "Apple proposes to take a 15% cut of purchases made outside the App Store",
+      "selection_reason": "涉及苹果服务收入与全球应用经济规则，是大型科技监管与反垄断领域的重大新进展。",
+      "event_summary": "Apple proposed taking a 15% commission on purchases made outside the App Store.",
+      "topic_group": "MEGA_CAP_TECH"
+    },
+    {
+      "rank": 4,
+      "candidate_id": "23be1c8a10c016b6",
+      "category": "AI / 科技",
+      "title_zh": "Meta发布开源AI模型Glimmer，强调AI应惠及所有人",
+      "summary_zh": "Meta推出可下载运行的开源模型Glimmer，对标其闭源模型Muse Spark；扎克伯格发布公开信称AI不应由少数实验室控制，展示开源与闭源路线的战略分歧。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/video/does-mark-zuckerberg-really-believe-ai-is-for-everyone/",
+      "published_at": "2026-08-14T15:43:28+00:00",
+      "original_title": "Does Mark Zuckerberg really believe AI is ‘for everyone’?",
+      "selection_reason": "大型科技公司AI战略重大动向，开源/闭源路线之争影响AI产业竞争格局与商业生态。",
+      "event_summary": "Meta released open-weight AI model Glimmer, contrasting with its locked Muse Spark.",
+      "topic_group": "MEGA_CAP_TECH"
+    },
+    {
+      "rank": 5,
+      "candidate_id": "5c88bd9b75e4dc96",
+      "category": "全球事件",
+      "title_zh": "英国拟将2030年电动车销售目标从80%下调至50%",
+      "summary_zh": "面对汽车制造商压力，英国政府考虑将2030年新电动汽车销售目标从80%降至50%，反映传统车企转型阻力加大，可能放缓电动化进程并影响全球车企战略。",
+      "source": "BBC Business",
+      "url": "https://www.bbc.co.uk/news/articles/c1l1yj0zd9no?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-14T15:58:21+00:00",
+      "original_title": "Electric vehicle sales targets could be cut after pressure from car makers",
+      "selection_reason": "重大产业政策转向，影响全球汽车业电气化节奏、传统车企与电动汽车供应链盈利预期。",
+      "event_summary": "The UK government is considering cutting the 2030 electric vehicle sales target from 80% to 50%.",
+      "topic_group": "OTHER_SYSTEMIC"
+    },
+    {
+      "rank": 6,
+      "candidate_id": "1f9545b7d9f9e842",
+      "category": "市场 / 宏观",
+      "title_zh": "传PayPal正谈判出售给Stripe与Advent",
+      "summary_zh": "有报道称PayPal正在与Stripe及私募股权公司Advent谈判潜在出售事宜，新CEO正试图扭转公司局面，交易若达成将重塑全球支付行业格局。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/14/talks-to-sell-paypal-to-stripe-and-advent-are-heating-up/",
+      "published_at": "2026-08-14T22:43:24+00:00",
+      "original_title": "Talks to sell PayPal to Stripe and Advent are heating up",
+      "selection_reason": "全球头部支付公司潜在并购具有系统性影响，对金融科技板块与支付生态意义重大。",
+      "event_summary": "PayPal is negotiating a potential sale to Stripe and private equity firm Advent.",
+      "topic_group": "OTHER_SYSTEMIC"
+    },
+    {
+      "rank": 7,
+      "candidate_id": "7d3387171e4d3995",
+      "category": "AI / 科技",
+      "title_zh": "Uber与Pony.ai拟在欧洲四城投放2000辆Robotaxi",
+      "summary_zh": "Uber与Pony.ai将合作扩大自动驾驶出租车服务，计划在除萨格勒布外的四个欧洲城市部署约2000辆Robotaxi，加速无人驾驶商业化落地。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/14/uber-and-pony-ai-plan-to-bring-2000-robotaxis-to-europe/",
+      "published_at": "2026-08-14T10:44:30+00:00",
+      "original_title": "Uber and Pony.ai plan to bring 2,000 robotaxis to Europe",
+      "selection_reason": "自动驾驶商业化迈出规模化步伐，对出行行业和AI应用落地具有长期影响。",
+      "event_summary": "Uber and Pony.ai plan to bring 2,000 robotaxis to four European cities beyond Zagreb.",
+      "topic_group": "OTHER_SYSTEMIC"
+    }
+  ],
+  "news_degraded": false,
+  "warnings": []
+}
