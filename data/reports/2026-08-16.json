@@ -1,0 +1,476 @@
+{
+  "report_date": "2026-08-16",
+  "generated_at": "2026-08-16 10:48 CST",
+  "market_date": "2026-08-14",
+  "status": "ok",
+  "status_label": "🟢 数据更新正常",
+  "market_data_valid": true,
+  "core_market_valid": true,
+  "context_market_valid": true,
+  "drawdown_market_valid": true,
+  "market": {
+    "sp500": {
+      "market_date": "2026-08-14",
+      "close": 7785.759765625,
+      "daily_return": -0.0016964335577297485,
+      "ytd_return": 0.13735443219998533,
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "drawdown": 0.0016964335577297485,
+      "name": "S&P 500",
+      "ticker": "^GSPC",
+      "valid": true
+    },
+    "nasdaq100": {
+      "market_date": "2026-08-14",
+      "close": 30046.140625,
+      "daily_return": -0.0012750544300220712,
+      "ytd_return": 0.18995325080447967,
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "drawdown": 0.020040670834993057,
+      "name": "Nasdaq-100",
+      "ticker": "^NDX",
+      "valid": true
+    },
+    "dow": {
+      "market_date": "2026-08-14",
+      "close": 53732.41015625,
+      "daily_return": -0.001998108254370967,
+      "ytd_return": 0.11795116822691964,
+      "ath": 54349.12109375,
+      "ath_date": "2026-08-05",
+      "drawdown": 0.011347210867241109,
+      "name": "Dow Jones",
+      "ticker": "^DJI",
+      "valid": true
+    }
+  },
+  "market_context": {
+    "russell2000": {
+      "market_date": "2026-08-14",
+      "close": 3068.419921875,
+      "daily_return": 0.005100094574149949,
+      "name": "Russell 2000",
+      "ticker": "^RUT",
+      "valid": true
+    },
+    "vix": {
+      "market_date": "2026-08-14",
+      "close": 14.25,
+      "daily_return": -0.025974033593193835,
+      "name": "VIX",
+      "ticker": "^VIX",
+      "valid": true
+    },
+    "dxy": {
+      "market_date": "2026-08-14",
+      "close": 99.66999816894531,
+      "daily_return": -0.002901169649694335,
+      "name": "美元指数",
+      "ticker": "DX-Y.NYB",
+      "valid": true
+    },
+    "us10y": {
+      "market_date": "2026-08-14",
+      "close": 4.696000099182129,
+      "yield_change_bp": 5.500030517578125,
+      "name": "10Y 美债",
+      "ticker": "^TNX",
+      "valid": true
+    }
+  },
+  "market_signals": {
+    "tech_relative": 0.00042137912770767727,
+    "small_cap_relative": 0.006796528131879698,
+    "vix_daily_return": -0.025974033593193835,
+    "dxy_daily_return": -0.002901169649694335,
+    "us10y_bp_change": 5.500030517578125,
+    "signals": [
+      {
+        "key": "small_cap_relative",
+        "value": 0.006796528131879698,
+        "level": "significant",
+        "message": "Russell 2000 比 S&P 500 领先 0.68 个百分点，小盘相对占优"
+      },
+      {
+        "key": "us10y_bp_change",
+        "value": 5.500030517578125,
+        "level": "significant",
+        "message": "10Y 美债收益率明显上升"
+      }
+    ]
+  },
+  "market_breadth": {
+    "market_date": "2026-08-14",
+    "stocks": {
+      "market_date": "2026-08-14",
+      "constituent_date": "2026-08-10",
+      "total_constituents": 505,
+      "valid_count": 503,
+      "invalid_count": 2,
+      "advancers": 250,
+      "decliners": 245,
+      "unchanged": 8,
+      "advance_ratio": 0.4970178926441352,
+      "decline_ratio": 0.4870775347912525,
+      "unchanged_ratio": 0.015904572564612324,
+      "coverage_ratio": 0.996039603960396,
+      "status": "ok"
+    },
+    "sectors": {
+      "market_date": "2026-08-14",
+      "items": [
+        {
+          "key": "energy",
+          "name": "能源",
+          "ticker": "XLE",
+          "valid": true,
+          "daily_return": 0.013920708401636173,
+          "direction": "up",
+          "bar_strength": 0.46402361338787246
+        },
+        {
+          "key": "utilities",
+          "name": "公用事业",
+          "ticker": "XLU",
+          "valid": true,
+          "daily_return": 0.006130800457555763,
+          "direction": "up",
+          "bar_strength": 0.20436001525185876
+        },
+        {
+          "key": "materials",
+          "name": "材料",
+          "ticker": "XLB",
+          "valid": true,
+          "daily_return": 0.004396855977789382,
+          "direction": "up",
+          "bar_strength": 0.14656186592631276
+        },
+        {
+          "key": "industrials",
+          "name": "工业",
+          "ticker": "XLI",
+          "valid": true,
+          "daily_return": 0.0038753498397205988,
+          "direction": "up",
+          "bar_strength": 0.12917832799068663
+        },
+        {
+          "key": "communication_services",
+          "name": "通信服务",
+          "ticker": "XLC",
+          "valid": true,
+          "daily_return": 0.003553921684928074,
+          "direction": "up",
+          "bar_strength": 0.11846405616426914
+        },
+        {
+          "key": "real_estate",
+          "name": "房地产",
+          "ticker": "XLRE",
+          "valid": true,
+          "daily_return": 0.003324501982044703,
+          "direction": "up",
+          "bar_strength": 0.11081673273482344
+        },
+        {
+          "key": "consumer_staples",
+          "name": "必需消费",
+          "ticker": "XLP",
+          "valid": true,
+          "daily_return": 0.0010464690452398617,
+          "direction": "up",
+          "bar_strength": 0.03488230150799539
+        },
+        {
+          "key": "financials",
+          "name": "金融",
+          "ticker": "XLF",
+          "valid": true,
+          "daily_return": -0.0017164173876079714,
+          "direction": "down",
+          "bar_strength": 0.057213912920265717
+        },
+        {
+          "key": "consumer_discretionary",
+          "name": "非必需消费",
+          "ticker": "XLY",
+          "valid": true,
+          "daily_return": -0.00211059524222057,
+          "direction": "down",
+          "bar_strength": 0.07035317474068567
+        },
+        {
+          "key": "technology",
+          "name": "科技",
+          "ticker": "XLK",
+          "valid": true,
+          "daily_return": -0.003983906005157634,
+          "direction": "down",
+          "bar_strength": 0.1327968668385878
+        },
+        {
+          "key": "health_care",
+          "name": "医疗保健",
+          "ticker": "XLV",
+          "valid": true,
+          "daily_return": -0.005998394918256156,
+          "direction": "down",
+          "bar_strength": 0.1999464972752052
+        }
+      ],
+      "valid_count": 11,
+      "advancers": 7,
+      "decliners": 4,
+      "unchanged": 0,
+      "advance_ratio": 0.6363636363636364
+    },
+    "health": {
+      "valid": true,
+      "score": 0.5527561901319357,
+      "level": "mixed",
+      "label": "市场分化",
+      "divergence": null,
+      "summary": "上涨与下跌分布较为均衡，市场内部存在明显分化。"
+    }
+  },
+  "drawdown": {
+    "sp500": {
+      "index": "sp500",
+      "name": "S&P 500",
+      "cycle_id": "sp500-2026-08-13-77989902",
+      "started_at": "2026-08-14T10:42:09.022326+08:00",
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "last_market_date": "2026-08-14",
+      "last_updated_at": "2026-08-16T10:48:33.235554+08:00",
+      "current_close": 7785.759765625,
+      "current_drawdown": 0.0016964335577297485,
+      "pool": 140000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.1,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.15,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.25,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 140000,
+      "next_threshold": 0.1,
+      "distance_to_next": 0.09830356644227026,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    },
+    "nasdaq100": {
+      "index": "nasdaq100",
+      "name": "Nasdaq-100",
+      "cycle_id": "nasdaq100-2026-06-02-306605996",
+      "started_at": "2026-08-12T10:00:00+08:00",
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "last_market_date": "2026-08-14",
+      "last_updated_at": "2026-08-16T10:48:33.235554+08:00",
+      "current_close": 30046.140625,
+      "current_drawdown": 0.020040670834993057,
+      "pool": 60000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.15,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.3,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.4,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 60000,
+      "next_threshold": 0.15,
+      "distance_to_next": 0.12995932916500694,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    }
+  },
+  "portfolio_action": "hold",
+  "market_summary": {
+    "market": "标普500微跌0.17%，罗素2000逆势涨0.51%，小盘相对占优；个股涨跌家数接近，板块涨多跌少，市场分化。",
+    "drivers": "市场同时关注俄乌及中东地缘政治紧张，以及AI安全监管相关报道。",
+    "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
+    "degraded": false
+  },
+  "news": [
+    {
+      "rank": 1,
+      "candidate_id": "8be8beaef499a270",
+      "category": "全球事件",
+      "title_zh": "乌克兰导弹袭击俄罗斯大型火箭工厂",
+      "summary_zh": "乌克兰使用巡航导弹袭击了俄罗斯一座主要火箭工厂。乌方称使用了“火烈鸟”导弹并取得良好战果。该事件可能加剧俄乌冲突，影响全球地缘政治和能源市场。",
+      "source": "Ars Technica",
+      "url": "https://arstechnica.com/space/2026/08/ukraine-strikes-major-russian-rocket-factory-with-cruise-missiles/",
+      "published_at": "2026-08-15T15:46:05+00:00",
+      "original_title": "Ukraine strikes major Russian rocket factory with cruise missiles",
+      "selection_reason": "俄乌冲突重大军事升级，直接影响地缘风险与市场情绪，且与当日能源板块领涨相关。",
+      "event_summary": "Ukraine struck a major Russian rocket factory with cruise missiles.",
+      "topic_group": "GEOPOLITICS"
+    },
+    {
+      "rank": 2,
+      "candidate_id": "9d3e8903f42afdfb",
+      "category": "全球事件",
+      "title_zh": "以色列空袭黎巴嫩南部致11人死亡",
+      "summary_zh": "以色列军方表示空袭了黎巴嫩南部的“真主党恐怖基础设施”，以回应当此前对其士兵的行动。黎巴嫩当局称袭击造成11人死亡。中东局势再度紧张，油价或受支撑。",
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/c4gjygx4gjeo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-15T20:21:14+00:00",
+      "original_title": "Eleven killed in Israeli strikes on southern Lebanon, authorities say",
+      "selection_reason": "中东冲突恶化，直接推高地缘风险溢价，与能源板块走强有关。",
+      "event_summary": "Eleven people were killed in Israeli strikes on southern Lebanon, which Israel said targeted Hezbollah infrastructure.",
+      "topic_group": "GEOPOLITICS"
+    },
+    {
+      "rank": 3,
+      "candidate_id": "4c2801492334bd06",
+      "category": "AI / 科技",
+      "title_zh": "SpaceX正式完成对AI编程公司Cursor的收购",
+      "summary_zh": "AI编程助手Cursor正式成为SpaceX的一部分。这笔交易标志着AI编码工具领域的整合加速，也扩展了SpaceX在AI方面的布局，对AI开发工具市场格局具有信号意义。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/15/spacex-officially-closes-its-cursor-acquisition/",
+      "published_at": "2026-08-15T16:30:00+00:00",
+      "original_title": "SpaceX officially closes its Cursor acquisition",
+      "selection_reason": "重大AI行业并购事件，反映AI开发工具赛道集中化趋势，对科技与AI投资具有长期意义。",
+      "event_summary": "SpaceX officially closed its acquisition of AI coding startup Cursor.",
+      "topic_group": "AI_CHIPS"
+    },
+    {
+      "rank": 4,
+      "candidate_id": "55ac7a10e85bd0a7",
+      "category": "市场 / 宏观",
+      "title_zh": "美国今年新增电力装机以太阳能和电池为主",
+      "summary_zh": "数据显示，今年美国并网的公用事业级电力装机中，太阳能遥遥领先，电池储能排名第二，化石燃料新增装机占比明显下降。这反映出美国能源结构正加速向清洁能源转型。",
+      "source": "Ars Technica",
+      "url": "https://arstechnica.com/science/2026/08/so-much-solar-digging-into-the-list-of-every-us-power-plant-that-went-online-this-year/",
+      "published_at": "2026-08-15T11:09:57+00:00",
+      "original_title": "So much solar: Digging into the list of every US power plant that went online this year",
+      "selection_reason": "美国能源结构转型的确认性数据，对长期能源投资和公用事业板块具有重要参考意义。",
+      "event_summary": "A list of US power plants that went online this year shows utility-scale solar leads, followed by batteries.",
+      "topic_group": "ENERGY_COMMODITIES"
+    },
+    {
+      "rank": 5,
+      "candidate_id": "69a74aa0b2b8f167",
+      "category": "市场 / 宏观",
+      "title_zh": "核聚变初创公司累计融资71亿美元",
+      "summary_zh": "核聚变领域初创公司迄今已筹集71亿美元，其中大部分集中在少数几家公司手中。资金涌入显示投资者对聚变能商业化前景的押注在加大，长期能源技术竞争加剧。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/15/every-fusion-startup-that-has-raised-over-100m/",
+      "published_at": "2026-08-15T13:15:20+00:00",
+      "original_title": "Every fusion startup that has raised over $100M",
+      "selection_reason": "能源科技领域的重大资本流向，预示未来能源技术竞争格局，属于长期结构性主题。",
+      "event_summary": "Fusion startups have raised $7.1 billion to date, with most of it going to a handful of companies.",
+      "topic_group": "ENERGY_COMMODITIES"
+    },
+    {
+      "rank": 6,
+      "candidate_id": "f939cd8244044d7a",
+      "category": "AI / 科技",
+      "title_zh": "女子称继父利用Grok将童年照片转为色情图像",
+      "summary_zh": "一名女子声称她的继父使用xAI的Grok工具将她的童年照片转换为露骨色情图像，指责AI工具将日常照片变成儿童性虐待材料。此事件可能加大AI安全和监管压力。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/15/woman-claims-her-stepfather-used-grok-to-transform-childhood-photo-into-explicit-imagery/",
+      "published_at": "2026-08-15T21:29:19+00:00",
+      "original_title": "Woman claims her stepfather used Grok to transform childhood photo into explicit imagery",
+      "selection_reason": "AI生成不当内容引发法律与伦理争议，可能促使监管收紧，对AI行业具有系统性影响。",
+      "event_summary": "A woman claimed her stepfather used Grok to transform a childhood photo into explicit imagery.",
+      "topic_group": "AI_CHIPS"
+    },
+    {
+      "rank": 7,
+      "candidate_id": "edc71185679e7c3b",
+      "category": "全球事件",
+      "title_zh": "韩国提出正式结束朝鲜战争会谈",
+      "summary_zh": "韩国提出就正式结束朝鲜战争与朝方举行会谈。韩国总统李在明表示愿为结束自1953年停战以来一直冻结的冲突提供机会。若成行，将显著改变东北亚地缘格局。",
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/c8en2z9jp2xo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-15T14:40:15+00:00",
+      "original_title": "South Korea proposes talks to officially end war with North",
+      "selection_reason": "重大外交倡议，虽与当日美股关联有限，但对长期地缘稳定和亚洲市场具有独立系统性影响。",
+      "event_summary": "South Korea proposed talks to officially end the war with North Korea.",
+      "topic_group": "GEOPOLITICS"
+    },
+    {
+      "rank": 8,
+      "candidate_id": "b89f894a66c0374e",
+      "category": "AI / 科技",
+      "title_zh": "Anthropic公布Claude新水印技术更多细节",
+      "summary_zh": "Anthropic公布了Claude新水印功能的更多细节，包括水印如何运作、能否被编辑隐藏以及对代码的影响。该技术旨在提高AI内容可追溯性，但可能引发隐私与反规避讨论。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/15/anthropic-shares-more-details-about-how-claudes-new-watermarks-will-work/",
+      "published_at": "2026-08-15T18:58:39+00:00",
+      "original_title": "Anthropic shares more details about how Claude’s new watermarks will work",
+      "selection_reason": "主要AI厂商推进内容溯源，体现行业应对监管趋势，对AI治理和产业生态有参考价值。",
+      "event_summary": "Anthropic shared more details about how Claude's new watermarks will work.",
+      "topic_group": "AI_CHIPS"
+    }
+  ],
+  "news_degraded": false,
+  "warnings": []
+}
