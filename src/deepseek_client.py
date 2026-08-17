@@ -26,6 +26,7 @@ SUMMARY_ZH_LIMIT = 180
 INVESTMENT_IMPACT_LIMIT = 220
 FOCUS_LIMIT = 80
 SELECTION_REASON_LIMIT = 120
+TAG_LIMIT = 16
 
 
 class NewsSelectionError(ValueError):
@@ -57,7 +58,10 @@ def _parse_payload(payload: Any) -> dict:
 
 
 def _required_text(item: dict, key: str, limit: int) -> str:
-    value = str(item.get(key, "")).strip()
+    raw_value = item.get(key)
+    if not isinstance(raw_value, str):
+        raise NewsSelectionError(f"{key} 不合法。")
+    value = raw_value.strip()
     if not value or len(value) > limit:
         raise NewsSelectionError(f"{key} 不合法。")
     return value
@@ -68,7 +72,7 @@ def _has_impact_path(value: str) -> bool:
         return True
     variables = (
         "SPY", "Nasdaq", "纳指", "科技股", "美债", "收益率", "美元", "信用", "AI", "半导体",
-        "估值", "通胀", "油价",
+        "估值", "通胀", "油价", "利率", "金融条件", "就业", "盈利", "流动性", "风险偏好",
     )
     connectors = ("→", "若", "如果", "导致", "使得", "进而", "从而", "有利于", "压制")
     return any(term in value for term in variables) and any(term in value for term in connectors)
@@ -78,7 +82,7 @@ def _validated_tags(item: dict) -> list[str]:
     tags = item.get("tags")
     if not isinstance(tags, list) or not 1 <= len(tags) <= 4:
         raise NewsSelectionError("tags 不合法。")
-    if any(not isinstance(tag, str) or not tag.strip() for tag in tags):
+    if any(not isinstance(tag, str) or not tag.strip() or len(tag.strip()) > TAG_LIMIT for tag in tags):
         raise NewsSelectionError("tags 不合法。")
     return [tag.strip() for tag in tags]
 

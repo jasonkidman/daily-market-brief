@@ -75,6 +75,44 @@ def test_rejects_boolean_investment_relevance_score():
         )
 
 
+@pytest.mark.parametrize("field,value", [
+    ("title_zh", 123),
+    ("summary_zh", {"text": "摘要"}),
+    ("investment_impact", ["利率", "→", "估值"]),
+    ("focus", None),
+    ("selection_reason", True),
+])
+def test_rejects_non_string_text_fields(field, value):
+    pool = [candidate("1", "Fed holds rates", "https://x/1")]
+
+    with pytest.raises(NewsSelectionError):
+        validate_selection({"news": [{**enriched_selection(), field: value}]}, pool)
+
+
+def test_rejects_tag_longer_than_sixteen_characters():
+    pool = [candidate("1", "Fed holds rates", "https://x/1")]
+
+    with pytest.raises(NewsSelectionError):
+        validate_selection(
+            {"news": [{**enriched_selection(), "tags": ["标" * 17]}]}, pool
+        )
+
+
+@pytest.mark.parametrize("impact", [
+    "政策利率若维持高位，金融条件将继续收紧。",
+    "就业若明显降温，企业盈利预期可能承压。",
+    "流动性改善 → 风险偏好回升 → 股票估值获得支撑。",
+])
+def test_accepts_spec_approved_impact_path_variables(impact):
+    pool = [candidate("1", "Fed holds rates", "https://x/1")]
+
+    news = validate_selection(
+        {"news": [{**enriched_selection(), "investment_impact": impact}]}, pool
+    )
+
+    assert news[0]["investment_impact"] == impact
+
+
 @pytest.mark.parametrize("field", [
     "investment_impact", "focus", "tags", "investment_relevance_score",
 ])
