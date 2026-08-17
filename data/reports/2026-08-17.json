@@ -1,0 +1,448 @@
+{
+  "report_date": "2026-08-17",
+  "generated_at": "2026-08-17 10:48 CST",
+  "market_date": "2026-08-14",
+  "status": "ok",
+  "status_label": "🟢 数据更新正常",
+  "market_data_valid": true,
+  "core_market_valid": true,
+  "context_market_valid": true,
+  "drawdown_market_valid": true,
+  "market": {
+    "sp500": {
+      "market_date": "2026-08-14",
+      "close": 7785.759765625,
+      "daily_return": -0.0016964335577297485,
+      "ytd_return": 0.13735443219998533,
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "drawdown": 0.0016964335577297485,
+      "name": "S&P 500",
+      "ticker": "^GSPC",
+      "valid": true
+    },
+    "nasdaq100": {
+      "market_date": "2026-08-14",
+      "close": 30046.140625,
+      "daily_return": -0.0012750544300220712,
+      "ytd_return": 0.18995325080447967,
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "drawdown": 0.020040670834993057,
+      "name": "Nasdaq-100",
+      "ticker": "^NDX",
+      "valid": true
+    },
+    "dow": {
+      "market_date": "2026-08-14",
+      "close": 53732.41015625,
+      "daily_return": -0.001998108254370967,
+      "ytd_return": 0.11795116822691964,
+      "ath": 54349.12109375,
+      "ath_date": "2026-08-05",
+      "drawdown": 0.011347210867241109,
+      "name": "Dow Jones",
+      "ticker": "^DJI",
+      "valid": true
+    }
+  },
+  "market_context": {
+    "russell2000": {
+      "market_date": "2026-08-14",
+      "close": 3068.419921875,
+      "daily_return": 0.005100094574149949,
+      "name": "Russell 2000",
+      "ticker": "^RUT",
+      "valid": true
+    },
+    "vix": {
+      "market_date": "2026-08-14",
+      "close": 14.25,
+      "daily_return": -0.025974033593193835,
+      "name": "VIX",
+      "ticker": "^VIX",
+      "valid": true
+    },
+    "dxy": {
+      "market_date": "2026-08-16",
+      "close": 99.52100372314453,
+      "daily_return": -0.001494877581398435,
+      "name": "美元指数",
+      "ticker": "DX-Y.NYB",
+      "valid": true
+    },
+    "us10y": {
+      "market_date": "2026-08-14",
+      "close": 4.696000099182129,
+      "yield_change_bp": 5.500030517578125,
+      "name": "10Y 美债",
+      "ticker": "^TNX",
+      "valid": true
+    }
+  },
+  "market_signals": {
+    "tech_relative": 0.00042137912770767727,
+    "small_cap_relative": 0.006796528131879698,
+    "vix_daily_return": -0.025974033593193835,
+    "dxy_daily_return": -0.001494877581398435,
+    "us10y_bp_change": 5.500030517578125,
+    "signals": [
+      {
+        "key": "small_cap_relative",
+        "value": 0.006796528131879698,
+        "level": "significant",
+        "message": "Russell 2000 比 S&P 500 领先 0.68 个百分点，小盘相对占优"
+      },
+      {
+        "key": "us10y_bp_change",
+        "value": 5.500030517578125,
+        "level": "significant",
+        "message": "10Y 美债收益率明显上升"
+      }
+    ]
+  },
+  "market_breadth": {
+    "market_date": "2026-08-14",
+    "stocks": {
+      "market_date": "2026-08-14",
+      "constituent_date": "2026-08-13",
+      "total_constituents": 505,
+      "valid_count": 503,
+      "invalid_count": 2,
+      "advancers": 250,
+      "decliners": 245,
+      "unchanged": 8,
+      "advance_ratio": 0.4970178926441352,
+      "decline_ratio": 0.4870775347912525,
+      "unchanged_ratio": 0.015904572564612324,
+      "coverage_ratio": 0.996039603960396,
+      "status": "ok"
+    },
+    "sectors": {
+      "market_date": "2026-08-14",
+      "items": [
+        {
+          "key": "energy",
+          "name": "能源",
+          "ticker": "XLE",
+          "valid": true,
+          "daily_return": 0.013920708401636173,
+          "direction": "up",
+          "bar_strength": 0.46402361338787246
+        },
+        {
+          "key": "utilities",
+          "name": "公用事业",
+          "ticker": "XLU",
+          "valid": true,
+          "daily_return": 0.006130800457555763,
+          "direction": "up",
+          "bar_strength": 0.20436001525185876
+        },
+        {
+          "key": "materials",
+          "name": "材料",
+          "ticker": "XLB",
+          "valid": true,
+          "daily_return": 0.004396855977789382,
+          "direction": "up",
+          "bar_strength": 0.14656186592631276
+        },
+        {
+          "key": "industrials",
+          "name": "工业",
+          "ticker": "XLI",
+          "valid": true,
+          "daily_return": 0.0038753498397205988,
+          "direction": "up",
+          "bar_strength": 0.12917832799068663
+        },
+        {
+          "key": "communication_services",
+          "name": "通信服务",
+          "ticker": "XLC",
+          "valid": true,
+          "daily_return": 0.003553921684928074,
+          "direction": "up",
+          "bar_strength": 0.11846405616426914
+        },
+        {
+          "key": "real_estate",
+          "name": "房地产",
+          "ticker": "XLRE",
+          "valid": true,
+          "daily_return": 0.003324501982044703,
+          "direction": "up",
+          "bar_strength": 0.11081673273482344
+        },
+        {
+          "key": "consumer_staples",
+          "name": "必需消费",
+          "ticker": "XLP",
+          "valid": true,
+          "daily_return": 0.0010464690452398617,
+          "direction": "up",
+          "bar_strength": 0.03488230150799539
+        },
+        {
+          "key": "financials",
+          "name": "金融",
+          "ticker": "XLF",
+          "valid": true,
+          "daily_return": -0.0017164173876079714,
+          "direction": "down",
+          "bar_strength": 0.057213912920265717
+        },
+        {
+          "key": "consumer_discretionary",
+          "name": "非必需消费",
+          "ticker": "XLY",
+          "valid": true,
+          "daily_return": -0.00211059524222057,
+          "direction": "down",
+          "bar_strength": 0.07035317474068567
+        },
+        {
+          "key": "technology",
+          "name": "科技",
+          "ticker": "XLK",
+          "valid": true,
+          "daily_return": -0.003983906005157634,
+          "direction": "down",
+          "bar_strength": 0.1327968668385878
+        },
+        {
+          "key": "health_care",
+          "name": "医疗保健",
+          "ticker": "XLV",
+          "valid": true,
+          "daily_return": -0.005998394918256156,
+          "direction": "down",
+          "bar_strength": 0.1999464972752052
+        }
+      ],
+      "valid_count": 11,
+      "advancers": 7,
+      "decliners": 4,
+      "unchanged": 0,
+      "advance_ratio": 0.6363636363636364
+    },
+    "health": {
+      "valid": true,
+      "score": 0.5527561901319357,
+      "level": "mixed",
+      "label": "市场分化",
+      "divergence": null,
+      "summary": "上涨与下跌分布较为均衡，市场内部存在明显分化。"
+    }
+  },
+  "drawdown": {
+    "sp500": {
+      "index": "sp500",
+      "name": "S&P 500",
+      "cycle_id": "sp500-2026-08-13-77989902",
+      "started_at": "2026-08-14T10:42:09.022326+08:00",
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "last_market_date": "2026-08-14",
+      "last_updated_at": "2026-08-17T10:48:00.688410+08:00",
+      "current_close": 7785.759765625,
+      "current_drawdown": 0.0016964335577297485,
+      "pool": 140000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.1,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.15,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.25,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 140000,
+      "next_threshold": 0.1,
+      "distance_to_next": 0.09830356644227026,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    },
+    "nasdaq100": {
+      "index": "nasdaq100",
+      "name": "Nasdaq-100",
+      "cycle_id": "nasdaq100-2026-06-02-306605996",
+      "started_at": "2026-08-12T10:00:00+08:00",
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "last_market_date": "2026-08-14",
+      "last_updated_at": "2026-08-17T10:48:00.688410+08:00",
+      "current_close": 30046.140625,
+      "current_drawdown": 0.020040670834993057,
+      "pool": 60000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.15,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.3,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.4,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 60000,
+      "next_threshold": 0.15,
+      "distance_to_next": 0.12995932916500694,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    }
+  },
+  "portfolio_action": "hold",
+  "market_summary": {
+    "market": "美股主要指数小幅收跌，标普500、纳指100、道指分别下跌0.17%、0.13%和0.20%；标普成分股涨跌家数几乎持平，小盘股相对占优，罗素2000上涨0.51%。",
+    "drivers": "市场同时关注俄乌冲突升级与美国多州起诉Meta。",
+    "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
+    "degraded": false
+  },
+  "news": [
+    {
+      "rank": 1,
+      "candidate_id": "3e4682c2422b9ff8",
+      "category": "全球事件",
+      "title_zh": "俄乌互袭升级，俄称乌克兰发动2026年来最大规模攻击",
+      "summary_zh": "俄罗斯称乌克兰发动了2026年以来最大规模攻击，至少7人丧生；俄军连夜对乌克兰发动致命打击，基辅多地燃起大火，俄乌冲突显著升级。",
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/c1411pgje8xo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-16T19:03:04+00:00",
+      "original_title": "Russia says at least seven killed in largest Ukrainian attack of 2026",
+      "selection_reason": "俄乌冲突升级是重要地缘事件，与当日能源板块领涨相关，影响全球风险偏好。",
+      "event_summary": "Russia says at least seven were killed in the largest Ukrainian attack of 2026, as Moscow also launched deadly strikes on Ukraine.",
+      "topic_group": "GEOPOLITICS"
+    },
+    {
+      "rank": 2,
+      "candidate_id": "d1b7ed52e00e3aef",
+      "category": "AI / 科技",
+      "title_zh": "OpenAI被曝解散“准备团队”，AI安全治理令人担忧",
+      "summary_zh": "据金融时报报道，OpenAI上月底解散了负责评估模型严重风险并制定缓解措施的“准备团队”，该团队原职责包括防止AI失控或入侵其他公司等风险，此举引发AI安全治理担忧。",
+      "source": "The Verge",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/980817/openai-disbands-preparedness-team",
+      "published_at": "2026-08-16T21:32:56+00:00",
+      "original_title": "OpenAI reportedly disbanded its preparedness team",
+      "selection_reason": "AI安全团队解散是重大行业事件，可能影响AI监管方向和大型科技公司估值逻辑，与当日科技板块弱势相关。",
+      "event_summary": "OpenAI reportedly disbanded its preparedness team at the end of last month.",
+      "topic_group": "OTHER_SYSTEMIC"
+    },
+    {
+      "rank": 3,
+      "candidate_id": "f1846b8ad98829af",
+      "category": "市场 / 宏观",
+      "title_zh": "美国三十州起诉Meta，要求全面改革青少年平台",
+      "summary_zh": "美国三十个州联合起诉Meta，要求强制其彻底改造面向青少年的平台；一旦败诉，Instagram和Facebook的商业模式可能发生重大变化，这是大型科技公司遭遇的又一重大监管诉讼。",
+      "source": "BBC Business",
+      "url": "https://www.bbc.co.uk/news/articles/clyqpx6xk69o?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-16T23:27:36+00:00",
+      "original_title": "If Meta loses this trial, Instagram and Facebook could change forever",
+      "selection_reason": "大型科技公司面临重大监管诉讼，可能改变社交媒体商业模式，对科技板块有系统性影响。",
+      "event_summary": "Thirty US states sued Meta to force an overhaul of its platforms for young users.",
+      "topic_group": "MEGA_CAP_TECH"
+    },
+    {
+      "rank": 4,
+      "candidate_id": "345b81487115ab84",
+      "category": "AI / 科技",
+      "title_zh": "Stripe据报将以超70亿美元收购AI网关OpenRouter",
+      "summary_zh": "据报道，支付巨头Stripe将以超过70亿美元收购AI网关初创公司OpenRouter；后者CEO曾称其为“AI领域的Stripe”，这笔交易显示支付与人工智能基础设施的融合正在加速。",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/16/stripe-will-reportedly-acquire-ai-gateway-startup-openrouter-for-7b/",
+      "published_at": "2026-08-16T20:57:04+00:00",
+      "original_title": "Stripe will reportedly acquire AI gateway startup OpenRouter for $7B+",
+      "selection_reason": "重大AI基础设施并购，显示资本向AI入口集中，对长期科技投资格局有指示意义。",
+      "event_summary": "Stripe will reportedly acquire AI gateway startup OpenRouter for over $7 billion.",
+      "topic_group": "OTHER_SYSTEMIC"
+    },
+    {
+      "rank": 5,
+      "candidate_id": "ff42b9432c374fc9",
+      "category": "全球事件",
+      "title_zh": "卡塔尔否认扣押三名伊朗飞行员，中东紧张或加剧",
+      "summary_zh": "卡塔尔否认扣押三名伊朗飞行员，此前伊朗声称自美伊战争初期卡塔尔击落两架战斗机后，飞行员一直被扣押；事件加剧中东地缘政治紧张。",
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/cj4kk8kz271o?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-16T09:27:58+00:00",
+      "original_title": "Qatar denies capturing three Iranian pilots after downing fighter jets",
+      "selection_reason": "美伊战争相关外交冲突，加剧中东不确定性，可能影响油价和全球市场，与当日能源强势相关。",
+      "event_summary": "Qatar denied capturing three Iranian pilots after Iran claimed they were held since Qatar downed two fighter jets.",
+      "topic_group": "GEOPOLITICS"
+    },
+    {
+      "rank": 6,
+      "candidate_id": "dba4ca149f58c3fa",
+      "category": "市场 / 宏观",
+      "title_zh": "亚马逊更新条款强制仲裁，用户须放弃集体诉讼",
+      "summary_zh": "亚马逊更新服务条款，规定用户同意通过仲裁解决争议并放弃集体诉讼；此举改变了消费者维权路径，或影响未来针对该公司的诉讼格局。",
+      "source": "The Verge",
+      "url": "https://www.theverge.com/tech/980752/amazon-class-action-arbitration-terms-and-conditions",
+      "published_at": "2026-08-16T17:35:02+00:00",
+      "original_title": "Amazon is trying to crush class-action suits before they get started",
+      "selection_reason": "大型科技公司通过合同限制集体诉讼，影响投资者对法律风险与消费者关系的判断。",
+      "event_summary": "Amazon updated its terms and conditions to require arbitration and class action waiver.",
+      "topic_group": "MEGA_CAP_TECH"
+    }
+  ],
+  "news_degraded": false,
+  "warnings": []
+}
