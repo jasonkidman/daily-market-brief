@@ -31,6 +31,23 @@ def report(date):
     }
 
 
+def modern_news_item(rank, title_prefix="新闻", summary="摘要"):
+    return {
+        "rank": rank,
+        "category": "美联储 / 利率",
+        "source": "Fixture",
+        "title_zh": f"{title_prefix} {rank}",
+        "summary_zh": summary,
+        "url": f"https://example.com/{rank}",
+        "published_at": "2026-08-12T10:00:00+00:00",
+        "investment_impact": "离线夹具：收益率变化 → 估值观察，不代表真实投资信息。",
+        "focus": "离线夹具关注项",
+        "tags": ["离线夹具", "渲染"],
+        "investment_relevance_score": max(50, 92 - rank + 1),
+        "selection_reason": "仅用于验证现代新闻字段渲染，不代表真实投资建议。",
+    }
+
+
 def test_renders_index_and_history_pages(tmp_path):
     reports = tmp_path / "reports"
     reports.mkdir()
@@ -151,10 +168,7 @@ def test_dashboard_visual_structure_maps_existing_data_without_changing_it(tmp_p
         "sectors": {"advancers": 6, "decliners": 5, "items": []},
         "health": {"valid": True, "level": "mixed", "label": "市场分化", "summary": "上涨与下跌分布较为均衡。", "divergence": None},
     }
-    payload["news"] = [{
-        "rank": rank, "category": "市场 / 宏观", "source": "Fixture", "title_zh": f"新闻标题 {rank}",
-        "summary_zh": f"新闻摘要 {rank}", "url": f"https://example.com/{rank}", "published_at": "2026-08-12T10:00:00+00:00",
-    } for rank in range(1, 9)]
+    payload["news"] = [modern_news_item(rank, "新闻标题", f"新闻摘要 {rank}") for rank in range(1, 9)]
     (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
     root = __import__("pathlib").Path(__file__).parents[1]
     site = tmp_path / "site"
@@ -516,11 +530,7 @@ def test_information_hierarchy_styles_metrics_drawdown_states_and_news_ranks(tmp
     payload = report("2026-08-12")
     payload["drawdown"]["sp500"]["status"] = "near"
     payload["news"] = [
-        {
-            "rank": rank, "category": "市场 / 宏观", "source": "Fixture",
-            "title_zh": f"新闻 {rank}", "summary_zh": "用于验证新闻视觉层级的摘要。",
-            "url": f"https://example.com/{rank}",
-        }
+        modern_news_item(rank, summary="用于验证新闻视觉层级的摘要。")
         for rank in range(1, 6)
     ]
     (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
@@ -554,11 +564,7 @@ def test_final_ui_diff_fix_uses_compact_warning_and_adaptive_news_grid(tmp_path)
     reports.mkdir()
     payload = report("2026-08-12")
     payload["warnings"] = ["当前报告由离线测试数据生成，不代表真实市场行情或新闻。"]
-    payload["news"] = [
-        {"rank": rank, "category": "市场 / 宏观", "source": "Fixture", "title_zh": f"新闻 {rank}",
-         "summary_zh": "摘要", "url": f"https://example.com/{rank}"}
-        for rank in range(1, 4)
-    ]
+    payload["news"] = [modern_news_item(rank) for rank in range(1, 4)]
     (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
     root = __import__("pathlib").Path(__file__).parents[1]
     site = tmp_path / "site"
@@ -584,11 +590,7 @@ def test_v5_news_layout_keeps_one_two_and_eight_news_adaptive(tmp_path):
         reports = tmp_path / f"reports-{count}"
         reports.mkdir()
         payload = report("2026-08-12")
-        payload["news"] = [
-            {"rank": rank, "category": "市场 / 宏观", "source": "Fixture", "title_zh": f"新闻 {rank}",
-             "summary_zh": "摘要", "url": f"https://example.com/{rank}"}
-            for rank in range(1, count + 1)
-        ]
+        payload["news"] = [modern_news_item(rank) for rank in range(1, count + 1)]
         (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
         site = tmp_path / f"site-{count}"
         render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
@@ -614,14 +616,7 @@ def test_reference_style_maps_breadth_drawdown_and_news_without_changing_data(tm
             "summary": "多数股票与板块共同上涨，市场参与度良好。", "divergence": None,
         },
     }
-    payload["news"] = [
-        {
-            "rank": rank, "category": "市场 / 宏观", "source": "Fixture",
-            "title_zh": f"新闻 {rank}", "summary_zh": "摘要",
-            "url": f"https://example.com/{rank}", "published_at": "2026-08-12T10:00:00+00:00",
-        }
-        for rank in range(1, 9)
-    ]
+    payload["news"] = [modern_news_item(rank) for rank in range(1, 9)]
     (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
     root = __import__("pathlib").Path(__file__).parents[1]
     site = tmp_path / "site"
@@ -670,11 +665,7 @@ def test_v5_visual_contract_is_the_rendered_dom_and_css_baseline(tmp_path):
         ]},
         "health": {"valid": True, "level": "mixed", "label": "市场分化", "summary": "上涨股票略占优势，但板块扩散不足。", "divergence": None},
     }
-    payload["news"] = [
-        {"rank": rank, "category": "市场 / 宏观", "source": "Fixture", "title_zh": f"新闻 {rank}",
-         "summary_zh": "摘要", "url": f"https://example.com/{rank}", "published_at": "2026-08-12T10:00:00+00:00"}
-        for rank in range(1, 9)
-    ]
+    payload["news"] = [modern_news_item(rank) for rank in range(1, 9)]
     (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
     root = __import__("pathlib").Path(__file__).parents[1]
     site = tmp_path / "site"

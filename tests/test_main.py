@@ -34,6 +34,13 @@ def test_offline_fixture_runs_complete_pipeline(tmp_path):
         "US_MARKET_MACRO", "AI_CHIPS", "GEOPOLITICS",
     ]
     assert all(item["event_summary"] for item in report["news"])
+    for item in report["news"]:
+        assert item["investment_impact"]
+        assert item["focus"]
+        assert item["tags"]
+        assert 50 <= item["investment_relevance_score"] <= 100
+        assert "不代表真实新闻或投资信息" in item["summary_zh"]
+        assert "不代表真实投资信息" in item["investment_impact"]
     assert report["portfolio_action"] == "hold"
     assert report["market_summary"]["degraded"] is True
     assert "标普500当日下跌0.5%" in report["market_summary"]["market"]
