@@ -41,3 +41,47 @@
 - None required for the approved scope.
 
 final result: passed
+
+---
+
+# Design QA — 全球重要新闻投资优先级重构
+
+## Source of truth
+
+- Source visual truth: `/Users/mayansen/Downloads/daily-market-brief-news-module-preview.html`
+- Implementation fixture: `http://127.0.0.1:8776/index.html`
+- Desktop evidence: `/tmp/news-module-viewport.png`
+- Full-page evidence: `/tmp/news-implementation-desktop.png`
+- Side-by-side comparison: `/tmp/news-module-comparison.png`
+
+## Compared state
+
+- State: eight enriched news records spanning the approved category set, with descending investment relevance.
+- The in-app browser rendered at its fixed 1280 × 720 viewport despite temporary viewport overrides; desktop visual inspection therefore used the actual 1280px render.
+- Medium and phone behavior is covered by renderer assertions for the complete `1180px` two-column and `700px` one-column media rules. The browser audit also reported zero horizontal overflow.
+
+## Fidelity review
+
+- Information hierarchy: rank, category, source, title, summary, investment transmission path, tags, focus points, and source link are all present in every card.
+- Desktop layout: eight cards render as a compact 2 × 4 grid at the available page width, matching the selected reference direction while preserving the existing page width.
+- Typography and spacing: cards retain the product's dense editorial rhythm; titles, body copy, impact callouts, tags, and footer links remain visually distinct without introducing a new global font or spacing system.
+- Colors and tokens: news styles use the existing `--surface`, `--line`, `--soft`, `--blue`, `--navy`, `--ink`, `--muted`, `--icon-bg`, and `--icon-fg` tokens. No new hard-coded module palette remains.
+- Responsiveness: CSS changes the grid to two columns at 1180px and one column at 700px; mobile cards remove the desktop minimum height. Complete breakpoint rules are regression-tested.
+- Scope: surrounding summary, market, breadth, drawdown, archive, page width, and data behavior remain unchanged.
+
+## Findings
+
+- No actionable P0, P1, or P2 mismatch remains.
+- The automated browser backend could not apply the requested tablet and phone viewport overrides in this run; breakpoint correctness is supported by exact generated-CSS tests rather than separate viewport screenshots.
+
+## Patches made
+
+- Scoped rank styling beneath `.news-meta` to avoid generic selector collisions.
+- Replaced the initial news-only palette with shared site tokens.
+- Strengthened renderer tests to lock the complete mobile breakpoint rule.
+
+## Follow-up polish
+
+- None required for the approved scope.
+
+final result: passed
