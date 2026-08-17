@@ -77,8 +77,15 @@ def test_renders_eight_investment_priority_news_cards_from_persisted_fields(tmp_
     assert "Persisted Source" in html
     assert 'href="https://persisted.example/news-1"' in html
     assert ".news-layout{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))" in compact_css
-    assert "@media(max-width:1180px)" in compact_css
-    assert "@media(max-width:700px)" in compact_css
+    assert ".news-meta.rank{min-width:31px;height:24px;padding:09px;border-radius:12px;background:var(--blue);color:var(--surface)" in compact_css
+    assert ".news-impact{margin-top:12px;padding:10px11px;border-left:3pxsolidvar(--blue);background:var(--soft);color:var(--navy)" in compact_css
+    assert ".news-summary{margin:0;color:var(--muted);font-size:12px;line-height:1.75}" in compact_css
+    assert ".news-footera{color:var(--blue);font-size:11px" in compact_css
+    news_css = compact_css[compact_css.index(".news-title-note"):compact_css.index("footer{")]
+    for raw_color in ("#6ea8cf", "#f7f9fb", "#40586d", "#627486", "#2e719c", "#677b8d", "#7f8d96"):
+        assert raw_color not in news_css
+    assert "@media(max-width:1180px){.news-layout{grid-template-columns:repeat(2,minmax(0,1fr))}}" in compact_css
+    assert "@media(max-width:700px){.news-layout{grid-template-columns:1fr}" in compact_css
 
 
 def test_legacy_news_uses_exact_fallback_copy_without_tags_or_score(tmp_path):
@@ -332,7 +339,7 @@ def test_desktop_density_uses_compact_spacing_without_shrinking_primary_numbers(
     assert ".market-value{font-size:28px" in compact_css
     assert ".draw-card{padding:13px14px}" in compact_css
     assert ".news-card{min-height:290px;padding:15px15px13px" in compact_css
-    assert ".news-summary{margin:0;color:#627486;font-size:12px;line-height:1.75}" in compact_css
+    assert ".news-summary{margin:0;color:var(--muted);font-size:12px;line-height:1.75}" in compact_css
     assert "@media(max-width:900px)" in compact_css
 
 
@@ -617,8 +624,8 @@ def test_information_hierarchy_styles_metrics_drawdown_states_and_news_ranks(tmp
     assert ".draw-pending" in css
     assert ".news-card" in css and ".news-impact" in css
     assert ".news-cardh3{margin:0010px;color:var(--ink);font-size:17px;line-height:1.45" in compact_css
-    assert ".news-summary{margin:0;color:#627486;font-size:12px;line-height:1.75}" in compact_css
-    assert ".news-footera{color:#2e719c;font-size:11px" in compact_css
+    assert ".news-summary{margin:0;color:var(--muted);font-size:12px;line-height:1.75}" in compact_css
+    assert ".news-footera{color:var(--blue);font-size:11px" in compact_css
 
 
 def test_final_ui_diff_fix_uses_compact_warning_and_adaptive_news_grid(tmp_path):
