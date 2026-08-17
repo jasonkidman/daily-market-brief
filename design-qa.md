@@ -79,6 +79,7 @@ final result: passed
 - Scoped rank styling beneath `.news-meta` to avoid generic selector collisions.
 - Replaced the initial news-only palette with shared site tokens.
 - Strengthened renderer tests to lock the complete mobile breakpoint rule.
+- Stacked the news-only heading and priority note vertically below 700px, restoring the reference copy hierarchy without changing other section headers.
 
 ## Follow-up polish
 

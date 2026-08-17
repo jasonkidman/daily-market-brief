@@ -85,7 +85,8 @@ def test_renders_eight_investment_priority_news_cards_from_persisted_fields(tmp_
     for raw_color in ("#6ea8cf", "#f7f9fb", "#40586d", "#627486", "#2e719c", "#677b8d", "#7f8d96"):
         assert raw_color not in news_css
     assert "@media(max-width:1180px){.news-layout{grid-template-columns:repeat(2,minmax(0,1fr))}}" in compact_css
-    assert "@media(max-width:700px){.news-layout{grid-template-columns:1fr}.news-section-meta{white-space:normal;text-align:right}.news-card{min-height:0}}" in compact_css
+    assert 'class="section-title news-section-title"' in html
+    assert "@media(max-width:700px){.news-section-title{align-items:flex-start;flex-direction:column}.news-layout{grid-template-columns:1fr}.news-section-meta{white-space:normal;text-align:left}.news-card{min-height:0}}" in compact_css
 
 
 def test_legacy_news_uses_exact_fallback_copy_without_tags_or_score(tmp_path):
