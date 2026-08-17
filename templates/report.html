@@ -142,11 +142,17 @@
   </section>
 
   <section class="section">
-    <div class="section-title"><div class="section-left"><span class="marker"></span><h2>全球重要新闻 <span class="title-note">（Top 8）</span></h2></div></div>
+    <div class="section-title"><div class="section-left"><span class="marker"></span><h2>全球重要新闻 <span class="news-title-note">Top 8 · 投资影响优先</span></h2></div><div class="news-section-meta">优先级：宏观政策 · 利率就业 · 金融 · AI · 地缘政治</div></div>
     {% if report.news_degraded %}<div class="alert warning"><strong>⚠️ 新闻 AI 处理暂时失败</strong><span>RSS 数据已获取，等待下一次更新</span></div>
-    {% elif report.news %}{% set compact_news = report.news|selectattr('rank', 'gt', 3)|list %}<div class="news-layout news-count-{{ report.news|length if report.news|length < 4 else 4 }}">
-      {% for item in report.news if item.rank <= 3 %}<article class="card news-card"><div class="nmeta"><span class="rank">{{ '%02d'|format(item.rank) }}</span>{{ item.category }}　{{ item.source|upper }}</div><h3>{{ item.title_zh }}</h3><p>{{ item.summary_zh }}</p><a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">查看原文 →</a></article>{% endfor %}
-      {% if compact_news %}<article class="card news-list" aria-label="第 4 至第 8 条新闻">{% for item in compact_news %}<a class="nrow" href="{{ item.url }}" target="_blank" rel="noopener noreferrer"><span class="nnum">{{ '%02d'|format(item.rank) }}</span><span class="ntitle">{{ item.title_zh }}</span><span class="ntime" title="{{ item.published_at or '' }}">{{ item.source }}</span></a>{% endfor %}</article>{% endif %}
+    {% elif report.news %}<div class="news-layout">
+      {% for item in report.news %}<article class="card news-card">
+        <div class="news-meta"><span class="rank">{{ '%02d'|format(item.rank) }}</span><span class="news-category">{{ item.category }}</span><span class="news-source">{{ item.source }}</span></div>
+        <h3>{{ item.title_zh }}</h3>
+        <p class="news-summary">{{ item.summary_zh }}</p>
+        <div class="news-impact"><strong>投资影响：</strong>{{ item.get('investment_impact') or '历史报告未生成结构化投资影响，建议结合原文观察。' }}</div>
+        {% if item.get('tags') %}<div class="news-tags">{% for tag in item.get('tags') %}<span>{{ tag }}</span>{% endfor %}</div>{% endif %}
+        <div class="news-footer"><span class="news-focus">关注：{{ item.get('focus') or '查看原文后续进展' }}</span><a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">查看原文 →</a></div>
+      </article>{% endfor %}
     </div>{% else %}<p class="empty">最近 30 小时暂无足够重要的有效新闻。</p>{% endif %}
   </section>
 

@@ -48,6 +48,68 @@ def modern_news_item(rank, title_prefix="新闻", summary="摘要"):
     }
 
 
+def test_renders_eight_investment_priority_news_cards_from_persisted_fields(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["news"] = [
+        modern_news_item(rank, "投资优先新闻", f"第 {rank} 条离线摘要")
+        for rank in range(1, 9)
+    ]
+    payload["news"][0]["source"] = "Persisted Source"
+    payload["news"][0]["url"] = "https://persisted.example/news-1"
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    compact_css = "".join((site / "style.css").read_text(encoding="utf-8").split())
+    assert html.count('class="card news-card"') == 8
+    assert 'class="news-section-meta">优先级：宏观政策 · 利率就业 · 金融 · AI · 地缘政治</div>' in html
+    assert "Top 8 · 投资影响优先" in html
+    assert html.count('class="news-impact"') == 8
+    assert html.count('class="news-focus"') == 8
+    assert html.count('class="news-tags"') == 8
+    assert html.count("查看原文 →") == 8
+    assert 'class="news-list"' not in html and 'class="nrow"' not in html
+    assert "Persisted Source" in html
+    assert 'href="https://persisted.example/news-1"' in html
+    assert ".news-layout{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))" in compact_css
+    assert "@media(max-width:1180px)" in compact_css
+    assert "@media(max-width:700px)" in compact_css
+
+
+def test_legacy_news_uses_exact_fallback_copy_without_tags_or_score(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["news"] = [{
+        "rank": 1,
+        "category": "金融市场",
+        "source": "Legacy Source",
+        "title_zh": "旧版新闻标题",
+        "summary_zh": "旧版报告保留的摘要。",
+        "url": "https://legacy.example/report",
+        "published_at": "2026-08-12T10:00:00+00:00",
+    }]
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    assert "历史报告未生成结构化投资影响，建议结合原文观察。" in html
+    assert "关注：查看原文后续进展" in html
+    assert 'class="news-tags"' not in html
+    assert "investment_relevance_score" not in html
+    assert "投资关联度" not in html
+    assert "Legacy Source" in html
+    assert 'href="https://legacy.example/report"' in html
+
+
 def test_renders_index_and_history_pages(tmp_path):
     reports = tmp_path / "reports"
     reports.mkdir()
@@ -186,13 +248,13 @@ def test_dashboard_visual_structure_maps_existing_data_without_changing_it(tmp_p
     assert html.count('class="icon-wrap"') == 4
     assert html.count('class="context-info"') == 4
     assert html.count('class="draw-layout"') == 2
-    assert 'class="news-layout news-count-4"' in html
-    assert html.count('class="card news-card"') == 3
-    assert html.count('class="nrow"') == 5
+    assert 'class="news-layout"' in html
+    assert html.count('class="card news-card"') == 8
+    assert 'class="nrow"' not in html
     assert '.page{width:min(1440px,calc(100%-34px))' in compact_css
     assert '.market-line{display:grid;grid-template-columns:minmax(0,1.25fr).62fr.78fr' in compact_css
     assert '.breadth-grid{display:grid;grid-template-columns:32%68%' in compact_css
-    assert '.news-layout{display:grid;grid-template-columns:1fr1fr1fr.9fr' in compact_css
+    assert '.news-layout{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}' in compact_css
     assert '.draw-layout{display:grid;grid-template-columns:100px1fr105px' in compact_css
     assert '@media(max-width:900px)' in compact_css
 
@@ -269,8 +331,8 @@ def test_desktop_density_uses_compact_spacing_without_shrinking_primary_numbers(
     assert ".market-card{padding:13px14px}" in compact_css
     assert ".market-value{font-size:28px" in compact_css
     assert ".draw-card{padding:13px14px}" in compact_css
-    assert ".news-card{padding:12px13px}" in compact_css
-    assert ".news-cardp" in compact_css and "line-height:1.5" in compact_css
+    assert ".news-card{min-height:290px;padding:15px15px13px" in compact_css
+    assert ".news-summary{margin:0;color:#627486;font-size:12px;line-height:1.75}" in compact_css
     assert "@media(max-width:900px)" in compact_css
 
 
@@ -475,7 +537,7 @@ def test_market_breadth_renders_health_stock_participation_sector_bars_and_toolt
     assert ".sector-row:hover.sector-tooltip" in compact_css
     assert "@media(prefers-reduced-motion:reduce)" in compact_css
     assert "@media(max-width:900px)" in compact_css
-    assert ".market-grid,.context-grid,.breadth-grid,.draw-grid,.news-layout" in compact_css
+    assert ".market-grid,.context-grid,.breadth-grid,.draw-grid{grid-template-columns:1fr}" in compact_css
     assert ".sector-cols{grid-template-columns:1fr" in compact_css
     assert ".bbar{grid-column:1/2;display:flex;height:6px" in compact_css
 
@@ -544,8 +606,8 @@ def test_information_hierarchy_styles_metrics_drawdown_states_and_news_ranks(tmp
     compact_css = "".join(css.split())
     assert 'class="card draw-card draw-near"' in html
     assert 'class="card draw-card draw-pending"' in html
-    assert html.count('class="card news-card"') == 3
-    assert html.count('class="nrow"') == 2
+    assert html.count('class="card news-card"') == 5
+    assert 'class="nrow"' not in html
     assert ".statspan{font-size:9px;color:var(--muted)}" in compact_css
     assert ".statstrong{font-size:12px}" in compact_css
     assert ".context-change{display:block;margin-top:3px;padding:0;font-size:11.5px" in compact_css
@@ -553,10 +615,10 @@ def test_information_hierarchy_styles_metrics_drawdown_states_and_news_ranks(tmp
     for selector in (".status-normal", ".status-near", ".status-pending", ".status-executed"):
         assert selector in css
     assert ".draw-pending" in css
-    assert ".news-card" in css and ".nrow" in css
-    assert ".news-cardh3" in compact_css and "font-size:12px" in compact_css
-    assert ".news-cardp" in compact_css and "color:#5b6b76" in compact_css
-    assert ".news-carda" in compact_css and "font-size:8px" in compact_css
+    assert ".news-card" in css and ".news-impact" in css
+    assert ".news-cardh3{margin:0010px;color:var(--ink);font-size:17px;line-height:1.45" in compact_css
+    assert ".news-summary{margin:0;color:#627486;font-size:12px;line-height:1.75}" in compact_css
+    assert ".news-footera{color:#2e719c;font-size:11px" in compact_css
 
 
 def test_final_ui_diff_fix_uses_compact_warning_and_adaptive_news_grid(tmp_path):
@@ -578,15 +640,15 @@ def test_final_ui_diff_fix_uses_compact_warning_and_adaptive_news_grid(tmp_path)
     assert "🟠 部分数据源异常 · 当前报告由离线测试数据生成" in html
     assert html.count('class="card news-card"') == 3
     assert 'class="card news-list"' not in html
-    assert 'class="news-layout news-count-3"' in html
+    assert 'class="news-layout"' in html
     assert ".alert{display:flex;gap:8px;align-items:center;margin-top:13px;padding:8px11px" in compact_css
-    assert ".news-layout.news-count-3{grid-template-columns:repeat(3,1fr)}" in compact_css
+    assert ".news-layout{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}" in compact_css
     assert ".draw-layout{display:grid;grid-template-columns:100px1fr105px" in compact_css
 
 
-def test_v5_news_layout_keeps_one_two_and_eight_news_adaptive(tmp_path):
+def test_news_layout_keeps_one_two_and_eight_complete_cards(tmp_path):
     root = __import__("pathlib").Path(__file__).parents[1]
-    for count, grid_class in ((1, "news-count-1"), (2, "news-count-2"), (8, "news-count-4")):
+    for count in (1, 2, 8):
         reports = tmp_path / f"reports-{count}"
         reports.mkdir()
         payload = report("2026-08-12")
@@ -595,9 +657,9 @@ def test_v5_news_layout_keeps_one_two_and_eight_news_adaptive(tmp_path):
         site = tmp_path / f"site-{count}"
         render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
         html = (site / "index.html").read_text(encoding="utf-8")
-        assert f'class="news-layout {grid_class}"' in html
-        assert html.count('class="card news-card"') == min(count, 3)
-        assert html.count('class="nrow"') == max(count - 3, 0)
+        assert 'class="news-layout"' in html
+        assert html.count('class="card news-card"') == count
+        assert 'class="nrow"' not in html
 
 
 def test_reference_style_maps_breadth_drawdown_and_news_without_changing_data(tmp_path):
@@ -634,9 +696,9 @@ def test_reference_style_maps_breadth_drawdown_and_news_without_changing_data(tm
     assert html.count('class="draw-layout"') == 2
     assert ".draw-layout{display:grid;grid-template-columns:100px1fr105px" in compact_css
 
-    assert '<div class="nmeta"><span class="rank">01</span>' in html
-    assert ".news-layout{display:grid;grid-template-columns:1fr1fr1fr.9fr" in compact_css
-    assert ".news-card{padding:12px13px}" in compact_css
+    assert '<div class="news-meta"><span class="rank">01</span>' in html
+    assert ".news-layout{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}" in compact_css
+    assert ".news-card{min-height:290px;padding:15px15px13px" in compact_css
 
 
 def test_v5_visual_contract_is_the_rendered_dom_and_css_baseline(tmp_path):
@@ -680,7 +742,8 @@ def test_v5_visual_contract_is_the_rendered_dom_and_css_baseline(tmp_path):
         "formula", "sector-card", "sector-head", "track", "fill", "sret",
         "draw-grid", "draw-card", "draw-layout", "draw-index", "dd", "small",
         "draw-mid", "distance", "dtrack", "cash", "news-layout", "news-card",
-        "nmeta", "news-list", "nrow", "nnum", "ntitle", "ntime",
+        "news-meta", "rank", "news-category", "news-source", "news-summary",
+        "news-impact", "news-tags", "news-footer", "news-focus",
     ):
         assert re.search(rf'class="[^"]*\b{re.escape(class_name)}\b', html)
     assert 'class="market-breadth-grid"' not in html
@@ -697,7 +760,7 @@ def test_v5_visual_contract_is_the_rendered_dom_and_css_baseline(tmp_path):
     assert ".section{padding:18px0" in compact_css
     assert ".breadth-grid{display:grid;grid-template-columns:32%68%;gap:12px;align-items:stretch}" in compact_css
     assert ".draw-layout{display:grid;grid-template-columns:100px1fr105px;gap:14px;align-items:center}" in compact_css
-    assert ".news-layout{display:grid;grid-template-columns:1fr1fr1fr.9fr;gap:10px}" in compact_css
+    assert ".news-layout{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}" in compact_css
     assert "@media(max-width:900px)" in compact_css
 
 
