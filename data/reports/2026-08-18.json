@@ -1,0 +1,443 @@
+{
+  "report_date": "2026-08-18",
+  "generated_at": "2026-08-18 10:44 CST",
+  "market_date": "2026-08-17",
+  "status": "ok",
+  "status_label": "🟢 数据更新正常",
+  "market_data_valid": true,
+  "core_market_valid": true,
+  "context_market_valid": true,
+  "drawdown_market_valid": true,
+  "market": {
+    "sp500": {
+      "market_date": "2026-08-17",
+      "close": 7745.06005859375,
+      "daily_return": -0.005227454770816764,
+      "ytd_return": 0.13140896334727192,
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "drawdown": 0.006915020298851826,
+      "name": "S&P 500",
+      "ticker": "^GSPC",
+      "valid": true
+    },
+    "nasdaq100": {
+      "market_date": "2026-08-17",
+      "close": 29995.380859375,
+      "daily_return": -0.0016893938645405893,
+      "ytd_return": 0.18794295108348025,
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "drawdown": 0.021696208113183735,
+      "name": "Nasdaq-100",
+      "ticker": "^NDX",
+      "valid": true
+    },
+    "dow": {
+      "market_date": "2026-08-17",
+      "close": 53459.78125,
+      "daily_return": -0.00507382612202234,
+      "ytd_return": 0.11227887838642436,
+      "ath": 54349.12109375,
+      "ath_date": "2026-08-05",
+      "drawdown": 0.016363463214353113,
+      "name": "Dow Jones",
+      "ticker": "^DJI",
+      "valid": true
+    }
+  },
+  "market_context": {
+    "russell2000": {
+      "market_date": "2026-08-17",
+      "close": 3057.539794921875,
+      "daily_return": -0.0035458402794088517,
+      "name": "Russell 2000",
+      "ticker": "^RUT",
+      "valid": true
+    },
+    "vix": {
+      "market_date": "2026-08-17",
+      "close": 15.1899995803833,
+      "daily_return": 0.06596488283391588,
+      "name": "VIX",
+      "ticker": "^VIX",
+      "valid": true
+    },
+    "dxy": {
+      "market_date": "2026-08-17",
+      "close": 99.59700012207031,
+      "daily_return": -0.0007323973935593475,
+      "name": "美元指数",
+      "ticker": "DX-Y.NYB",
+      "valid": true
+    },
+    "us10y": {
+      "market_date": "2026-08-17",
+      "close": 4.723999977111816,
+      "yield_change_bp": 2.79998779296875,
+      "name": "10Y 美债",
+      "ticker": "^TNX",
+      "valid": true
+    }
+  },
+  "market_signals": {
+    "tech_relative": 0.0035380609062761748,
+    "small_cap_relative": 0.0016816144914079123,
+    "vix_daily_return": 0.06596488283391588,
+    "dxy_daily_return": -0.0007323973935593475,
+    "us10y_bp_change": 2.79998779296875,
+    "signals": []
+  },
+  "market_breadth": {
+    "market_date": "2026-08-17",
+    "stocks": {
+      "market_date": "2026-08-17",
+      "constituent_date": "2026-08-13",
+      "total_constituents": 505,
+      "valid_count": 502,
+      "invalid_count": 3,
+      "advancers": 132,
+      "decliners": 368,
+      "unchanged": 2,
+      "advance_ratio": 0.26294820717131473,
+      "decline_ratio": 0.7330677290836654,
+      "unchanged_ratio": 0.00398406374501992,
+      "coverage_ratio": 0.994059405940594,
+      "status": "ok"
+    },
+    "sectors": {
+      "market_date": "2026-08-17",
+      "items": [
+        {
+          "key": "energy",
+          "name": "能源",
+          "ticker": "XLE",
+          "valid": true,
+          "daily_return": 0.01082219326916345,
+          "direction": "up",
+          "bar_strength": 0.3607397756387817
+        },
+        {
+          "key": "technology",
+          "name": "科技",
+          "ticker": "XLK",
+          "valid": true,
+          "daily_return": 0.0016315605828389756,
+          "direction": "up",
+          "bar_strength": 0.05438535276129919
+        },
+        {
+          "key": "industrials",
+          "name": "工业",
+          "ticker": "XLI",
+          "valid": true,
+          "daily_return": -0.0010186434411707523,
+          "direction": "down",
+          "bar_strength": 0.03395478137235841
+        },
+        {
+          "key": "health_care",
+          "name": "医疗保健",
+          "ticker": "XLV",
+          "valid": true,
+          "daily_return": -0.0019118842968576244,
+          "direction": "down",
+          "bar_strength": 0.06372947656192082
+        },
+        {
+          "key": "utilities",
+          "name": "公用事业",
+          "ticker": "XLU",
+          "valid": true,
+          "daily_return": -0.0029338989863718634,
+          "direction": "down",
+          "bar_strength": 0.09779663287906212
+        },
+        {
+          "key": "materials",
+          "name": "材料",
+          "ticker": "XLB",
+          "valid": true,
+          "daily_return": -0.005709920666786439,
+          "direction": "down",
+          "bar_strength": 0.1903306888928813
+        },
+        {
+          "key": "real_estate",
+          "name": "房地产",
+          "ticker": "XLRE",
+          "valid": true,
+          "daily_return": -0.009719430577861288,
+          "direction": "down",
+          "bar_strength": 0.3239810192620429
+        },
+        {
+          "key": "financials",
+          "name": "金融",
+          "ticker": "XLF",
+          "valid": true,
+          "daily_return": -0.00997245560314819,
+          "direction": "down",
+          "bar_strength": 0.3324151867716063
+        },
+        {
+          "key": "consumer_discretionary",
+          "name": "非必需消费",
+          "ticker": "XLY",
+          "valid": true,
+          "daily_return": -0.012267317983748471,
+          "direction": "down",
+          "bar_strength": 0.4089105994582824
+        },
+        {
+          "key": "consumer_staples",
+          "name": "必需消费",
+          "ticker": "XLP",
+          "valid": true,
+          "daily_return": -0.016378163464902618,
+          "direction": "down",
+          "bar_strength": 0.5459387821634206
+        },
+        {
+          "key": "communication_services",
+          "name": "通信服务",
+          "ticker": "XLC",
+          "valid": true,
+          "daily_return": -0.018857877919146948,
+          "direction": "down",
+          "bar_strength": 0.6285959306382316
+        }
+      ],
+      "valid_count": 11,
+      "advancers": 2,
+      "decliners": 9,
+      "unchanged": 0,
+      "advance_ratio": 0.18181818181818182
+    },
+    "health": {
+      "valid": true,
+      "score": 0.23049619703006158,
+      "level": "very_weak",
+      "label": "广泛走弱",
+      "divergence": null,
+      "summary": "多数股票与板块共同走弱，市场宽度明显恶化。"
+    }
+  },
+  "drawdown": {
+    "sp500": {
+      "index": "sp500",
+      "name": "S&P 500",
+      "cycle_id": "sp500-2026-08-13-77989902",
+      "started_at": "2026-08-14T10:42:09.022326+08:00",
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "last_market_date": "2026-08-17",
+      "last_updated_at": "2026-08-18T10:44:14.403161+08:00",
+      "current_close": 7745.06005859375,
+      "current_drawdown": 0.006915020298851826,
+      "pool": 140000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.1,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.15,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.25,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 140000,
+      "next_threshold": 0.1,
+      "distance_to_next": 0.09308497970114818,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    },
+    "nasdaq100": {
+      "index": "nasdaq100",
+      "name": "Nasdaq-100",
+      "cycle_id": "nasdaq100-2026-06-02-306605996",
+      "started_at": "2026-08-12T10:00:00+08:00",
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "last_market_date": "2026-08-17",
+      "last_updated_at": "2026-08-18T10:44:14.403161+08:00",
+      "current_close": 29995.380859375,
+      "current_drawdown": 0.021696208113183735,
+      "pool": 60000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.15,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.3,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.4,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 60000,
+      "next_threshold": 0.15,
+      "distance_to_next": 0.12830379188681626,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    }
+  },
+  "portfolio_action": "hold",
+  "market_summary": {
+    "market": "今日美股三大指数集体收跌，标普500下跌0.52%，纳斯达克100微跌0.17%；市场宽度明显走弱，标普500中上涨仅132家、下跌368家，11个板块中9个收跌。",
+    "drivers": "市场同时关注AI商业化强劲信号（Anthropic年化收入达650亿美元）以及美加贸易谈判紧张和伊朗地缘风险。",
+    "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
+    "degraded": false
+  },
+  "news": [
+    {
+      "rank": 1,
+      "candidate_id": "2b3016495e0d30c1",
+      "category": "AI / 资本开支",
+      "title_zh": "Anthropic年化收入飙升至650亿美元，两个月新增180亿美元",
+      "summary_zh": "Anthropic年化收入达到650亿美元，两个月内新增180亿美元，显示AI模型商业化需求极为强劲，为AI算力投入回报提供重要验证。",
+      "investment_impact": "Anthropic收入高增 → AI商业化收入规模快速扩大 → 主要云厂商与芯片厂商的AI资本开支回报预期改善 → 支撑Nasdaq-100中AI权重股盈利预期；若需求持续，可能强化数据中心与算力投资周期，但需观察收入可持续性与资本开支强度。",
+      "focus": "后续关注Anthropic收入增速、主要云厂商AI收入、以及上游算力订单与资本开支指引",
+      "tags": [
+        "AI商业化",
+        "Anthropic",
+        "大模型",
+        "算力需求"
+      ],
+      "investment_relevance_score": 90,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/17/anthropics-annualized-revenue-surges-to-65b/",
+      "published_at": "2026-08-17T23:56:26+00:00",
+      "original_title": "Anthropic’s annualized revenue surges to $65B",
+      "selection_reason": "Anthropic年化收入两个月新增180亿美元，是AI商业化规模的重大数据点，直接验证AI资本开支回报，对Nasdaq-100定价有实质影响。",
+      "event_summary": "Anthropic's annualized revenue surges to $65B, adding $18B in two months.",
+      "topic_group": "AI_CHIPS"
+    },
+    {
+      "rank": 2,
+      "candidate_id": "edd24dd0fb800932",
+      "category": "AI / 资本开支",
+      "title_zh": "英伟达向软银数据中心开发商投资15亿美元，以供应OpenAI项目芯片",
+      "summary_zh": "英伟达将向软银旗下数据中心开发商投资15亿美元，确保其芯片为OpenAI数据中心提供算力，进一步锁定AI基础设施与芯片需求。",
+      "investment_impact": "英伟达投资数据中心商 → 锁定OpenAI项目算力订单 → 数据中心建设与GPU需求确定性增强 → 利好英伟达及AI基础设施相关供应链；同时也反映AI资本开支持续膨胀，需关注融资与回报风险。",
+      "focus": "后续关注OpenAI数据中心建设进度、英伟达订单可见度、及AI基础设施融资成本",
+      "tags": [
+        "英伟达",
+        "数据中心",
+        "OpenAI",
+        "AI算力"
+      ],
+      "investment_relevance_score": 86,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/17/nvidia-investing-1-5b-in-softbank-data-center-developer-behind-openai-project/",
+      "published_at": "2026-08-17T15:16:24+00:00",
+      "original_title": "Nvidia investing $1.5B in SoftBank data center developer behind OpenAI project",
+      "selection_reason": "英伟达以15亿美元投资换取OpenAI数据中心芯片供应，是AI芯片与基础设施周期的重要订单信号，直接影响半导体与AI资本开支链条。",
+      "event_summary": "Nvidia invests $1.5B in SoftBank data center developer to power OpenAI project.",
+      "topic_group": "AI_CHIPS"
+    },
+    {
+      "rank": 3,
+      "candidate_id": "cc6f2328b83b596e",
+      "category": "地缘政治",
+      "title_zh": "特朗普威胁称若阿曼在伊朗协议问题上'碍事'将对其轰炸",
+      "summary_zh": "特朗普威胁轰炸美国盟友阿曼，若其在伊朗协议问题上'碍事'；伊朗问题60天谈判窗口即将到期，涉及霍尔木兹海峡。地缘风险上升，油价面临上行压力。",
+      "investment_impact": "美国对伊朗相关军事威胁升级 → 霍尔木兹海峡供应风险上升 → 油价上行预期增强 → 通胀预期与美债收益率承压 → 成长股估值面临压力，能源板块或相对受益；若冲突缓和，风险溢价将回落。",
+      "focus": "后续关注美伊谈判进展、霍尔木兹海峡通航状况、油价及VIX变化",
+      "tags": [
+        "伊朗",
+        "霍尔木兹海峡",
+        "地缘风险",
+        "油价"
+      ],
+      "investment_relevance_score": 84,
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/cy5dzk0ryzdo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-17T19:25:05+00:00",
+      "original_title": "Trump threatens to bomb US ally Oman if it 'gets in the way' over Iran deal",
+      "selection_reason": "特朗普威胁轰炸盟友并涉及霍尔木兹海峡，地缘风险与油价影响显著；当天VIX上升、能源板块领涨，与该事件风险方向相关。",
+      "event_summary": "Trump threatens to bomb US ally Oman if it gets in the way over Iran deal.",
+      "topic_group": "GEOPOLITICS"
+    },
+    {
+      "rank": 4,
+      "candidate_id": "b6f5fc0820288c8b",
+      "category": "政策 / 监管",
+      "title_zh": "美加贸易谈判'紧张'，新一轮关税截止日期临近",
+      "summary_zh": "美加贸易谈判在特朗普新一轮关税截止前变得'紧张'，加拿大方面需为让步向公众交代；若未能达成协议，新关税可能落地并影响北美供应链与通胀预期。",
+      "investment_impact": "美加关税若落地 → 北美贸易成本上升 → 供应链与部分消费品价格承压 → 通胀预期上修 → 美债收益率与美元波动加大 → 美股盈利预期与风险偏好受压制；谈判若达成则影响有限。",
+      "focus": "后续关注美加谈判结果、关税是否如期生效、加元及加拿大资产表现",
+      "tags": [
+        "美加贸易",
+        "关税",
+        "供应链",
+        "通胀"
+      ],
+      "investment_relevance_score": 78,
+      "source": "BBC Business",
+      "url": "https://www.bbc.co.uk/news/articles/crl7600rpnko?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-18T00:02:31+00:00",
+      "original_title": "US-Canada trade talks 'intense' as new tariff deadline looms",
+      "selection_reason": "美加贸易谈判在关税截止日前进入关键阶段，结果将直接影响北美贸易与通胀路径，对美股风险偏好和盈利预期有宏观影响。",
+      "event_summary": "US-Canada trade talks are 'intense' as new tariff deadline looms.",
+      "topic_group": "US_MARKET_MACRO"
+    }
+  ],
+  "news_degraded": false,
+  "warnings": []
+}
