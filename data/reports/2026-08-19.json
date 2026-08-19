@@ -1,0 +1,456 @@
+{
+  "report_date": "2026-08-19",
+  "generated_at": "2026-08-19 10:32 CST",
+  "market_date": "2026-08-18",
+  "status": "ok",
+  "status_label": "🟢 数据更新正常",
+  "market_data_valid": true,
+  "core_market_valid": true,
+  "context_market_valid": true,
+  "drawdown_market_valid": true,
+  "market": {
+    "sp500": {
+      "market_date": "2026-08-18",
+      "close": 7691.759765625,
+      "daily_return": -0.006881843725615733,
+      "ytd_return": 0.12362278367175517,
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "drawdown": 0.01374927593541131,
+      "name": "S&P 500",
+      "ticker": "^GSPC",
+      "valid": true
+    },
+    "nasdaq100": {
+      "market_date": "2026-08-18",
+      "close": 29490.95703125,
+      "daily_return": -0.016816716896839945,
+      "ytd_return": 0.16796565078551295,
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "drawdown": 0.03814806602044929,
+      "name": "Nasdaq-100",
+      "ticker": "^NDX",
+      "valid": true
+    },
+    "dow": {
+      "market_date": "2026-08-18",
+      "close": 53343.3984375,
+      "daily_return": -0.0021770162499495926,
+      "ytd_return": 0.10985742919370156,
+      "ath": 54349.12109375,
+      "ath_date": "2026-08-05",
+      "drawdown": 0.018504855938979548,
+      "name": "Dow Jones",
+      "ticker": "^DJI",
+      "valid": true
+    }
+  },
+  "market_context": {
+    "russell2000": {
+      "market_date": "2026-08-18",
+      "close": 3017.886962890625,
+      "daily_return": -0.012968947475838544,
+      "name": "Russell 2000",
+      "ticker": "^RUT",
+      "valid": true
+    },
+    "vix": {
+      "market_date": "2026-08-18",
+      "close": 15.84000015258789,
+      "daily_return": 0.04279134892432879,
+      "name": "VIX",
+      "ticker": "^VIX",
+      "valid": true
+    },
+    "dxy": {
+      "market_date": "2026-08-18",
+      "close": 99.56900024414062,
+      "daily_return": -0.00071255666341552,
+      "name": "美元指数",
+      "ticker": "DX-Y.NYB",
+      "valid": true
+    },
+    "us10y": {
+      "market_date": "2026-08-18",
+      "close": 4.706000328063965,
+      "yield_change_bp": -1.7999649047851562,
+      "name": "10Y 美债",
+      "ticker": "^TNX",
+      "valid": true
+    }
+  },
+  "market_signals": {
+    "tech_relative": -0.009934873171224212,
+    "small_cap_relative": -0.006087103750222811,
+    "vix_daily_return": 0.04279134892432879,
+    "dxy_daily_return": -0.00071255666341552,
+    "us10y_bp_change": -1.7999649047851562,
+    "signals": [
+      {
+        "key": "tech_relative",
+        "value": -0.009934873171224212,
+        "level": "significant",
+        "message": "Nasdaq-100 比 S&P 500 落后 0.99 个百分点，科技/成长相对承压"
+      },
+      {
+        "key": "small_cap_relative",
+        "value": -0.006087103750222811,
+        "level": "significant",
+        "message": "Russell 2000 比 S&P 500 落后 0.61 个百分点，小盘相对落后"
+      }
+    ]
+  },
+  "market_breadth": {
+    "market_date": "2026-08-18",
+    "stocks": {
+      "market_date": "2026-08-18",
+      "constituent_date": "2026-08-13",
+      "total_constituents": 505,
+      "valid_count": 502,
+      "invalid_count": 3,
+      "advancers": 224,
+      "decliners": 274,
+      "unchanged": 4,
+      "advance_ratio": 0.44621513944223107,
+      "decline_ratio": 0.545816733067729,
+      "unchanged_ratio": 0.00796812749003984,
+      "coverage_ratio": 0.994059405940594,
+      "status": "ok"
+    },
+    "sectors": {
+      "market_date": "2026-08-18",
+      "items": [
+        {
+          "key": "energy",
+          "name": "能源",
+          "ticker": "XLE",
+          "valid": true,
+          "daily_return": 0.01757747590181813,
+          "direction": "up",
+          "bar_strength": 0.5859158633939376
+        },
+        {
+          "key": "health_care",
+          "name": "医疗保健",
+          "ticker": "XLV",
+          "valid": true,
+          "daily_return": 0.016043056730450367,
+          "direction": "up",
+          "bar_strength": 0.534768557681679
+        },
+        {
+          "key": "consumer_staples",
+          "name": "必需消费",
+          "ticker": "XLP",
+          "valid": true,
+          "daily_return": 0.010628265501126721,
+          "direction": "up",
+          "bar_strength": 0.3542755167042241
+        },
+        {
+          "key": "financials",
+          "name": "金融",
+          "ticker": "XLF",
+          "valid": true,
+          "daily_return": 0.004515427462056465,
+          "direction": "up",
+          "bar_strength": 0.15051424873521552
+        },
+        {
+          "key": "communication_services",
+          "name": "通信服务",
+          "ticker": "XLC",
+          "valid": true,
+          "daily_return": -0.0030680052231267796,
+          "direction": "down",
+          "bar_strength": 0.10226684077089265
+        },
+        {
+          "key": "consumer_discretionary",
+          "name": "非必需消费",
+          "ticker": "XLY",
+          "valid": true,
+          "daily_return": -0.0033404658642264273,
+          "direction": "down",
+          "bar_strength": 0.11134886214088091
+        },
+        {
+          "key": "utilities",
+          "name": "公用事业",
+          "ticker": "XLU",
+          "valid": true,
+          "daily_return": -0.0036215447330670836,
+          "direction": "down",
+          "bar_strength": 0.1207181577689028
+        },
+        {
+          "key": "real_estate",
+          "name": "房地产",
+          "ticker": "XLRE",
+          "valid": true,
+          "daily_return": -0.0044613150740696605,
+          "direction": "down",
+          "bar_strength": 0.1487105024689887
+        },
+        {
+          "key": "materials",
+          "name": "材料",
+          "ticker": "XLB",
+          "valid": true,
+          "daily_return": -0.008805568231050276,
+          "direction": "down",
+          "bar_strength": 0.2935189410350092
+        },
+        {
+          "key": "industrials",
+          "name": "工业",
+          "ticker": "XLI",
+          "valid": true,
+          "daily_return": -0.014759552876222659,
+          "direction": "down",
+          "bar_strength": 0.4919850958740887
+        },
+        {
+          "key": "technology",
+          "name": "科技",
+          "ticker": "XLK",
+          "valid": true,
+          "daily_return": -0.024695313294227472,
+          "direction": "down",
+          "bar_strength": 0.8231771098075824
+        }
+      ],
+      "valid_count": 11,
+      "advancers": 4,
+      "decliners": 7,
+      "unchanged": 0,
+      "advance_ratio": 0.36363636363636365
+    },
+    "health": {
+      "valid": true,
+      "score": 0.41318362911988415,
+      "level": "weak",
+      "label": "市场偏弱",
+      "divergence": null,
+      "summary": "多数股票或板块表现偏弱，市场参与度下降。"
+    }
+  },
+  "drawdown": {
+    "sp500": {
+      "index": "sp500",
+      "name": "S&P 500",
+      "cycle_id": "sp500-2026-08-13-77989902",
+      "started_at": "2026-08-14T10:42:09.022326+08:00",
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "last_market_date": "2026-08-18",
+      "last_updated_at": "2026-08-19T10:32:49.574791+08:00",
+      "current_close": 7691.759765625,
+      "current_drawdown": 0.01374927593541131,
+      "pool": 140000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.1,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.15,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.25,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 140000,
+      "next_threshold": 0.1,
+      "distance_to_next": 0.0862507240645887,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    },
+    "nasdaq100": {
+      "index": "nasdaq100",
+      "name": "Nasdaq-100",
+      "cycle_id": "nasdaq100-2026-06-02-306605996",
+      "started_at": "2026-08-12T10:00:00+08:00",
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "last_market_date": "2026-08-18",
+      "last_updated_at": "2026-08-19T10:32:49.574791+08:00",
+      "current_close": 29490.95703125,
+      "current_drawdown": 0.03814806602044929,
+      "pool": 60000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.15,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.3,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.4,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 60000,
+      "next_threshold": 0.15,
+      "distance_to_next": 0.1118519339795507,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    }
+  },
+  "portfolio_action": "hold",
+  "market_summary": {
+    "market": "8月18日美股全线回落，标普500跌0.69%，纳斯达克100跌1.68%，市场宽度偏弱，上涨224家、下跌274家，科技板块领跌。",
+    "drivers": "市场同时关注全球长期国债收益率升至新高，以及苹果调整欧盟App Store收费、Etched估值升至210亿美元等消息。",
+    "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
+    "degraded": false
+  },
+  "news": [
+    {
+      "rank": 1,
+      "candidate_id": "7db57af9bf76dffd",
+      "category": "美债 / 美元",
+      "title_zh": "全球长期借贷成本创新高：油价、AI与通胀共同推升收益率",
+      "summary_zh": "美、英、德、日长期国债收益率均升至新高，市场在油价、AI资本开支与通胀黏性三重影响下重新定价利率。",
+      "investment_impact": "全球借贷成本上升 → 美债收益率高位运行 → 成长股估值承压，Nasdaq-100相对S&P 500或继续落后 → AI与科技等高久期资产波动放大。与当日科技板块领跌相关，显示市场对利率敏感度上升。",
+      "focus": "10年期美债收益率能否突破关键点位、油价与AI资本开支对通胀预期的传导、下周美联储官员表态",
+      "tags": [
+        "全球收益率",
+        "美债",
+        "成长股估值",
+        "AI资本开支"
+      ],
+      "investment_relevance_score": 86,
+      "source": "BBC Business",
+      "url": "https://www.bbc.co.uk/news/articles/c1k1x1zdywdo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-18T18:20:08+00:00",
+      "original_title": "Global borrowing costs hit fresh highs on oil, AI and inflation",
+      "selection_reason": "全球债券收益率创新高直接关系到美国利率与金融条件，是长线资产定价的核心变量；事件提及AI与通胀，符合当前市场主线。",
+      "event_summary": "Global borrowing costs hit fresh highs on oil, AI and inflation.",
+      "topic_group": "US_MARKET_MACRO"
+    },
+    {
+      "rank": 2,
+      "candidate_id": "ecd443b88eea63f3",
+      "category": "政策 / 监管",
+      "title_zh": "苹果调整欧盟App Store费用：替代安装费改为5%佣金，放宽第三方应用商店",
+      "summary_zh": "苹果正式改革欧盟App Store收费，对外部分发应用收取5%佣金，并简化第三方应用商店运营规则，以回应欧盟监管压力。",
+      "investment_impact": "欧盟监管合规成本下降 → Apple服务业务收入模式调整，利润率影响温和 → 对AAPL长期盈利中枢影响有限，但释放大型科技接受监管约束的信号 → 相关科技巨头估值或小幅承压。短期资产价格影响有限，暂以观察为主。",
+      "focus": "欧盟数字市场法案后续执行、开发者向替代商店迁移比例、Apple服务营收与利润率变化",
+      "tags": [
+        "苹果",
+        "欧盟监管",
+        "App Store",
+        "大型科技"
+      ],
+      "investment_relevance_score": 74,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/18/apple-overhauls-its-eu-app-store-fees-loosens-rules-for-alternative-app-stores/",
+      "published_at": "2026-08-18T17:12:13+00:00",
+      "original_title": "Apple overhauls its EU App Store fees, loosens rules for alternative app stores",
+      "selection_reason": "Apple是Nasdaq-100最大权重股之一，欧盟费用机制重大调整在近7天提案基础上有明确新事实，影响其商业模式与盈利预期。",
+      "event_summary": "Apple overhauled its EU App Store fees, replacing per-install fee with 5% commission for outside apps.",
+      "topic_group": "MEGA_CAP_TECH"
+    },
+    {
+      "rank": 3,
+      "candidate_id": "27811b48920ab769",
+      "category": "AI / 资本开支",
+      "title_zh": "AI芯片初创Etched估值一个月翻倍至210亿美元，Jane Street领投",
+      "summary_zh": "Etched估值一个月内从约百亿美元升至210亿美元，Jane Street领投并部署其AI集群系统，显示AI算力投资热度持续升温。",
+      "investment_impact": "AI芯片初创高估值 → 资本继续涌入AI基础设施 → 利好Nvidia、AMD等上市芯片巨头估值情绪 → 但高估值也暗示AI投资回报预期激进，若后续AI收入不及预期，相关板块回撤风险上升。",
+      "focus": "Etched产品量产与客户采用、AI芯片订单增速、市场对AI算力投资的持续性评估",
+      "tags": [
+        "AI芯片",
+        "Etched",
+        "资本开支",
+        "估值"
+      ],
+      "investment_relevance_score": 72,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/18/etcheds-valuation-doubles-to-21b-in-a-month/",
+      "published_at": "2026-08-18T17:21:58+00:00",
+      "original_title": "Etched’s valuation doubles to $21B in a month",
+      "selection_reason": "AI芯片是当前AI周期的核心环节，Etched估值在短时间内翻倍是AI投资热度与资本开支的高频信号，对供应链及上市AI芯片公司有情绪传导。",
+      "event_summary": "Etched's valuation doubled to $21B in a month after a round led by Jane Street.",
+      "topic_group": "AI_CHIPS"
+    },
+    {
+      "rank": 4,
+      "candidate_id": "7a3ac8f24e1e86f8",
+      "category": "政策 / 监管",
+      "title_zh": "Meta被诉“让儿童上瘾”案开庭，公司否认社交媒体成瘾客观存在",
+      "summary_zh": "美国多州起诉Meta案进入庭审，指控其通过Facebook和Instagram的算法设计使儿童成瘾；Meta则辩称社交媒体成瘾并不存在。",
+      "investment_impact": "诉讼若成立 → Meta面临罚款与算法整改，盈利预期下调风险 → 对整个社交媒体及大型科技板块监管溢价上升 → 短期股价波动可能加大，但最终影响需看判决与和解。",
+      "focus": "庭审证据披露、各州索赔金额、Meta是否提出和解、社交媒体监管立法动态",
+      "tags": [
+        "Meta",
+        "社交媒体",
+        "监管诉讼",
+        "大型科技"
+      ],
+      "investment_relevance_score": 70,
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/cly5r7vr7q1o?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-18T22:11:07+00:00",
+      "original_title": "Meta hooked children on Facebook and Instagram, court hears",
+      "selection_reason": "Meta为Nasdaq-100重要权重股，诉讼案开庭是自近7天“法院允许诉讼继续”后的实质新进展，能通过监管风险路径影响大型科技板块估值。",
+      "event_summary": "A court heard that Meta hooked children on Facebook and Instagram; Meta argued social media addiction doesn't exist.",
+      "topic_group": "MEGA_CAP_TECH"
+    }
+  ],
+  "news_degraded": false,
+  "warnings": []
+}
