@@ -7,6 +7,8 @@ import inspect
 import time
 from typing import Any, Callable, Optional
 
+import httpx
+
 from .news_prompt import SYSTEM_PROMPT
 
 
@@ -27,10 +29,27 @@ INVESTMENT_IMPACT_LIMIT = 220
 FOCUS_LIMIT = 80
 SELECTION_REASON_LIMIT = 120
 TAG_LIMIT = 16
+DEEPSEEK_TIMEOUT = httpx.Timeout(connect=5.0, read=25.0, write=15.0, pool=5.0)
+DEEPSEEK_MAX_RETRIES = 0
+DEEPSEEK_MAX_ATTEMPTS = 2
 
 
 class NewsSelectionError(ValueError):
     """Raised when model output violates the candidate-only contract."""
+
+
+def _error_kind(exc: Exception) -> str:
+    """Classify transport failures for concise operational logs."""
+    error_type = type(exc).__name__.lower()
+    error_module = type(exc).__module__.lower()
+    if "timeout" in error_type or "timeout" in error_module:
+        return "timeout"
+    if "connection" in error_type or "network" in error_type or "connect" in error_module:
+        return "connection_error"
+    status_code = getattr(exc, "status_code", None)
+    if status_code is not None:
+        return f"api_error_{status_code}"
+    return "error"
 
 
 def invoke_model(call_model: Callable, system_prompt: str, user_payload: str, api_key: str, *,
@@ -139,6 +158,8 @@ def validate_selection(payload: Any, candidates: list[dict]) -> list[dict]:
             "selection_reason": selection_reason,
             "event_summary": source.get("event_summary", source["title"]),
             "topic_group": source.get("topic_group"),
+            "event_category": source.get("event_category", "other"),
+            "source_channel": source.get("source_channel"),
         })
     if sorted(item["rank"] for item in validated) != list(range(1, len(validated) + 1)):
         raise NewsSelectionError("rank 必须从 1 连续排列。")
@@ -166,7 +187,12 @@ def call_deepseek(system_prompt: str, user_payload: str, api_key: str, *,
     """Call DeepSeek and return only final content, never reasoning content."""
     from openai import OpenAI
 
-    client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
+    client = OpenAI(
+        api_key=api_key,
+        base_url="https://api.deepseek.com",
+        timeout=DEEPSEEK_TIMEOUT,
+        max_retries=DEEPSEEK_MAX_RETRIES,
+    )
     request = {
         "model": "deepseek-v4-flash",
         "messages": [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_payload}],
@@ -179,6 +205,49 @@ def call_deepseek(system_prompt: str, user_payload: str, api_key: str, *,
     return response.choices[0].message.content
 
 
+def _log_stage_b_input(candidates: list[dict]) -> None:
+    print(f"[NEWS STAGE B] input events: {len(candidates)}")
+    for candidate in candidates:
+        print(
+            "[NEWS STAGE B] candidate_id={candidate_id} | category={category} | title={title}".format(
+                candidate_id=candidate.get("candidate_id", ""),
+                category=candidate.get("event_category", "other"),
+                title=candidate.get("title", ""),
+            )
+        )
+
+
+def _log_stage_b_raw_response(raw: Any) -> None:
+    try:
+        data = raw if isinstance(raw, dict) else json.loads(raw)
+        items = data.get("news") if isinstance(data, dict) else None
+    except (TypeError, json.JSONDecodeError):
+        print("[NEWS STAGE B] DeepSeek raw return count: <unparseable>")
+        return
+    if not isinstance(items, list):
+        print("[NEWS STAGE B] DeepSeek raw return count: <missing news array>")
+        return
+    print(f"[NEWS STAGE B] DeepSeek raw return count: {len(items)}")
+    for item in items:
+        if not isinstance(item, dict):
+            print("[NEWS STAGE B] raw item: <non-object>")
+            continue
+        print(
+            "[NEWS STAGE B] raw item | rank={rank} | candidate_id={candidate_id} | title={title} | "
+            "importance={importance} | us_relevance={us_relevance} | novelty={novelty} | "
+            "persistence={persistence} | investment_relevance_score={score}".format(
+                rank=item.get("rank", "<missing>"),
+                candidate_id=item.get("candidate_id", "<missing>"),
+                title=item.get("title_zh", item.get("title", "<missing>")),
+                importance=item.get("importance", "<missing>"),
+                us_relevance=item.get("us_relevance", "<missing>"),
+                novelty=item.get("novelty", "<missing>"),
+                persistence=item.get("persistence", "<missing>"),
+                score=item.get("investment_relevance_score", "<missing>"),
+            )
+        )
+
+
 def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict] = None,
                 market_context: dict = None,
                 call_model: Callable = call_deepseek, sleep_fn: Callable = time.sleep
@@ -186,26 +255,41 @@ def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict
     if not candidates:
         return [], None
     event_fields = (
-        "candidate_id", "event_summary", "topic_group", "source", "title", "summary", "published_at",
+        "candidate_id", "event_summary", "topic_group", "event_category", "source_channel", "source", "title", "summary", "published_at",
     )
     events = [{
         **{field: candidate.get(field) for field in event_fields},
         "event_summary": candidate.get("event_summary", candidate.get("title", "")),
         "topic_group": candidate.get("topic_group", "OTHER_SYSTEMIC"),
+        "event_category": candidate.get("event_category", "other"),
     } for candidate in candidates]
+    _log_stage_b_input(candidates)
     payload = {"events": events, "recent_7_days_events": recent_selected or []}
     if market_context:
         payload.update(market_context)
     user_payload = json.dumps(payload, ensure_ascii=False)
     last_error = None
-    for attempt in range(3):
+    started = time.monotonic()
+    for attempt in range(DEEPSEEK_MAX_ATTEMPTS):
         try:
             raw = invoke_model(
                 call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=True, reasoning_effort="high"
             )
-            return validate_selection(raw, candidates), None
+            _log_stage_b_raw_response(raw)
+            try:
+                selected = validate_selection(raw, candidates)
+            except Exception as exc:
+                print(f"[NEWS STAGE B] validate_selection: failed | reason={exc}")
+                raise
+            print("[NEWS STAGE B] validate_selection: passed")
+            print(f"[NEWS AI] selection succeeded in {time.monotonic() - started:.1f}s")
+            return selected, None
         except Exception as exc:
             last_error = exc
-            if attempt < 2:
+            print(
+                f"[NEWS AI] attempt {attempt + 1}/{DEEPSEEK_MAX_ATTEMPTS} failed "
+                f"after {time.monotonic() - started:.1f}s ({_error_kind(exc)}): {exc}"
+            )
+            if attempt < DEEPSEEK_MAX_ATTEMPTS - 1:
                 sleep_fn((5, 10)[attempt])
-    return [], f"⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：{last_error}"
+    return [], f"⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：{_error_kind(last_error)}: {last_error}"

@@ -400,6 +400,35 @@ def test_deepseek_payload_includes_market_driven_context_and_selection_reason():
     assert captured["kwargs"] == {"thinking_enabled": True, "reasoning_effort": "high"}
 
 
+def test_stage_b_logs_input_raw_return_and_validation(capsys):
+    def model(system_prompt, user_payload, api_key):
+        return json.dumps({"news": [{
+            **enriched_selection(),
+            "title_zh": "美联储维持利率",
+            "summary_zh": "摘要",
+            "selection_reason": "重大宏观事件",
+        }]})
+
+    selected, warning = select_news(
+        [candidate("1", "Fed holds rates", "https://x/1")],
+        "secret-api-key",
+        call_model=model,
+        sleep_fn=lambda _: None,
+    )
+
+    output = capsys.readouterr().out
+    assert warning is None
+    assert selected[0]["title_zh"] == "美联储维持利率"
+    assert "[NEWS STAGE B] input events: 1" in output
+    assert "candidate_id=1 | category=other | title=Fed holds rates" in output
+    assert "[NEWS STAGE B] DeepSeek raw return count: 1" in output
+    assert "rank=1 | candidate_id=1 | title=美联储维持利率" in output
+    assert "importance=<missing>" in output
+    assert "investment_relevance_score=92" in output
+    assert "validate_selection: passed" in output
+    assert "secret-api-key" not in output
+
+
 def test_deepseek_payload_accepts_breadth_context_and_prompt_has_sector_rotation_rule():
     captured = {}
 

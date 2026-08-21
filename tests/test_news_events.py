@@ -28,12 +28,13 @@ def cluster_payload(*events):
     return {"events": list(events)}
 
 
-def event(event_id, candidate_ids, summary="A factual event.", topic_group="US_MARKET_MACRO"):
+def event(event_id, candidate_ids, summary="A factual event.", topic_group="US_MARKET_MACRO", event_category="other"):
     return {
         "event_id": event_id,
         "candidate_ids": candidate_ids,
         "event_summary": summary,
         "topic_group": topic_group,
+        "event_category": event_category,
     }
 
 
@@ -46,6 +47,27 @@ def test_validates_complete_non_overlapping_event_clusters():
     ), candidates)
 
     assert [item["event_id"] for item in events] == ["event_001", "event_002"]
+
+
+def test_event_category_is_factual_stage_a_metadata_and_survives_program_mapping():
+    pool = [candidate("a")]
+    clusters = cluster_payload({
+        **event("event_001", ["a"]),
+        "event_category": "financial_markets",
+    })
+
+    events = validate_event_clusters(clusters, pool)
+    flattened = event_selection_candidates(build_event_representatives(events, pool))
+
+    assert flattened[0]["event_category"] == "financial_markets"
+
+
+def test_rejects_invalid_factual_event_category():
+    with pytest.raises(NewsEventError):
+        validate_event_clusters(cluster_payload({
+            **event("event_001", ["a"]),
+            "event_category": "world_news",
+        }), [candidate("a")])
 
 
 @pytest.mark.parametrize("payload", [
@@ -84,6 +106,7 @@ def test_build_event_representatives_keeps_program_owned_event_metadata():
         "event_id": "event_001",
         "event_summary": "Fed held rates",
         "topic_group": "US_MARKET_MACRO",
+        "event_category": "other",
         "candidate_ids": ["a", "b"],
         "representative": pool[0],
     }]
@@ -122,7 +145,23 @@ def test_cluster_calls_shared_transport_without_urls_and_returns_validated_event
     } for item in pool]}
     assert "https://example.com" not in __import__("json").dumps(captured["payload"])
     assert "现实世界事件聚类" in captured["prompt"]
-    assert captured["kwargs"] == {"thinking_enabled": True, "reasoning_effort": "high"}
+    assert captured["kwargs"] == {"thinking_enabled": False, "reasoning_effort": None}
+
+
+def test_stage_a_logs_input_and_complete_output_events(capsys):
+    pool = [candidate("a", summary="Fed held rates."), candidate("b", summary="Fed held rates unchanged.")]
+
+    def model(system_prompt, user_payload, api_key):
+        return cluster_payload(event("event_001", ["a", "b"], "Fed held rates", "US_MARKET_MACRO", "macro_policy"))
+
+    events, warning = cluster_news_events(pool, "secret-api-key", call_model=model, sleep_fn=lambda _: None)
+
+    output = capsys.readouterr().out
+    assert warning is None
+    assert events[0]["event_id"] == "event_001"
+    assert "[NEWS STAGE A] input candidates: 2" in output
+    assert "event_id=event_001 | category=macro_policy | title=Fed held rates" in output
+    assert "secret-api-key" not in output
 
 
 def test_cluster_skips_model_when_at_most_one_candidate():
@@ -154,7 +193,7 @@ def test_cluster_caps_input_to_fifty_by_priority_and_recency():
     assert "p0" in events[0]["candidate_ids"]
 
 
-def test_cluster_three_failures_uses_candidate_per_event_fallback():
+def test_cluster_two_failures_uses_candidate_per_event_fallback():
     calls, sleeps = [], []
 
     def failing(*args):
@@ -165,8 +204,8 @@ def test_cluster_three_failures_uses_candidate_per_event_fallback():
         [candidate("a"), candidate("b")], "key", call_model=failing, sleep_fn=sleeps.append
     )
 
-    assert len(calls) == 3
-    assert sleeps == [5, 10]
+    assert len(calls) == 2
+    assert sleeps == [5]
     assert [item["candidate_ids"] for item in events] == [["a"], ["b"]]
     assert all(item["topic_group"] == "OTHER_SYSTEMIC" for item in events)
     assert "事件级去重暂时失败" in warning
