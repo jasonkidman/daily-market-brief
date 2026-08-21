@@ -9,10 +9,11 @@ import pytest
 import yaml
 
 from src.deepseek_client import NewsSelectionError, select_news, validate_selection
+import src.deepseek_client as deepseek_client
 from src.news_dedupe import dedupe_candidates
 from src.news_events import build_event_representatives, cluster_news_events, event_selection_candidates
 from src.main import _recent_news_events
-from src.rss_news import fetch_candidates
+from src.rss_news import fetch_candidates, filter_final_candidates
 
 
 def candidate(cid, title, url, source="BBC News", summary="full summary", priority="P0"):
@@ -280,7 +281,36 @@ def test_rss_30_hour_window_uses_feed_gmt_not_runner_timezone(monkeypatch):
     assert candidates == []
 
 
-def test_three_ai_failures_degrade_without_raising():
+def test_final_eligibility_keeps_30_hour_fetch_buffer_out_of_stage_a_and_b():
+    now = datetime(2026, 8, 12, 12, 0, tzinfo=ZoneInfo("UTC"))
+    candidates = [
+        {**candidate("fresh", "Fresh", "https://x/fresh"), "published_at": "2026-08-11T13:00:00+00:00"},
+        {**candidate("buffer-only", "Buffered", "https://x/buffer"), "published_at": "2026-08-11T11:00:00+00:00"},
+    ]
+
+    eligible = filter_final_candidates(candidates, now)
+
+    assert [item["candidate_id"] for item in eligible] == ["fresh"]
+
+
+def test_source_channel_is_source_metadata_not_event_category():
+    now = datetime(2026, 8, 12, tzinfo=ZoneInfo("UTC"))
+    entry = SimpleNamespace(title="Treasury yields rise", link="https://example.test/yields", summary="Summary",
+                            published_parsed=now.timetuple())
+
+    candidates, warnings = fetch_candidates(
+        [{"name": "CNBC", "url": "https://example.test/rss", "priority": "P1",
+          "source_channel": "world_news"}],
+        now,
+        parser=lambda url: SimpleNamespace(entries=[entry]),
+    )
+
+    assert warnings == []
+    assert candidates[0]["source_channel"] == "world_news"
+    assert "event_category" not in candidates[0]
+
+
+def test_two_ai_failures_degrade_without_raising():
     attempts = []
     sleeps = []
 
@@ -292,8 +322,50 @@ def test_three_ai_failures_degrade_without_raising():
                                 sleep_fn=sleeps.append)
     assert news == []
     assert "新闻 AI 处理暂时失败" in warning
-    assert len(attempts) == 3
-    assert sleeps == [5, 10]
+    assert len(attempts) == 2
+    assert sleeps == [5]
+
+
+def test_deepseek_client_uses_bounded_timeout_and_disables_sdk_retries(monkeypatch):
+    captured = {}
+
+    class FakeCompletions:
+        def create(self, **kwargs):
+            return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content="{}"))])
+
+    class FakeClient:
+        def __init__(self, **kwargs):
+            captured.update(kwargs)
+            self.chat = SimpleNamespace(completions=FakeCompletions())
+
+    import openai
+    monkeypatch.setattr(openai, "OpenAI", FakeClient)
+
+    assert deepseek_client.call_deepseek("system", "user", "key") == "{}"
+    assert captured["max_retries"] == 0
+    assert captured["timeout"].connect == 5.0
+    assert captured["timeout"].read == 25.0
+    assert captured["timeout"].write == 15.0
+    assert captured["timeout"].pool == 5.0
+
+
+def test_news_selection_timeout_retries_once_then_returns_timeout_reason():
+    attempts = []
+    sleeps = []
+
+    def timing_out(*args, **kwargs):
+        attempts.append(1)
+        raise TimeoutError("read timed out")
+
+    news, warning = select_news(
+        [candidate("1", "Title", "https://x/1")], "key", call_model=timing_out,
+        sleep_fn=sleeps.append,
+    )
+
+    assert news == []
+    assert len(attempts) == 2
+    assert sleeps == [5]
+    assert "timeout" in warning.lower()
 
 
 def test_deepseek_payload_includes_market_driven_context_and_selection_reason():
@@ -433,7 +505,7 @@ def test_investment_priority_prompt_has_selection_contract():
         "长期持有 SPY 与 Nasdaq-100",
         "美国资产定价的重要程度",
         "investment_relevance_score",
-        "宏观/政策重要性 0-30",
+        "importance*0.35 + us_relevance*0.30 + novelty*0.20 + persistence*0.15",
         "低于50分不得入选",
         "普通产品更新",
         "普通公司融资",
@@ -471,3 +543,41 @@ def test_event_selection_prompt_strengthens_market_structure_relevance():
 
     assert "市场结构相关性" in SYSTEM_PROMPT
     assert "不得把相关性写成确定因果" in SYSTEM_PROMPT
+
+
+def test_selection_rules_v1_are_explicit_and_do_not_force_eight_events():
+    from src.news_prompt import SYSTEM_PROMPT
+
+    for phrase in (
+        "Selection Rules v1",
+        "政策状态或制度环境",
+        "系统性金融变化",
+        "产业结构变化",
+        "投资传导路径",
+        "普通产品更新",
+        "不得根据当天市场涨跌反向寻找新闻",
+        "来源质量不等于事件重要性",
+        "不得通过夸大 why_it_matters",
+        "最多选择8条",
+        "高质量事件不足时允许少于8条",
+    ):
+        assert phrase in SYSTEM_PROMPT
+
+
+def test_stage_b_prompt_matches_validated_demo_selection_contract():
+    from src.news_prompt import SYSTEM_PROMPT
+
+    for phrase in (
+        "macro_policy",
+        "financial_markets",
+        "high_tech",
+        "geopolitics",
+        "若投资者今天只能看8条新闻",
+        "第6-8名",
+        "同一事件的不同媒体报道只能占1条",
+        "分析师观点",
+        "评论或观点文章",
+        "不要把“某只股票、某个板块、债券、商品或其他资产上涨/下跌”本身选入Top 8",
+        "importance*0.35 + us_relevance*0.30 + novelty*0.20 + persistence*0.15",
+    ):
+        assert phrase in SYSTEM_PROMPT
