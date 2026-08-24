@@ -111,7 +111,7 @@ def build_event_representatives(events: list[dict], candidate_pool: list[dict]) 
 
 
 def event_selection_candidates(event_representatives: list[dict]) -> list[dict]:
-    """Flatten one program-selected article per event for the Top 8 stage."""
+    """Flatten one program-selected article per event for the news selection stage."""
     return [{
         **event["representative"],
         "event_summary": event["event_summary"],

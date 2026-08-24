@@ -15,6 +15,7 @@ from .news_dedupe import canonical_url
 
 
 RSS_USER_AGENT = "daily-market-brief/1.0 (github.com/jasonkidman/daily-market-brief)"
+FINAL_NEWS_WINDOW_HOURS = 24
 
 
 def _parse_feed(url: str):
@@ -65,8 +66,36 @@ def fetch_candidates(sources: list[dict], now: datetime, hours: int = 30,
                 }
                 if source.get("category_hint"):
                     candidate["category_hint"] = source["category_hint"]
+                if source.get("source_channel"):
+                    candidate["source_channel"] = source["source_channel"]
                 candidates.append(candidate)
         except Exception as exc:
             warnings.append(f"{source['name']} RSS 获取失败：{exc}")
     candidates.sort(key=lambda item: item["published_at"], reverse=True)
     return candidates, warnings
+
+
+def filter_final_candidates(candidates: list[dict], now: datetime) -> list[dict]:
+    """Keep candidates published in the inclusive final 24-hour window.
+
+    RSS acquisition intentionally uses a 30-hour buffer. This second pass is
+    the strict eligibility boundary before event clustering and selection.
+    Missing, malformed, and future timestamps are not eligible.
+    """
+    now_utc = now.astimezone(timezone.utc)
+    cutoff = now_utc - timedelta(hours=FINAL_NEWS_WINDOW_HOURS)
+    eligible = []
+    for candidate in candidates:
+        raw_published_at = candidate.get("published_at")
+        if not isinstance(raw_published_at, str) or not raw_published_at.strip():
+            continue
+        try:
+            published_at = datetime.fromisoformat(raw_published_at.strip().replace("Z", "+00:00"))
+            if published_at.tzinfo is None:
+                published_at = published_at.replace(tzinfo=timezone.utc)
+            published_at = published_at.astimezone(timezone.utc)
+        except (TypeError, ValueError, OverflowError):
+            continue
+        if cutoff <= published_at <= now_utc:
+            eligible.append(candidate)
+    return eligible

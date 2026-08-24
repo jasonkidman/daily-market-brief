@@ -111,8 +111,6 @@ def validate_selection(payload: Any, candidates: list[dict]) -> list[dict]:
     news = data.get("news")
     if not isinstance(news, list):
         raise NewsSelectionError("news 必须是数组。")
-    if len(news) > 8:
-        raise NewsSelectionError("news 数量不得超过 8。")
     pool = {item["candidate_id"]: item for item in candidates}
     seen, validated = set(), []
     for item in news:
@@ -194,9 +192,10 @@ def call_deepseek(system_prompt: str, user_payload: str, api_key: str, *,
         max_retries=DEEPSEEK_MAX_RETRIES,
     )
     request = {
-        "model": "deepseek-v4-flash",
+        "model": "deepseek-chat",
         "messages": [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_payload}],
         "response_format": {"type": "json_object"},
+        "temperature": 0.15,
         "extra_body": {"thinking": {"type": "enabled" if thinking_enabled else "disabled"}},
     }
     if reasoning_effort is not None:
@@ -273,7 +272,7 @@ def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict
     for attempt in range(DEEPSEEK_MAX_ATTEMPTS):
         try:
             raw = invoke_model(
-                call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=True, reasoning_effort="high"
+                call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=False, reasoning_effort=None
             )
             _log_stage_b_raw_response(raw)
             try:

@@ -43,7 +43,7 @@ def _valid_snapshot(snapshot: dict, field: str):
 def _summary_payload(market_data: dict, market_context: dict, market_breadth: dict,
                      news: list[dict], drawdown_action: str) -> dict:
     final_news = []
-    for item in news[:8]:
+    for item in news:
         final_news.append({
             "event_summary": item.get("event_summary") or item.get("original_title") or item.get("title"),
             "title": item.get("original_title") or item.get("title"),

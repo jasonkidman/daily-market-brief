@@ -88,6 +88,22 @@ def test_generates_valid_summary_from_existing_inputs_and_program_owned_action()
     assert captured["kwargs"] == {"thinking_enabled": True, "reasoning_effort": "high"}
 
 
+def test_summary_payload_passes_all_dynamic_news_without_eight_item_truncation():
+    captured = {}
+
+    def model(system_prompt, user_payload, api_key, **kwargs):
+        captured["payload"] = json.loads(user_payload)
+        return model_response()
+
+    dynamic_news = [{**news()[0], "original_title": f"Event {index}"} for index in range(12)]
+    generate_market_summary(
+        market_data(), context(), breadth(), dynamic_news, "hold", "key",
+        call_model=model, sleep_fn=lambda _: None,
+    )
+
+    assert len(captured["payload"]["final_news"]) == 12
+
+
 def test_pending_and_executed_actions_use_only_program_owned_action_copy():
     pending = generate_market_summary(
         market_data(), context(), breadth(), news(), "pending_drawdown_buy", "key",
