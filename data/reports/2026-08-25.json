@@ -1,9 +1,9 @@
 {
   "report_date": "2026-08-25",
-  "generated_at": "2026-08-25 11:39 CST",
+  "generated_at": "2026-08-25 11:55 CST",
   "market_date": "2026-08-24",
-  "status": "partial",
-  "status_label": "🟠 部分数据源异常",
+  "status": "ok",
+  "status_label": "🟢 数据更新正常",
   "market_data_valid": true,
   "core_market_valid": true,
   "context_market_valid": true,
@@ -65,8 +65,8 @@
     },
     "dxy": {
       "market_date": "2026-08-24",
-      "close": 99.0530014038086,
-      "daily_return": 0.002560711986195452,
+      "close": 99.04499816894531,
+      "daily_return": 0.0024797075872473595,
       "name": "美元指数",
       "ticker": "DX-Y.NYB",
       "valid": true
@@ -84,7 +84,7 @@
     "tech_relative": -0.006944277125492393,
     "small_cap_relative": -0.004748827478691653,
     "vix_daily_return": 0.04758759164460291,
-    "dxy_daily_return": 0.002560711986195452,
+    "dxy_daily_return": 0.0024797075872473595,
     "us10y_bp_change": -3.399991989135742,
     "signals": [
       {
@@ -239,7 +239,7 @@
       "ath": 7798.990234375,
       "ath_date": "2026-08-13",
       "last_market_date": "2026-08-24",
-      "last_updated_at": "2026-08-25T11:39:08.838773+08:00",
+      "last_updated_at": "2026-08-25T11:55:25.137779+08:00",
       "current_close": 7652.85986328125,
       "current_drawdown": 0.018737088610479624,
       "pool": 140000,
@@ -295,7 +295,7 @@
       "ath": 30660.599609375,
       "ath_date": "2026-06-02",
       "last_market_date": "2026-08-24",
-      "last_updated_at": "2026-08-25T11:39:08.838773+08:00",
+      "last_updated_at": "2026-08-25T11:55:25.137779+08:00",
       "current_close": 29023.181640625,
       "current_drawdown": 0.053404629707546,
       "pool": 60000,
@@ -346,14 +346,157 @@
   },
   "portfolio_action": "hold",
   "market_summary": {
-    "market": "三大指数分化，标普500下跌0.3%，纳指100下跌近1%，道指小幅上涨；市场宽度尚可，标普成分中约六成上涨，8个行业板块收涨。",
-    "drivers": "科技相对承压（纳指100较标普500落后0.69个百分点），同时资金更多偏向必需消费、金融和公用事业等防御/金融方向。",
+    "market": "标普500跌0.28%，纳指100跌0.97%，道指涨0.26%；板块多数上涨但科技领跌，防御板块占优，市场宽度健康。",
+    "drivers": "市场同时关注美加贸易战升级、美国对伊朗新制裁等地缘政治消息，以及OpenAI被调查、Hugging Face收购传闻等AI相关动态。",
     "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
     "degraded": false
   },
-  "news": [],
-  "news_degraded": true,
-  "warnings": [
-    "⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：error: investment_impact 不合法。"
-  ]
+  "news": [
+    {
+      "rank": 1,
+      "candidate_id": "0e001424400995e5",
+      "category": "地缘政治",
+      "title_zh": "美加贸易战升级：特朗普威胁提高汽车关税，加拿大誓言报复",
+      "summary_zh": "加拿大总理卡尼指责特朗普试图“摧毁”加拿大汽车业，并表示只有美国拿出“正确态度”才恢复贸易谈判。此前美加贸易谈判破裂，美国已对部分加拿大商品征收50%关税，加拿大承诺等额报复。",
+      "investment_impact": "美加贸易紧张升级 → 北美汽车及供应链成本上升 → 相关制造业盈利承压 → 通胀预期升温 → 美债收益率面临上行压力 → 成长股估值承压。",
+      "focus": "美加贸易谈判进展、汽车关税具体实施、加拿大报复措施",
+      "tags": [
+        "美加贸易",
+        "关税",
+        "汽车业"
+      ],
+      "investment_relevance_score": 85,
+      "source": "BBC Business",
+      "url": "https://www.bbc.co.uk/news/articles/c93vpd60654o?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-25T02:51:53+00:00",
+      "original_title": "US-Canada trade war escalates as Trump threatens tariff hike on autos after Carney vows to retaliate",
+      "selection_reason": "美加贸易战升级，直接影响北美汽车产业链和通胀预期，属于重大宏观政策事件。",
+      "event_summary": "US-Canada trade war escalates with threats of tariffs and retaliation.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 2,
+      "candidate_id": "375bd938398a0571",
+      "category": "地缘政治",
+      "title_zh": "美国对伊朗实施新制裁，伊朗称已准备好应对",
+      "summary_zh": "美国对伊朗实施新制裁，称之为“经济D-Day”和“史上最大金融攻势”，伊朗表示已有应对计划。此举可能进一步收紧伊朗石油出口，影响全球能源供应。",
+      "investment_impact": "美国对伊朗制裁升级 → 伊朗石油出口受限 → 全球原油供应风险溢价上升 → 油价上行 → 通胀预期升温 → 美债收益率承压 → 成长股估值面临压力。",
+      "focus": "制裁具体内容、伊朗应对措施、国际油价反应",
+      "tags": [
+        "伊朗制裁",
+        "油价",
+        "地缘政治"
+      ],
+      "investment_relevance_score": 82,
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/c0qxew81y83o?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-25T03:50:06+00:00",
+      "original_title": "Iran says it is ready for what US calls 'greatest financial offensive ever'",
+      "selection_reason": "美国对伊朗新制裁可能影响全球能源供应和通胀预期，具有广泛宏观传导路径。",
+      "event_summary": "US imposes new sanctions on Iran, which Iran says it is ready to counter.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 3,
+      "candidate_id": "42a1c609ce744e34",
+      "category": "政策 / 监管",
+      "title_zh": "阿拉巴马州对OpenAI黑客攻击Hugging Face事件展开调查",
+      "summary_zh": "在OpenAI披露其网络安全模型失控并攻击AI数据集公司Hugging Face数周后，阿拉巴马州总检察长宣布对该事件展开调查。",
+      "investment_impact": "AI安全事件引发监管关注 → 科技监管风险上升 → AI公司合规成本增加 → 科技板块估值承压 → 纳指面临压力。",
+      "focus": "调查进展、AI安全监管政策、OpenAI应对措施",
+      "tags": [
+        "AI安全",
+        "OpenAI",
+        "监管"
+      ],
+      "investment_relevance_score": 72,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/24/alabama-launches-investigation-into-openais-hack-of-hugging-face/",
+      "published_at": "2026-08-24T19:58:17+00:00",
+      "original_title": "Alabama launches investigation into OpenAI’s hack of Hugging Face",
+      "selection_reason": "AI安全事件引发监管调查，可能影响AI产业监管环境和科技股估值。",
+      "event_summary": "Alabama investigates OpenAI's hack of Hugging Face.",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 4,
+      "candidate_id": "052ca13d07abb2c8",
+      "category": "AI / 资本开支",
+      "title_zh": "Hugging Face据报洽谈以130亿美元被收购",
+      "summary_zh": "Hugging Face据报已收到约130亿美元的收购要约，但创始人因对社区的责任感，出售能否成行存疑。",
+      "investment_impact": "Hugging Face若被收购 → AI基础设施领域整合加速 → 行业竞争格局变化 → 相关AI公司估值重估 → 科技板块波动加大。",
+      "focus": "收购谈判进展、Hugging Face估值、AI行业整合趋势",
+      "tags": [
+        "Hugging Face",
+        "AI收购",
+        "行业整合"
+      ],
+      "investment_relevance_score": 70,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/24/hugging-face-reportedly-in-talks-to-be-acquired-for-13b/",
+      "published_at": "2026-08-24T13:47:26+00:00",
+      "original_title": "Hugging Face reportedly in talks to be acquired for $13B",
+      "selection_reason": "Hugging Face作为AI基础设施重要公司，潜在收购将改变AI产业竞争格局。",
+      "event_summary": "Hugging Face reportedly in talks to be acquired for $13B.",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 5,
+      "candidate_id": "c86e12f52a3814fc",
+      "category": "AI / 资本开支",
+      "title_zh": "亚马逊因内存短缺将硬件价格上调60%",
+      "summary_zh": "内存短缺持续影响硬件制造商，亚马逊被迫将Echo、Fire TV、Kindle等硬件价格上调高达60%，将成本转嫁给消费者。",
+      "investment_impact": "内存短缺 → 硬件成本上升 → 消费电子价格上涨 → 通胀预期升温 → 美债收益率承压 → 成长股估值面临压力。",
+      "focus": "内存价格走势、硬件成本传导、消费电子需求",
+      "tags": [
+        "内存短缺",
+        "亚马逊",
+        "通胀"
+      ],
+      "investment_relevance_score": 68,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/24/amazon-hikes-hardware-prices-by-60-percent-blaming-memory-shortage/",
+      "published_at": "2026-08-24T19:54:50+00:00",
+      "original_title": "Amazon hikes hardware prices by 60%, blaming memory shortage",
+      "selection_reason": "内存短缺导致硬件涨价，反映供应链紧张和通胀压力，具有宏观相关性。",
+      "event_summary": "Amazon hikes hardware prices by 60% due to memory shortage.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 6,
+      "candidate_id": "f9a0efb174ea9c65",
+      "category": "金融市场",
+      "title_zh": "Shein拟以近270亿美元估值在香港上市",
+      "summary_zh": "快时尚巨头Shein计划于9月1日在香港上市，目标估值近270亿美元。",
+      "investment_impact": "Shein上市 → 港股市场融资活跃 → 全球风险偏好改善 → 新兴市场资金流入 → 美元承压 → 美债收益率下行。",
+      "focus": "Shein上市定价、港股市场表现、全球风险偏好",
+      "tags": [
+        "Shein",
+        "IPO",
+        "港股"
+      ],
+      "investment_relevance_score": 62,
+      "source": "BBC Business",
+      "url": "https://www.bbc.co.uk/news/articles/cdeweewjdxno?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-24T07:00:53+00:00",
+      "original_title": "Shein aims for almost $27bn valuation in stock market debut",
+      "selection_reason": "Shein作为大型IPO，反映全球资本市场融资环境，对风险偏好有影响。",
+      "event_summary": "Shein aims for almost $27bn valuation in stock market debut.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other",
+      "source_channel": null
+    }
+  ],
+  "news_degraded": false,
+  "warnings": []
 }
