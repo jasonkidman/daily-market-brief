@@ -45,7 +45,7 @@ python -m src.smoke --base-dir work/smoke
 4. 进入 `Actions → Daily Market Report → Run workflow`，手动运行一次。
 5. 流程成功后，在该次运行的 `deploy` job 或 Pages 设置中查看站点 URL。
 
-每日 workflow 使用 `Asia/Shanghai` 时区，在周一至周日每天 10:00 运行，也支持手动触发。它会安装依赖、获取并校验数据、更新状态、生成 JSON、保留 7 日、渲染、运行测试与冒烟检查、提交 `data/reports/`、`state/`、`site/` 的真实变化，再通过 GitHub 官方 Pages Actions 发布 `site/`。
+每日 workflow 使用 GitHub Actions 的 UTC 定时配置 `0 1 * * *`，对应 `Asia/Shanghai` 时区周一至周日每天 09:00 运行，也支持手动触发。它会安装依赖、获取并校验数据、更新状态、生成 JSON、保留 7 日、渲染、运行测试与冒烟检查、提交 `data/reports/`、`state/`、`site/` 的真实变化，再通过 GitHub 官方 Pages Actions 发布 `site/`。
 
 ## 实际加仓后的操作
 
