@@ -50,6 +50,12 @@ class NewsSelectionError(ValueError):
     """Raised when model output violates the candidate-only contract."""
 
 
+class _ItemValidationError(NewsSelectionError):
+    def __init__(self, field: str, reason: str):
+        super().__init__(reason)
+        self.field = field
+
+
 class DeepSeekModelResult(str):
     """String-compatible model content with response metadata for observability."""
 
@@ -233,8 +239,24 @@ def _required_text(item: dict, key: str, limit: int) -> str:
     return value
 
 
+def _normalize_investment_impact(item: dict) -> tuple[str, bool]:
+    raw_value = item.get("investment_impact")
+    if not isinstance(raw_value, str):
+        raise _ItemValidationError("investment_impact", "investment_impact 类型不合法")
+    value = raw_value.strip()
+    normalized = value
+    for arrow in ("->", "=>", "➡", "⟶"):
+        normalized = normalized.replace(arrow, "→")
+    normalized = normalized.strip()
+    if not normalized or len(normalized) > INVESTMENT_IMPACT_LIMIT:
+        raise _ItemValidationError("investment_impact", "investment_impact 超出长度或为空")
+    if not _has_impact_path(normalized):
+        raise _ItemValidationError("investment_impact", "缺少资产变量及因果/条件传导路径")
+    return normalized, normalized != value
+
+
 def _has_impact_path(value: str) -> bool:
-    if value == "短期资产价格影响有限，暂以观察为主。":
+    if "短期资产价格影响有限，暂以观察为主" in value:
         return True
     variables = (
         "SPY", "Nasdaq", "纳指", "科技股", "美债", "收益率", "美元", "信用", "AI", "半导体",
@@ -244,71 +266,151 @@ def _has_impact_path(value: str) -> bool:
     return any(term in value for term in variables) and any(term in value for term in connectors)
 
 
-def _validated_tags(item: dict) -> list[str]:
+def _validated_tags(item: dict) -> tuple[list[str], bool]:
     tags = item.get("tags")
-    if not isinstance(tags, list) or not 1 <= len(tags) <= 4:
-        raise NewsSelectionError("tags 不合法。")
-    if any(not isinstance(tag, str) or not tag.strip() or len(tag.strip()) > TAG_LIMIT for tag in tags):
-        raise NewsSelectionError("tags 不合法。")
-    return [tag.strip() for tag in tags]
+    if not isinstance(tags, list):
+        raise _ItemValidationError("tags", "tags 必须是数组")
+    normalized_tags = []
+    for tag in tags:
+        if not isinstance(tag, str):
+            continue
+        value = tag.strip()
+        if not value or len(value) > TAG_LIMIT:
+            continue
+        if value not in normalized_tags:
+            normalized_tags.append(value)
+    normalized_tags = normalized_tags[:4]
+    if not normalized_tags:
+        raise _ItemValidationError("tags", "tags 清理后为空")
+    return normalized_tags, normalized_tags != tags
 
 
-def validate_selection(payload: Any, candidates: list[dict]) -> list[dict]:
+def _validate_item(item: Any, pool: dict[str, dict], raw_count: int) -> tuple[dict, list[str]]:
+    if not isinstance(item, dict):
+        raise _ItemValidationError("item", "news 条目必须是对象")
+    candidate_id = item.get("candidate_id")
+    rank = item.get("rank")
+    if not isinstance(rank, int) or isinstance(rank, bool) or not 1 <= rank <= raw_count:
+        raise _ItemValidationError("rank", "rank 不合法")
+    if candidate_id not in pool:
+        raise _ItemValidationError("candidate_id", "candidate_id 不在候选池")
+    if item.get("category") not in ALLOWED_CATEGORIES:
+        raise _ItemValidationError("category", "category 不合法")
+    try:
+        title_zh = _required_text(item, "title_zh", TITLE_ZH_LIMIT)
+        summary_zh = _required_text(item, "summary_zh", SUMMARY_ZH_LIMIT)
+    except NewsSelectionError as exc:
+        raise _ItemValidationError("text", str(exc)) from exc
+    investment_impact, impact_normalized = _normalize_investment_impact(item)
+    try:
+        focus = _required_text(item, "focus", FOCUS_LIMIT)
+        selection_reason = _required_text(item, "selection_reason", SELECTION_REASON_LIMIT)
+    except NewsSelectionError as exc:
+        raise _ItemValidationError("text", str(exc)) from exc
+    tags, tags_normalized = _validated_tags(item)
+    score = item.get("investment_relevance_score")
+    if not isinstance(score, int) or isinstance(score, bool) or not 50 <= score <= 100:
+        raise _ItemValidationError("investment_relevance_score", "investment_relevance_score 不合法")
+    source = pool[candidate_id]
+    validated = {
+        "rank": rank,
+        "candidate_id": candidate_id,
+        "category": item["category"],
+        "title_zh": title_zh,
+        "summary_zh": summary_zh,
+        "investment_impact": investment_impact,
+        "focus": focus,
+        "tags": tags,
+        "investment_relevance_score": score,
+        "source": source["source"],
+        "url": source["url"],
+        "published_at": source["published_at"],
+        "original_title": source["title"],
+        "selection_reason": selection_reason,
+        "event_summary": source.get("event_summary", source["title"]),
+        "topic_group": source.get("topic_group"),
+        "event_category": source.get("event_category", "other"),
+        "source_channel": source.get("source_channel"),
+    }
+    normalized_fields = []
+    if tags_normalized:
+        normalized_fields.append("tags")
+    if impact_normalized:
+        normalized_fields.append("investment_impact")
+    return validated, normalized_fields
+
+
+def _validate_selection_items(payload: Any, candidates: list[dict]) -> dict[str, Any]:
     data = _parse_payload(payload)
     news = data.get("news")
     if not isinstance(news, list):
         raise NewsSelectionError("news 必须是数组。")
     pool = {item["candidate_id"]: item for item in candidates}
-    seen, validated = set(), []
+    seen = set()
+    validated = []
+    issues = []
+    normalized_count = 0
     for item in news:
-        if not isinstance(item, dict):
-            raise NewsSelectionError("news 条目必须是对象。")
-        candidate_id = item.get("candidate_id")
-        rank = item.get("rank")
-        if not isinstance(rank, int) or isinstance(rank, bool) or not 1 <= rank <= len(news):
-            raise NewsSelectionError("rank 不合法。")
-        if candidate_id not in pool:
-            raise NewsSelectionError("candidate_id 不在候选池。")
+        candidate_id = item.get("candidate_id", "<missing>") if isinstance(item, dict) else "<non-object>"
         if candidate_id in seen:
-            raise NewsSelectionError("candidate_id 不得重复。")
-        if item.get("category") not in ALLOWED_CATEGORIES:
-            raise NewsSelectionError("category 不合法。")
-        title_zh = _required_text(item, "title_zh", TITLE_ZH_LIMIT)
-        summary_zh = _required_text(item, "summary_zh", SUMMARY_ZH_LIMIT)
-        investment_impact = _required_text(item, "investment_impact", INVESTMENT_IMPACT_LIMIT)
-        if not _has_impact_path(investment_impact):
-            raise NewsSelectionError("investment_impact 不合法。")
-        focus = _required_text(item, "focus", FOCUS_LIMIT)
-        tags = _validated_tags(item)
-        score = item.get("investment_relevance_score")
-        if not isinstance(score, int) or isinstance(score, bool) or not 50 <= score <= 100:
-            raise NewsSelectionError("investment_relevance_score 不合法。")
-        selection_reason = _required_text(item, "selection_reason", SELECTION_REASON_LIMIT)
+            issues.append({"candidate_id": candidate_id, "field": "candidate_id", "reason": "candidate_id 重复"})
+            continue
+        try:
+            selected, normalized_fields = _validate_item(item, pool, len(news))
+        except _ItemValidationError as exc:
+            issues.append({"candidate_id": candidate_id, "field": exc.field, "reason": str(exc)})
+            continue
         seen.add(candidate_id)
-        source = pool[candidate_id]
-        validated.append({
-            "rank": rank,
-            "candidate_id": candidate_id,
-            "category": item["category"],
-            "title_zh": title_zh,
-            "summary_zh": summary_zh,
-            "investment_impact": investment_impact,
-            "focus": focus,
-            "tags": tags,
-            "investment_relevance_score": score,
-            "source": source["source"],
-            "url": source["url"],
-            "published_at": source["published_at"],
-            "original_title": source["title"],
-            "selection_reason": selection_reason,
-            "event_summary": source.get("event_summary", source["title"]),
-            "topic_group": source.get("topic_group"),
-            "event_category": source.get("event_category", "other"),
-            "source_channel": source.get("source_channel"),
-        })
+        validated.append(selected)
+        if normalized_fields:
+            normalized_count += 1
+            for field in normalized_fields:
+                issues.append({"candidate_id": candidate_id, "field": field, "action": "normalized"})
+    validated.sort(key=lambda item: item["rank"])
+    batch_validated = []
+    topic_counts: dict[str, int] = {}
+    for item in validated:
+        if batch_validated and item["investment_relevance_score"] > batch_validated[-1]["investment_relevance_score"]:
+            issues.append({
+                "candidate_id": item["candidate_id"],
+                "field": "investment_relevance_score",
+                "reason": "分数未按 rank 非递增",
+            })
+            continue
+        topic_group = item["topic_group"]
+        if topic_group:
+            topic_counts[topic_group] = topic_counts.get(topic_group, 0) + 1
+            if topic_counts[topic_group] > 2 and (
+                item["investment_relevance_score"] < 85
+                or "主题上限例外" not in item["selection_reason"]
+            ):
+                issues.append({
+                    "candidate_id": item["candidate_id"],
+                    "field": "topic_group",
+                    "reason": "topic_group 超过主题上限",
+                })
+                topic_counts[topic_group] -= 1
+                continue
+        batch_validated.append(item)
+    validated = batch_validated
+    for rank, item in enumerate(validated, start=1):
+        item["rank"] = rank
+    return {
+        "raw_count": len(news),
+        "validated": validated,
+        "issues": issues,
+        "normalized_count": normalized_count,
+    }
+
+
+def validate_selection(payload: Any, candidates: list[dict]) -> list[dict]:
+    result = _validate_selection_items(payload, candidates)
+    if result["raw_count"] != len(result["validated"]):
+        issue = next((item for item in result["issues"] if "reason" in item), None)
+        raise NewsSelectionError(issue["reason"] if issue else "news 条目不合法。")
+    validated = result["validated"]
     if sorted(item["rank"] for item in validated) != list(range(1, len(validated) + 1)):
         raise NewsSelectionError("rank 必须从 1 连续排列。")
-    validated.sort(key=lambda item: item["rank"])
     if any(
         item["investment_relevance_score"] < next_item["investment_relevance_score"]
         for item, next_item in zip(validated, validated[1:])
@@ -429,7 +531,26 @@ def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict
             )
             _log_stage_b_raw_response(raw)
             try:
-                selected = validate_selection(raw, candidates)
+                validation = _validate_selection_items(raw, candidates)
+                for issue in validation["issues"]:
+                    if issue.get("action") == "normalized":
+                        print(
+                            f"[NEWS STAGE B VALIDATION] candidate_id={issue['candidate_id']} "
+                            f"field={issue['field']} action=normalized"
+                        )
+                    else:
+                        print(
+                            f"[NEWS STAGE B VALIDATION] candidate_id={issue['candidate_id']} "
+                            f"field={issue['field']} action=dropped reason={issue['reason']}"
+                        )
+                selected = validation["validated"]
+                print(
+                    f"[NEWS STAGE B VALIDATION] raw_count={validation['raw_count']} "
+                    f"valid_count={len(selected)} normalized_count={validation['normalized_count']} "
+                    f"dropped_count={validation['raw_count'] - len(selected)}"
+                )
+                if validation["raw_count"] > 0 and not selected:
+                    raise NewsSelectionError("所有新闻条目均未通过 validation。")
             except Exception as exc:
                 print(f"[NEWS STAGE B] validate_selection: failed | reason={exc}")
                 if usage_tracker is not None:

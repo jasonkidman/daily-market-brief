@@ -53,7 +53,6 @@ def test_validates_enriched_investment_fields_and_keeps_source_metadata_program_
     {"investment_relevance_score": 92.5},
     {"investment_impact": "利好科技股"},
     {"tags": []},
-    {"tags": ["x"] * 5},
     {"title_zh": "标" * 71},
     {"summary_zh": "摘" * 181},
     {"investment_impact": "10Y 美债 → " + "影" * 221},
@@ -97,6 +96,107 @@ def test_rejects_tag_longer_than_sixteen_characters():
         validate_selection(
             {"news": [{**enriched_selection(), "tags": ["标" * 17]}]}, pool
         )
+
+
+def test_stage_b_keeps_other_items_when_one_tags_item_is_invalid(capsys):
+    pool = [candidate(str(i), f"Title {i}", f"https://x/{i}") for i in range(10)]
+
+    def model(system_prompt, user_payload, api_key):
+        items = [enriched_selection(str(i), i + 1, 100 - i) for i in range(10)]
+        items[3]["tags"] = "not-a-list"
+        return json.dumps({"news": items}, ensure_ascii=False)
+
+    selected, warning = select_news(pool, "key", call_model=model, sleep_fn=lambda _: None)
+
+    output = capsys.readouterr().out
+    assert warning is None
+    assert len(selected) == 9
+    assert [item["rank"] for item in selected] == list(range(1, 10))
+    assert "candidate_id=3" in output
+    assert "field=tags" in output
+    assert "action=dropped" in output
+    assert "raw_count=10 valid_count=9" in output
+
+
+def test_stage_b_keeps_other_items_when_one_investment_impact_item_is_invalid(capsys):
+    pool = [candidate(str(i), f"Title {i}", f"https://x/{i}") for i in range(10)]
+
+    def model(system_prompt, user_payload, api_key):
+        items = [enriched_selection(str(i), i + 1, 100 - i) for i in range(10)]
+        items[6]["investment_impact"] = "利好科技股"
+        return json.dumps({"news": items}, ensure_ascii=False)
+
+    selected, warning = select_news(pool, "key", call_model=model, sleep_fn=lambda _: None)
+
+    output = capsys.readouterr().out
+    assert warning is None
+    assert len(selected) == 9
+    assert "candidate_id=6" in output
+    assert "field=investment_impact" in output
+    assert "action=dropped" in output
+    assert "raw_count=10 valid_count=9" in output
+
+
+def test_stage_b_normalizes_tags_without_inventing_tags():
+    pool = [candidate("1", "Fed holds rates", "https://x/1")]
+
+    def model(system_prompt, user_payload, api_key):
+        item = enriched_selection()
+        item["tags"] = [" Fed ", "", "Fed", " 美债 ", "多余标签"]
+        return json.dumps({"news": [item]}, ensure_ascii=False)
+
+    selected, warning = select_news(pool, "key", call_model=model, sleep_fn=lambda _: None)
+
+    assert warning is None
+    assert selected[0]["tags"] == ["Fed", "美债", "多余标签"]
+
+
+def test_stage_b_normalizes_impact_arrow_without_relaxing_path_check():
+    pool = [candidate("1", "Fed holds rates", "https://x/1")]
+
+    def model(system_prompt, user_payload, api_key):
+        item = enriched_selection()
+        item["investment_impact"] = "通胀预期上升 -> 收益率承压 -> 成长股估值面临压力。"
+        return json.dumps({"news": [item]}, ensure_ascii=False)
+
+    selected, warning = select_news(pool, "key", call_model=model, sleep_fn=lambda _: None)
+
+    assert warning is None
+    assert selected[0]["investment_impact"] == "通胀预期上升 → 收益率承压 → 成长股估值面临压力。"
+
+
+def test_stage_b_preserves_dynamic_news_count():
+    pool = [candidate(str(i), f"Title {i}", f"https://x/{i}") for i in range(12)]
+
+    def model(system_prompt, user_payload, api_key):
+        return json.dumps({
+            "news": [enriched_selection(str(i), i + 1, 100 - i) for i in range(12)]
+        }, ensure_ascii=False)
+
+    selected, warning = select_news(pool, "key", call_model=model, sleep_fn=lambda _: None)
+
+    assert warning is None
+    assert len(selected) == 12
+
+
+def test_stage_b_retries_only_when_all_items_fail_validation():
+    attempts = []
+
+    def model(system_prompt, user_payload, api_key):
+        attempts.append(1)
+        items = [enriched_selection(str(i), i + 1, 100 - i) for i in range(10)]
+        for item in items:
+            item["investment_impact"] = "利好科技股"
+        return json.dumps({"news": items}, ensure_ascii=False)
+
+    selected, warning = select_news(
+        [candidate(str(i), f"Title {i}", f"https://x/{i}") for i in range(10)],
+        "key", call_model=model, sleep_fn=lambda _: None,
+    )
+
+    assert selected == []
+    assert "新闻 AI 处理暂时失败" in warning
+    assert len(attempts) == 2
 
 
 @pytest.mark.parametrize("impact", [
