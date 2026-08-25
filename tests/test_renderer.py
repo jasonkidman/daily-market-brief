@@ -248,10 +248,11 @@ def test_dashboard_visual_structure_maps_existing_data_without_changing_it(tmp_p
     css = (site / "style.css").read_text(encoding="utf-8")
     compact_css = "".join(css.split())
     assert 'class="summary-icon"' in html and "TODAY IN ONE LINE" not in html
-    assert html.count('class="market-line"') == 3
-    assert 'class="market-value up">100.00 <span class="arrow">▲</span>' in html
-    assert 'class="market-value down">100.00 <span class="arrow">▼</span>' in html
-    assert 'class="market-value flat">100.00 <span class="arrow">→</span>' in html
+    assert html.count('class="market-value">100.00</div>') == 3
+    assert html.count('class="market-performance"') == 3
+    assert 'class="market-daily stat"><strong class="up"><span class="arrow">▲</span>' in html
+    assert 'class="market-daily stat"><strong class="down"><span class="arrow">▼</span>' in html
+    assert 'class="market-daily stat"><strong class="flat"><span class="arrow">→</span>' in html
     assert html.count('class="icon-wrap"') == 4
     assert html.count('class="context-info"') == 4
     assert html.count('class="draw-layout"') == 2
@@ -259,7 +260,7 @@ def test_dashboard_visual_structure_maps_existing_data_without_changing_it(tmp_p
     assert html.count('class="card news-card"') == 8
     assert 'class="nrow"' not in html
     assert '.page{width:min(1440px,calc(100%-34px))' in compact_css
-    assert '.market-line{display:grid;grid-template-columns:minmax(0,1.25fr).62fr.78fr' in compact_css
+    assert '.market-performance{display:flex;justify-content:space-between;align-items:baseline' in compact_css
     assert '.breadth-grid{display:grid;grid-template-columns:32%68%' in compact_css
     assert '.news-layout{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}' in compact_css
     assert '.draw-layout{display:grid;grid-template-columns:100px1fr105px' in compact_css
@@ -335,8 +336,8 @@ def test_desktop_density_uses_compact_spacing_without_shrinking_primary_numbers(
 
     assert ".section{padding:18px0" in compact_css
     assert ".section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}" in compact_css
-    assert ".market-card{padding:13px14px}" in compact_css
-    assert ".market-value{font-size:28px" in compact_css
+    assert ".market-card{padding:13px14px15px;display:flex;flex-direction:column;min-height:140px}" in compact_css
+    assert ".market-value{margin-top:10px;font-size:31px;font-weight:760" in compact_css
     assert ".draw-card{padding:13px14px}" in compact_css
     assert ".news-card{min-height:290px;padding:15px15px13px" in compact_css
     assert ".news-summary{margin:0;color:var(--muted);font-size:12px;line-height:1.75}" in compact_css
@@ -615,8 +616,8 @@ def test_information_hierarchy_styles_metrics_drawdown_states_and_news_ranks(tmp
     assert 'class="card draw-card draw-pending"' in html
     assert html.count('class="card news-card"') == 5
     assert 'class="nrow"' not in html
-    assert ".statspan{font-size:9px;color:var(--muted)}" in compact_css
-    assert ".statstrong{font-size:12px}" in compact_css
+    assert ".statspan{color:var(--muted)}" in compact_css
+    assert ".statstrong{font-variant-numeric:tabular-nums}" in compact_css
     assert ".context-change{display:block;margin-top:3px;padding:0;font-size:11.5px" in compact_css
     assert ".draw-status{font-size:8px" in compact_css
     for selector in (".status-normal", ".status-near", ".status-pending", ".status-executed"):
@@ -744,7 +745,7 @@ def test_v5_visual_contract_is_the_rendered_dom_and_css_baseline(tmp_path):
     compact_css = "".join((site / "style.css").read_text(encoding="utf-8").split())
     for class_name in (
         "page", "summary", "section-title", "section-left", "marker", "note",
-        "market-line", "icon-wrap", "context-info", "help", "breadth-grid",
+        "market-performance", "icon-wrap", "context-info", "help", "breadth-grid",
         "breadth-left", "ratio-label", "ratio", "breadth-copy", "mini", "bbar",
         "formula", "sector-card", "sector-head", "track", "fill", "sret",
         "draw-grid", "draw-card", "draw-layout", "draw-index", "dd", "small",
@@ -786,3 +787,50 @@ def test_drawdown_index_titles_stay_aligned_without_wrapping_on_desktop(tmp_path
     assert "font-size:12px;white-space:nowrap" in compact_css
     assert "@media(max-width:900px)" in compact_css
     assert ".draw-index{width:auto;min-width:0}" in compact_css
+
+
+def test_us_index_daily_change_has_primary_visual_weight(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    (reports / "2026-08-12.json").write_text(json.dumps(report("2026-08-12")), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    compact_css = "".join((site / "style.css").read_text(encoding="utf-8").split())
+    assert html.count('class="market-daily stat"') == 3
+    assert html.count(">昨日</span>") == 3
+    assert html.count('class="market-ytd stat"') == 3
+    assert ".market-dailystrong{font-size:29px;font-weight:800" in compact_css
+    assert ".market-dailyspan{font-size:11px" in compact_css
+    assert ".market-ytdstrong{font-size:17px" in compact_css
+    assert ".market-ytdspan{font-size:10px" in compact_css
+    assert ".market-value{margin-top:10px;font-size:31px;font-weight:760" in compact_css
+
+
+def test_us_index_cards_keep_price_and_performance_on_separate_rows(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["market"]["sp500"]["daily_return"] = -0.01
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    compact_css = "".join((site / "style.css").read_text(encoding="utf-8").split())
+    assert html.count('class="market-value">') == 3
+    assert html.count('class="market-performance"') == 3
+    assert 'class="market-value down"' not in html
+    assert 'class="market-daily stat"' in html
+    assert 'class="market-daily stat"><strong class="down"><span class="arrow">▼</span>' in html
+    assert ".market-card{padding:13px14px15px;display:flex;flex-direction:column;min-height:140px}" in compact_css
+    assert ".market-value{margin-top:10px;font-size:31px;font-weight:760" in compact_css
+    assert ".market-performance{display:flex;justify-content:space-between;align-items:baseline" in compact_css
+    assert ".market-dailystrong{font-size:29px;font-weight:800" in compact_css
+    assert ".market-ytdstrong{font-size:17px" in compact_css
+    assert ".market-daily.arrow{margin-right:2px;font-size:21px;vertical-align:baseline;color:inherit}" in compact_css

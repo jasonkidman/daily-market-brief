@@ -45,12 +45,11 @@ select{height:31px;min-width:174px;padding:0 9px;border:1px solid var(--line);bo
 
 .card{background:var(--surface);border:1px solid var(--line);border-radius:4px}
 .market-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.market-card{padding:13px 14px}
+.market-card{padding:13px 14px 15px;display:flex;flex-direction:column;min-height:140px}
 .market-top{display:flex;justify-content:space-between}.market-top h3{margin:0;font-size:13px}.ticker{color:var(--muted);font-size:9px}
-.market-line{display:grid;grid-template-columns:minmax(0,1.25fr) .62fr .78fr;gap:13px;align-items:end;margin-top:10px}
-.market-value{font-size:28px;font-weight:760;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
-.arrow{margin-left:6px;font-size:13px;vertical-align:2px}
-.stat{display:flex;align-items:baseline;gap:4px;white-space:nowrap}.stat span{font-size:9px;color:var(--muted)}.stat strong{font-size:12px}
+.market-value{margin-top:10px;font-size:31px;font-weight:760;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--navy)}
+.market-performance{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:14px;min-width:0}
+.stat{display:flex;align-items:baseline;gap:4px;white-space:nowrap}.stat span{color:var(--muted)}.stat strong{font-variant-numeric:tabular-nums}.market-daily{min-width:0}.market-daily strong{font-size:29px;font-weight:800;line-height:1}.market-daily span{font-size:11px}.market-ytd strong{font-size:17px;font-weight:780;line-height:1}.market-ytd span{font-size:10px}.market-daily .arrow{margin-right:2px;font-size:21px;vertical-align:baseline;color:inherit}
 .up{color:var(--green)}.down{color:var(--red)}.flat{color:var(--navy)}
 
 .context-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
