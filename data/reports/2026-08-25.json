@@ -1,9 +1,9 @@
 {
   "report_date": "2026-08-25",
-  "generated_at": "2026-08-25 10:13 CST",
+  "generated_at": "2026-08-25 11:39 CST",
   "market_date": "2026-08-24",
-  "status": "ok",
-  "status_label": "🟢 数据更新正常",
+  "status": "partial",
+  "status_label": "🟠 部分数据源异常",
   "market_data_valid": true,
   "core_market_valid": true,
   "context_market_valid": true,
@@ -35,12 +35,12 @@
     },
     "dow": {
       "market_date": "2026-08-24",
-      "close": 53417.16015625,
-      "daily_return": 0.0026305611553412156,
-      "ytd_return": 0.11139210815947265,
+      "close": 53417.19921875,
+      "daily_return": 0.0026312943514934517,
+      "ytd_return": 0.1113929208899529,
       "ath": 54349.12109375,
       "ath_date": "2026-08-05",
-      "drawdown": 0.017147672653112567,
+      "drawdown": 0.017146953920238572,
       "name": "Dow Jones",
       "ticker": "^DJI",
       "valid": true
@@ -65,8 +65,8 @@
     },
     "dxy": {
       "market_date": "2026-08-24",
-      "close": 99.02899932861328,
-      "daily_return": 0.002317776009941097,
+      "close": 99.0530014038086,
+      "daily_return": 0.002560711986195452,
       "name": "美元指数",
       "ticker": "DX-Y.NYB",
       "valid": true
@@ -84,7 +84,7 @@
     "tech_relative": -0.006944277125492393,
     "small_cap_relative": -0.004748827478691653,
     "vix_daily_return": 0.04758759164460291,
-    "dxy_daily_return": 0.002317776009941097,
+    "dxy_daily_return": 0.002560711986195452,
     "us10y_bp_change": -3.399991989135742,
     "signals": [
       {
@@ -239,7 +239,7 @@
       "ath": 7798.990234375,
       "ath_date": "2026-08-13",
       "last_market_date": "2026-08-24",
-      "last_updated_at": "2026-08-25T10:13:16.873497+08:00",
+      "last_updated_at": "2026-08-25T11:39:08.838773+08:00",
       "current_close": 7652.85986328125,
       "current_drawdown": 0.018737088610479624,
       "pool": 140000,
@@ -295,7 +295,7 @@
       "ath": 30660.599609375,
       "ath_date": "2026-06-02",
       "last_market_date": "2026-08-24",
-      "last_updated_at": "2026-08-25T10:13:16.873497+08:00",
+      "last_updated_at": "2026-08-25T11:39:08.838773+08:00",
       "current_close": 29023.181640625,
       "current_drawdown": 0.053404629707546,
       "pool": 60000,
@@ -346,57 +346,14 @@
   },
   "portfolio_action": "hold",
   "market_summary": {
-    "market": "标普500收跌0.28%，纳斯达克跌0.97%，道指上涨0.26%；市场宽度尚可，但科技/成长板块相对承压。",
-    "drivers": "市场同时关注美加贸易摩擦升级与美国对伊朗金融攻势等地缘政治风险。",
+    "market": "三大指数分化，标普500下跌0.3%，纳指100下跌近1%，道指小幅上涨；市场宽度尚可，标普成分中约六成上涨，8个行业板块收涨。",
+    "drivers": "科技相对承压（纳指100较标普500落后0.69个百分点），同时资金更多偏向必需消费、金融和公用事业等防御/金融方向。",
     "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
     "degraded": false
   },
-  "news": [
-    {
-      "rank": 1,
-      "candidate_id": "0e001424400995e5",
-      "category": "地缘政治",
-      "title_zh": "美加贸易战升级，特朗普威胁加码汽车关税，加拿大誓言报复",
-      "summary_zh": "美国与加拿大贸易谈判破裂后，特朗普威胁对汽车加征更高关税，加拿大总理卡尼指责特朗普试图“摧毁”加拿大汽车业，并表示只有美国拿出“正确态度”才考虑恢复谈判，企业担忧成本上升。",
-      "investment_impact": "美国对加拿大汽车加征关税 → 北美汽车供应链成本上升 → 通胀预期抬升 → 美债收益率承压 → 成长股估值面临压力；加拿大报复 → 美国出口与跨国企业盈利预期承压。具体影响取决于关税范围与谈判进展。",
-      "focus": "关注美加后续谈判进展、汽车关税实际生效范围、美国CPI及汽车价格、加拿大反制措施。",
-      "tags": [
-        "美加贸易",
-        "汽车关税",
-        "通胀预期"
-      ],
-      "investment_relevance_score": 78,
-      "source": "BBC Business",
-      "url": "https://www.bbc.co.uk/news/articles/c93vpd60654o?at_medium=RSS&at_campaign=rss",
-      "published_at": "2026-08-25T00:25:52+00:00",
-      "original_title": "US-Canada trade war escalates as Trump threatens tariff hike on autos after Carney vows to retaliate",
-      "selection_reason": "美加贸易战出现新升级，特朗普威胁对汽车加税，加拿大总理卡尼誓言报复，直接影响北美汽车供应链与美国通胀预期，对美股盈利预期有实质影响。",
-      "event_summary": "US-Canada trade war escalates as Trump threatens tariff hike on autos and Carney vows retaliation, with businesses fearing impact.",
-      "topic_group": "GEOPOLITICS"
-    },
-    {
-      "rank": 2,
-      "candidate_id": "375bd938398a0571",
-      "category": "地缘政治",
-      "title_zh": "美国财长宣布对伊朗发动“最大金融攻势”，切断所有经济联系",
-      "summary_zh": "美国财长贝森特表示，将切断与伊朗的所有经济联系，并孤立任何与伊朗有金融合作的国家，称这是对伊朗的“最强大金融攻势”，地缘风险显著升级。",
-      "investment_impact": "美国切断与伊朗所有经济联系 → 伊朗石油出口受限预期增强 → 油价上行风险 → 通胀预期上升 → 美债收益率承压 → 成长股估值承压；地缘风险溢价上升 → 风险资产波动加大。具体影响取决于执行力度与全球配合程度。",
-      "focus": "关注油价反应、对伊朗石油出口的实质影响、其他大国是否配合制裁、霍尔木兹海峡局势。",
-      "tags": [
-        "伊朗制裁",
-        "油价风险",
-        "地缘冲突"
-      ],
-      "investment_relevance_score": 74,
-      "source": "BBC News",
-      "url": "https://www.bbc.co.uk/news/articles/c0qxew81y83o?at_medium=RSS&at_campaign=rss",
-      "published_at": "2026-08-24T23:48:25+00:00",
-      "original_title": "Iran faces 'greatest financial offensive ever', says US treasury secretary",
-      "selection_reason": "美国对伊朗金融制裁升级，可能推升油价并加大全球地缘风险，直接影响通胀与风险偏好，属于高优先级地缘事件。",
-      "event_summary": "US Treasury secretary says severing all economic ties with Iran in 'greatest financial offensive'.",
-      "topic_group": "GEOPOLITICS"
-    }
-  ],
-  "news_degraded": false,
-  "warnings": []
+  "news": [],
+  "news_degraded": true,
+  "warnings": [
+    "⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：error: investment_impact 不合法。"
+  ]
 }
