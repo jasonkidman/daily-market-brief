@@ -43,10 +43,50 @@ def dedupe_candidates(candidates: list[dict], recent_selected: list[dict] = None
     kept = []
     for candidate in candidates:
         if canonical_url(candidate["url"]) in exact_recent_urls or normalize_title(candidate["title"]) in exact_recent_titles:
+            reason = "duplicate_url" if canonical_url(candidate["url"]) in exact_recent_urls else "duplicate_title"
+            print(
+                f"[NEWS CANDIDATE] candidate_id={candidate.get('candidate_id', '')} "
+                f"| title={candidate.get('title', '')} | source={candidate.get('source', '')} "
+                f"| published_at={candidate.get('published_at', '')} | stage=dedup "
+                f"| action=drop | reason={reason}"
+            )
             continue
         match_index = next((i for i, existing in enumerate(kept) if _duplicate(candidate, existing)), None)
         if match_index is None:
             kept.append(candidate)
-        elif _quality(candidate) > _quality(kept[match_index]):
-            kept[match_index] = candidate
+            action = "keep"
+        else:
+            existing = kept[match_index]
+            if canonical_url(candidate["url"]) == canonical_url(existing["url"]):
+                reason = "duplicate_url"
+            elif normalize_title(candidate["title"]) == normalize_title(existing["title"]):
+                reason = "duplicate_title"
+            else:
+                reason = "similar_title"
+            if _quality(candidate) > _quality(existing):
+                kept[match_index] = candidate
+                print(
+                    f"[NEWS CANDIDATE] candidate_id={existing.get('candidate_id', '')} "
+                    f"| title={existing.get('title', '')} | source={existing.get('source', '')} "
+                    f"| published_at={existing.get('published_at', '')} | stage=dedup "
+                    f"| action=drop | reason=replaced_by_higher_quality_candidate "
+                    f"| retained_candidate_id={candidate.get('candidate_id', '')}"
+                )
+                action = "replace"
+                reason = "replaced_by_higher_quality_candidate"
+            else:
+                print(
+                    f"[NEWS CANDIDATE] candidate_id={candidate.get('candidate_id', '')} "
+                    f"| title={candidate.get('title', '')} | source={candidate.get('source', '')} "
+                    f"| published_at={candidate.get('published_at', '')} | stage=dedup "
+                    f"| action=drop | reason={reason} "
+                    f"| retained_candidate_id={existing.get('candidate_id', '')}"
+                )
+                continue
+        print(
+            f"[NEWS CANDIDATE] candidate_id={candidate.get('candidate_id', '')} "
+            f"| title={candidate.get('title', '')} | source={candidate.get('source', '')} "
+            f"| published_at={candidate.get('published_at', '')} | stage=dedup "
+            f"| action={action} | reason={reason if action == 'replace' else 'not_duplicate'}"
+        )
     return kept

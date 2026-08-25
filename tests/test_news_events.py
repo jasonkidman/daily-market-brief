@@ -193,6 +193,23 @@ def test_cluster_caps_input_to_fifty_by_priority_and_recency():
     assert "p0" in events[0]["candidate_ids"]
 
 
+def test_cluster_logs_cap_counts_and_each_cap_drop(capsys):
+    pool = [candidate(f"candidate-{index}", priority="P2", published_at=f"2026-08-12T{index % 24:02d}:00:00+00:00")
+            for index in range(79)]
+
+    def model(system_prompt, user_payload, api_key):
+        ids = [item["candidate_id"] for item in __import__("json").loads(user_payload)["candidates"]]
+        return cluster_payload(event("event_001", ids))
+
+    cluster_news_events(pool, "key", call_model=model, sleep_fn=lambda _: None)
+
+    output = capsys.readouterr().out
+    assert "[NEWS STAGE A CAP] pre_cap=79 actual_input=50 cap_dropped=29" in output
+    assert output.count("stage=stage_a_cap | action=drop | reason=input_cap_50") == 29
+    assert output.count("stage=stage_a_cap | action=keep") == 50
+    assert "[NEWS STAGE A MAPPING] candidate_id=candidate-" in output
+
+
 def test_cluster_two_failures_uses_candidate_per_event_fallback():
     calls, sleeps = [], []
 

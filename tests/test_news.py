@@ -301,6 +301,42 @@ def test_rss_failure_does_not_block_other_sources():
     assert len(warnings) == 1
 
 
+def test_rss_logs_source_counts_and_received_candidate(capsys):
+    now = datetime(2026, 8, 12, tzinfo=ZoneInfo("UTC"))
+    entry = SimpleNamespace(title="Fed holds rates", link="https://good/story", summary="Summary",
+                            published_parsed=now.timetuple())
+
+    candidates, warnings = fetch_candidates(
+        [{"name": "Federal Reserve - Monetary Policy", "url": "https://good/rss", "priority": "P0"}],
+        now,
+        parser=lambda url: SimpleNamespace(entries=[entry]),
+    )
+
+    output = capsys.readouterr().out
+    assert warnings == []
+    assert len(candidates) == 1
+    assert "[NEWS RSS SOURCE] source=Federal Reserve - Monetary Policy raw=1 accepted=1 warning=<none>" in output
+    assert "stage=rss_fetch | action=received" in output
+    assert "title=Fed holds rates" in output
+
+
+def test_final_eligibility_logs_drop_reasons(capsys):
+    now = datetime(2026, 8, 12, 12, 0, tzinfo=ZoneInfo("UTC"))
+    candidates = [
+        {**candidate("old", "Old", "https://x/old"), "published_at": "2026-08-11T11:59:00+00:00"},
+        {**candidate("future", "Future", "https://x/future"), "published_at": "2026-08-12T12:01:00+00:00"},
+        {**candidate("missing", "Missing", "https://x/missing"), "published_at": ""},
+        {**candidate("invalid", "Invalid", "https://x/invalid"), "published_at": "not-a-time"},
+    ]
+
+    assert filter_final_candidates(candidates, now) == []
+    output = capsys.readouterr().out
+    assert "candidate_id=old" in output and "reason=too_old" in output
+    assert "candidate_id=future" in output and "reason=future_timestamp" in output
+    assert "candidate_id=missing" in output and "reason=missing_timestamp" in output
+    assert "candidate_id=invalid" in output and "reason=invalid_timestamp" in output
+
+
 def test_disabled_rss_source_is_not_requested_and_produces_no_warning():
     now = datetime(2026, 8, 12, tzinfo=ZoneInfo("UTC"))
     requested = []
@@ -412,6 +448,20 @@ def test_final_eligibility_rejects_future_and_invalid_timestamps():
     ]
 
     assert filter_final_candidates(candidates, now) == []
+
+
+def test_dedupe_logs_drop_and_replace_reasons(capsys):
+    items = [
+        candidate("first", "Same title", "https://x/one", source="BBC News", summary="short", priority="P1"),
+        candidate("second", "Same title", "https://x/two", source="Reuters", summary="long summary", priority="P0"),
+    ]
+
+    assert [item["candidate_id"] for item in dedupe_candidates(items)] == ["second"]
+    output = capsys.readouterr().out
+    assert "candidate_id=first" in output and "action=drop" in output
+    assert "reason=replaced_by_higher_quality_candidate" in output
+    assert "retained_candidate_id=second" in output
+    assert "candidate_id=second" in output and "action=replace" in output
 
 
 def test_source_channel_is_source_metadata_not_event_category():

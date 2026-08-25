@@ -23,6 +23,7 @@ from .news_events import (
     build_event_representatives,
     cluster_news_events,
     event_selection_candidates,
+    stage_a_input_counts,
     validate_event_clusters,
 )
 from .report import load_reports, retain_latest_reports, write_report
@@ -169,16 +170,22 @@ def _recent_news_events(reports: list[dict]) -> list[dict]:
     return events
 
 
-def _log_news_pipeline(rss_count: int, window_count: int, deduped_count: int,
+def _log_news_pipeline(rss_raw_count: int, within_24h_count: int, deduplicated_count: int,
+                       stage_a_pre_cap_count: int, stage_a_actual_input_count: int,
                        event_representatives: list[dict], stage_b_candidates: list[dict],
+                       stage_b_raw_count: int, stage_b_validated_count: int,
                        recent_events: list[dict], selected: list[dict]) -> None:
     print("[NEWS PIPELINE]")
-    print(f"RSS raw candidates: {rss_count}")
-    print(f"After 24h window filter: {window_count}")
-    print(f"Stage A input candidates: {deduped_count}")
+    print(f"rss_raw_count: {rss_raw_count}")
+    print(f"within_24h_count: {within_24h_count}")
+    print(f"deduplicated_count: {deduplicated_count}")
+    print(f"stage_a_pre_cap_count: {stage_a_pre_cap_count}")
+    print(f"stage_a_actual_input_count: {stage_a_actual_input_count}")
+    print(f"duplicates_removed: {within_24h_count - deduplicated_count}")
+    print(f"stage_a_cap_dropped: {stage_a_pre_cap_count - stage_a_actual_input_count}")
     print("[EVENT CLUSTERING]")
-    print(f"Stage A output events: {len(event_representatives)}")
-    print(f"Duplicates collapsed: {max(deduped_count - len(event_representatives), 0)}")
+    print(f"stage_a_output_event_count: {len(event_representatives)}")
+    print(f"clustering_collapsed: {max(stage_a_actual_input_count - len(event_representatives), 0)}")
     print("Largest clusters:")
     for event in sorted(event_representatives, key=lambda item: len(item["candidate_ids"]), reverse=True)[:5]:
         print(f"{event['event_summary']}: {len(event['candidate_ids'])} articles")
@@ -186,9 +193,11 @@ def _log_news_pipeline(rss_count: int, window_count: int, deduped_count: int,
     for event in event_representatives:
         print(f"event_id={event.get('event_id')} | category={event.get('event_category', 'other')} | title={event.get('event_summary', '')}")
     print("[STAGE B INPUT EVENTS]")
-    print(f"Stage B input events: {len(stage_b_candidates)}")
+    print(f"stage_b_input_count: {len(stage_b_candidates)}")
     for item in stage_b_candidates:
         print(f"candidate_id={item.get('candidate_id')} | category={item.get('event_category', 'other')} | title={item.get('title', '')}")
+    print(f"stage_b_raw_count: {stage_b_raw_count}")
+    print(f"stage_b_validated_count: {stage_b_validated_count}")
     print("[EVENT HISTORY]")
     print(f"Recent events checked: {len(recent_events)}")
     print("[TOPIC DISTRIBUTION]")
@@ -317,6 +326,7 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
     news_degraded = False
     api_key = os.environ.get("DEEPSEEK_API_KEY")
     usage_tracker = DeepSeekUsageTracker()
+    stage_b_observability = {"raw_count": 0, "validated_count": 0}
     if offline_fixture:
         news = _offline_news()
     else:
@@ -326,11 +336,13 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         candidates = filter_final_candidates(candidates, now)
         window_candidate_count = len(candidates)
         candidates = dedupe_candidates(candidates)
+        stage_a_pre_cap_count, stage_a_actual_input_count = stage_a_input_counts(candidates)
         recent_events = _recent_news_events(retained)
         if not api_key:
             news, ai_warning = [], "⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：未配置 AI 凭据。"
             event_representatives = []
             selection_candidates = []
+            stage_a_actual_input_count = 0
         else:
             events, clustering_warning = cluster_news_events(candidates, api_key, usage_tracker=usage_tracker)
             if clustering_warning:
@@ -354,11 +366,13 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
                 print("[NEWS]\nMarket-driven context generated")
             news, ai_warning = select_news(
                 selection_candidates, api_key, recent_events, market_context=ai_market_context,
-                usage_tracker=usage_tracker,
+                usage_tracker=usage_tracker, observability=stage_b_observability,
             )
         _log_news_pipeline(
-            rss_candidate_count, window_candidate_count, len(candidates), event_representatives,
-            selection_candidates, recent_events, news,
+            rss_candidate_count, window_candidate_count, len(candidates), stage_a_pre_cap_count,
+            stage_a_actual_input_count, event_representatives, selection_candidates,
+            stage_b_observability["raw_count"], stage_b_observability["validated_count"],
+            recent_events, news,
         )
         if ai_warning:
             warnings.append(ai_warning)

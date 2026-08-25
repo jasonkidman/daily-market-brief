@@ -3,7 +3,25 @@ import json
 import pytest
 
 import src.main as main
-from src.main import assess_market_validity, generate_daily_report
+from src.main import _log_news_pipeline, assess_market_validity, generate_daily_report
+
+
+def test_news_pipeline_logs_distinct_stage_counts(capsys):
+    _log_news_pipeline(89, 85, 79, 79, 50, [], [], 6, 5, [], [])
+
+    output = capsys.readouterr().out
+    assert "rss_raw_count: 89" in output
+    assert "within_24h_count: 85" in output
+    assert "deduplicated_count: 79" in output
+    assert "stage_a_pre_cap_count: 79" in output
+    assert "stage_a_actual_input_count: 50" in output
+    assert "stage_a_cap_dropped: 29" in output
+    assert "stage_a_output_event_count: 0" in output
+    assert "clustering_collapsed: 50" in output
+    assert "stage_b_input_count: 0" in output
+    assert "stage_b_raw_count: 6" in output
+    assert "stage_b_validated_count: 5" in output
+    assert "Duplicates collapsed" not in output
 
 
 def test_offline_fixture_runs_complete_pipeline(tmp_path):

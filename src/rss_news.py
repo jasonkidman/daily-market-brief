@@ -33,6 +33,16 @@ def _plain_text(value: str) -> str:
     return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", value or ""))).strip()
 
 
+def _log_candidate(candidate: dict, stage: str, action: str, reason: str = "") -> None:
+    suffix = f" | reason={reason}" if reason else ""
+    print(
+        f"[NEWS CANDIDATE] candidate_id={candidate.get('candidate_id', '')} "
+        f"| title={candidate.get('title', '')} | source={candidate.get('source', '')} "
+        f"| published_at={candidate.get('published_at', '')} | stage={stage} "
+        f"| action={action}{suffix}"
+    )
+
+
 def fetch_candidates(sources: list[dict], now: datetime, hours: int = 30,
                      parser=_parse_feed) -> tuple[list[dict], list[str]]:
     now_utc = now.astimezone(timezone.utc)
@@ -41,11 +51,16 @@ def fetch_candidates(sources: list[dict], now: datetime, hours: int = 30,
     for source in sources:
         if source.get("enabled", True) is False:
             continue
+        raw_count = 0
+        accepted_count = 0
+        source_warning = "<none>"
         try:
             feed = parser(source["url"])
             if getattr(feed, "bozo", False) and not getattr(feed, "entries", []):
                 raise RuntimeError(str(getattr(feed, "bozo_exception", "RSS 解析失败")))
-            for entry in getattr(feed, "entries", []):
+            entries = getattr(feed, "entries", [])
+            raw_count = len(entries)
+            for entry in entries:
                 published = _entry_datetime(entry)
                 if published is None or published < cutoff or published > now_utc + timedelta(minutes=5):
                     continue
@@ -69,8 +84,15 @@ def fetch_candidates(sources: list[dict], now: datetime, hours: int = 30,
                 if source.get("source_channel"):
                     candidate["source_channel"] = source["source_channel"]
                 candidates.append(candidate)
+                accepted_count += 1
+                _log_candidate(candidate, "rss_fetch", "received")
         except Exception as exc:
+            source_warning = str(exc)
             warnings.append(f"{source['name']} RSS 获取失败：{exc}")
+        print(
+            f"[NEWS RSS SOURCE] source={source['name']} raw={raw_count} "
+            f"accepted={accepted_count} warning={source_warning}"
+        )
     candidates.sort(key=lambda item: item["published_at"], reverse=True)
     return candidates, warnings
 
@@ -88,6 +110,7 @@ def filter_final_candidates(candidates: list[dict], now: datetime) -> list[dict]
     for candidate in candidates:
         raw_published_at = candidate.get("published_at")
         if not isinstance(raw_published_at, str) or not raw_published_at.strip():
+            _log_candidate(candidate, "24h_filter", "drop", "missing_timestamp")
             continue
         try:
             published_at = datetime.fromisoformat(raw_published_at.strip().replace("Z", "+00:00"))
@@ -95,7 +118,13 @@ def filter_final_candidates(candidates: list[dict], now: datetime) -> list[dict]
                 published_at = published_at.replace(tzinfo=timezone.utc)
             published_at = published_at.astimezone(timezone.utc)
         except (TypeError, ValueError, OverflowError):
+            _log_candidate(candidate, "24h_filter", "drop", "invalid_timestamp")
             continue
         if cutoff <= published_at <= now_utc:
             eligible.append(candidate)
+            _log_candidate(candidate, "24h_filter", "keep")
+        elif published_at > now_utc:
+            _log_candidate(candidate, "24h_filter", "drop", "future_timestamp")
+        else:
+            _log_candidate(candidate, "24h_filter", "drop", "too_old")
     return eligible

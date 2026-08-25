@@ -468,10 +468,41 @@ def _log_stage_b_raw_response(raw: Any) -> None:
         )
 
 
+def _stage_b_raw_items(raw: Any) -> list[dict]:
+    try:
+        data = raw if isinstance(raw, dict) else json.loads(raw)
+        items = data.get("news") if isinstance(data, dict) else None
+    except (TypeError, json.JSONDecodeError):
+        return []
+    return [item for item in items if isinstance(item, dict)] if isinstance(items, list) else []
+
+
+def _log_stage_b_selection(candidates: list[dict], raw_items: list[dict], validated: list[dict], issues: list[dict]) -> None:
+    raw_ids = {item.get("candidate_id") for item in raw_items}
+    selected_ids = {item.get("candidate_id") for item in validated}
+    issue_reasons = {
+        item.get("candidate_id"): item.get("reason", "validation_drop")
+        for item in issues if item.get("reason")
+    }
+    for candidate in candidates:
+        candidate_id = candidate.get("candidate_id", "")
+        if candidate_id in selected_ids:
+            action, reason = "selected", "validated"
+        elif candidate_id in raw_ids:
+            action, reason = "not_selected", issue_reasons.get(candidate_id, "validation_drop")
+        else:
+            action, reason = "not_selected", "model_not_selected"
+        print(
+            f"[NEWS STAGE B TRACE] candidate_id={candidate_id} | title={candidate.get('title', '')} "
+            f"| source={candidate.get('source', '')} | stage=stage_b | action={action} | reason={reason}"
+        )
+
+
 def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict] = None,
                 market_context: dict = None,
                 call_model: Callable = call_deepseek, sleep_fn: Callable = time.sleep,
-                usage_tracker: DeepSeekUsageTracker | None = None
+                usage_tracker: DeepSeekUsageTracker | None = None,
+                observability: dict | None = None,
                 ) -> tuple[list[dict], Optional[str]]:
     if not candidates:
         return [], None
@@ -498,6 +529,9 @@ def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict
                 stage="Stage B", attempt=attempt + 1, usage_tracker=usage_tracker,
             )
             _log_stage_b_raw_response(raw)
+            raw_items = _stage_b_raw_items(raw)
+            if observability is not None:
+                observability["raw_count"] = len(raw_items)
             try:
                 validation = _validate_selection_items(raw, candidates)
                 for issue in validation["issues"]:
@@ -512,6 +546,9 @@ def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict
                             f"field={issue['field']} action=dropped reason={issue['reason']}"
                         )
                 selected = validation["validated"]
+                if observability is not None:
+                    observability["validated_count"] = len(selected)
+                _log_stage_b_selection(candidates, raw_items, selected, validation["issues"])
                 print(
                     f"[NEWS STAGE B VALIDATION] raw_count={validation['raw_count']} "
                     f"valid_count={len(selected)} normalized_count={validation['normalized_count']} "

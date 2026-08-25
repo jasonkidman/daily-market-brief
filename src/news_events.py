@@ -130,6 +130,38 @@ def _cluster_candidate_input(candidates: list[dict]) -> list[dict]:
     return [{field: item.get(field, "") for field in fields} for item in limited]
 
 
+def stage_a_input_counts(candidates: list[dict]) -> tuple[int, int]:
+    """Return pre-cap and actual Stage A input counts without changing selection."""
+    return len(candidates), len(_cluster_candidate_input(candidates))
+
+
+def _log_stage_a_cap(candidates: list[dict], cluster_input: list[dict]) -> None:
+    actual_ids = {item["candidate_id"] for item in cluster_input}
+    print(
+        f"[NEWS STAGE A CAP] pre_cap={len(candidates)} actual_input={len(cluster_input)} "
+        f"cap_dropped={len(candidates) - len(cluster_input)}"
+    )
+    for candidate in candidates:
+        action = "keep" if candidate["candidate_id"] in actual_ids else "drop"
+        reason = "" if action == "keep" else "input_cap_50"
+        suffix = f" | reason={reason}" if reason else ""
+        print(
+            f"[NEWS CANDIDATE] candidate_id={candidate.get('candidate_id', '')} "
+            f"| title={candidate.get('title', '')} | source={candidate.get('source', '')} "
+            f"| published_at={candidate.get('published_at', '')} | stage=stage_a_cap "
+            f"| action={action}{suffix}"
+        )
+
+
+def _log_stage_a_mapping(events: list[dict]) -> None:
+    for event in events:
+        for candidate_id in event.get("candidate_ids", []):
+            print(
+                f"[NEWS STAGE A MAPPING] candidate_id={candidate_id} "
+                f"-> event_id={event.get('event_id', '')}"
+            )
+
+
 def _fallback_events(candidates: list[dict]) -> list[dict]:
     return [{
         "event_id": f"fallback_{index:03d}",
@@ -158,10 +190,12 @@ def cluster_news_events(candidates: list[dict], api_key: str,
                         usage_tracker: DeepSeekUsageTracker | None = None) -> tuple[list[dict], Optional[str]]:
     """Cluster deterministic candidates, falling back safely if Stage A is unavailable."""
     cluster_input = _cluster_candidate_input(candidates)
+    _log_stage_a_cap(candidates, cluster_input)
     print(f"[NEWS STAGE A] input candidates: {len(cluster_input)}")
     if len(cluster_input) <= 1:
         events = _fallback_events(cluster_input)
         _log_stage_a_events(events)
+        _log_stage_a_mapping(events)
         return events, None
     user_payload = json.dumps({"candidates": cluster_input}, ensure_ascii=False)
     last_error = None
@@ -179,6 +213,7 @@ def cluster_news_events(candidates: list[dict], api_key: str,
                     usage_tracker.record_validation_failure("Stage A", attempt + 1, exc)
                 raise
             _log_stage_a_events(events)
+            _log_stage_a_mapping(events)
             print(f"[NEWS AI] event clustering succeeded in {time.monotonic() - started:.1f}s")
             return events, None
         except Exception as exc:
@@ -191,6 +226,7 @@ def cluster_news_events(candidates: list[dict], api_key: str,
                 sleep_fn((5, 10)[attempt])
     events = _fallback_events(cluster_input)
     _log_stage_a_events(events)
+    _log_stage_a_mapping(events)
     return events, (
         "⚠️ 新闻事件级去重暂时失败，已使用基础去重结果继续生成日报。"
         f" 原因：{last_error}"
