@@ -22,6 +22,26 @@ TOPIC_GROUPS = {
 }
 EVENT_CATEGORIES = {"macro_policy", "financial_markets", "high_tech", "geopolitics", "other"}
 PRIORITY_ORDER = {"P0": 0, "P1": 1, "P2": 2}
+PRIORITY_BASE_WEIGHT = {"P0": 6, "P1": 3, "P2": 0}
+IMPORTANCE_WEIGHT = 2
+SOURCE_PENALTY_WEIGHT = 0.25
+MAX_SOURCE_PENALTY = 2.0
+
+# These signals are intentionally small and explicit: they improve the cap
+# ranking without asking an LLM to classify candidates or changing source data.
+IMPORTANCE_SIGNAL_GROUPS = (
+    ("macro_rates", 3, ("treasury", "federal reserve", "fed ", "interest rate", "rates", "yield", "bond", "inflation", "employment", "jobs")),
+    ("mega_cap_tech", 3, ("apple", "microsoft", "amazon", "tesla", "nvidia", "alphabet", "google", "meta")),
+    ("ai_chips", 3, ("artificial intelligence", " ai ", "semiconductor", "chip", "data center", "datacenter", "gpu")),
+    ("geopolitics_policy", 2, ("sanction", "tariff", "trade war", "iran", "ukraine", "russia", "regulation", "regulator", "export control")),
+)
+EVENT_SIGNIFICANCE_TERMS = (
+    "surge", "soar", "jump", "plunge", "collapse", "crash", "breakout", "raise", "cut", "hike",
+    "inflation", "employment", "jobs", "yield", "rates", "outlook", "policy", "guidance", "earnings",
+    "revenue", "profit", "loss", "lawsuit", "fine", "recall", "sanction", "tariff", "retaliatory",
+    "trade war", "export control", "regulation", "regulator", "acquisition", "merger", "launch", "unveil",
+    "announced", "announces", "ban", "restriction", "crisis", "war",
+)
 
 
 class NewsEventError(ValueError):
@@ -91,6 +111,51 @@ def _published_at_value(item: dict) -> float:
         return float("-inf")
 
 
+def _importance_signal(item: dict) -> tuple[int, str]:
+    """Return an explainable deterministic importance score for cap ranking."""
+    text = " ".join(str(item.get(field, "")) for field in ("title", "summary", "category_hint")).lower()
+    significant = any(term in text for term in EVENT_SIGNIFICANCE_TERMS)
+    matches = []
+    score = 0
+    for name, weight, keywords in IMPORTANCE_SIGNAL_GROUPS:
+        if any(keyword in text for keyword in keywords) and significant:
+            matches.append(name)
+            score += weight
+    return min(score, 6), ",".join(matches) or "none"
+
+
+def _rank_stage_a_candidates(candidates: list[dict]) -> list[tuple[dict, int, str, float, int, float]]:
+    """Rank with a strong priority base, weighted importance, and soft diversity."""
+    remaining = list(enumerate(candidates))
+    ranked = []
+    source_counts: dict[str, int] = {}
+    while remaining:
+        def sort_key(entry: tuple[int, dict]):
+            index, item = entry
+            importance_score, _ = _importance_signal(item)
+            source = item.get("source", "")
+            priority_base = PRIORITY_BASE_WEIGHT.get(item.get("priority", "P2"), 0)
+            source_penalty = min(source_counts.get(source, 0) * SOURCE_PENALTY_WEIGHT, MAX_SOURCE_PENALTY)
+            composite_score = priority_base + importance_score * IMPORTANCE_WEIGHT - source_penalty
+            return (
+                -composite_score,
+                -_published_at_value(item),
+                index,
+            )
+
+        index, item = min(remaining, key=sort_key)
+        remaining.remove((index, item))
+        importance_score, reason = _importance_signal(item)
+        source = item.get("source", "")
+        source_count = source_counts.get(source, 0)
+        source_penalty = min(source_count * SOURCE_PENALTY_WEIGHT, MAX_SOURCE_PENALTY)
+        priority_base = PRIORITY_BASE_WEIGHT.get(item.get("priority", "P2"), 0)
+        composite_score = priority_base + importance_score * IMPORTANCE_WEIGHT - source_penalty
+        ranked.append((item, importance_score, reason, source_penalty, priority_base, composite_score))
+        source_counts[source] = source_count + 1
+    return ranked
+
+
 def select_event_representative(event: dict, candidate_pool: list[dict]) -> dict:
     """Choose source article by priority, information completeness, then recency."""
     by_id = {item["candidate_id"]: item for item in candidate_pool}
@@ -122,10 +187,7 @@ def event_selection_candidates(event_representatives: list[dict]) -> list[dict]:
 
 def _cluster_candidate_input(candidates: list[dict]) -> list[dict]:
     """Bound the clustering prompt without exposing article URLs to the model."""
-    limited = sorted(candidates, key=lambda item: (
-        PRIORITY_ORDER.get(item.get("priority", "P2"), 2),
-        -_published_at_value(item),
-    ))[:50]
+    limited = [item for item, _, _, _, _, _ in _rank_stage_a_candidates(candidates)[:50]]
     fields = ("candidate_id", "source", "priority", "title", "summary", "published_at")
     return [{field: item.get(field, "") for field in fields} for item in limited]
 
@@ -137,6 +199,12 @@ def stage_a_input_counts(candidates: list[dict]) -> tuple[int, int]:
 
 def _log_stage_a_cap(candidates: list[dict], cluster_input: list[dict]) -> None:
     actual_ids = {item["candidate_id"] for item in cluster_input}
+    ranking = _rank_stage_a_candidates(candidates)
+    diagnostics = {
+        item["candidate_id"]: (rank, importance_score, reason, source_penalty, priority_base, composite_score)
+        for rank, (item, importance_score, reason, source_penalty, priority_base, composite_score)
+        in enumerate(ranking, 1)
+    }
     print(
         f"[NEWS STAGE A CAP] pre_cap={len(candidates)} actual_input={len(cluster_input)} "
         f"cap_dropped={len(candidates) - len(cluster_input)}"
@@ -145,10 +213,14 @@ def _log_stage_a_cap(candidates: list[dict], cluster_input: list[dict]) -> None:
         action = "keep" if candidate["candidate_id"] in actual_ids else "drop"
         reason = "" if action == "keep" else "input_cap_50"
         suffix = f" | reason={reason}" if reason else ""
+        rank, importance_score, importance_reason, source_penalty, priority_base, composite_score = diagnostics[candidate["candidate_id"]]
         print(
             f"[NEWS CANDIDATE] candidate_id={candidate.get('candidate_id', '')} "
-            f"| title={candidate.get('title', '')} | source={candidate.get('source', '')} "
-            f"| published_at={candidate.get('published_at', '')} | stage=stage_a_cap "
+            f"| source={candidate.get('source', '')} | priority={candidate.get('priority', 'P2')} "
+            f"| importance_score={importance_score} | importance_reason={importance_reason} "
+            f"| priority_base={priority_base} | source_penalty={source_penalty:g} "
+            f"| composite_score={composite_score:g} | pre_cap_rank={rank} "
+            f"| stage=stage_a_cap "
             f"| action={action}{suffix}"
         )
 
