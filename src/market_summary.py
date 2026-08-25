@@ -6,7 +6,7 @@ import json
 import time
 from typing import Any, Callable
 
-from .deepseek_client import call_deepseek, invoke_model
+from .deepseek_client import DeepSeekUsageTracker, call_deepseek, invoke_model
 from .market_summary_prompt import SYSTEM_PROMPT
 
 
@@ -127,7 +127,8 @@ def deterministic_market_summary(market_data: dict, market_breadth: dict, news: 
 
 def generate_market_summary(market_data: dict, market_context: dict, market_breadth: dict,
                             news: list[dict], drawdown_action: str, api_key: str | None,
-                            call_model: Callable = call_deepseek, sleep_fn: Callable = time.sleep) -> dict:
+                            call_model: Callable = call_deepseek, sleep_fn: Callable = time.sleep,
+                            usage_tracker: DeepSeekUsageTracker | None = None) -> dict:
     """Generate a validated summary, degrading to program-owned facts after three failures."""
     if drawdown_action not in ACTION_COPY:
         raise ValueError("portfolio_action 不合法。")
@@ -140,9 +141,15 @@ def generate_market_summary(market_data: dict, market_context: dict, market_brea
     for attempt in range(3):
         try:
             raw = invoke_model(
-                call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=True, reasoning_effort="high"
+                call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=True, reasoning_effort="high",
+                stage="Layer 2", attempt=attempt + 1, usage_tracker=usage_tracker,
             )
-            return _parse_model_summary(raw, drawdown_action)
+            try:
+                return _parse_model_summary(raw, drawdown_action)
+            except Exception as exc:
+                if usage_tracker is not None:
+                    usage_tracker.record_validation_failure("Layer 2", attempt + 1, exc)
+                raise
         except Exception:
             if attempt < 2:
                 sleep_fn((5, 10)[attempt])

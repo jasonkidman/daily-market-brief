@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import inspect
 import time
+from dataclasses import dataclass, field
 from typing import Any, Callable, Optional
 
 import httpx
@@ -32,10 +33,135 @@ TAG_LIMIT = 16
 DEEPSEEK_TIMEOUT = httpx.Timeout(connect=5.0, read=25.0, write=15.0, pool=5.0)
 DEEPSEEK_MAX_RETRIES = 0
 DEEPSEEK_MAX_ATTEMPTS = 2
+DEEPSEEK_MODEL = "deepseek-chat"
+
+# RMB per one million tokens.  Keep aliases because deployed workflows may use
+# either the compatibility names or the current V4 model names.
+DEEPSEEK_PRICE_CNY_PER_MILLION = {
+    "deepseek-chat": {"cache_hit": 0.02, "cache_miss": 1.0, "completion": 2.0},
+    "deepseek-reasoner": {"cache_hit": 0.02, "cache_miss": 1.0, "completion": 2.0},
+    "deepseek-v4-flash": {"cache_hit": 0.02, "cache_miss": 1.0, "completion": 2.0},
+    "deepseek-v4-pro": {"cache_hit": 0.025, "cache_miss": 3.0, "completion": 6.0},
+}
+OBSERVED_STAGES = ("Stage A", "Stage B", "Layer 2")
 
 
 class NewsSelectionError(ValueError):
     """Raised when model output violates the candidate-only contract."""
+
+
+class DeepSeekModelResult(str):
+    """String-compatible model content with response metadata for observability."""
+
+    def __new__(cls, content: str, *, model: str | None, usage: Any):
+        instance = super().__new__(cls, content or "")
+        instance.model = model
+        instance.usage = usage
+        return instance
+
+
+def _field(value: Any, name: str) -> Any:
+    return value.get(name) if isinstance(value, dict) else getattr(value, name, None)
+
+
+def extract_usage(usage: Any) -> dict[str, int | None]:
+    """Normalize OpenAI-compatible usage objects without inferring missing fields."""
+    completion_details = _field(usage, "completion_tokens_details")
+    prompt_details = _field(usage, "prompt_tokens_details")
+    return {
+        "prompt_tokens": _field(usage, "prompt_tokens"),
+        "completion_tokens": _field(usage, "completion_tokens"),
+        "total_tokens": _field(usage, "total_tokens"),
+        "prompt_cache_hit_tokens": (
+            _field(usage, "prompt_cache_hit_tokens")
+            if _field(usage, "prompt_cache_hit_tokens") is not None
+            else _field(prompt_details, "cached_tokens")
+        ),
+        "prompt_cache_miss_tokens": _field(usage, "prompt_cache_miss_tokens"),
+        "reasoning_tokens": (
+            _field(usage, "reasoning_tokens")
+            if _field(usage, "reasoning_tokens") is not None
+            else _field(completion_details, "reasoning_tokens")
+        ),
+    }
+
+
+def _format_value(value: Any) -> str:
+    return "unavailable" if value is None else str(value)
+
+
+def estimate_cost_cny(model: str | None, usage: dict[str, int | None]) -> float | None:
+    """Calculate only when the response provides the full cache-aware token split."""
+    prices = DEEPSEEK_PRICE_CNY_PER_MILLION.get(model or "")
+    required = ("prompt_cache_hit_tokens", "prompt_cache_miss_tokens", "completion_tokens")
+    if prices is None or any(usage.get(key) is None for key in required):
+        return None
+    return (
+        usage["prompt_cache_hit_tokens"] * prices["cache_hit"]
+        + usage["prompt_cache_miss_tokens"] * prices["cache_miss"]
+        + usage["completion_tokens"] * prices["completion"]
+    ) / 1_000_000
+
+
+@dataclass
+class DeepSeekUsageTracker:
+    """Request-safe Actions log aggregation for one daily-report process."""
+
+    records: list[dict[str, Any]] = field(default_factory=list)
+
+    def record_success(self, *, stage: str, attempt: int, model: str | None,
+                       thinking_enabled: bool, reasoning_effort: str | None,
+                       elapsed_ms: int, usage: dict[str, int | None]) -> None:
+        cost = estimate_cost_cny(model, usage)
+        record = {
+            "stage": stage, "attempt": attempt, "model": model,
+            "thinking_enabled": thinking_enabled, "reasoning_effort": reasoning_effort,
+            "elapsed_ms": elapsed_ms, "success": True, "usage": usage, "cost": cost,
+        }
+        self.records.append(record)
+        fields = " ".join(f"{key}={_format_value(usage[key])}" for key in usage)
+        print(
+            f"[DEEPSEEK REQUEST] stage={stage} attempt={attempt} model={_format_value(model)} "
+            f"thinking_enabled={thinking_enabled} reasoning_effort={_format_value(reasoning_effort)} "
+            f"elapsed_ms={elapsed_ms} success=true {fields} "
+            f"estimated_cost_cny={_format_value(f'{cost:.6f}' if cost is not None else None)}"
+        )
+
+    def record_failure(self, *, stage: str, attempt: int, model: str | None,
+                       thinking_enabled: bool, reasoning_effort: str | None,
+                       elapsed_ms: int, exc: Exception) -> None:
+        status_code = getattr(exc, "status_code", None)
+        self.records.append({"stage": stage, "attempt": attempt, "model": model, "cost": None})
+        print(
+            f"[DEEPSEEK REQUEST] stage={stage} attempt={attempt} model={_format_value(model)} "
+            f"thinking_enabled={thinking_enabled} reasoning_effort={_format_value(reasoning_effort)} "
+            f"elapsed_ms={elapsed_ms} success=false exception_type={type(exc).__name__} "
+            f"http_status={_format_value(status_code)} estimated_cost_cny=unavailable"
+        )
+
+    def record_validation_failure(self, stage: str, attempt: int, exc: Exception) -> None:
+        print(
+            f"[DEEPSEEK VALIDATION] stage={stage} attempt={attempt} "
+            f"validation_failure={type(exc).__name__}: {exc} retry=true"
+        )
+
+    def log_summary(self) -> None:
+        print("[DEEPSEEK COST SUMMARY]")
+        for stage in OBSERVED_STAGES:
+            records = [record for record in self.records if record["stage"] == stage]
+            costs = [record["cost"] for record in records]
+            cost = sum(costs) if costs and all(item is not None for item in costs) else (0.0 if not costs else None)
+            print(
+                f"[DEEPSEEK COST SUMMARY] stage={stage} actual_api_requests={len(records)} "
+                f"retry_count={max(len(records) - 1, 0)} "
+                f"estimated_cost_cny={_format_value(f'{cost:.6f}' if cost is not None else None)}"
+            )
+        costs = [record["cost"] for record in self.records]
+        total = sum(costs) if costs and all(item is not None for item in costs) else (0.0 if not costs else None)
+        print(
+            f"[DEEPSEEK COST SUMMARY] actual_api_requests={len(self.records)} "
+            f"total_estimated_cost_cny={_format_value(f'{total:.6f}' if total is not None else None)}"
+        )
 
 
 def _error_kind(exc: Exception) -> str:
@@ -53,16 +179,37 @@ def _error_kind(exc: Exception) -> str:
 
 
 def invoke_model(call_model: Callable, system_prompt: str, user_payload: str, api_key: str, *,
-                 thinking_enabled: bool, reasoning_effort: str | None) -> str:
+                 thinking_enabled: bool, reasoning_effort: str | None,
+                 stage: str | None = None, attempt: int | None = None,
+                 usage_tracker: DeepSeekUsageTracker | None = None) -> str:
     """Call production transport with reasoning settings while supporting legacy test injectables."""
     parameters = inspect.signature(call_model).parameters.values()
     accepts_keywords = any(parameter.kind is inspect.Parameter.VAR_KEYWORD for parameter in parameters)
-    if accepts_keywords or {"thinking_enabled", "reasoning_effort"}.issubset(inspect.signature(call_model).parameters):
-        return call_model(
-            system_prompt, user_payload, api_key,
+    started = time.monotonic()
+    try:
+        if accepts_keywords or {"thinking_enabled", "reasoning_effort"}.issubset(inspect.signature(call_model).parameters):
+            raw = call_model(
+                system_prompt, user_payload, api_key,
+                thinking_enabled=thinking_enabled, reasoning_effort=reasoning_effort,
+            )
+        else:
+            raw = call_model(system_prompt, user_payload, api_key)
+    except Exception as exc:
+        if usage_tracker is not None and stage is not None and attempt is not None:
+            usage_tracker.record_failure(
+                stage=stage, attempt=attempt, model=DEEPSEEK_MODEL,
+                thinking_enabled=thinking_enabled, reasoning_effort=reasoning_effort,
+                elapsed_ms=round((time.monotonic() - started) * 1000), exc=exc,
+            )
+        raise
+    if usage_tracker is not None and stage is not None and attempt is not None:
+        usage_tracker.record_success(
+            stage=stage, attempt=attempt, model=getattr(raw, "model", DEEPSEEK_MODEL),
             thinking_enabled=thinking_enabled, reasoning_effort=reasoning_effort,
+            elapsed_ms=round((time.monotonic() - started) * 1000),
+            usage=extract_usage(getattr(raw, "usage", None)),
         )
-    return call_model(system_prompt, user_payload, api_key)
+    return raw
 
 
 def _parse_payload(payload: Any) -> dict:
@@ -201,7 +348,11 @@ def call_deepseek(system_prompt: str, user_payload: str, api_key: str, *,
     if reasoning_effort is not None:
         request["reasoning_effort"] = reasoning_effort
     response = client.chat.completions.create(**request)
-    return response.choices[0].message.content
+    return DeepSeekModelResult(
+        response.choices[0].message.content,
+        model=getattr(response, "model", DEEPSEEK_MODEL),
+        usage=getattr(response, "usage", None),
+    )
 
 
 def _log_stage_b_input(candidates: list[dict]) -> None:
@@ -249,7 +400,8 @@ def _log_stage_b_raw_response(raw: Any) -> None:
 
 def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict] = None,
                 market_context: dict = None,
-                call_model: Callable = call_deepseek, sleep_fn: Callable = time.sleep
+                call_model: Callable = call_deepseek, sleep_fn: Callable = time.sleep,
+                usage_tracker: DeepSeekUsageTracker | None = None
                 ) -> tuple[list[dict], Optional[str]]:
     if not candidates:
         return [], None
@@ -272,13 +424,16 @@ def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict
     for attempt in range(DEEPSEEK_MAX_ATTEMPTS):
         try:
             raw = invoke_model(
-                call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=False, reasoning_effort=None
+                call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=False, reasoning_effort=None,
+                stage="Stage B", attempt=attempt + 1, usage_tracker=usage_tracker,
             )
             _log_stage_b_raw_response(raw)
             try:
                 selected = validate_selection(raw, candidates)
             except Exception as exc:
                 print(f"[NEWS STAGE B] validate_selection: failed | reason={exc}")
+                if usage_tracker is not None:
+                    usage_tracker.record_validation_failure("Stage B", attempt + 1, exc)
                 raise
             print("[NEWS STAGE B] validate_selection: passed")
             print(f"[NEWS AI] selection succeeded in {time.monotonic() - started:.1f}s")

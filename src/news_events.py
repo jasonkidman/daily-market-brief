@@ -7,7 +7,7 @@ import time
 from datetime import datetime
 from typing import Any, Callable, Optional
 
-from .deepseek_client import DEEPSEEK_MAX_ATTEMPTS, call_deepseek, invoke_model
+from .deepseek_client import DEEPSEEK_MAX_ATTEMPTS, DeepSeekUsageTracker, call_deepseek, invoke_model
 from .news_event_prompt import SYSTEM_PROMPT
 
 
@@ -154,7 +154,8 @@ def _log_stage_a_events(events: list[dict]) -> None:
 
 def cluster_news_events(candidates: list[dict], api_key: str,
                         call_model: Callable = call_deepseek,
-                        sleep_fn: Callable = time.sleep) -> tuple[list[dict], Optional[str]]:
+                        sleep_fn: Callable = time.sleep,
+                        usage_tracker: DeepSeekUsageTracker | None = None) -> tuple[list[dict], Optional[str]]:
     """Cluster deterministic candidates, falling back safely if Stage A is unavailable."""
     cluster_input = _cluster_candidate_input(candidates)
     print(f"[NEWS STAGE A] input candidates: {len(cluster_input)}")
@@ -168,9 +169,15 @@ def cluster_news_events(candidates: list[dict], api_key: str,
     for attempt in range(DEEPSEEK_MAX_ATTEMPTS):
         try:
             raw = invoke_model(
-                call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=False, reasoning_effort=None
+                call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=False, reasoning_effort=None,
+                stage="Stage A", attempt=attempt + 1, usage_tracker=usage_tracker,
             )
-            events = validate_event_clusters(raw, cluster_input)
+            try:
+                events = validate_event_clusters(raw, cluster_input)
+            except Exception as exc:
+                if usage_tracker is not None:
+                    usage_tracker.record_validation_failure("Stage A", attempt + 1, exc)
+                raise
             _log_stage_a_events(events)
             print(f"[NEWS AI] event clustering succeeded in {time.monotonic() - started:.1f}s")
             return events, None

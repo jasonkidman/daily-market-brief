@@ -11,7 +11,7 @@ from zoneinfo import ZoneInfo
 
 import yaml
 
-from .deepseek_client import select_news, validate_selection
+from .deepseek_client import DeepSeekUsageTracker, select_news, validate_selection
 from .drawdown import summarize_index_state, update_drawdown_state
 from .market import calculate_context_snapshot, calculate_market_snapshot, fetch_market, fetch_market_context
 from .market_breadth import build_market_breadth, build_offline_market_breadth, unavailable_market_breadth
@@ -319,6 +319,7 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
     warnings = [*market_warnings, *breadth_warnings]
     news_degraded = False
     api_key = os.environ.get("DEEPSEEK_API_KEY")
+    usage_tracker = DeepSeekUsageTracker()
     if offline_fixture:
         news = _offline_news()
     else:
@@ -334,7 +335,7 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
             event_representatives = []
             selection_candidates = []
         else:
-            events, clustering_warning = cluster_news_events(candidates, api_key)
+            events, clustering_warning = cluster_news_events(candidates, api_key, usage_tracker=usage_tracker)
             if clustering_warning:
                 warnings.append(clustering_warning)
             event_representatives = build_event_representatives(events, candidates)
@@ -355,7 +356,8 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
                 }
                 print("[NEWS]\nMarket-driven context generated")
             news, ai_warning = select_news(
-                selection_candidates, api_key, recent_events, market_context=ai_market_context
+                selection_candidates, api_key, recent_events, market_context=ai_market_context,
+                usage_tracker=usage_tracker,
             )
         _log_news_pipeline(
             rss_candidate_count, window_candidate_count, len(candidates), event_representatives,
@@ -376,7 +378,9 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         news,
         portfolio_action,
         api_key,
+        usage_tracker=usage_tracker,
     )
+    usage_tracker.log_summary()
 
     if not validity_summary["drawdown_market_valid"]:
         status, status_label = "critical", "🔴 行情数据校验失败"
