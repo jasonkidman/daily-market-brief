@@ -9,10 +9,11 @@ import pytest
 import yaml
 
 from src.deepseek_client import NewsSelectionError, select_news, validate_selection
+import src.deepseek_client as deepseek_client
 from src.news_dedupe import dedupe_candidates
 from src.news_events import build_event_representatives, cluster_news_events, event_selection_candidates
 from src.main import _recent_news_events
-from src.rss_news import fetch_candidates
+from src.rss_news import fetch_candidates, filter_final_candidates
 
 
 def candidate(cid, title, url, source="BBC News", summary="full summary", priority="P0"):
@@ -174,8 +175,8 @@ def test_similar_title_prefers_higher_priority_or_more_complete_item():
     assert [x["candidate_id"] for x in dedupe_candidates(items)] == ["2"]
 
 
-def test_rejects_invalid_candidate_category_duplicates_and_more_than_eight():
-    pool = [candidate(str(i), f"title {i}", f"https://x/{i}") for i in range(9)]
+def test_rejects_invalid_candidate_category_duplicates_and_accepts_dynamic_count():
+    pool = [candidate(str(i), f"title {i}", f"https://x/{i}") for i in range(12)]
     base = enriched_selection("0")
     with pytest.raises(NewsSelectionError):
         validate_selection({"news": [{**base, "candidate_id": "missing"}]}, pool)
@@ -183,8 +184,10 @@ def test_rejects_invalid_candidate_category_duplicates_and_more_than_eight():
         validate_selection({"news": [{**base, "category": "体育"}]}, pool)
     with pytest.raises(NewsSelectionError):
         validate_selection({"news": [base, {**base, "rank": 2}]}, pool)
-    with pytest.raises(NewsSelectionError):
-        validate_selection({"news": [{**base, "rank": i + 1, "candidate_id": str(i)} for i in range(9)]}, pool)
+    selected = validate_selection(
+        {"news": [{**enriched_selection(str(i), rank=i + 1), "candidate_id": str(i)} for i in range(12)]}, pool
+    )
+    assert len(selected) == 12
 
 
 def test_rss_failure_does_not_block_other_sources():
@@ -280,7 +283,65 @@ def test_rss_30_hour_window_uses_feed_gmt_not_runner_timezone(monkeypatch):
     assert candidates == []
 
 
-def test_three_ai_failures_degrade_without_raising():
+def test_final_eligibility_keeps_30_hour_fetch_buffer_out_of_stage_a_and_b():
+    now = datetime(2026, 8, 12, 12, 0, tzinfo=ZoneInfo("UTC"))
+    candidates = [
+        {**candidate("fresh", "Fresh", "https://x/fresh"), "published_at": "2026-08-11T13:00:00+00:00"},
+        {**candidate("buffer-only", "Buffered", "https://x/buffer"), "published_at": "2026-08-11T11:00:00+00:00"},
+    ]
+
+    eligible = filter_final_candidates(candidates, now)
+
+    assert [item["candidate_id"] for item in eligible] == ["fresh"]
+
+
+def test_final_eligibility_uses_inclusive_24_hour_cutoff():
+    now = datetime(2026, 8, 12, 12, 0, tzinfo=ZoneInfo("UTC"))
+    candidates = [
+        {**candidate("just-inside", "Just inside", "https://x/just-inside"),
+         "published_at": "2026-08-11T12:01:00+00:00"},
+        {**candidate("exact-cutoff", "Exact cutoff", "https://x/exact-cutoff"),
+         "published_at": "2026-08-11T12:00:00+00:00"},
+        {**candidate("just-outside", "Just outside", "https://x/just-outside"),
+         "published_at": "2026-08-11T11:59:00+00:00"},
+    ]
+
+    eligible = filter_final_candidates(candidates, now)
+
+    assert [item["candidate_id"] for item in eligible] == ["just-inside", "exact-cutoff"]
+
+
+def test_final_eligibility_rejects_future_and_invalid_timestamps():
+    now = datetime(2026, 8, 12, 12, 0, tzinfo=ZoneInfo("UTC"))
+    candidates = [
+        {**candidate("future", "Future", "https://x/future"),
+         "published_at": "2026-08-12T12:01:00+00:00"},
+        {**candidate("missing", "Missing", "https://x/missing"), "published_at": ""},
+        {**candidate("invalid", "Invalid", "https://x/invalid"), "published_at": "not-a-time"},
+        {**candidate("none", "None", "https://x/none"), "published_at": None},
+    ]
+
+    assert filter_final_candidates(candidates, now) == []
+
+
+def test_source_channel_is_source_metadata_not_event_category():
+    now = datetime(2026, 8, 12, tzinfo=ZoneInfo("UTC"))
+    entry = SimpleNamespace(title="Treasury yields rise", link="https://example.test/yields", summary="Summary",
+                            published_parsed=now.timetuple())
+
+    candidates, warnings = fetch_candidates(
+        [{"name": "CNBC", "url": "https://example.test/rss", "priority": "P1",
+          "source_channel": "world_news"}],
+        now,
+        parser=lambda url: SimpleNamespace(entries=[entry]),
+    )
+
+    assert warnings == []
+    assert candidates[0]["source_channel"] == "world_news"
+    assert "event_category" not in candidates[0]
+
+
+def test_two_ai_failures_degrade_without_raising():
     attempts = []
     sleeps = []
 
@@ -292,8 +353,55 @@ def test_three_ai_failures_degrade_without_raising():
                                 sleep_fn=sleeps.append)
     assert news == []
     assert "新闻 AI 处理暂时失败" in warning
-    assert len(attempts) == 3
-    assert sleeps == [5, 10]
+    assert len(attempts) == 2
+    assert sleeps == [5]
+
+
+def test_deepseek_client_uses_bounded_timeout_and_disables_sdk_retries(monkeypatch):
+    captured = {}
+
+    class FakeCompletions:
+        def create(self, **kwargs):
+            captured["request"] = kwargs
+            return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content="{}"))])
+
+    class FakeClient:
+        def __init__(self, **kwargs):
+            captured.update(kwargs)
+            self.chat = SimpleNamespace(completions=FakeCompletions())
+
+    import openai
+    monkeypatch.setattr(openai, "OpenAI", FakeClient)
+
+    assert deepseek_client.call_deepseek("system", "user", "key") == "{}"
+    assert captured["max_retries"] == 0
+    assert captured["timeout"].connect == 5.0
+    assert captured["timeout"].read == 25.0
+    assert captured["timeout"].write == 15.0
+    assert captured["timeout"].pool == 5.0
+    assert captured["request"]["model"] == "deepseek-chat"
+    assert captured["request"]["temperature"] == 0.15
+    assert captured["request"]["extra_body"] == {"thinking": {"type": "disabled"}}
+    assert "reasoning_effort" not in captured["request"]
+
+
+def test_news_selection_timeout_retries_once_then_returns_timeout_reason():
+    attempts = []
+    sleeps = []
+
+    def timing_out(*args, **kwargs):
+        attempts.append(1)
+        raise TimeoutError("read timed out")
+
+    news, warning = select_news(
+        [candidate("1", "Title", "https://x/1")], "key", call_model=timing_out,
+        sleep_fn=sleeps.append,
+    )
+
+    assert news == []
+    assert len(attempts) == 2
+    assert sleeps == [5]
+    assert "timeout" in warning.lower()
 
 
 def test_deepseek_payload_includes_market_driven_context_and_selection_reason():
@@ -325,7 +433,36 @@ def test_deepseek_payload_includes_market_driven_context_and_selection_reason():
     assert captured["payload"]["market_signals"] == market_context["market_signals"]
     assert "不得根据时间共现" in captured["prompt"]
     assert news[0]["selection_reason"] == "与利率明显上升相关"
-    assert captured["kwargs"] == {"thinking_enabled": True, "reasoning_effort": "high"}
+    assert captured["kwargs"] == {"thinking_enabled": False, "reasoning_effort": None}
+
+
+def test_stage_b_logs_input_raw_return_and_validation(capsys):
+    def model(system_prompt, user_payload, api_key):
+        return json.dumps({"news": [{
+            **enriched_selection(),
+            "title_zh": "美联储维持利率",
+            "summary_zh": "摘要",
+            "selection_reason": "重大宏观事件",
+        }]})
+
+    selected, warning = select_news(
+        [candidate("1", "Fed holds rates", "https://x/1")],
+        "secret-api-key",
+        call_model=model,
+        sleep_fn=lambda _: None,
+    )
+
+    output = capsys.readouterr().out
+    assert warning is None
+    assert selected[0]["title_zh"] == "美联储维持利率"
+    assert "[NEWS STAGE B] input events: 1" in output
+    assert "candidate_id=1 | category=other | title=Fed holds rates" in output
+    assert "[NEWS STAGE B] DeepSeek raw return count: 1" in output
+    assert "rank=1 | candidate_id=1 | title=美联储维持利率" in output
+    assert "importance=<missing>" in output
+    assert "investment_relevance_score=92" in output
+    assert "validate_selection: passed" in output
+    assert "secret-api-key" not in output
 
 
 def test_deepseek_payload_accepts_breadth_context_and_prompt_has_sector_rotation_rule():
@@ -433,7 +570,7 @@ def test_investment_priority_prompt_has_selection_contract():
         "长期持有 SPY 与 Nasdaq-100",
         "美国资产定价的重要程度",
         "investment_relevance_score",
-        "宏观/政策重要性 0-30",
+        "importance*0.35 + us_relevance*0.30 + novelty*0.20 + persistence*0.15",
         "低于50分不得入选",
         "普通产品更新",
         "普通公司融资",
@@ -471,3 +608,41 @@ def test_event_selection_prompt_strengthens_market_structure_relevance():
 
     assert "市场结构相关性" in SYSTEM_PROMPT
     assert "不得把相关性写成确定因果" in SYSTEM_PROMPT
+
+
+def test_selection_rules_v1_are_explicit_and_dynamic_count():
+    from src.news_prompt import SYSTEM_PROMPT
+
+    for phrase in (
+        "Selection Rules v1",
+        "政策状态或制度环境",
+        "系统性金融变化",
+        "产业结构变化",
+        "投资传导路径",
+        "普通产品更新",
+        "不得根据当天市场涨跌反向寻找新闻",
+        "来源质量不等于事件重要性",
+        "不得通过夸大 why_it_matters",
+        "数量动态",
+        "不为凑数选入低价值事件",
+    ):
+        assert phrase in SYSTEM_PROMPT
+
+
+def test_stage_b_prompt_matches_validated_demo_selection_contract():
+    from src.news_prompt import SYSTEM_PROMPT
+
+    for phrase in (
+        "macro_policy",
+        "financial_markets",
+        "high_tech",
+        "geopolitics",
+        "重大事件优先展示",
+        "rank 仅作为展示顺序编号",
+        "同一事件的不同媒体报道只能占1条",
+        "分析师观点",
+        "评论或观点文章",
+        "不要把“某只股票、某个板块、债券、商品或其他资产上涨/下跌”本身作为新闻事件",
+        "importance*0.35 + us_relevance*0.30 + novelty*0.20 + persistence*0.15",
+    ):
+        assert phrase in SYSTEM_PROMPT

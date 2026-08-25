@@ -48,7 +48,7 @@ def modern_news_item(rank, title_prefix="新闻", summary="摘要"):
     }
 
 
-def test_renders_eight_investment_priority_news_cards_from_persisted_fields(tmp_path):
+def test_renders_dynamic_important_news_cards_from_persisted_fields(tmp_path):
     reports = tmp_path / "reports"
     reports.mkdir()
     payload = report("2026-08-12")
@@ -68,7 +68,7 @@ def test_renders_eight_investment_priority_news_cards_from_persisted_fields(tmp_
     compact_css = "".join((site / "style.css").read_text(encoding="utf-8").split())
     assert html.count('class="card news-card"') == 8
     assert 'class="news-section-meta">优先级：宏观政策 · 利率就业 · 金融 · AI · 地缘政治</div>' in html
-    assert "Top 8 · 投资影响优先" in html
+    assert "今日重要新闻" in html
     assert html.count('class="news-impact"') == 8
     assert html.count('class="news-focus"') == 8
     assert html.count('class="news-tags"') == 8

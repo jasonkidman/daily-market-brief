@@ -7,7 +7,7 @@ import time
 from datetime import datetime
 from typing import Any, Callable, Optional
 
-from .deepseek_client import call_deepseek, invoke_model
+from .deepseek_client import DEEPSEEK_MAX_ATTEMPTS, DeepSeekUsageTracker, call_deepseek, invoke_model
 from .news_event_prompt import SYSTEM_PROMPT
 
 
@@ -20,6 +20,7 @@ TOPIC_GROUPS = {
     "CORPORATE_EARNINGS",
     "OTHER_SYSTEMIC",
 }
+EVENT_CATEGORIES = {"macro_policy", "financial_markets", "high_tech", "geopolitics", "other"}
 PRIORITY_ORDER = {"P0": 0, "P1": 1, "P2": 2}
 
 
@@ -53,6 +54,7 @@ def validate_event_clusters(payload: Any, candidates: list[dict]) -> list[dict]:
         candidate_ids = item.get("candidate_ids")
         summary = str(item.get("event_summary", "")).strip()
         topic_group = item.get("topic_group")
+        event_category = item.get("event_category", "other")
         if not event_id or event_id in event_ids:
             raise NewsEventError("event_id 不能为空且不得重复。")
         if not isinstance(candidate_ids, list) or not candidate_ids:
@@ -61,6 +63,8 @@ def validate_event_clusters(payload: Any, candidates: list[dict]) -> list[dict]:
             raise NewsEventError("event_summary 不能为空。")
         if topic_group not in TOPIC_GROUPS:
             raise NewsEventError("topic_group 不合法。")
+        if event_category not in EVENT_CATEGORIES:
+            raise NewsEventError("event_category 不合法。")
         for candidate_id in candidate_ids:
             if candidate_id not in pool_ids:
                 raise NewsEventError("candidate_id 不在候选池。")
@@ -73,6 +77,7 @@ def validate_event_clusters(payload: Any, candidates: list[dict]) -> list[dict]:
             "candidate_ids": candidate_ids,
             "event_summary": summary,
             "topic_group": topic_group,
+            "event_category": event_category,
         })
     if assigned != pool_ids:
         raise NewsEventError("所有 candidate 必须恰好被一个 event 覆盖。")
@@ -106,11 +111,12 @@ def build_event_representatives(events: list[dict], candidate_pool: list[dict]) 
 
 
 def event_selection_candidates(event_representatives: list[dict]) -> list[dict]:
-    """Flatten one program-selected article per event for the Top 8 stage."""
+    """Flatten one program-selected article per event for the news selection stage."""
     return [{
         **event["representative"],
         "event_summary": event["event_summary"],
         "topic_group": event["topic_group"],
+        "event_category": event.get("event_category", "other"),
     } for event in event_representatives]
 
 
@@ -130,29 +136,62 @@ def _fallback_events(candidates: list[dict]) -> list[dict]:
         "candidate_ids": [item["candidate_id"]],
         "event_summary": item.get("title", "新闻事件"),
         "topic_group": "OTHER_SYSTEMIC",
+        "event_category": "other",
     } for index, item in enumerate(candidates, 1)]
+
+
+def _log_stage_a_events(events: list[dict]) -> None:
+    print(f"[NEWS STAGE A] output events: {len(events)}")
+    for event in events:
+        print(
+            "[NEWS STAGE A] event_id={event_id} | category={category} | title={title}".format(
+                event_id=event.get("event_id", ""),
+                category=event.get("event_category", "other"),
+                title=event.get("event_summary", ""),
+            )
+        )
 
 
 def cluster_news_events(candidates: list[dict], api_key: str,
                         call_model: Callable = call_deepseek,
-                        sleep_fn: Callable = time.sleep) -> tuple[list[dict], Optional[str]]:
+                        sleep_fn: Callable = time.sleep,
+                        usage_tracker: DeepSeekUsageTracker | None = None) -> tuple[list[dict], Optional[str]]:
     """Cluster deterministic candidates, falling back safely if Stage A is unavailable."""
     cluster_input = _cluster_candidate_input(candidates)
+    print(f"[NEWS STAGE A] input candidates: {len(cluster_input)}")
     if len(cluster_input) <= 1:
-        return _fallback_events(cluster_input), None
+        events = _fallback_events(cluster_input)
+        _log_stage_a_events(events)
+        return events, None
     user_payload = json.dumps({"candidates": cluster_input}, ensure_ascii=False)
     last_error = None
-    for attempt in range(3):
+    started = time.monotonic()
+    for attempt in range(DEEPSEEK_MAX_ATTEMPTS):
         try:
             raw = invoke_model(
-                call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=True, reasoning_effort="high"
+                call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=False, reasoning_effort=None,
+                stage="Stage A", attempt=attempt + 1, usage_tracker=usage_tracker,
             )
-            return validate_event_clusters(raw, cluster_input), None
+            try:
+                events = validate_event_clusters(raw, cluster_input)
+            except Exception as exc:
+                if usage_tracker is not None:
+                    usage_tracker.record_validation_failure("Stage A", attempt + 1, exc)
+                raise
+            _log_stage_a_events(events)
+            print(f"[NEWS AI] event clustering succeeded in {time.monotonic() - started:.1f}s")
+            return events, None
         except Exception as exc:
             last_error = exc
-            if attempt < 2:
+            print(
+                f"[NEWS AI] event clustering attempt {attempt + 1}/{DEEPSEEK_MAX_ATTEMPTS} failed "
+                f"after {time.monotonic() - started:.1f}s: {exc}"
+            )
+            if attempt < DEEPSEEK_MAX_ATTEMPTS - 1:
                 sleep_fn((5, 10)[attempt])
-    return _fallback_events(cluster_input), (
+    events = _fallback_events(cluster_input)
+    _log_stage_a_events(events)
+    return events, (
         "⚠️ 新闻事件级去重暂时失败，已使用基础去重结果继续生成日报。"
         f" 原因：{last_error}"
     )
