@@ -40,7 +40,6 @@ def modern_news_item(rank, title_prefix="新闻", summary="摘要"):
         "summary_zh": summary,
         "url": f"https://example.com/{rank}",
         "published_at": "2026-08-12T10:00:00+00:00",
-        "investment_impact": "离线夹具：收益率变化 → 估值观察，不代表真实投资信息。",
         "focus": "离线夹具关注项",
         "tags": ["离线夹具", "渲染"],
         "investment_relevance_score": max(50, 92 - rank + 1),
@@ -69,7 +68,7 @@ def test_renders_dynamic_important_news_cards_from_persisted_fields(tmp_path):
     assert html.count('class="card news-card"') == 8
     assert 'class="news-section-meta">优先级：宏观政策 · 利率就业 · 金融 · AI · 地缘政治</div>' in html
     assert "今日重要新闻" in html
-    assert html.count('class="news-impact"') == 8
+    assert 'class="news-impact"' not in html
     assert html.count('class="news-focus"') == 8
     assert html.count('class="news-tags"') == 8
     assert html.count("查看原文 →") == 8
@@ -78,7 +77,7 @@ def test_renders_dynamic_important_news_cards_from_persisted_fields(tmp_path):
     assert 'href="https://persisted.example/news-1"' in html
     assert ".news-layout{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))" in compact_css
     assert ".news-meta.rank{min-width:31px;height:24px;padding:09px;border-radius:12px;background:var(--blue);color:var(--surface)" in compact_css
-    assert ".news-impact{margin-top:12px;padding:10px11px;border-left:3pxsolidvar(--blue);background:var(--soft);color:var(--navy)" in compact_css
+    assert ".news-impact" not in compact_css
     assert ".news-summary{margin:0;color:var(--muted);font-size:12px;line-height:1.75}" in compact_css
     assert ".news-footera{color:var(--blue);font-size:11px" in compact_css
     news_css = compact_css[compact_css.index(".news-title-note"):compact_css.index("footer{")]
@@ -109,7 +108,7 @@ def test_legacy_news_uses_exact_fallback_copy_without_tags_or_score(tmp_path):
     render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
 
     html = (site / "index.html").read_text(encoding="utf-8")
-    assert "历史报告未生成结构化投资影响，建议结合原文观察。" in html
+    assert "投资影响" not in html
     assert "关注：查看原文后续进展" in html
     assert 'class="news-tags"' not in html
     assert "investment_relevance_score" not in html
@@ -623,7 +622,7 @@ def test_information_hierarchy_styles_metrics_drawdown_states_and_news_ranks(tmp
     for selector in (".status-normal", ".status-near", ".status-pending", ".status-executed"):
         assert selector in css
     assert ".draw-pending" in css
-    assert ".news-card" in css and ".news-impact" in css
+    assert ".news-card" in css and ".news-impact" not in css
     assert ".news-cardh3{margin:0010px;color:var(--ink);font-size:17px;line-height:1.45" in compact_css
     assert ".news-summary{margin:0;color:var(--muted);font-size:12px;line-height:1.75}" in compact_css
     assert ".news-footera{color:var(--blue);font-size:11px" in compact_css
@@ -751,7 +750,7 @@ def test_v5_visual_contract_is_the_rendered_dom_and_css_baseline(tmp_path):
         "draw-grid", "draw-card", "draw-layout", "draw-index", "dd", "small",
         "draw-mid", "distance", "dtrack", "cash", "news-layout", "news-card",
         "news-meta", "rank", "news-category", "news-source", "news-summary",
-        "news-impact", "news-tags", "news-footer", "news-focus",
+        "news-tags", "news-footer", "news-focus",
     ):
         assert re.search(rf'class="[^"]*\b{re.escape(class_name)}\b', html)
     assert 'class="market-breadth-grid"' not in html

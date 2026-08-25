@@ -234,17 +234,14 @@ def _offline_news():
     payload = {"news": [
         {"rank": 1, "candidate_id": "offline-fed-reuters", "category": "美联储 / 利率",
          "title_zh": "美联储维持利率", "summary_zh": "此条目仅用于验证事件级新闻去重后的离线日报生成流程，不代表真实新闻或投资信息。",
-         "investment_impact": "离线夹具（不代表真实投资信息）：美债收益率回落 → 成长股估值压力缓解。",
          "focus": "FOMC · 美债收益率", "tags": ["Fed", "美债", "估值"],
          "investment_relevance_score": 92, "selection_reason": "演示用宏观代表事件，利率路径影响折现率。"},
         {"rank": 2, "candidate_id": "offline-nvidia-techcrunch", "category": "AI / 资本开支",
          "title_zh": "英伟达推出新 AI 芯片", "summary_zh": "此条目仅用于验证同一公司同一次事件被合并为单一代表文章，不代表真实新闻或投资信息。",
-         "investment_impact": "离线夹具（不代表真实投资信息）：AI 资本开支增加 → 半导体需求预期改善。",
          "focus": "AI 资本开支 · 数据中心", "tags": ["AI", "半导体", "资本开支"],
          "investment_relevance_score": 85, "selection_reason": "演示用科技代表事件，验证事件级合并结果。"},
         {"rank": 3, "candidate_id": "offline-oil-bbc", "category": "地缘政治",
          "title_zh": "中东局势升级推动油价上涨", "summary_zh": "此条目仅用于验证独立地缘事件保留为单独新闻事件，不代表真实新闻或投资信息。",
-         "investment_impact": "离线夹具（不代表真实投资信息）：油价上涨 → 通胀预期走高 → 美债收益率承压。",
          "focus": "中东局势 · 油价", "tags": ["地缘政治", "油价", "通胀"],
          "investment_relevance_score": 78, "selection_reason": "演示用独立地缘事件，验证主题分散保留。"},
     ]}

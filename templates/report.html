@@ -149,7 +149,6 @@
         <div class="news-meta"><span class="rank">{{ '%02d'|format(item.rank) }}</span><span class="news-category">{{ item.category }}</span><span class="news-source">{{ item.source }}</span></div>
         <h3>{{ item.title_zh }}</h3>
         <p class="news-summary">{{ item.summary_zh }}</p>
-        <div class="news-impact"><strong>投资影响：</strong>{{ item.get('investment_impact') or '历史报告未生成结构化投资影响，建议结合原文观察。' }}</div>
         {% if item.get('tags') %}<div class="news-tags">{% for tag in item.get('tags') %}<span>{{ tag }}</span>{% endfor %}</div>{% endif %}
         <div class="news-footer"><span class="news-focus">关注：{{ item.get('focus') or '查看原文后续进展' }}</span><a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">查看原文 →</a></div>
       </article>{% endfor %}

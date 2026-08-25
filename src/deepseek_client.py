@@ -26,7 +26,6 @@ ALLOWED_CATEGORIES = {
 }
 TITLE_ZH_LIMIT = 70
 SUMMARY_ZH_LIMIT = 180
-INVESTMENT_IMPACT_LIMIT = 220
 FOCUS_LIMIT = 80
 SELECTION_REASON_LIMIT = 120
 TAG_LIMIT = 16
@@ -239,33 +238,6 @@ def _required_text(item: dict, key: str, limit: int) -> str:
     return value
 
 
-def _normalize_investment_impact(item: dict) -> tuple[str, bool]:
-    raw_value = item.get("investment_impact")
-    if not isinstance(raw_value, str):
-        raise _ItemValidationError("investment_impact", "investment_impact 类型不合法")
-    value = raw_value.strip()
-    normalized = value
-    for arrow in ("->", "=>", "➡", "⟶"):
-        normalized = normalized.replace(arrow, "→")
-    normalized = normalized.strip()
-    if not normalized or len(normalized) > INVESTMENT_IMPACT_LIMIT:
-        raise _ItemValidationError("investment_impact", "investment_impact 超出长度或为空")
-    if not _has_impact_path(normalized):
-        raise _ItemValidationError("investment_impact", "缺少资产变量及因果/条件传导路径")
-    return normalized, normalized != value
-
-
-def _has_impact_path(value: str) -> bool:
-    if "短期资产价格影响有限，暂以观察为主" in value:
-        return True
-    variables = (
-        "SPY", "Nasdaq", "纳指", "科技股", "美债", "收益率", "美元", "信用", "AI", "半导体",
-        "估值", "通胀", "油价", "利率", "金融条件", "就业", "盈利", "流动性", "风险偏好",
-    )
-    connectors = ("→", "若", "如果", "导致", "使得", "进而", "从而", "有利于", "压制")
-    return any(term in value for term in variables) and any(term in value for term in connectors)
-
-
 def _validated_tags(item: dict) -> tuple[list[str], bool]:
     tags = item.get("tags")
     if not isinstance(tags, list):
@@ -301,7 +273,6 @@ def _validate_item(item: Any, pool: dict[str, dict], raw_count: int) -> tuple[di
         summary_zh = _required_text(item, "summary_zh", SUMMARY_ZH_LIMIT)
     except NewsSelectionError as exc:
         raise _ItemValidationError("text", str(exc)) from exc
-    investment_impact, impact_normalized = _normalize_investment_impact(item)
     try:
         focus = _required_text(item, "focus", FOCUS_LIMIT)
         selection_reason = _required_text(item, "selection_reason", SELECTION_REASON_LIMIT)
@@ -318,7 +289,6 @@ def _validate_item(item: Any, pool: dict[str, dict], raw_count: int) -> tuple[di
         "category": item["category"],
         "title_zh": title_zh,
         "summary_zh": summary_zh,
-        "investment_impact": investment_impact,
         "focus": focus,
         "tags": tags,
         "investment_relevance_score": score,
@@ -335,8 +305,6 @@ def _validate_item(item: Any, pool: dict[str, dict], raw_count: int) -> tuple[di
     normalized_fields = []
     if tags_normalized:
         normalized_fields.append("tags")
-    if impact_normalized:
-        normalized_fields.append("investment_impact")
     return validated, normalized_fields
 
 

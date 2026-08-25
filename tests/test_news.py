@@ -48,14 +48,36 @@ def test_validates_enriched_investment_fields_and_keeps_source_metadata_program_
     assert news[0]["tags"] == ["Fed", "10Y 美债", "成长股估值"]
 
 
+def test_stage_b_accepts_important_event_without_investment_impact():
+    pool = [candidate("tesla", "Tesla recalls vehicles", "https://x/tesla")]
+    item = enriched_selection("tesla", category="政策 / 监管")
+    item.pop("investment_impact")
+    item["title_zh"] = "特斯拉在华大规模召回车辆"
+    item["summary_zh"] = "特斯拉在华启动大规模车辆召回，事实来源和事件信息完整。"
+
+    news = validate_selection({"news": [item]}, pool)
+
+    assert news[0]["title_zh"] == "特斯拉在华大规模召回车辆"
+    assert "investment_impact" not in news[0]
+
+
+def test_stage_b_accepts_empty_investment_impact_for_important_event():
+    pool = [candidate("tesla", "Tesla recalls vehicles", "https://x/tesla")]
+    item = enriched_selection("tesla", category="政策 / 监管")
+    item["investment_impact"] = ""
+
+    news = validate_selection({"news": [item]}, pool)
+
+    assert news[0]["candidate_id"] == "tesla"
+    assert "investment_impact" not in news[0]
+
+
 @pytest.mark.parametrize("patch", [
     {"investment_relevance_score": 49},
     {"investment_relevance_score": 92.5},
-    {"investment_impact": "利好科技股"},
     {"tags": []},
     {"title_zh": "标" * 71},
     {"summary_zh": "摘" * 181},
-    {"investment_impact": "10Y 美债 → " + "影" * 221},
     {"focus": "关" * 81},
     {"selection_reason": "理" * 121},
 ])
@@ -78,7 +100,6 @@ def test_rejects_boolean_investment_relevance_score():
 @pytest.mark.parametrize("field,value", [
     ("title_zh", 123),
     ("summary_zh", {"text": "摘要"}),
-    ("investment_impact", ["利率", "→", "估值"]),
     ("focus", None),
     ("selection_reason", True),
 ])
@@ -118,23 +139,21 @@ def test_stage_b_keeps_other_items_when_one_tags_item_is_invalid(capsys):
     assert "raw_count=10 valid_count=9" in output
 
 
-def test_stage_b_keeps_other_items_when_one_investment_impact_item_is_invalid(capsys):
+def test_stage_b_keeps_other_items_when_investment_impact_is_missing(capsys):
     pool = [candidate(str(i), f"Title {i}", f"https://x/{i}") for i in range(10)]
 
     def model(system_prompt, user_payload, api_key):
         items = [enriched_selection(str(i), i + 1, 100 - i) for i in range(10)]
-        items[6]["investment_impact"] = "利好科技股"
+        items[6].pop("investment_impact")
         return json.dumps({"news": items}, ensure_ascii=False)
 
     selected, warning = select_news(pool, "key", call_model=model, sleep_fn=lambda _: None)
 
     output = capsys.readouterr().out
     assert warning is None
-    assert len(selected) == 9
-    assert "candidate_id=6" in output
-    assert "field=investment_impact" in output
-    assert "action=dropped" in output
-    assert "raw_count=10 valid_count=9" in output
+    assert len(selected) == 10
+    assert "field=investment_impact" not in output
+    assert "raw_count=10 valid_count=10" in output
 
 
 def test_stage_b_normalizes_tags_without_inventing_tags():
@@ -149,20 +168,6 @@ def test_stage_b_normalizes_tags_without_inventing_tags():
 
     assert warning is None
     assert selected[0]["tags"] == ["Fed", "美债", "多余标签"]
-
-
-def test_stage_b_normalizes_impact_arrow_without_relaxing_path_check():
-    pool = [candidate("1", "Fed holds rates", "https://x/1")]
-
-    def model(system_prompt, user_payload, api_key):
-        item = enriched_selection()
-        item["investment_impact"] = "通胀预期上升 -> 收益率承压 -> 成长股估值面临压力。"
-        return json.dumps({"news": [item]}, ensure_ascii=False)
-
-    selected, warning = select_news(pool, "key", call_model=model, sleep_fn=lambda _: None)
-
-    assert warning is None
-    assert selected[0]["investment_impact"] == "通胀预期上升 → 收益率承压 → 成长股估值面临压力。"
 
 
 def test_stage_b_preserves_dynamic_news_count():
@@ -186,7 +191,7 @@ def test_stage_b_retries_only_when_all_items_fail_validation():
         attempts.append(1)
         items = [enriched_selection(str(i), i + 1, 100 - i) for i in range(10)]
         for item in items:
-            item["investment_impact"] = "利好科技股"
+            item.pop("investment_impact")
         return json.dumps({"news": items}, ensure_ascii=False)
 
     selected, warning = select_news(
@@ -194,28 +199,13 @@ def test_stage_b_retries_only_when_all_items_fail_validation():
         "key", call_model=model, sleep_fn=lambda _: None,
     )
 
-    assert selected == []
-    assert "新闻 AI 处理暂时失败" in warning
-    assert len(attempts) == 2
-
-
-@pytest.mark.parametrize("impact", [
-    "政策利率若维持高位，金融条件将继续收紧。",
-    "就业若明显降温，企业盈利预期可能承压。",
-    "流动性改善 → 风险偏好回升 → 股票估值获得支撑。",
-])
-def test_accepts_spec_approved_impact_path_variables(impact):
-    pool = [candidate("1", "Fed holds rates", "https://x/1")]
-
-    news = validate_selection(
-        {"news": [{**enriched_selection(), "investment_impact": impact}]}, pool
-    )
-
-    assert news[0]["investment_impact"] == impact
+    assert len(selected) == 10
+    assert warning is None
+    assert len(attempts) == 1
 
 
 @pytest.mark.parametrize("field", [
-    "investment_impact", "focus", "tags", "investment_relevance_score",
+    "focus", "tags", "investment_relevance_score",
 ])
 def test_rejects_missing_required_enriched_field(field):
     pool = [candidate("1", "Fed holds rates", "https://x/1")]
@@ -674,7 +664,6 @@ def test_investment_priority_prompt_has_selection_contract():
         "低于50分不得入选",
         "普通产品更新",
         "普通公司融资",
-        "短期资产价格影响有限，暂以观察为主。",
         "不要返回URL",
     ):
         assert phrase in SYSTEM_PROMPT
