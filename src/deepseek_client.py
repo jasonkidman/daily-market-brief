@@ -371,7 +371,61 @@ def _validate_selection_items(payload: Any, candidates: list[dict]) -> dict[str,
     }
 
 
+def _stage_b_contract(payload: Any) -> tuple[list[dict], list[dict]]:
+    data = _parse_payload(payload)
+    if "selected" in data or "reserve" in data:
+        selected = data.get("selected")
+        reserve = data.get("reserve")
+        if not isinstance(selected, list) or not isinstance(reserve, list):
+            raise NewsSelectionError("selected 和 reserve 必须是数组。")
+        return selected, reserve
+    legacy_news = data.get("news")
+    if not isinstance(legacy_news, list):
+        raise NewsSelectionError("news 必须是数组。")
+    return legacy_news, []
+
+
+def _topic_group_counts(items: list[dict]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for item in items:
+        topic_group = item.get("topic_group")
+        if topic_group:
+            counts[topic_group] = counts.get(topic_group, 0) + 1
+    return counts
+
+
+def _validate_reserve_item(item: Any, candidates: list[dict], model_rank: int,
+                           final_items: list[dict], previous_score: int | None) -> tuple[dict, str | None]:
+    candidate_id = item.get("candidate_id", "<missing>") if isinstance(item, dict) else "<non-object>"
+    if candidate_id in {entry.get("candidate_id") for entry in final_items}:
+        return {}, "candidate_id 重复"
+    if previous_score is not None and isinstance(item, dict):
+        score = item.get("investment_relevance_score")
+        if isinstance(score, int) and not isinstance(score, bool) and score > previous_score:
+            return {}, "分数未按 reserve 顺序非递增"
+    candidate_copy = dict(item) if isinstance(item, dict) else item
+    if isinstance(candidate_copy, dict):
+        candidate_copy["rank"] = 1
+    try:
+        validated, _ = _validate_item(candidate_copy, {entry["candidate_id"]: entry for entry in candidates}, 1)
+    except _ItemValidationError as exc:
+        return {}, str(exc)
+    counts = _topic_group_counts(final_items)
+    topic_group = validated.get("topic_group")
+    if topic_group:
+        counts[topic_group] = counts.get(topic_group, 0) + 1
+        if counts[topic_group] > 2 and (
+            validated["investment_relevance_score"] < 85
+            or "主题上限例外" not in validated["selection_reason"]
+        ):
+            return {}, "topic_group 超过主题上限"
+    validated["model_rank"] = model_rank
+    return validated, None
+
+
 def validate_selection(payload: Any, candidates: list[dict]) -> list[dict]:
+    selected, reserve = _stage_b_contract(payload)
+    payload = {"news": selected}
     result = _validate_selection_items(payload, candidates)
     if result["raw_count"] != len(result["validated"]):
         issue = next((item for item in result["issues"] if "reason" in item), None)
@@ -440,7 +494,7 @@ def _log_stage_b_input(candidates: list[dict]) -> None:
 def _log_stage_b_raw_response(raw: Any) -> None:
     try:
         data = raw if isinstance(raw, dict) else json.loads(raw)
-        items = data.get("news") if isinstance(data, dict) else None
+        items = data.get("selected") if isinstance(data, dict) and "selected" in data else data.get("news") if isinstance(data, dict) else None
     except (TypeError, json.JSONDecodeError):
         print("[NEWS STAGE B] DeepSeek raw return count: <unparseable>")
         return
@@ -468,15 +522,6 @@ def _log_stage_b_raw_response(raw: Any) -> None:
         )
 
 
-def _stage_b_raw_items(raw: Any) -> list[dict]:
-    try:
-        data = raw if isinstance(raw, dict) else json.loads(raw)
-        items = data.get("news") if isinstance(data, dict) else None
-    except (TypeError, json.JSONDecodeError):
-        return []
-    return [item for item in items if isinstance(item, dict)] if isinstance(items, list) else []
-
-
 def _log_stage_b_selection(candidates: list[dict], raw_items: list[dict], validated: list[dict], issues: list[dict]) -> None:
     raw_ids = {item.get("candidate_id") for item in raw_items}
     selected_ids = {item.get("candidate_id") for item in validated}
@@ -496,6 +541,24 @@ def _log_stage_b_selection(candidates: list[dict], raw_items: list[dict], valida
             f"[NEWS STAGE B TRACE] candidate_id={candidate_id} | title={candidate.get('title', '')} "
             f"| source={candidate.get('source', '')} | stage=stage_b | action={action} | reason={reason}"
         )
+
+
+def _log_stage_b_contract_trace(raw_selected: list[dict], raw_reserve: list[dict], selected: list[dict],
+                                reserve_trace: list[dict], final: list[dict]) -> None:
+    selected_ids = {item.get("candidate_id") for item in selected}
+    for item in raw_selected:
+        candidate_id = item.get("candidate_id", "<missing>")
+        action = "pass" if candidate_id in selected_ids else "drop"
+        print(f"[NEWS STAGE B EVENT] stage_b_selected candidate_id={candidate_id} action={action}")
+        if action == "drop":
+            print(f"[NEWS STAGE B EVENT] stage_b_selected_validation_drop candidate_id={candidate_id}")
+        print(f"[NEWS STAGE B TRACE] candidate_id={candidate_id} | pool=selected | model_rank={item.get('rank', '<missing>')} | validation_action={action} | final_rank={next((x.get('rank') for x in final if x.get('candidate_id') == candidate_id), '<none>')}")
+    for trace in reserve_trace:
+        event_name = "stage_b_reserve_validation_pass" if trace["action"] == "pass" else "stage_b_reserve_validation_drop"
+        if trace["action"] == "pass" and trace["reason"] == "backfilled":
+            print(f"[NEWS STAGE B EVENT] stage_b_backfill candidate_id={trace['candidate_id']}")
+        print(f"[NEWS STAGE B EVENT] {event_name} candidate_id={trace['candidate_id']} reason={trace['reason']}")
+        print(f"[NEWS STAGE B TRACE] candidate_id={trace['candidate_id']} | pool=reserve | model_rank={trace['model_rank']} | validation_action={trace['action']} | reason={trace['reason']} | final_rank={next((x.get('rank') for x in final if x.get('candidate_id') == trace['candidate_id']), '<none>')}")
 
 
 def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict] = None,
@@ -529,11 +592,17 @@ def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict
                 stage="Stage B", attempt=attempt + 1, usage_tracker=usage_tracker,
             )
             _log_stage_b_raw_response(raw)
-            raw_items = _stage_b_raw_items(raw)
+            contract_selected, contract_reserve = _stage_b_contract(raw)
+            raw_items = [item for item in contract_selected if isinstance(item, dict)]
+            raw_reserve = [item for item in contract_reserve if isinstance(item, dict)]
+            target_count = len(raw_items)
             if observability is not None:
                 observability["raw_count"] = len(raw_items)
+                observability["stage_b_selected_count"] = len(raw_items)
+                observability["stage_b_reserve_count"] = len(raw_reserve)
+                observability["stage_b_target_count"] = target_count
             try:
-                validation = _validate_selection_items(raw, candidates)
+                validation = _validate_selection_items({"news": raw_items}, candidates)
                 for issue in validation["issues"]:
                     if issue.get("action") == "normalized":
                         print(
@@ -546,13 +615,44 @@ def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict
                             f"field={issue['field']} action=dropped reason={issue['reason']}"
                         )
                 selected = validation["validated"]
+                reserve_trace = []
+                reserve_pass_count = 0
+                reserve_drop_count = 0
+                previous_score = selected[-1]["investment_relevance_score"] if selected else None
+                for model_rank, reserve_item in enumerate(raw_reserve, start=1):
+                    if len(selected) >= target_count:
+                        break
+                    validated_reserve, reason = _validate_reserve_item(
+                        reserve_item, candidates, model_rank, selected, previous_score
+                    )
+                    candidate_id = reserve_item.get("candidate_id", "<missing>")
+                    if reason is None:
+                        selected.append(validated_reserve)
+                        previous_score = validated_reserve["investment_relevance_score"]
+                        reserve_pass_count += 1
+                        action = "pass"
+                        reason = "backfilled"
+                    else:
+                        reserve_drop_count += 1
+                        action = "drop"
+                    reserve_trace.append({"candidate_id": candidate_id, "model_rank": model_rank, "action": action, "reason": reason})
+                    if len(selected) >= target_count:
+                        break
+                for rank, item in enumerate(selected, start=1):
+                    item["rank"] = rank
                 if observability is not None:
                     observability["validated_count"] = len(selected)
-                _log_stage_b_selection(candidates, raw_items, selected, validation["issues"])
+                    observability["stage_b_selected_valid_count"] = len(validation["validated"])
+                    observability["stage_b_reserve_validation_pass_count"] = reserve_pass_count
+                    observability["stage_b_reserve_validation_drop_count"] = reserve_drop_count
+                    observability["stage_b_backfilled_count"] = reserve_pass_count
+                    observability["stage_b_final_count"] = len(selected)
+                _log_stage_b_selection(candidates, raw_items, validation["validated"], validation["issues"])
+                _log_stage_b_contract_trace(raw_items, raw_reserve, validation["validated"], reserve_trace, selected)
                 print(
                     f"[NEWS STAGE B VALIDATION] raw_count={validation['raw_count']} "
                     f"valid_count={len(selected)} normalized_count={validation['normalized_count']} "
-                    f"dropped_count={validation['raw_count'] - len(selected)}"
+                    f"dropped_count={validation['raw_count'] - len(validation['validated'])}"
                 )
                 if validation["raw_count"] > 0 and not selected:
                     raise NewsSelectionError("所有新闻条目均未通过 validation。")

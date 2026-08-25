@@ -174,7 +174,8 @@ def _log_news_pipeline(rss_raw_count: int, within_24h_count: int, deduplicated_c
                        stage_a_pre_cap_count: int, stage_a_actual_input_count: int,
                        event_representatives: list[dict], stage_b_candidates: list[dict],
                        stage_b_raw_count: int, stage_b_validated_count: int,
-                       recent_events: list[dict], selected: list[dict]) -> None:
+                       recent_events: list[dict], selected: list[dict],
+                       stage_b_observability: dict | None = None) -> None:
     print("[NEWS PIPELINE]")
     print(f"rss_raw_count: {rss_raw_count}")
     print(f"within_24h_count: {within_24h_count}")
@@ -198,6 +199,12 @@ def _log_news_pipeline(rss_raw_count: int, within_24h_count: int, deduplicated_c
         print(f"candidate_id={item.get('candidate_id')} | category={item.get('event_category', 'other')} | title={item.get('title', '')}")
     print(f"stage_b_raw_count: {stage_b_raw_count}")
     print(f"stage_b_validated_count: {stage_b_validated_count}")
+    if stage_b_observability:
+        for key in (
+            "stage_b_selected_count", "stage_b_reserve_count", "stage_b_selected_valid_count",
+            "stage_b_backfilled_count", "stage_b_final_count", "stage_b_target_count",
+        ):
+            print(f"{key}: {stage_b_observability.get(key, 0)}")
     print("[EVENT HISTORY]")
     print(f"Recent events checked: {len(recent_events)}")
     print("[TOPIC DISTRIBUTION]")
@@ -372,7 +379,7 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
             rss_candidate_count, window_candidate_count, len(candidates), stage_a_pre_cap_count,
             stage_a_actual_input_count, event_representatives, selection_candidates,
             stage_b_observability["raw_count"], stage_b_observability["validated_count"],
-            recent_events, news,
+            recent_events, news, stage_b_observability,
         )
         if ai_warning:
             warnings.append(ai_warning)

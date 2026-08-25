@@ -21,6 +21,17 @@
       {"candidate_id": "future_threat", "title": "Foreign official threatens possible action in the future", "event_summary": "A threat or prediction without a confirmed policy or state change."}
     ]
   },
+  "stage_b_response_fixture": {
+    "selected": [
+      "Treasury", "US-Canada", "Iran", "Hugging Face acquisition",
+      "Hugging Face/OpenAI investigation", "AI jobs", "Amazon"
+    ],
+    "reserve": ["SEC probe", "Tesla", "Syria", "GM"],
+    "simulation": {
+      "selected_validation_drop": "Amazon",
+      "reserve_attempt_order": ["SEC probe", "Tesla", "Syria", "GM"]
+    }
+  },
   "expected_contract": {
     "A": "major_company_action > ordinary_ai_product > lifestyle_story",
     "B": "explicit_regulatory_action > startup_funding > ai_opinion",

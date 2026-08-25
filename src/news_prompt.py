@@ -48,7 +48,8 @@ Selection Rules v1：严格事件筛选
 
 允许的九个 category 值只能是："美联储 / 利率"、"就业 / 通胀"、"美国经济"、"美债 / 美元"、"金融市场"、"AI / 资本开支"、"半导体"、"地缘政治"、"政策 / 监管"。
 
-严格输出
+Stage B 输出 contract
 只返回一个合法 JSON 对象，不要 Markdown、解释、代码围栏或额外字段，格式如下：
-{"news":[{"rank":1,"candidate_id":"候选ID","category":"美联储 / 利率","title_zh":"中文标题","summary_zh":"中文摘要","focus":"后续关注指标或事件","tags":["关键词"],"investment_relevance_score":92,"selection_reason":"仅基于输入事实的入选理由"}]}
+{"selected":[{"rank":1,"candidate_id":"候选ID","category":"美联储 / 利率","title_zh":"中文标题","summary_zh":"中文摘要","focus":"后续关注指标或事件","tags":["关键词"],"investment_relevance_score":92,"selection_reason":"仅基于输入事实的入选理由"}],"reserve":[{"rank":1,"candidate_id":"备选候选ID","category":"美联储 / 利率","title_zh":"中文标题","summary_zh":"中文摘要","focus":"后续关注指标或事件","tags":["关键词"],"investment_relevance_score":80,"selection_reason":"仅基于输入事实的备选理由"}]}
+selected 只放当前真正值得展示的新闻，数量动态决定，不要求固定数量。reserve 是有限的、按重要性排序的额外备选（例如3-5条），每条必须使用与 selected 相同的完整字段、满足完全相同的事实确认和新闻价值门槛；如果没有足够合格备选，可以少返回或为空。reserve 不是把剩余候选全部返回，也不代表最终展示，只用于 selected 经过程序 deterministic validation 被删除后的顺序补位。程序只会按你给出的 reserve 顺序逐条重新验证，不会重新评分、排序或新增模型调用。
 candidate_id 必须来自输入 events 且不能重复。不要返回 source、url、published_at、original_title、event_summary 或 topic_group；这些字段由程序根据候选池映射。不要返回URL，也不要生成或修改URL。"""

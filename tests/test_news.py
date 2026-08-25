@@ -42,6 +42,18 @@ def enriched_selection(cid="1", rank=1, score=92, category="美联储 / 利率")
     }
 
 
+def stage_b_item(cid, rank=1, score=92, category="美联储 / 利率"):
+    return enriched_selection(cid, rank=rank, score=score, category=category)
+
+
+def stage_b_pool(ids, topic_group=None):
+    return [
+        {**candidate(cid, f"Title {cid}", f"https://x/{cid}"),
+         **({"topic_group": topic_group} if topic_group else {})}
+        for cid in ids
+    ]
+
+
 def test_validates_enriched_investment_fields_and_keeps_source_metadata_program_owned():
     pool = [candidate("1", "Fed holds rates", "https://trusted.example/fed", source="Reuters")]
     item = {**enriched_selection(), "source": "Fake", "url": "https://fake.example"}
@@ -188,6 +200,180 @@ def test_stage_b_preserves_dynamic_news_count():
 
     assert warning is None
     assert len(selected) == 12
+
+
+def test_stage_b_selected_all_valid_does_not_consume_reserve():
+    ids = [str(i) for i in range(9)]
+    pool = stage_b_pool(ids)
+
+    def model(system_prompt, user_payload, api_key):
+        return json.dumps({
+            "selected": [stage_b_item(str(i), i + 1, 100 - i) for i in range(6)],
+            "reserve": [stage_b_item(str(i), i + 1, 90 - i) for i in range(6, 9)],
+        }, ensure_ascii=False)
+
+    observability = {}
+    selected, warning = select_news(pool, "key", call_model=model,
+                                    sleep_fn=lambda _: None,
+                                    observability=observability)
+
+    assert warning is None
+    assert len(selected) == 6
+    assert observability["stage_b_target_count"] == 6
+    assert observability["stage_b_backfilled_count"] == 0
+    assert observability["stage_b_reserve_validation_pass_count"] == 0
+
+
+def test_stage_b_backfills_selected_topic_drop_using_current_final_topic_count():
+    ids = [str(i) for i in range(8)]
+    pool = stage_b_pool(ids[:7], topic_group="AI_CHIPS") + stage_b_pool(ids[7:])
+    pool[0]["topic_group"] = "US_MARKET_MACRO"
+    pool[1]["topic_group"] = "US_MARKET_MACRO"
+    pool[2]["topic_group"] = "MEGA_CAP_TECH"
+    pool[3]["topic_group"] = "MEGA_CAP_TECH"
+    pool[4]["topic_group"] = "AI_CHIPS"
+    pool[5]["topic_group"] = "AI_CHIPS"
+    pool[6]["topic_group"] = "AI_CHIPS"
+    pool[7]["topic_group"] = "AI_CHIPS"
+
+    def model(system_prompt, user_payload, api_key):
+        selected = [stage_b_item(str(i), i + 1, 92 - i * 2) for i in range(7)]
+        selected[6]["investment_relevance_score"] = 80
+        reserve = [stage_b_item("7", 1, 79)]
+        pool[7]["topic_group"] = "OTHER_SYSTEMIC"
+        return json.dumps({"selected": selected, "reserve": reserve}, ensure_ascii=False)
+
+    observability = {}
+    selected, warning = select_news(pool, "key", call_model=model,
+                                    sleep_fn=lambda _: None,
+                                    observability=observability)
+
+    assert warning is None
+    assert [item["candidate_id"] for item in selected] == [str(i) for i in range(6)] + ["7"]
+    assert observability["stage_b_target_count"] == 7
+    assert observability["stage_b_backfilled_count"] == 1
+
+
+def test_stage_b_reserve_is_tried_in_model_order_and_failed_reserve_is_skipped():
+    pool = stage_b_pool([str(i) for i in range(5)], topic_group="AI_CHIPS")
+
+    def model(system_prompt, user_payload, api_key):
+        selected = [stage_b_item(str(i), i + 1, 92 - i * 2) for i in range(3)]
+        selected[2]["investment_relevance_score"] = 80
+        reserve = [stage_b_item("3", 1, 78), stage_b_item("4", 2, 77)]
+        pool[3]["topic_group"] = "AI_CHIPS"
+        pool[4]["topic_group"] = "OTHER_SYSTEMIC"
+        return json.dumps({"selected": selected, "reserve": reserve}, ensure_ascii=False)
+
+    selected, warning = select_news(pool, "key", call_model=model, sleep_fn=lambda _: None)
+
+    assert warning is None
+    assert [item["candidate_id"] for item in selected] == ["0", "1", "4"]
+
+
+def test_stage_b_reserve_exhaustion_does_not_overfill_or_lower_target():
+    pool = stage_b_pool([str(i) for i in range(4)], topic_group="AI_CHIPS")
+
+    def model(system_prompt, user_payload, api_key):
+        selected = [stage_b_item(str(i), i + 1, 92 - i * 2) for i in range(3)]
+        selected[2]["investment_relevance_score"] = 80
+        reserve = [stage_b_item("3", 1, 77)]
+        reserve[0]["tags"] = []
+        return json.dumps({"selected": selected, "reserve": reserve}, ensure_ascii=False)
+
+    observability = {}
+    selected, warning = select_news(pool, "key", call_model=model,
+                                    sleep_fn=lambda _: None,
+                                    observability=observability)
+
+    assert warning is None
+    assert len(selected) == 2
+    assert observability["stage_b_target_count"] == 3
+    assert observability["stage_b_final_count"] == 2
+
+
+def test_stage_b_dynamic_target_is_selected_count_not_eight():
+    for selected_count in (5, 7):
+        ids = [str(i) for i in range(selected_count)]
+        pool = stage_b_pool(ids)
+
+        def model(system_prompt, user_payload, api_key, count=selected_count):
+            return json.dumps({"selected": [stage_b_item(str(i), i + 1, 100 - i) for i in range(count)],
+                               "reserve": []}, ensure_ascii=False)
+
+        observability = {}
+        selected, warning = select_news(pool, "key", call_model=model,
+                                        sleep_fn=lambda _: None,
+                                        observability=observability)
+        assert warning is None
+        assert len(selected) == selected_count
+        assert observability["stage_b_target_count"] == selected_count
+
+
+def test_stage_b_backfill_does_not_make_an_additional_llm_call():
+    calls = []
+    pool = stage_b_pool(["0", "1", "2"], topic_group="AI_CHIPS")
+    pool[0]["topic_group"] = "US_MARKET_MACRO"
+
+    def model(system_prompt, user_payload, api_key):
+        calls.append(1)
+        selected = [stage_b_item("0", 1, 92), stage_b_item("1", 2, 80)]
+        return json.dumps({"selected": selected, "reserve": [stage_b_item("2", 1, 79)]}, ensure_ascii=False)
+
+    select_news(pool, "key", call_model=model, sleep_fn=lambda _: None)
+
+    assert len(calls) == 1
+
+
+def test_stage_b_duplicate_reserve_cannot_enter_final():
+    pool = stage_b_pool(["0", "1"], topic_group="AI_CHIPS")
+    pool[0]["topic_group"] = "US_MARKET_MACRO"
+
+    def model(system_prompt, user_payload, api_key):
+        return json.dumps({"selected": [stage_b_item("0", 1, 92)],
+                           "reserve": [stage_b_item("0", 1, 91), stage_b_item("1", 2, 90)]}, ensure_ascii=False)
+
+    selected, warning = select_news(pool, "key", call_model=model, sleep_fn=lambda _: None)
+
+    assert warning is None
+    assert [item["candidate_id"] for item in selected] == ["0"]
+
+
+def test_run_32822389426_fixture_simulates_amazon_drop_and_sec_backfill(capsys):
+    fixture = json.load(open(CONTRACT_FIXTURE, encoding="utf-8"))
+    contract = fixture["stage_b_response_fixture"]
+    ids = contract["selected"] + contract["reserve"]
+    pool = stage_b_pool(ids)
+    topic_map = {
+        "Treasury": "US_MARKET_MACRO", "US-Canada": "GEOPOLITICS", "Iran": "ENERGY_COMMODITIES",
+        "Hugging Face acquisition": "MEGA_CAP_TECH",
+        "Hugging Face/OpenAI investigation": "MEGA_CAP_TECH", "AI jobs": "AI_CHIPS",
+        "Amazon": "MEGA_CAP_TECH",
+    }
+    for item in pool:
+        item["topic_group"] = topic_map.get(item["candidate_id"], "OTHER_SYSTEMIC")
+
+    def model(system_prompt, user_payload, api_key):
+        selected = [stage_b_item(cid, index + 1, 92 - index * 2)
+                    for index, cid in enumerate(contract["selected"])]
+        selected[-1]["investment_relevance_score"] = 80
+        reserve = [stage_b_item(cid, index + 1, 78 - index)
+                   for index, cid in enumerate(contract["reserve"])]
+        return json.dumps({"selected": selected, "reserve": reserve}, ensure_ascii=False)
+
+    observability = {}
+    selected, warning = select_news(pool, "key", call_model=model,
+                                    sleep_fn=lambda _: None,
+                                    observability=observability)
+
+    output = capsys.readouterr().out
+    assert warning is None
+    assert len(selected) == 7
+    assert "Amazon" not in [item["candidate_id"] for item in selected]
+    assert "SEC probe" in [item["candidate_id"] for item in selected]
+    assert observability["stage_b_target_count"] == 7
+    assert observability["stage_b_backfilled_count"] == 1
+    assert "stage_b_backfill candidate_id=SEC probe" in output
 
 
 def test_stage_b_retries_only_when_all_items_fail_validation():
