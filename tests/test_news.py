@@ -16,6 +16,12 @@ from src.main import _recent_news_events
 from src.rss_news import fetch_candidates, filter_final_candidates
 
 
+CONTRACT_FIXTURE = os.path.join(
+    os.path.dirname(__file__), "..", "experiments", "news_selection_eval",
+    "2026-08-25-run-32820597633-stage-b-contract-fixture.json",
+)
+
+
 def candidate(cid, title, url, source="BBC News", summary="full summary", priority="P0"):
     return {"candidate_id": cid, "title": title, "url": url, "source": source,
             "summary": summary, "published_at": "2026-08-12T00:00:00+00:00", "priority": priority}
@@ -783,5 +789,62 @@ def test_stage_b_prompt_matches_validated_demo_selection_contract():
         "评论或观点文章",
         "不要把“某只股票、某个板块、债券、商品或其他资产上涨/下跌”本身作为新闻事件",
         "importance*0.35 + us_relevance*0.30 + novelty*0.20 + persistence*0.15",
+    ):
+        assert phrase in SYSTEM_PROMPT
+
+
+def test_stage_b_prompt_prioritizes_major_single_company_events_and_explicit_regulatory_action():
+    from src.news_prompt import SYSTEM_PROMPT
+
+    fixture = json.load(open(CONTRACT_FIXTURE, encoding="utf-8"))
+    assert fixture["expected_contract"]["A"].startswith("major_company_action")
+    assert fixture["expected_contract"]["B"].startswith("explicit_regulatory_action")
+    for phrase in (
+        "单一公司事件不能因为只影响一家企业自动降级",
+        "大规模召回",
+        "重大监管调查",
+        "重大诉讼/反垄断",
+        "明确的 SEC / FTC / DOJ / federal investigation / enforcement",
+        "高于普通 AI 产品发布、创业融资、传闻类新闻",
+    ):
+        assert phrase in SYSTEM_PROMPT
+
+
+def test_stage_b_prompt_prioritizes_confirmed_policy_state_changes_over_threats():
+    from src.news_prompt import SYSTEM_PROMPT
+
+    fixture = json.load(open(CONTRACT_FIXTURE, encoding="utf-8"))
+    assert fixture["expected_contract"]["D"] == "policy_state_change > future_threat"
+    for phrase in (
+        "外交/政策状态变化",
+        "sanctions",
+        "terrorism designation",
+        "export controls",
+        "tariffs",
+        "diplomatic recognition/status",
+        "已经发生的政策状态变化",
+        "优先于纯预测、口头威胁",
+    ):
+        assert phrase in SYSTEM_PROMPT
+
+
+def test_stage_b_prompt_handles_structural_employment_news_without_equating_it_to_official_data():
+    from src.news_prompt import SYSTEM_PROMPT
+
+    assert "结构性宏观/就业变化" in SYSTEM_PROMPT
+    assert "可靠研究或数据支持" in SYSTEM_PROMPT
+    assert "不要强行等同于官方就业数据" in SYSTEM_PROMPT
+
+
+def test_stage_b_prompt_concentrates_by_company_and_incremental_information_without_hard_quota():
+    from src.news_prompt import SYSTEM_PROMPT
+
+    fixture = json.load(open(CONTRACT_FIXTURE, encoding="utf-8"))
+    assert "higher-information" in fixture["expected_contract"]["C"]
+    for phrase in (
+        "同一公司或高度相邻主题",
+        "信息增量更高",
+        "只有当两条事件彼此独立且都达到明显高重要性时",
+        "不做硬 company quota",
     ):
         assert phrase in SYSTEM_PROMPT

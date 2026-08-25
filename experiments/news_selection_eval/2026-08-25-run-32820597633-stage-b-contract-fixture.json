@@ -1,0 +1,30 @@
+{
+  "run_id": "32820597633",
+  "source": "reconstructed from /private/tmp/run-32820597633.log Stage B input lines",
+  "cases": {
+    "A": [
+      {"candidate_id": "major_company_action", "title": "Mega-cap company announces a recall affecting millions of vehicles", "event_summary": "A confirmed recall affects millions of vehicles and other manufacturers face related scrutiny."},
+      {"candidate_id": "ordinary_ai_product", "title": "AI company releases a routine product feature", "event_summary": "A routine product update with no confirmed industry-wide consequence."},
+      {"candidate_id": "lifestyle_story", "title": "Lifestyle story about consumer habits", "event_summary": "A local-interest lifestyle article with no market-relevant action."}
+    ],
+    "B": [
+      {"candidate_id": "explicit_regulatory_action", "title": "Federal agency opens an investigation into a large AI fund", "event_summary": "A confirmed SEC, FTC, DOJ, or federal investigation has been launched."},
+      {"candidate_id": "startup_funding", "title": "Private startup raises a new funding round", "event_summary": "A reported minor startup financing with no systemic impact."},
+      {"candidate_id": "ai_opinion", "title": "Opinion article discusses possible AI disruption", "event_summary": "An opinion article without a newly confirmed action, data release, or policy change."}
+    ],
+    "C": [
+      {"candidate_id": "company_capital_action", "title": "Large company is reportedly in talks for a major acquisition", "event_summary": "Reported acquisition talks with material strategic or capital-market significance."},
+      {"candidate_id": "company_secondary_event", "title": "The same company faces a related secondary cyber investigation", "event_summary": "A related investigation in the same company ecosystem, with lower incremental information."}
+    ],
+    "D": [
+      {"candidate_id": "policy_state_change", "title": "US government enacts a new sanctions or diplomatic designation", "event_summary": "A confirmed US sanctions, terrorism-designation, export-control, tariff, or diplomatic-status change has taken effect."},
+      {"candidate_id": "future_threat", "title": "Foreign official threatens possible action in the future", "event_summary": "A threat or prediction without a confirmed policy or state change."}
+    ]
+  },
+  "expected_contract": {
+    "A": "major_company_action > ordinary_ai_product > lifestyle_story",
+    "B": "explicit_regulatory_action > startup_funding > ai_opinion",
+    "C": "prefer one higher-information event by default; retain both only if both are clearly high-importance and independent",
+    "D": "policy_state_change > future_threat"
+  }
+}
