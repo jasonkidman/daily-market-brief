@@ -33,11 +33,26 @@ jobs:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         run: python -m src.main
 
+      - name: Resolve generated snapshot
+        id: snapshot
+        run: |
+          snapshot=$(find data/news_snapshots -maxdepth 1 -type f -name '*.json' -print -quit)
+          test -n "$snapshot"
+          echo "path=$snapshot" >> "$GITHUB_OUTPUT"
+          echo "date=$(basename "$snapshot" .json)" >> "$GITHUB_OUTPUT"
+
       - name: Run tests
         run: python -m pytest -v
 
       - name: Smoke-check generated report and HTML
         run: python -m src.smoke
+
+      - name: Upload Stage B replay snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage-b-snapshot-${{ steps.snapshot.outputs.date }}-${{ github.run_id }}
+          path: ${{ steps.snapshot.outputs.path }}
+          if-no-files-found: error
 
       - name: Commit durable report and state changes
         run: |

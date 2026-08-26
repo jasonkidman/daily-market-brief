@@ -26,6 +26,7 @@ from .news_events import (
     stage_a_input_counts,
     validate_event_clusters,
 )
+from .news_snapshot import load_stage_b_snapshot, write_stage_b_snapshot
 from .report import load_reports, retain_latest_reports, write_report
 from .renderer import render_site
 from .rss_news import fetch_candidates, filter_final_candidates
@@ -48,6 +49,21 @@ def _read_json(path: Path, default):
 def _write_json(path: Path, payload) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def replay_stage_b_snapshot(snapshot_path: Path, api_key: str) -> list[dict]:
+    """Replay only Stage B from a persisted production input snapshot."""
+    snapshot = load_stage_b_snapshot(snapshot_path)
+    candidates = snapshot["stage_b"]["candidates"]
+    selected, warning = select_news(
+        candidates,
+        api_key,
+        recent_selected=snapshot["stage_b"].get("recent_7_days_events", []),
+        market_context=snapshot["stage_b"].get("market_context"),
+    )
+    if warning:
+        print(warning)
+    return selected
 
 
 def _offline_market(now: datetime, core_config: dict, context_config: dict):
@@ -371,6 +387,28 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
                     ),
                 }
                 print("[NEWS]\nMarket-driven context generated")
+            snapshot = {
+                "schema_version": 1,
+                "report_date": report_date,
+                "run_at": datetime.now(SHANGHAI).isoformat(),
+                "candidate_counts": {
+                    "rss_raw": rss_candidate_count,
+                    "within_24h": window_candidate_count,
+                    "deduplicated": len(candidates),
+                    "stage_a_pre_cap": stage_a_pre_cap_count,
+                    "stage_a_actual_input": stage_a_actual_input_count,
+                    "stage_a_events": len(events),
+                    "stage_b_input": len(selection_candidates),
+                },
+                "stage_a_events": events,
+                "stage_b": {
+                    "candidates": selection_candidates,
+                    "recent_7_days_events": recent_events,
+                    "market_context": ai_market_context,
+                },
+            }
+            # Snapshot persistence is fail-fast: a report without a replayable Stage B input is incomplete.
+            write_stage_b_snapshot(base_dir, snapshot)
             news, ai_warning = select_news(
                 selection_candidates, api_key, recent_events, market_context=ai_market_context,
                 usage_tracker=usage_tracker, observability=stage_b_observability,
@@ -440,7 +478,15 @@ def main() -> int:
     parser.add_argument("--offline-fixture", action="store_true")
     parser.add_argument("--report-date")
     parser.add_argument("--base-dir", type=Path, default=ROOT)
+    parser.add_argument("--stage-b-snapshot", type=Path)
     args = parser.parse_args()
+    if args.stage_b_snapshot:
+        api_key = os.environ.get("DEEPSEEK_API_KEY")
+        if not api_key:
+            parser.error("--stage-b-snapshot requires DEEPSEEK_API_KEY")
+        selected = replay_stage_b_snapshot(args.stage_b_snapshot, api_key)
+        print(f"Replayed Stage B: {len(selected)} selected news items")
+        return 0
     path = generate_daily_report(args.base_dir, args.offline_fixture, args.report_date)
     print(f"Generated {path}")
     return 0

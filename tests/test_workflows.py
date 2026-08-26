@@ -20,6 +20,9 @@ def test_daily_workflow_uses_edgeone_commit_flow_without_github_pages():
     assert workflow["permissions"] == {"contents": "write"}
     assert "DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}" in text
     assert "git add data/reports state site" in text
+    assert "actions/upload-artifact@v4" in text
+    assert "stage-b-snapshot-${{ steps.snapshot.outputs.date }}-${{ github.run_id }}" in text
+    assert 'path: ${{ steps.snapshot.outputs.path }}' in text
     assert "configure-pages" not in text
     assert "upload-pages-artifact" not in text
     assert "deploy-pages" not in text
