@@ -1,0 +1,567 @@
+{
+  "report_date": "2026-08-26",
+  "generated_at": "2026-08-26 10:20 CST",
+  "market_date": "2026-08-25",
+  "status": "ok",
+  "status_label": "🟢 数据更新正常",
+  "market_data_valid": true,
+  "core_market_valid": true,
+  "context_market_valid": true,
+  "drawdown_market_valid": true,
+  "market": {
+    "sp500": {
+      "market_date": "2026-08-25",
+      "close": 7677.27978515625,
+      "daily_return": 0.003190953749482306,
+      "ytd_return": 0.12150752832609024,
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "drawdown": 0.015605924044153396,
+      "name": "S&P 500",
+      "ticker": "^GSPC",
+      "valid": true
+    },
+    "nasdaq100": {
+      "market_date": "2026-08-25",
+      "close": 29209.228515625,
+      "daily_return": 0.006410353039475236,
+      "ytd_return": 0.15680801935469457,
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "drawdown": 0.047336683308248806,
+      "name": "Nasdaq-100",
+      "ticker": "^NDX",
+      "valid": true
+    },
+    "dow": {
+      "market_date": "2026-08-25",
+      "close": 53577.3984375,
+      "daily_return": 0.0029997529030239,
+      "ytd_return": 0.11472600986232173,
+      "ath": 54349.12109375,
+      "ath_date": "2026-08-05",
+      "drawdown": 0.014199358530910033,
+      "name": "Dow Jones",
+      "ticker": "^DJI",
+      "valid": true
+    }
+  },
+  "market_context": {
+    "russell2000": {
+      "market_date": "2026-08-25",
+      "close": 3010.021728515625,
+      "daily_return": 0.004988731519986134,
+      "name": "Russell 2000",
+      "ticker": "^RUT",
+      "valid": true
+    },
+    "vix": {
+      "market_date": "2026-08-25",
+      "close": 15.449999809265137,
+      "daily_return": -0.025236628553790497,
+      "name": "VIX",
+      "ticker": "^VIX",
+      "valid": true
+    },
+    "dxy": {
+      "market_date": "2026-08-25",
+      "close": 98.91300201416016,
+      "daily_return": -0.0008787675337358358,
+      "name": "美元指数",
+      "ticker": "DX-Y.NYB",
+      "valid": true
+    },
+    "us10y": {
+      "market_date": "2026-08-25",
+      "close": 4.638999938964844,
+      "yield_change_bp": -6.500005722045898,
+      "name": "10Y 美债",
+      "ticker": "^TNX",
+      "valid": true
+    }
+  },
+  "market_signals": {
+    "tech_relative": 0.0032193992899929302,
+    "small_cap_relative": 0.0017977777705038278,
+    "vix_daily_return": -0.025236628553790497,
+    "dxy_daily_return": -0.0008787675337358358,
+    "us10y_bp_change": -6.500005722045898,
+    "signals": [
+      {
+        "key": "us10y_bp_change",
+        "value": -6.500005722045898,
+        "level": "significant",
+        "message": "10Y 美债收益率明显下降"
+      }
+    ]
+  },
+  "market_breadth": {
+    "market_date": "2026-08-25",
+    "stocks": {
+      "market_date": "2026-08-25",
+      "constituent_date": "2026-08-20",
+      "total_constituents": 505,
+      "valid_count": 503,
+      "invalid_count": 2,
+      "advancers": 207,
+      "decliners": 294,
+      "unchanged": 2,
+      "advance_ratio": 0.4115308151093439,
+      "decline_ratio": 0.584493041749503,
+      "unchanged_ratio": 0.003976143141153081,
+      "coverage_ratio": 0.996039603960396,
+      "status": "ok"
+    },
+    "sectors": {
+      "market_date": "2026-08-25",
+      "items": [
+        {
+          "key": "technology",
+          "name": "科技",
+          "ticker": "XLK",
+          "valid": true,
+          "daily_return": 0.009386294988956045,
+          "direction": "up",
+          "bar_strength": 0.3128764996318682
+        },
+        {
+          "key": "communication_services",
+          "name": "通信服务",
+          "ticker": "XLC",
+          "valid": true,
+          "daily_return": 0.007656700611540224,
+          "direction": "up",
+          "bar_strength": 0.2552233537180075
+        },
+        {
+          "key": "health_care",
+          "name": "医疗保健",
+          "ticker": "XLV",
+          "valid": true,
+          "daily_return": 0.0033771971848712834,
+          "direction": "up",
+          "bar_strength": 0.11257323949570945
+        },
+        {
+          "key": "utilities",
+          "name": "公用事业",
+          "ticker": "XLU",
+          "valid": true,
+          "daily_return": 0.002082372745162653,
+          "direction": "up",
+          "bar_strength": 0.0694124248387551
+        },
+        {
+          "key": "financials",
+          "name": "金融",
+          "ticker": "XLF",
+          "valid": true,
+          "daily_return": 0.001545863117500046,
+          "direction": "up",
+          "bar_strength": 0.05152877058333487
+        },
+        {
+          "key": "real_estate",
+          "name": "房地产",
+          "ticker": "XLRE",
+          "valid": true,
+          "daily_return": 0.0006617864126430284,
+          "direction": "up",
+          "bar_strength": 0.02205954708810095
+        },
+        {
+          "key": "materials",
+          "name": "材料",
+          "ticker": "XLB",
+          "valid": true,
+          "daily_return": 0.0,
+          "direction": "flat",
+          "bar_strength": 0.0
+        },
+        {
+          "key": "consumer_discretionary",
+          "name": "非必需消费",
+          "ticker": "XLY",
+          "valid": true,
+          "daily_return": -0.0029586313988723134,
+          "direction": "down",
+          "bar_strength": 0.09862104662907711
+        },
+        {
+          "key": "industrials",
+          "name": "工业",
+          "ticker": "XLI",
+          "valid": true,
+          "daily_return": -0.0033519894051152743,
+          "direction": "down",
+          "bar_strength": 0.11173298017050914
+        },
+        {
+          "key": "consumer_staples",
+          "name": "必需消费",
+          "ticker": "XLP",
+          "valid": true,
+          "daily_return": -0.010634652231334085,
+          "direction": "down",
+          "bar_strength": 0.3544884077111362
+        },
+        {
+          "key": "energy",
+          "name": "能源",
+          "ticker": "XLE",
+          "valid": true,
+          "daily_return": -0.016637604609503365,
+          "direction": "down",
+          "bar_strength": 0.5545868203167789
+        }
+      ],
+      "valid_count": 11,
+      "advancers": 6,
+      "decliners": 4,
+      "unchanged": 1,
+      "advance_ratio": 0.5454545454545454
+    },
+    "health": {
+      "valid": true,
+      "score": 0.4651003072474245,
+      "level": "mixed",
+      "label": "市场分化",
+      "divergence": "narrow_rally",
+      "summary": "指数上涨但市场参与度不足，上涨较集中于少数股票或板块。"
+    }
+  },
+  "drawdown": {
+    "sp500": {
+      "index": "sp500",
+      "name": "S&P 500",
+      "cycle_id": "sp500-2026-08-13-77989902",
+      "started_at": "2026-08-14T10:42:09.022326+08:00",
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "last_market_date": "2026-08-25",
+      "last_updated_at": "2026-08-26T10:20:04.829040+08:00",
+      "current_close": 7677.27978515625,
+      "current_drawdown": 0.015605924044153396,
+      "pool": 140000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.1,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.15,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.25,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 140000,
+      "next_threshold": 0.1,
+      "distance_to_next": 0.08439407595584661,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    },
+    "nasdaq100": {
+      "index": "nasdaq100",
+      "name": "Nasdaq-100",
+      "cycle_id": "nasdaq100-2026-06-02-306605996",
+      "started_at": "2026-08-12T10:00:00+08:00",
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "last_market_date": "2026-08-25",
+      "last_updated_at": "2026-08-26T10:20:04.829040+08:00",
+      "current_close": 29209.228515625,
+      "current_drawdown": 0.047336683308248806,
+      "pool": 60000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.15,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.3,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.4,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 60000,
+      "next_threshold": 0.15,
+      "distance_to_next": 0.10266331669175119,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    }
+  },
+  "portfolio_action": "hold",
+  "market_summary": {
+    "market": "美股三大指数集体上涨，标普500涨0.32%、纳指涨0.64%，但市场宽度偏弱，下跌个股多于上涨个股，上涨集中于科技等少数板块。10年期美债收益率明显下降，VIX同步回落，市场分化格局下呈现窄幅上攻。",
+    "drivers": "市场同时关注美加贸易摩擦升级及美国对伊朗新制裁等地缘政治风险，以及OpenAI芯片进展等科技题材。",
+    "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
+    "degraded": false
+  },
+  "news": [
+    {
+      "rank": 1,
+      "candidate_id": "8e4eb3bab8015f93",
+      "category": "地缘政治",
+      "title_zh": "加拿大宣布对美商品征收最高50%报复性关税",
+      "summary_zh": "加拿大宣布对美国商品征收最高50%的报复性关税，涉及钢铁、家具、金枪鱼和化妆品等，作为对美国关税的回应。这是美加贸易战的最新升级，此前美国已对部分加拿大商品征收50%关税，加拿大承诺对等报复。",
+      "focus": "关注美加贸易谈判进展、关税生效时间及对北美供应链和通胀的影响",
+      "tags": [
+        "美加贸易战",
+        "关税",
+        "贸易政策"
+      ],
+      "investment_relevance_score": 92,
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/c3v4xg5klx7o?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-25T19:50:57+00:00",
+      "original_title": "Canada announces 'dollar-for-dollar' retaliatory tariffs on US as high as 50%",
+      "selection_reason": "美加贸易战升级，直接影响北美供应链、通胀预期和风险偏好，属于系统性宏观事件，主题上限例外因独立系统性影响。",
+      "event_summary": "Canada announces retaliatory tariffs on US goods up to 50% in response to US tariffs.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 2,
+      "candidate_id": "0921b080b96099e8",
+      "category": "地缘政治",
+      "title_zh": "美国对伊朗及贸易伙伴实施新制裁，中国谴责非法",
+      "summary_zh": "美国对伊朗及其贸易伙伴实施新制裁，威胁孤立继续与德黑兰做生意的国家，伊朗表示准备反击，中国谴责制裁非法。伊朗大部分石油出口至中国，制裁可能影响全球石油供应和贸易格局。",
+      "focus": "关注制裁执行细节、伊朗石油出口变化及中国反应对油价和全球贸易的影响",
+      "tags": [
+        "伊朗制裁",
+        "石油",
+        "地缘政治"
+      ],
+      "investment_relevance_score": 88,
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/clyl8965j5go?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-25T11:53:36+00:00",
+      "original_title": "China hits out at 'illegal' new US sanctions on Iran and trading partners",
+      "selection_reason": "美国对伊朗新制裁涉及石油供应和全球贸易，影响通胀和风险溢价，属于系统性宏观事件。",
+      "event_summary": "US imposes new sanctions on Iran and trading partners; Iran says prepared to counter; China denounces as illegal.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 3,
+      "candidate_id": "0081f581d69d3bf0",
+      "category": "美债 / 美元",
+      "title_zh": "德鲁肯米勒警告贝森特将在债券市场战中失败",
+      "summary_zh": "亿万富翁投资者德鲁肯米勒警告，美国财长贝森特试图压低债券收益率将失败，应削减预算赤字而非压制收益率。此前美国国债市场干预未能降低收益率，30年期收益率接近20年高位。",
+      "focus": "关注美债收益率走势、财政部政策及赤字削减进展",
+      "tags": [
+        "美债",
+        "贝森特",
+        "财政政策"
+      ],
+      "investment_relevance_score": 85,
+      "source": "The Guardian Business",
+      "url": "https://www.theguardian.com/business/2026/aug/25/us-treasury-scott-bessent-bond-buying-donald-trump-stanley-druckenmiller",
+      "published_at": "2026-08-25T09:59:16+00:00",
+      "original_title": "US Treasury’s Scott Bessent ‘will lose’ battle with bond markets, former mentor warns",
+      "selection_reason": "美债市场干预失败及赤字担忧是系统性金融风险，影响全球资产定价，属于高优先级宏观事件。",
+      "event_summary": "Billionaire Stanley Druckenmiller warns Treasury Secretary Scott Bessent will lose battle with bond markets.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 4,
+      "candidate_id": "0c7fd51720556fba",
+      "category": "AI / 资本开支",
+      "title_zh": "OpenAI Jalapeño芯片基准测试显示大规模快速推理能力",
+      "summary_zh": "OpenAI的Jalapeño芯片在SemiAnalysis的InferenceX基准测试中，每用户token数和每千瓦吞吐量均优于当前最先进水平，显示其在大规模推理场景下的性能优势。",
+      "focus": "关注Jalapeño芯片量产进度、OpenAI算力布局及对AI芯片竞争格局的影响",
+      "tags": [
+        "OpenAI",
+        "AI芯片",
+        "推理"
+      ],
+      "investment_relevance_score": 82,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/25/openais-jalapeno-chip-is-built-for-fast-inference-at-scale-benchmarks-show/",
+      "published_at": "2026-08-25T14:22:04+00:00",
+      "original_title": "OpenAI’s Jalapeño chip is built for fast inference at scale, benchmarks show",
+      "selection_reason": "OpenAI自研芯片性能突破可能改变AI算力竞争格局，影响AI资本开支和半导体产业，属于高优先级产业事件。",
+      "event_summary": "OpenAI's Jalapeño chip benchmarks show fast inference at scale.",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 5,
+      "candidate_id": "887097f45ca5709d",
+      "category": "AI / 资本开支",
+      "title_zh": "OpenAI再失数据中心高管，离职潮持续",
+      "summary_zh": "OpenAI失去一位顶级数据中心高管，此前已重组基础设施部门，将汇报线从总裁Greg Brockman转移至副总裁Sachin Katti。这是OpenAI一系列高调离职中的最新一例。",
+      "focus": "关注OpenAI高管团队稳定性、基础设施战略及对AI产业人才流动的影响",
+      "tags": [
+        "OpenAI",
+        "数据中心",
+        "高管离职"
+      ],
+      "investment_relevance_score": 75,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/25/openai-loses-a-top-data-center-exec-as-stream-of-high-profile-departures-continues/",
+      "published_at": "2026-08-26T00:06:20+00:00",
+      "original_title": "OpenAI loses a top data center exec, as stream of high-profile departures continues",
+      "selection_reason": "OpenAI作为AI产业核心公司，高管持续流失可能影响其算力扩张和战略执行，对AI资本开支有外溢影响。",
+      "event_summary": "OpenAI loses top data center exec as high-profile departures continue.",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 6,
+      "candidate_id": "01bdbdbde4f7ca9a",
+      "category": "AI / 资本开支",
+      "title_zh": "SpaceX将投资1000亿美元在路易斯安那建设第二座星舰基地",
+      "summary_zh": "SpaceX宣布将在路易斯安那建设第二座价值1000亿美元的星舰基地，计划2027年开工，2029年实现星舰火箭首飞。这是SpaceX在航天基础设施上的重大投资。",
+      "focus": "关注SpaceX建设进度、对航天产业和当地经济的影响",
+      "tags": [
+        "SpaceX",
+        "航天",
+        "资本开支"
+      ],
+      "investment_relevance_score": 72,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/25/spacex-will-build-a-second-100b-starbase-spaceport-in-louisiana/",
+      "published_at": "2026-08-25T18:26:55+00:00",
+      "original_title": "SpaceX will build a second, $100B ‘Starbase’ spaceport in Louisiana",
+      "selection_reason": "SpaceX千亿美元级投资是重大资本行动，影响航天产业和先进制造，属于高优先级产业事件。",
+      "event_summary": "SpaceX to build $100bn launch facility in Louisiana, aiming for 2029 flights.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 7,
+      "candidate_id": "b132fd99f4130c36",
+      "category": "AI / 资本开支",
+      "title_zh": "太平洋聚变公司在新墨西哥州动工建设示范设施",
+      "summary_zh": "聚变初创公司太平洋聚变在新墨西哥州动工建设示范设施，称将产生足够自供电的能量，可能为商用聚变发电扫清关键障碍。",
+      "focus": "关注聚变技术进展、示范设施建设进度及对能源产业的影响",
+      "tags": [
+        "聚变能源",
+        "太平洋聚变",
+        "能源技术"
+      ],
+      "investment_relevance_score": 70,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/25/pacific-fusion-next-fusion-machine-could-clear-key-hurdle-to-commercial-power/",
+      "published_at": "2026-08-25T15:30:00+00:00",
+      "original_title": "Pacific Fusion’s next fusion machine could clear a key hurdle to commercial power",
+      "selection_reason": "聚变能源商业化进展可能改变能源格局，属于长期结构性事件，对能源和科技产业有潜在影响。",
+      "event_summary": "Pacific Fusion breaks ground on demonstration facility in New Mexico.",
+      "topic_group": "ENERGY_COMMODITIES",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 8,
+      "candidate_id": "5875565c61191c3d",
+      "category": "AI / 资本开支",
+      "title_zh": "自动驾驶卡车初创公司Gatik融资2亿美元",
+      "summary_zh": "Gatik在获得PepsiCo合作后完成2亿美元融资，由卡塔尔投资局和Koch Disruptive Technologies领投，是其最大一轮融资。",
+      "focus": "关注自动驾驶卡车商业化进展及融资后扩张计划",
+      "tags": [
+        "自动驾驶",
+        "Gatik",
+        "融资"
+      ],
+      "investment_relevance_score": 68,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/25/self-driving-truck-startup-gatik-raises-200m-following-pepsico-deal/",
+      "published_at": "2026-08-25T14:00:00+00:00",
+      "original_title": "Self-driving truck startup Gatik raises $200M following PepsiCo deal",
+      "selection_reason": "自动驾驶卡车融资反映自动驾驶商业化趋势，但规模有限，重要性中等。",
+      "event_summary": "Self-driving truck startup Gatik raises $200M following PepsiCo deal.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other",
+      "source_channel": null,
+      "model_rank": 1
+    },
+    {
+      "rank": 9,
+      "candidate_id": "f145aeb5b28d1b32",
+      "category": "就业 / 通胀",
+      "title_zh": "英国冬季能源价格预计升至三年高位",
+      "summary_zh": "英国能源监管机构Ofgem上调能源价格上限，预计冬季能源价格将升至三年高位，影响数百万家庭。",
+      "focus": "关注英国能源价格对通胀和消费者支出的影响",
+      "tags": [
+        "英国",
+        "能源价格",
+        "通胀"
+      ],
+      "investment_relevance_score": 60,
+      "source": "BBC Business",
+      "url": "https://www.bbc.co.uk/news/articles/cqjkl1xvgw5o?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-25T23:07:29+00:00",
+      "original_title": "Winter energy prices expected to rise to three-year high",
+      "selection_reason": "英国能源价格上涨影响通胀，但与美国市场相关性较低，重要性中等。",
+      "event_summary": "Winter energy prices expected to rise to three-year high in UK due to energy price cap increase.",
+      "topic_group": "ENERGY_COMMODITIES",
+      "event_category": "other",
+      "source_channel": null,
+      "model_rank": 4
+    }
+  ],
+  "news_degraded": false,
+  "warnings": []
+}
