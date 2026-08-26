@@ -24,6 +24,20 @@ Selection Rules v1：严格事件筛选
 
 结构性宏观/就业变化可以进入高优先级：若有可靠研究或数据支持，且可能反映经济结构变化（例如 AI 对 entry-level jobs 的影响），可高于普通 AI 新闻；但不要强行等同于官方就业数据，必须准确说明研究、调查或观点的证据性质。
 
+美国市场相关性是硬门槛，而不是软排序信号。每一条入选新闻至少必须满足以下一项：可能影响美国金融市场定价；可能影响美国宏观政策、利率、通胀或就业预期；可能影响主要美股上市公司或重要行业板块；可能实质改变 AI、半导体、云计算、数据中心或能源等关键产业格局；属于重大地缘政治事件且存在明确的市场传导渠道；或属于全球性金融、能源或贸易事件并对美国资产存在明显外溢影响。如果新闻只是“属于财经新闻”，但无法解释为什么值得美国市场投资者今天关注，则淘汰。
+
+对每一条候选执行以下硬判断："Would a U.S. equity / rates / macro investor reasonably care about this development today?" If the answer is no, exclude it. 优先选择具有明确因果传导路径的事件：event → market / macro / industry variable → U.S. asset prices or major listed companies。如果这条路径弱、猜测性强、过于间接或只是“行业继续发展”，则排除。不得通过夸大 why_it_matters、假设连锁后果或虚构传导路径把弱新闻包装成重要新闻。
+
+一级市场普通融资默认排除。Ordinary Series A/B/C/D financing、普通 VC 投资、1-5亿美元级创业公司融资和未明显影响上市公司或产业结构的融资事件，不能仅凭 AI、自动驾驶、科技或能源标签入选。只有数十亿美元以上超大规模融资、OpenAI / Anthropic / SpaceX 等系统重要性公司重大融资、明显改变产业竞争格局、与大型上市公司存在重大资本/供应链/战略关系，或对 AI CapEx、芯片、数据中心、电力等市场产生实质影响时，才考虑入选。
+
+AI-related news is not automatically important. AI 事件只有在实质影响 AI compute demand、semiconductor demand/supply、hyperscaler capex、data-center infrastructure、electricity / power demand、major AI platform competition、major listed companies、industry economics or valuation expectations 时才考虑入选。即使涉及 OpenAI、Anthropic、NVIDIA、AMD、Broadcom、Microsoft、Alphabet / Google、Meta、Amazon、Oracle、xAI 或 SpaceX，也必须判断事件本身是否达到重要性门槛，不能仅凭公司名称入选。
+
+地方性产业项目默认排除。新建示范设施、普通工厂建设、技术验证设施或地方投资项目，若没有明显的巨额资本开支、上市公司影响、能源市场影响、政策变化或产业供需变化，不得仅因属于能源、AI、新能源、资本开支或基础设施而入选。Local economic developments outside the U.S. should normally be excluded unless they have a clear and material transmission channel to U.S. markets. 非美国本地宏观新闻只有在可能显著影响全球能源价格、全球利率预期、美元或主要货币、全球贸易、美国跨国企业盈利或全球 risk-on / risk-off，并能说明对美股行业板块的传导时才考虑入选。A local fusion demonstration project, a $200M autonomous-driving startup round, and a UK household energy-price forecast without global spillover are default exclusions unless the input facts show a clear and material U.S.-market transmission.
+
+A SpaceX-scale capital expenditure or infrastructure event, including a $100B-class launch facility, should be retained when confirmed. 已确认的 SpaceX 级别超大规模资本开支或基础设施事件，即使主体未上市、传导不是即时的，也属于重大科技基础设施事件；不得将其与普通地方项目或普通创业融资混同，除非输入事实显示事件本身并未发生。
+
+Confirmed major OpenAI product or infrastructure events and $100B-class SpaceX infrastructure events should not be dropped as indirect. 对已确认的 OpenAI 重大产品/基础设施事件和 1000 亿美元级 SpaceX 基础设施事件，不能仅因传导间接、主体未上市或不属于传统半导体公司而删除；只要事实确认且不是重复事件，就应作为高价值候选保留。
+
 选题优先级只有三级：第一优先是可能改变美国宏观路径、利率/财政预期、能源与通胀、信用环境、金融稳定、系统性金融风险或全球风险溢价的事件；第二优先是会改变 AI/半导体/云/数据中心等高新科技产业格局、资本开支、监管、竞争结构或商业化进程的事件；重大单公司事件不因公司数量少自动降为第三优先，若符合大规模召回、明确监管行动、重大诉讼/反垄断、大额资本行动、重大供应链/成本冲击、行业外溢或 mega-cap / 系统重要公司标准，可进入第一或第二优先级；第三优先才是对单一公司、单一产品或局部行业有意义且缺乏上述重大特征的事件。类别不需要平均分配，重要性优先，主题平衡其次。
 
 低优先级或原则上不入选：普通产品更新、功能发布、消费电子小改款、常规市场推广或用户增长新闻；普通融资、普通公司融资、普通财报、一般性公司人事、普通公司新闻、单一股票涨跌或分析师观点；评论或观点文章（除非其本身披露了具有独立新闻价值的新事实）；个人理财、生活方式、娱乐、促销、活动和教程。普通召回、普通IPO、普通产品更新、常规诉讼或处罚不应自动入选；只有规模、系统性影响、行业外溢或美国市场相关性明显时才考虑。不要因为来自高质量媒体、知名公司或标题包含 AI / Apple / SpaceX 就自动提高事件重要性。讨论很多本身不等于重要事件。
@@ -35,7 +49,9 @@ Selection Rules v1：严格事件筛选
 评分与过滤
 对候选事件先使用 demo 已验证的四个 0-10 维度评分：importance（事件本身的重要性和影响范围）、us_relevance（对美国经济、政策、金融市场或美国关键科技产业的相关性）、novelty（相较已有认知是否带来新的实质性信息）、persistence（影响是否可能持续数周、数月或更久）。评分公式严格为：importance*0.35 + us_relevance*0.30 + novelty*0.20 + persistence*0.15。普通产品更新、消费科技小功能和常规公司新闻，即使 novelty 较高，importance 和 persistence 也应明显较低；宏观政策、利率、财政、能源、信用市场、金融稳定、关键 AI/半导体产业结构变化，如事实重大，可给予更高 importance/persistence。正式输出仍使用既有整数 investment_relevance_score 字段和 50-100 校验范围；不得增加新的评分维度或改变上述四维相对权重。
 
-最终只输出50-100分。70分及以上是高优先级；50-69分只能在高质量事件不足时补充；低于50分不得入选。rank 从1开始连续排列，作为展示顺序编号；重大事件优先，但不要求精确排名，不得为了类别平衡牺牲重要性。
+最终只输出50-100分。分数只用于合格新闻之间的排序，不是美国市场相关性硬门槛的替代品；任何未通过上述硬门槛的候选，即使分数较高也不得入选。No story with a score below 70 may be selected. 70分及以上通常是高优先级；不得用50-69分新闻填补数量，也不得为“高质量事件不足”降低门槛。If only a small number of stories meet the importance threshold, return only those stories. Do not fill remaining slots with lower-priority financial, technology, funding, local economic, or industry news. Before returning JSON, ensure selected rank and investment_relevance_score are in non-increasing order; reorder items instead of dropping a qualifying story. rank 从1开始连续排列，作为展示顺序编号；重大事件优先，但不要求精确排名，不得为了类别平衡牺牲重要性。
+
+最终输出前执行边际价值复筛：Before finalizing the list, apply a marginal-value test: "If this story were removed, would the investor materially lose understanding of today's market, macro, technology, or geopolitical environment?" If not, remove it. 如果删除该新闻不会明显损失投资者对当日市场环境的理解，即使它属于财经、科技、融资、地方经济或行业新闻，也不得入选。
 
 市场上下文的使用
 市场宽度只用于辅助判断候选事件的相关性和排序，不得根据标普或纳指当天表现倒推新闻，不得把市场表现本身替代真实事件。市场结构相关性也可参考10Y收益率、Nasdaq相对强弱、科技或能源板块表现、板块轮动，以及Russell相对表现，但不得把相关性写成确定因果，不得无依据建立因果关系；不得根据时间共现自行推断市场因果。除非候选原文明确说明，否则只能使用“与当天市场表现相关”等谨慎表述。
@@ -51,5 +67,5 @@ Selection Rules v1：严格事件筛选
 Stage B 输出 contract
 只返回一个合法 JSON 对象，不要 Markdown、解释、代码围栏或额外字段，格式如下：
 {"selected":[{"rank":1,"candidate_id":"候选ID","category":"美联储 / 利率","title_zh":"中文标题","summary_zh":"中文摘要","focus":"后续关注指标或事件","tags":["关键词"],"investment_relevance_score":92,"selection_reason":"仅基于输入事实的入选理由"}],"reserve":[{"rank":1,"candidate_id":"备选候选ID","category":"美联储 / 利率","title_zh":"中文标题","summary_zh":"中文摘要","focus":"后续关注指标或事件","tags":["关键词"],"investment_relevance_score":80,"selection_reason":"仅基于输入事实的备选理由"}]}
-selected 只放当前真正值得展示的新闻，数量动态决定，不要求固定数量。reserve 是有限的、按重要性排序的额外备选（例如3-5条），每条必须使用与 selected 相同的完整字段、满足完全相同的事实确认和新闻价值门槛；如果没有足够合格备选，可以少返回或为空。reserve 不是把剩余候选全部返回，也不代表最终展示，只用于 selected 经过程序 deterministic validation 被删除后的顺序补位。程序只会按你给出的 reserve 顺序逐条重新验证，不会重新评分、排序或新增模型调用。
+selected 只放当前真正值得展示的新闻，数量动态决定，不要求固定数量，也没有目标数量或隐含的“约8-10条”要求。reserve 是有限的、按重要性排序的额外备选，每条必须使用与 selected 相同的完整字段、满足完全相同的美国市场硬门槛、市场传导、事实确认和边际价值门槛；如果没有足够合格备选，可以少返回或为空。不要为了达到任何数量目标创建 reserve，也不要把低优先级新闻放入 reserve。reserve 不用于补足 selected 数量；程序不会为了恢复模型返回数量而把 reserve 新闻加入最终展示，也不会重新评分、排序或新增模型调用。
 candidate_id 必须来自输入 events 且不能重复。不要返回 source、url、published_at、original_title、event_summary 或 topic_group；这些字段由程序根据候选池映射。不要返回URL，也不要生成或修改URL。"""

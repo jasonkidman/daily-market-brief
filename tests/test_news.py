@@ -224,7 +224,30 @@ def test_stage_b_selected_all_valid_does_not_consume_reserve():
     assert observability["stage_b_reserve_validation_pass_count"] == 0
 
 
-def test_stage_b_backfills_selected_topic_drop_using_current_final_topic_count():
+def test_stage_b_does_not_backfill_reserve_after_selected_item_is_dropped():
+    pool = stage_b_pool(["0", "1", "2"])
+
+    def model(system_prompt, user_payload, api_key):
+        invalid = stage_b_item("1", 2, 90)
+        invalid["tags"] = []
+        return json.dumps({
+            "selected": [stage_b_item("0", 1, 92), invalid],
+            "reserve": [stage_b_item("2", 1, 80)],
+        }, ensure_ascii=False)
+
+    observability = {}
+    selected, warning = select_news(pool, "key", call_model=model,
+                                    sleep_fn=lambda _: None,
+                                    observability=observability)
+
+    assert warning is None
+    assert [item["candidate_id"] for item in selected] == ["0"]
+    assert observability["stage_b_target_count"] == 2
+    assert observability["stage_b_backfilled_count"] == 0
+    assert observability["stage_b_reserve_validation_pass_count"] == 0
+
+
+def test_stage_b_does_not_backfill_selected_topic_drop():
     ids = [str(i) for i in range(8)]
     pool = stage_b_pool(ids[:7], topic_group="AI_CHIPS") + stage_b_pool(ids[7:])
     pool[0]["topic_group"] = "US_MARKET_MACRO"
@@ -249,12 +272,12 @@ def test_stage_b_backfills_selected_topic_drop_using_current_final_topic_count()
                                     observability=observability)
 
     assert warning is None
-    assert [item["candidate_id"] for item in selected] == [str(i) for i in range(6)] + ["7"]
+    assert [item["candidate_id"] for item in selected] == [str(i) for i in range(6)]
     assert observability["stage_b_target_count"] == 7
-    assert observability["stage_b_backfilled_count"] == 1
+    assert observability["stage_b_backfilled_count"] == 0
 
 
-def test_stage_b_reserve_is_tried_in_model_order_and_failed_reserve_is_skipped():
+def test_stage_b_reserve_is_not_used_to_restore_selected_count():
     pool = stage_b_pool([str(i) for i in range(5)], topic_group="AI_CHIPS")
 
     def model(system_prompt, user_payload, api_key):
@@ -268,7 +291,7 @@ def test_stage_b_reserve_is_tried_in_model_order_and_failed_reserve_is_skipped()
     selected, warning = select_news(pool, "key", call_model=model, sleep_fn=lambda _: None)
 
     assert warning is None
-    assert [item["candidate_id"] for item in selected] == ["0", "1", "4"]
+    assert [item["candidate_id"] for item in selected] == ["0", "1"]
 
 
 def test_stage_b_reserve_exhaustion_does_not_overfill_or_lower_target():
@@ -339,7 +362,7 @@ def test_stage_b_duplicate_reserve_cannot_enter_final():
     assert [item["candidate_id"] for item in selected] == ["0"]
 
 
-def test_run_32822389426_fixture_simulates_amazon_drop_and_sec_backfill(capsys):
+def test_run_32822389426_fixture_keeps_amazon_drop_without_reserve_backfill(capsys):
     fixture = json.load(open(CONTRACT_FIXTURE, encoding="utf-8"))
     contract = fixture["stage_b_response_fixture"]
     ids = contract["selected"] + contract["reserve"]
@@ -368,12 +391,12 @@ def test_run_32822389426_fixture_simulates_amazon_drop_and_sec_backfill(capsys):
 
     output = capsys.readouterr().out
     assert warning is None
-    assert len(selected) == 7
+    assert len(selected) == 6
     assert "Amazon" not in [item["candidate_id"] for item in selected]
-    assert "SEC probe" in [item["candidate_id"] for item in selected]
+    assert "SEC probe" not in [item["candidate_id"] for item in selected]
     assert observability["stage_b_target_count"] == 7
-    assert observability["stage_b_backfilled_count"] == 1
-    assert "stage_b_backfill candidate_id=SEC probe" in output
+    assert observability["stage_b_backfilled_count"] == 0
+    assert "stage_b_backfill candidate_id=SEC probe" not in output
 
 
 def test_stage_b_retries_only_when_all_items_fail_validation():
@@ -408,12 +431,14 @@ def test_rejects_missing_required_enriched_field(field):
         validate_selection({"news": [item]}, pool)
 
 
-def test_requires_non_increasing_scores():
+def test_normalizes_non_increasing_scores_without_dropping_valid_news():
     pool = [candidate(str(i), f"Title {i}", f"https://x/{i}") for i in range(1, 3)]
     payload = {"news": [enriched_selection("1", 1, 70), enriched_selection("2", 2, 90)]}
 
-    with pytest.raises(NewsSelectionError):
-        validate_selection(payload, pool)
+    news = validate_selection(payload, pool)
+
+    assert [item["candidate_id"] for item in news] == ["2", "1"]
+    assert [item["investment_relevance_score"] for item in news] == [90, 70]
 
 
 def test_rejects_third_same_topic_without_high_score_exception_reason():
@@ -903,7 +928,7 @@ def test_investment_priority_prompt_has_selection_contract():
         "美国资产定价的重要程度",
         "investment_relevance_score",
         "importance*0.35 + us_relevance*0.30 + novelty*0.20 + persistence*0.15",
-        "低于50分不得入选",
+        "不得用50-69分新闻填补数量",
         "普通产品更新",
         "普通公司融资",
         "不要返回URL",
@@ -958,6 +983,34 @@ def test_selection_rules_v1_are_explicit_and_dynamic_count():
         "不为凑数选入低价值事件",
     ):
         assert phrase in SYSTEM_PROMPT
+
+
+def test_stage_b_prompt_has_us_market_hard_gate_and_no_padding_rules():
+    from src.news_prompt import SYSTEM_PROMPT
+
+    for phrase in (
+        "If only a small number of stories meet the importance threshold, return only those stories.",
+        "Do not fill remaining slots with lower-priority financial, technology, funding, local economic, or industry news.",
+        'Would a U.S. equity / rates / macro investor reasonably care about this development today?',
+        "If the answer is no, exclude it.",
+        "Local economic developments outside the U.S. should normally be excluded unless they have a clear and material transmission channel to U.S. markets.",
+        "Ordinary Series A/B/C/D financing",
+        "AI-related news is not automatically important.",
+        "event → market / macro / industry variable → U.S. asset prices or major listed companies",
+        "Before finalizing the list, apply a marginal-value test:",
+        "If this story were removed, would the investor materially lose understanding of today's market, macro, technology, or geopolitical environment?",
+        "Before returning JSON, ensure selected rank and investment_relevance_score are in non-increasing order; reorder items instead of dropping a qualifying story.",
+        "No story with a score below 70 may be selected.",
+        "A local fusion demonstration project",
+        "$200M autonomous-driving startup round",
+        "UK household energy-price forecast without global spillover",
+        "A SpaceX-scale capital expenditure or infrastructure event, including a $100B-class launch facility, should be retained when confirmed.",
+        "Confirmed major OpenAI product or infrastructure events and $100B-class SpaceX infrastructure events should not be dropped as indirect.",
+    ):
+        assert phrase in SYSTEM_PROMPT
+
+    assert "50-69分只能在高质量事件不足时补充" not in SYSTEM_PROMPT
+    assert "select approximately 8-10 stories" not in SYSTEM_PROMPT
 
 
 def test_stage_b_prompt_matches_validated_demo_selection_contract():
