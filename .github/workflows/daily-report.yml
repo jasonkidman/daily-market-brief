@@ -3,6 +3,8 @@ name: Daily Market Report
 on:
   schedule:
     - cron: "0 1 * * *"
+  repository_dispatch:
+    types: [daily-brief-trigger]
   workflow_dispatch:
 
 permissions:
