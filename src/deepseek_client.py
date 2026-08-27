@@ -32,10 +32,12 @@ TAG_LIMIT = 16
 DEEPSEEK_TIMEOUT = httpx.Timeout(connect=5.0, read=25.0, write=15.0, pool=5.0)
 DEEPSEEK_MAX_RETRIES = 0
 DEEPSEEK_MAX_ATTEMPTS = 2
-DEEPSEEK_MODEL = "deepseek-chat"
+DEEPSEEK_MODEL = "gpt-5.6-terra"
+DEEPSEEK_BASE_URL = "https://api.lmuai.com/v1"
 
-# RMB per one million tokens.  Keep aliases because deployed workflows may use
-# either the compatibility names or the current V4 model names.
+# RMB per one million tokens. terra (灵眸) has no entry yet — real pricing is unknown,
+# so estimate_cost_cny() falls through to None for it rather than guessing at a rate.
+# Kept aliases below are for historical DeepSeek usage records already logged.
 DEEPSEEK_PRICE_CNY_PER_MILLION = {
     "deepseek-chat": {"cache_hit": 0.02, "cache_miss": 1.0, "completion": 2.0},
     "deepseek-reasoner": {"cache_hit": 0.02, "cache_miss": 1.0, "completion": 2.0},
@@ -408,21 +410,25 @@ def validate_selection(payload: Any, candidates: list[dict]) -> list[dict]:
 
 def call_deepseek(system_prompt: str, user_payload: str, api_key: str, *,
                   thinking_enabled: bool = False, reasoning_effort: str | None = None) -> str:
-    """Call DeepSeek and return only final content, never reasoning content."""
+    """Call the terra reasoning model (via 灵眸's OpenAI-compatible API) and return final content.
+
+    terra is always a reasoning model: there is no separate "thinking" toggle like
+    DeepSeek's extra_body param, and it does not accept `temperature`. Reasoning depth
+    is controlled solely via `reasoning_effort`; `thinking_enabled` is accepted for
+    call-site compatibility but has no effect here.
+    """
     from openai import OpenAI
 
     client = OpenAI(
         api_key=api_key,
-        base_url="https://api.deepseek.com",
+        base_url=DEEPSEEK_BASE_URL,
         timeout=DEEPSEEK_TIMEOUT,
         max_retries=DEEPSEEK_MAX_RETRIES,
     )
     request = {
-        "model": "deepseek-chat",
+        "model": DEEPSEEK_MODEL,
         "messages": [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_payload}],
         "response_format": {"type": "json_object"},
-        "temperature": 0.15,
-        "extra_body": {"thinking": {"type": "enabled" if thinking_enabled else "disabled"}},
     }
     if reasoning_effort is not None:
         request["reasoning_effort"] = reasoning_effort

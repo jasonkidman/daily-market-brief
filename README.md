@@ -5,7 +5,7 @@
 ## 工作方式
 
 - 行情：yfinance 日线 `Close`，由本地程序计算单日涨跌、YTD、历史最高收盘价和回撤；Russell 2000、VIX、美元指数和 10Y 美债作为独立的市场环境数据，不参与回撤判断。
-- 新闻：仅从 `config/news_sources.yaml` 中的 RSS 获取候选，本地先去重，再结合程序计算的 Market Context / Market Signals 交给 DeepSeek 筛选、分类、翻译与摘要。模型只返回候选 ID，原文 URL 由程序映射回来。
+- 新闻：仅从 `config/news_sources.yaml` 中的 RSS 获取候选，本地先去重，再结合程序计算的 Market Context / Market Signals 交给灵眸（gpt-5.6-terra 模型）筛选、分类、翻译与摘要。模型只返回候选 ID，原文 URL 由程序映射回来。
 - 状态：`state/drawdown_state.json` 保存当前两个独立回撤周期，`state/drawdown_history.json` 保存已结束周期。行情校验失败时不会产生或修改任何新回撤信号。
 - 输出：`data/reports/YYYY-MM-DD.json` 保存日报，`site/` 是唯一 Pages 发布目录。仅保留最近 7 个自然日。
 
@@ -28,7 +28,7 @@ python -m src.main
 python -m src.smoke
 ```
 
-不联网、不调用 DeepSeek 的确定性完整流程验证：
+不联网、不调用灵眸的确定性完整流程验证：
 
 ```bash
 python -m src.main --offline-fixture --base-dir work/smoke --report-date 2026-08-12
@@ -40,7 +40,7 @@ python -m src.smoke --base-dir work/smoke
 ## 首次部署
 
 1. 在 GitHub 仓库进入 `Settings → Secrets and variables → Actions → New repository secret`。
-2. 创建名称为 `DEEPSEEK_API_KEY` 的 Secret，值为 DeepSeek API Key。代码只通过 `os.environ` 读取它；不要把 Key 写入任何文件。
+2. 创建名称为 `DEEPSEEK_API_KEY` 的 Secret，值为灵眸 API Key（变量名沿用旧名以减少改动面）。代码只通过 `os.environ` 读取它；不要把 Key 写入任何文件。
 3. 进入 `Settings → Pages → Build and deployment → Source`，选择 `GitHub Actions`。
 4. 进入 `Actions → Daily Market Report → Run workflow`，手动运行一次。
 5. 流程成功后，在该次运行的 `deploy` job 或 Pages 设置中查看站点 URL。
@@ -56,7 +56,7 @@ python -m src.smoke --base-dir work/smoke
 3. 选择档位 `tier_1` 至 `tier_4`。
 4. 点击 `Run workflow`。
 
-只有 `pending` 状态可以确认。`not_triggered` 会以“该档位尚未触发，禁止标记为已执行。”失败；`executed` 会保持不变。确认流程记录 `executed_at`、金额、指数、档位和周期 ID，只重渲染已有日报并重新发布，不会获取行情、RSS 或调用 DeepSeek。
+只有 `pending` 状态可以确认。`not_triggered` 会以“该档位尚未触发，禁止标记为已执行。”失败；`executed` 会保持不变。确认流程记录 `executed_at`、金额、指数、档位和周期 ID，只重渲染已有日报并重新发布，不会获取行情、RSS 或调用灵眸。
 
 每日任务与确认任务共用 `investment-report-state` 并发组，且 `cancel-in-progress: false`，避免同时修改状态。
 
@@ -66,7 +66,7 @@ python -m src.smoke --base-dir work/smoke
 - `config/drawdown_rules.yaml`：总备用金、70/30 资金池与各档阈值/比例。
 - `config/news_sources.yaml`：RSS URL 与 P0/P1/P2 优先级。单源失败只产生 warning，不会改用网页爬虫。
 
-DeepSeek 使用 OpenAI Python SDK 兼容接口：`https://api.deepseek.com`、模型 `deepseek-v4-flash`、JSON 输出，并显式发送 `thinking: disabled`。连续三次校验或调用失败后，新闻区降级，行情与回撤仍继续生成。
+灵眸使用 OpenAI Python SDK 兼容接口：`https://api.lmuai.com/v1`、模型 `gpt-5.6-terra`（推理模型，通过 `reasoning_effort` 控制推理强度，不发送 `temperature`），JSON 输出。连续三次校验或调用失败后，新闻区降级，行情与回撤仍继续生成。
 
 ## 安全与限制
 

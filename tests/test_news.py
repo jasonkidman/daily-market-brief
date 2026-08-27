@@ -742,9 +742,9 @@ def test_deepseek_client_uses_bounded_timeout_and_disables_sdk_retries(monkeypat
     assert captured["timeout"].read == 25.0
     assert captured["timeout"].write == 15.0
     assert captured["timeout"].pool == 5.0
-    assert captured["request"]["model"] == "deepseek-chat"
-    assert captured["request"]["temperature"] == 0.15
-    assert captured["request"]["extra_body"] == {"thinking": {"type": "disabled"}}
+    assert captured["request"]["model"] == "gpt-5.6-terra"
+    assert "temperature" not in captured["request"]
+    assert "extra_body" not in captured["request"]
     assert "reasoning_effort" not in captured["request"]
 
 
