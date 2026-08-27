@@ -1,0 +1,467 @@
+{
+  "report_date": "2026-08-27",
+  "generated_at": "2026-08-27 11:31 CST",
+  "market_date": "2026-08-26",
+  "status": "ok",
+  "status_label": "🟢 数据更新正常",
+  "market_data_valid": true,
+  "core_market_valid": true,
+  "context_market_valid": true,
+  "drawdown_market_valid": true,
+  "market": {
+    "sp500": {
+      "market_date": "2026-08-26",
+      "close": 7675.7001953125,
+      "daily_return": -0.00020574863596922732,
+      "ytd_return": 0.12127677968190786,
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "drawdown": 0.015808461782537475,
+      "name": "S&P 500",
+      "ticker": "^GSPC",
+      "valid": true
+    },
+    "nasdaq100": {
+      "market_date": "2026-08-26",
+      "close": 29224.521484375,
+      "daily_return": 0.0005234994342409038,
+      "ytd_return": 0.15741368509079146,
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "drawdown": 0.04683790086612971,
+      "name": "Nasdaq-100",
+      "ticker": "^NDX",
+      "valid": true
+    },
+    "dow": {
+      "market_date": "2026-08-26",
+      "close": 53463.8984375,
+      "daily_return": -0.0021184305940573633,
+      "ytd_return": 0.11236454017903807,
+      "ath": 54349.12109375,
+      "ath_date": "2026-08-05",
+      "drawdown": 0.016287708769439524,
+      "name": "Dow Jones",
+      "ticker": "^DJI",
+      "valid": true
+    }
+  },
+  "market_context": {
+    "russell2000": {
+      "market_date": "2026-08-26",
+      "close": 3005.900146484375,
+      "daily_return": -0.0013687194836387029,
+      "name": "Russell 2000",
+      "ticker": "^RUT",
+      "valid": true
+    },
+    "vix": {
+      "market_date": "2026-08-26",
+      "close": 15.210000038146973,
+      "daily_return": -0.01553396595993739,
+      "name": "VIX",
+      "ticker": "^VIX",
+      "valid": true
+    },
+    "dxy": {
+      "market_date": "2026-08-26",
+      "close": 99.13800048828125,
+      "daily_return": 0.002203824538730803,
+      "name": "美元指数",
+      "ticker": "DX-Y.NYB",
+      "valid": true
+    },
+    "us10y": {
+      "market_date": "2026-08-26",
+      "close": 4.664000034332275,
+      "yield_change_bp": 2.500009536743164,
+      "name": "10Y 美债",
+      "ticker": "^TNX",
+      "valid": true
+    }
+  },
+  "market_signals": {
+    "tech_relative": 0.0007292480702101312,
+    "small_cap_relative": -0.0011629708476694756,
+    "vix_daily_return": -0.01553396595993739,
+    "dxy_daily_return": 0.002203824538730803,
+    "us10y_bp_change": 2.500009536743164,
+    "signals": []
+  },
+  "market_breadth": {
+    "market_date": "2026-08-26",
+    "stocks": {
+      "market_date": "2026-08-26",
+      "constituent_date": "2026-08-20",
+      "total_constituents": 505,
+      "valid_count": 503,
+      "invalid_count": 2,
+      "advancers": 283,
+      "decliners": 218,
+      "unchanged": 2,
+      "advance_ratio": 0.562624254473161,
+      "decline_ratio": 0.43339960238568587,
+      "unchanged_ratio": 0.003976143141153081,
+      "coverage_ratio": 0.996039603960396,
+      "status": "ok"
+    },
+    "sectors": {
+      "market_date": "2026-08-26",
+      "items": [
+        {
+          "key": "industrials",
+          "name": "工业",
+          "ticker": "XLI",
+          "valid": true,
+          "daily_return": 0.010874453518938676,
+          "direction": "up",
+          "bar_strength": 0.36248178396462255
+        },
+        {
+          "key": "technology",
+          "name": "科技",
+          "ticker": "XLK",
+          "valid": true,
+          "daily_return": 0.006052552060519911,
+          "direction": "up",
+          "bar_strength": 0.2017517353506637
+        },
+        {
+          "key": "energy",
+          "name": "能源",
+          "ticker": "XLE",
+          "valid": true,
+          "daily_return": 0.0059619549419476225,
+          "direction": "up",
+          "bar_strength": 0.1987318313982541
+        },
+        {
+          "key": "utilities",
+          "name": "公用事业",
+          "ticker": "XLU",
+          "valid": true,
+          "daily_return": 0.004617800551849571,
+          "direction": "up",
+          "bar_strength": 0.15392668506165239
+        },
+        {
+          "key": "materials",
+          "name": "材料",
+          "ticker": "XLB",
+          "valid": true,
+          "daily_return": 0.0016796628371607003,
+          "direction": "up",
+          "bar_strength": 0.05598876123869001
+        },
+        {
+          "key": "financials",
+          "name": "金融",
+          "ticker": "XLF",
+          "valid": true,
+          "daily_return": -0.0008575381680699934,
+          "direction": "down",
+          "bar_strength": 0.028584605602333113
+        },
+        {
+          "key": "consumer_staples",
+          "name": "必需消费",
+          "ticker": "XLP",
+          "valid": true,
+          "daily_return": -0.0028895054288011757,
+          "direction": "down",
+          "bar_strength": 0.09631684762670586
+        },
+        {
+          "key": "communication_services",
+          "name": "通信服务",
+          "ticker": "XLC",
+          "valid": true,
+          "daily_return": -0.00503622277157878,
+          "direction": "down",
+          "bar_strength": 0.16787409238595935
+        },
+        {
+          "key": "real_estate",
+          "name": "房地产",
+          "ticker": "XLRE",
+          "valid": true,
+          "daily_return": -0.005952390964078957,
+          "direction": "down",
+          "bar_strength": 0.19841303213596526
+        },
+        {
+          "key": "consumer_discretionary",
+          "name": "非必需消费",
+          "ticker": "XLY",
+          "valid": true,
+          "daily_return": -0.006697696537283249,
+          "direction": "down",
+          "bar_strength": 0.22325655124277496
+        },
+        {
+          "key": "health_care",
+          "name": "医疗保健",
+          "ticker": "XLV",
+          "valid": true,
+          "daily_return": -0.009983456369602406,
+          "direction": "down",
+          "bar_strength": 0.3327818789867469
+        }
+      ],
+      "valid_count": 11,
+      "advancers": 5,
+      "decliners": 6,
+      "unchanged": 0,
+      "advance_ratio": 0.45454545454545453
+    },
+    "health": {
+      "valid": true,
+      "score": 0.5193927345020783,
+      "level": "mixed",
+      "label": "市场分化",
+      "divergence": null,
+      "summary": "上涨与下跌分布较为均衡，市场内部存在明显分化。"
+    }
+  },
+  "drawdown": {
+    "sp500": {
+      "index": "sp500",
+      "name": "S&P 500",
+      "cycle_id": "sp500-2026-08-13-77989902",
+      "started_at": "2026-08-14T10:42:09.022326+08:00",
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "last_market_date": "2026-08-26",
+      "last_updated_at": "2026-08-27T11:31:08.095845+08:00",
+      "current_close": 7675.7001953125,
+      "current_drawdown": 0.015808461782537475,
+      "pool": 140000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.1,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.15,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.25,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 140000,
+      "next_threshold": 0.1,
+      "distance_to_next": 0.08419153821746253,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    },
+    "nasdaq100": {
+      "index": "nasdaq100",
+      "name": "Nasdaq-100",
+      "cycle_id": "nasdaq100-2026-06-02-306605996",
+      "started_at": "2026-08-12T10:00:00+08:00",
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "last_market_date": "2026-08-26",
+      "last_updated_at": "2026-08-27T11:31:08.095845+08:00",
+      "current_close": 29224.521484375,
+      "current_drawdown": 0.04683790086612971,
+      "pool": 60000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.15,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.3,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.4,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 60000,
+      "next_threshold": 0.15,
+      "distance_to_next": 0.10316209913387028,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    }
+  },
+  "portfolio_action": "hold",
+  "market_summary": {
+    "market": "标普500几乎持平（-0.02%），纳指微涨0.05%，道指下跌0.21%；市场宽度中性，涨跌家数接近，板块明显分化，工业与科技领涨，医疗与非必需消费领跌。",
+    "drivers": "市场同时关注英伟达季度营收超预期及亚马逊扩大AI芯片采购所反映的AI需求，以及美加贸易摩擦对消费品价格的影响。",
+    "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
+    "degraded": false
+  },
+  "news": [
+    {
+      "rank": 1,
+      "candidate_id": "bb58c28efbc6da97",
+      "category": "半导体",
+      "title_zh": "英伟达季度营收960亿美元超预期，下季指引1080亿美元",
+      "summary_zh": "英伟达公布创纪录季度营收960亿美元，超市场预期，并预计下季度营收1080亿美元，显示AI硬件需求持续强劲。",
+      "focus": "关注下季度实际营收及AI芯片需求持续性",
+      "tags": [
+        "英伟达",
+        "AI芯片",
+        "财报"
+      ],
+      "investment_relevance_score": 95,
+      "source": "BBC Business",
+      "url": "https://www.bbc.co.uk/news/articles/ce871n7lyvlo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-26T21:49:26+00:00",
+      "original_title": "Nvidia revenue doubles on continued AI demand",
+      "selection_reason": "英伟达作为AI芯片核心供应商，业绩超预期并给出强劲指引，直接影响半导体板块及AI资本开支预期，对美国科技股定价有重大影响。",
+      "event_summary": "Nvidia reported record quarterly revenue of $96.2 billion, beating forecasts, and projected $108 billion in next quarter revenue.",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 2,
+      "candidate_id": "80b256b102804c43",
+      "category": "AI / 资本开支",
+      "title_zh": "亚马逊将英伟达芯片订单增加两倍，两年新增200万GPU",
+      "summary_zh": "亚马逊因需求激增，将英伟达芯片订单增加两倍，未来两年新增200万GPU用于数据中心，显示超大规模云厂商AI资本开支持续扩张。",
+      "focus": "关注亚马逊资本开支计划及对英伟达订单的进一步影响",
+      "tags": [
+        "亚马逊",
+        "英伟达",
+        "数据中心",
+        "资本开支"
+      ],
+      "investment_relevance_score": 92,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/26/amazon-just-tripled-its-order-of-nvidia-chips-over-surging-demand/",
+      "published_at": "2026-08-26T23:47:18+00:00",
+      "original_title": "Amazon just tripled its order of Nvidia chips over ‘surging demand’",
+      "selection_reason": "亚马逊大幅增加AI芯片订单，反映超大规模云厂商资本开支强劲，对AI产业链及半导体需求有重大影响，属于产业结构变化。",
+      "event_summary": "Amazon tripled its order of Nvidia chips, adding 2 million GPUs over two years.",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 3,
+      "candidate_id": "40375040a60b4a5a",
+      "category": "地缘政治",
+      "title_zh": "美加贸易战升级，卫生纸等纸制品价格飙升",
+      "summary_zh": "美加贸易谈判破裂，加拿大对近900种美国商品征收25%-50%关税，纸制品等受冲击，美国消费者面临价格上涨。",
+      "focus": "关注美加贸易战后续谈判及对消费品价格的影响",
+      "tags": [
+        "美加贸易战",
+        "关税",
+        "通胀"
+      ],
+      "investment_relevance_score": 88,
+      "source": "The Guardian Business",
+      "url": "https://www.theguardian.com/us-news/2026/aug/26/paper-product-toilet-paper-tariffs-us-canada",
+      "published_at": "2026-08-26T10:00:41+00:00",
+      "original_title": "Wiped out: US faces surging toilet paper prices amid trade war with Canada",
+      "selection_reason": "美加贸易战升级，关税影响消费品价格，可能推升通胀，影响美联储政策路径，对美国宏观和消费板块有重要影响。",
+      "event_summary": "US and Canada trade war leads to surging toilet paper prices due to tariffs.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 4,
+      "candidate_id": "446c7b7136a7b11e",
+      "category": "政策 / 监管",
+      "title_zh": "Meta同意支付180亿美元和解美国各州青少年成瘾诉讼",
+      "summary_zh": "Meta同意支付最高180亿美元并实施青少年安全措施，包括每日两小时使用限制，以和解美国各州关于儿童成瘾的诉讼。",
+      "focus": "关注Meta合规成本及对广告业务的影响",
+      "tags": [
+        "Meta",
+        "监管",
+        "和解"
+      ],
+      "investment_relevance_score": 85,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/26/meta-agrees-to-sweeping-changes-to-restrict-kids-access-to-its-apps-as-part-of-settlement-with-states/",
+      "published_at": "2026-08-26T16:03:14+00:00",
+      "original_title": "Meta agrees to sweeping changes to restrict kids’ access to its apps as part of settlement with states",
+      "selection_reason": "Meta作为大型科技公司，巨额和解及监管限制可能影响其运营和广告收入，对科技板块有示范效应。",
+      "event_summary": "Meta agreed to pay up to $18 billion and implement teen safety changes to settle a US lawsuit over child addiction.",
+      "topic_group": "MEGA_CAP_TECH",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 5,
+      "candidate_id": "099915061c594f5e",
+      "category": "地缘政治",
+      "title_zh": "美国查封中国僵尸网络域名，该网络曾入侵NASA、司法部等",
+      "summary_zh": "美国司法部查封中国僵尸网络域名，该网络曾用于入侵NASA、司法部和参议院，使其指挥控制服务器失效。",
+      "focus": "关注中美网络对抗升级及对科技股风险溢价的影响",
+      "tags": [
+        "网络安全",
+        "中美关系",
+        "地缘政治"
+      ],
+      "investment_relevance_score": 82,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/26/us-seizes-domains-of-chinese-botnet-used-to-hack-nasa-justice-department-and-the-senate/",
+      "published_at": "2026-08-26T17:01:05+00:00",
+      "original_title": "US seizes domains of Chinese botnet used to hack NASA, Justice Department, and the Senate",
+      "selection_reason": "美国查封中国僵尸网络，显示中美网络对抗升级，可能影响科技股风险偏好，具有地缘政治传导路径。",
+      "event_summary": "US seized domains of Chinese botnet used to hack NASA, DOJ, and Senate.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other",
+      "source_channel": null
+    }
+  ],
+  "news_degraded": false,
+  "warnings": []
+}
