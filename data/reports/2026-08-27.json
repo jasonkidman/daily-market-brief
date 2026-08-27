@@ -1,6 +1,6 @@
 {
   "report_date": "2026-08-27",
-  "generated_at": "2026-08-27 11:31 CST",
+  "generated_at": "2026-08-27 15:06 CST",
   "market_date": "2026-08-26",
   "status": "ok",
   "status_label": "🟢 数据更新正常",
@@ -23,24 +23,24 @@
     },
     "nasdaq100": {
       "market_date": "2026-08-26",
-      "close": 29224.521484375,
-      "daily_return": 0.0005234994342409038,
-      "ytd_return": 0.15741368509079146,
+      "close": 29224.51953125,
+      "daily_return": 0.00052343256753562,
+      "ytd_return": 0.1574136077388455,
       "ath": 30660.599609375,
       "ath_date": "2026-06-02",
-      "drawdown": 0.04683790086612971,
+      "drawdown": 0.04683796456759093,
       "name": "Nasdaq-100",
       "ticker": "^NDX",
       "valid": true
     },
     "dow": {
       "market_date": "2026-08-26",
-      "close": 53463.8984375,
-      "daily_return": -0.0021184305940573633,
-      "ytd_return": 0.11236454017903807,
+      "close": 53463.87890625,
+      "daily_return": -0.0021187951367669378,
+      "ytd_return": 0.11236413381379795,
       "ath": 54349.12109375,
       "ath_date": "2026-08-05",
-      "drawdown": 0.016287708769439524,
+      "drawdown": 0.016288068135876466,
       "name": "Dow Jones",
       "ticker": "^DJI",
       "valid": true
@@ -49,8 +49,8 @@
   "market_context": {
     "russell2000": {
       "market_date": "2026-08-26",
-      "close": 3005.900146484375,
-      "daily_return": -0.0013687194836387029,
+      "close": 3005.89990234375,
+      "daily_return": -0.0013688005929414215,
       "name": "Russell 2000",
       "ticker": "^RUT",
       "valid": true
@@ -64,9 +64,9 @@
       "valid": true
     },
     "dxy": {
-      "market_date": "2026-08-26",
-      "close": 99.13800048828125,
-      "daily_return": 0.002203824538730803,
+      "market_date": "2026-08-27",
+      "close": 99.15499877929688,
+      "daily_return": -0.00015124926817977613,
       "name": "美元指数",
       "ticker": "DX-Y.NYB",
       "valid": true
@@ -81,10 +81,10 @@
     }
   },
   "market_signals": {
-    "tech_relative": 0.0007292480702101312,
-    "small_cap_relative": -0.0011629708476694756,
+    "tech_relative": 0.0007291812035048473,
+    "small_cap_relative": -0.0011630519569721942,
     "vix_daily_return": -0.01553396595993739,
-    "dxy_daily_return": 0.002203824538730803,
+    "dxy_daily_return": -0.00015124926817977613,
     "us10y_bp_change": 2.500009536743164,
     "signals": []
   },
@@ -232,7 +232,7 @@
       "ath": 7798.990234375,
       "ath_date": "2026-08-13",
       "last_market_date": "2026-08-26",
-      "last_updated_at": "2026-08-27T11:31:08.095845+08:00",
+      "last_updated_at": "2026-08-27T15:06:56.571237+08:00",
       "current_close": 7675.7001953125,
       "current_drawdown": 0.015808461782537475,
       "pool": 140000,
@@ -288,9 +288,9 @@
       "ath": 30660.599609375,
       "ath_date": "2026-06-02",
       "last_market_date": "2026-08-26",
-      "last_updated_at": "2026-08-27T11:31:08.095845+08:00",
-      "current_close": 29224.521484375,
-      "current_drawdown": 0.04683790086612971,
+      "last_updated_at": "2026-08-27T15:06:56.571237+08:00",
+      "current_close": 29224.51953125,
+      "current_drawdown": 0.04683796456759093,
       "pool": 60000,
       "tiers": {
         "tier_1": {
@@ -332,15 +332,15 @@
       "executed_amount": 0,
       "remaining_amount": 60000,
       "next_threshold": 0.15,
-      "distance_to_next": 0.10316209913387028,
+      "distance_to_next": 0.10316203543240907,
       "status": "normal",
       "status_label": "🟢 未触发"
     }
   },
   "portfolio_action": "hold",
   "market_summary": {
-    "market": "标普500几乎持平（-0.02%），纳指微涨0.05%，道指下跌0.21%；市场宽度中性，涨跌家数接近，板块明显分化，工业与科技领涨，医疗与非必需消费领跌。",
-    "drivers": "市场同时关注英伟达季度营收超预期及亚马逊扩大AI芯片采购所反映的AI需求，以及美加贸易摩擦对消费品价格的影响。",
+    "market": "标普500距历史高点仅约1.6%，当日基本走平，纳指100微涨；市场宽度均衡，板块分化，工业与科技领涨，而医疗保健和非必需消费走弱。",
+    "drivers": "市场同时关注英伟达创纪录季度营收及AI芯片需求，以及美加贸易战升级。",
     "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
     "degraded": false
   },
@@ -349,21 +349,21 @@
       "rank": 1,
       "candidate_id": "bb58c28efbc6da97",
       "category": "半导体",
-      "title_zh": "英伟达季度营收960亿美元超预期，下季指引1080亿美元",
-      "summary_zh": "英伟达公布创纪录季度营收960亿美元，超市场预期，并预计下季度营收1080亿美元，显示AI硬件需求持续强劲。",
-      "focus": "关注下季度实际营收及AI芯片需求持续性",
+      "title_zh": "英伟达季度营收960亿美元创纪录，下季指引1080亿超预期",
+      "summary_zh": "英伟达公布季度营收960亿美元，同比增长一倍，超市场预期，并预计下季度营收1080亿美元。AI硬件需求持续强劲，数据中心业务增长显著，强化其AI芯片主导地位。",
+      "focus": "下季度实际营收与指引差距、数据中心业务增速、AI资本开支持续性",
       "tags": [
         "英伟达",
-        "AI芯片",
-        "财报"
+        "财报",
+        "AI芯片"
       ],
       "investment_relevance_score": 95,
       "source": "BBC Business",
       "url": "https://www.bbc.co.uk/news/articles/ce871n7lyvlo?at_medium=RSS&at_campaign=rss",
       "published_at": "2026-08-26T21:49:26+00:00",
       "original_title": "Nvidia revenue doubles on continued AI demand",
-      "selection_reason": "英伟达作为AI芯片核心供应商，业绩超预期并给出强劲指引，直接影响半导体板块及AI资本开支预期，对美国科技股定价有重大影响。",
-      "event_summary": "Nvidia reported record quarterly revenue of $96.2 billion, beating forecasts, and projected $108 billion in next quarter revenue.",
+      "selection_reason": "大型科技：英伟达财报显示AI需求强劲，营收与指引均超预期，直接影响AI芯片产业链与美股科技板块定价。",
+      "event_summary": "Nvidia reported record quarterly revenue of $96.2 billion and forecast $108 billion for next quarter.",
       "topic_group": "AI_CHIPS",
       "event_category": "other",
       "source_channel": null
@@ -372,22 +372,22 @@
       "rank": 2,
       "candidate_id": "80b256b102804c43",
       "category": "AI / 资本开支",
-      "title_zh": "亚马逊将英伟达芯片订单增加两倍，两年新增200万GPU",
-      "summary_zh": "亚马逊因需求激增，将英伟达芯片订单增加两倍，未来两年新增200万GPU用于数据中心，显示超大规模云厂商AI资本开支持续扩张。",
-      "focus": "关注亚马逊资本开支计划及对英伟达订单的进一步影响",
+      "title_zh": "亚马逊将英伟达芯片订单增加两倍，新增200万GPU",
+      "summary_zh": "亚马逊因需求激增，将英伟达芯片订单增加两倍，未来两年新增200万GPU至数据中心。此举显示大型云厂商AI资本开支持续扩张，利好英伟达及AI基础设施产业链。",
+      "focus": "云厂商资本开支趋势、GPU供应与交付、对英伟达订单能见度",
       "tags": [
         "亚马逊",
         "英伟达",
-        "数据中心",
-        "资本开支"
+        "资本开支",
+        "AI"
       ],
-      "investment_relevance_score": 92,
+      "investment_relevance_score": 90,
       "source": "TechCrunch",
       "url": "https://techcrunch.com/2026/08/26/amazon-just-tripled-its-order-of-nvidia-chips-over-surging-demand/",
       "published_at": "2026-08-26T23:47:18+00:00",
       "original_title": "Amazon just tripled its order of Nvidia chips over ‘surging demand’",
-      "selection_reason": "亚马逊大幅增加AI芯片订单，反映超大规模云厂商资本开支强劲，对AI产业链及半导体需求有重大影响，属于产业结构变化。",
-      "event_summary": "Amazon tripled its order of Nvidia chips, adding 2 million GPUs over two years.",
+      "selection_reason": "大型科技：亚马逊大幅增加英伟达GPU订单，反映AI资本开支扩张，强化AI芯片需求与云基础设施投资逻辑。",
+      "event_summary": "Amazon tripled its order of Nvidia chips over surging demand.",
       "topic_group": "AI_CHIPS",
       "event_category": "other",
       "source_channel": null
@@ -396,21 +396,21 @@
       "rank": 3,
       "candidate_id": "40375040a60b4a5a",
       "category": "地缘政治",
-      "title_zh": "美加贸易战升级，卫生纸等纸制品价格飙升",
-      "summary_zh": "美加贸易谈判破裂，加拿大对近900种美国商品征收25%-50%关税，纸制品等受冲击，美国消费者面临价格上涨。",
-      "focus": "关注美加贸易战后续谈判及对消费品价格的影响",
+      "title_zh": "美加贸易战升级，加拿大对美商品征收25%-50%报复性关税",
+      "summary_zh": "美加贸易谈判破裂，加拿大总理卡尼宣布对近900种美国商品征收25%-50%关税，自9月8日生效。纸制品等消费品价格将上涨，贸易战升级可能推高美国通胀并影响相关行业盈利。",
+      "focus": "关税对消费品价格影响、贸易谈判进展、对通胀与美联储政策影响",
       "tags": [
-        "美加贸易战",
+        "美加贸易",
         "关税",
         "通胀"
       ],
-      "investment_relevance_score": 88,
+      "investment_relevance_score": 85,
       "source": "The Guardian Business",
       "url": "https://www.theguardian.com/us-news/2026/aug/26/paper-product-toilet-paper-tariffs-us-canada",
       "published_at": "2026-08-26T10:00:41+00:00",
       "original_title": "Wiped out: US faces surging toilet paper prices amid trade war with Canada",
-      "selection_reason": "美加贸易战升级，关税影响消费品价格，可能推升通胀，影响美联储政策路径，对美国宏观和消费板块有重要影响。",
-      "event_summary": "US and Canada trade war leads to surging toilet paper prices due to tariffs.",
+      "selection_reason": "美国宏观：美加贸易战升级，加拿大报复性关税直接推高美国消费品价格，影响通胀预期与相关行业。",
+      "event_summary": "US faces surging toilet paper prices amid trade war with Canada.",
       "topic_group": "GEOPOLITICS",
       "event_category": "other",
       "source_channel": null
@@ -420,44 +420,22 @@
       "candidate_id": "446c7b7136a7b11e",
       "category": "政策 / 监管",
       "title_zh": "Meta同意支付180亿美元和解美国各州青少年成瘾诉讼",
-      "summary_zh": "Meta同意支付最高180亿美元并实施青少年安全措施，包括每日两小时使用限制，以和解美国各州关于儿童成瘾的诉讼。",
-      "focus": "关注Meta合规成本及对广告业务的影响",
+      "summary_zh": "Meta同意支付最高180亿美元，并实施限制青少年使用其应用的重大变革，包括每日两小时使用时限，以和解美国各州提起的青少年成瘾诉讼。此举将影响Meta运营成本与用户增长。",
+      "focus": "和解对Meta财务影响、青少年用户使用时长变化、监管后续行动",
       "tags": [
         "Meta",
+        "和解",
         "监管",
-        "和解"
+        "青少年"
       ],
-      "investment_relevance_score": 85,
+      "investment_relevance_score": 82,
       "source": "TechCrunch",
       "url": "https://techcrunch.com/2026/08/26/meta-agrees-to-sweeping-changes-to-restrict-kids-access-to-its-apps-as-part-of-settlement-with-states/",
       "published_at": "2026-08-26T16:03:14+00:00",
       "original_title": "Meta agrees to sweeping changes to restrict kids’ access to its apps as part of settlement with states",
-      "selection_reason": "Meta作为大型科技公司，巨额和解及监管限制可能影响其运营和广告收入，对科技板块有示范效应。",
-      "event_summary": "Meta agreed to pay up to $18 billion and implement teen safety changes to settle a US lawsuit over child addiction.",
+      "selection_reason": "大型科技：Meta巨额和解与产品限制措施，直接影响其运营成本与用户参与度，具有重大财务与监管影响。",
+      "event_summary": "Meta agreed to pay up to $18 billion and implement changes to settle US states' lawsuit over teen addiction.",
       "topic_group": "MEGA_CAP_TECH",
-      "event_category": "other",
-      "source_channel": null
-    },
-    {
-      "rank": 5,
-      "candidate_id": "099915061c594f5e",
-      "category": "地缘政治",
-      "title_zh": "美国查封中国僵尸网络域名，该网络曾入侵NASA、司法部等",
-      "summary_zh": "美国司法部查封中国僵尸网络域名，该网络曾用于入侵NASA、司法部和参议院，使其指挥控制服务器失效。",
-      "focus": "关注中美网络对抗升级及对科技股风险溢价的影响",
-      "tags": [
-        "网络安全",
-        "中美关系",
-        "地缘政治"
-      ],
-      "investment_relevance_score": 82,
-      "source": "TechCrunch",
-      "url": "https://techcrunch.com/2026/08/26/us-seizes-domains-of-chinese-botnet-used-to-hack-nasa-justice-department-and-the-senate/",
-      "published_at": "2026-08-26T17:01:05+00:00",
-      "original_title": "US seizes domains of Chinese botnet used to hack NASA, Justice Department, and the Senate",
-      "selection_reason": "美国查封中国僵尸网络，显示中美网络对抗升级，可能影响科技股风险偏好，具有地缘政治传导路径。",
-      "event_summary": "US seized domains of Chinese botnet used to hack NASA, DOJ, and Senate.",
-      "topic_group": "GEOPOLITICS",
       "event_category": "other",
       "source_channel": null
     }
