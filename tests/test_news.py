@@ -1075,6 +1075,61 @@ def test_stage_b_prompt_handles_structural_employment_news_without_equating_it_t
     assert "不要强行等同于官方就业数据" in SYSTEM_PROMPT
 
 
+def test_stage_b_prompt_has_dual_track_and_big_tech_independent_standard():
+    from src.news_prompt import SYSTEM_PROMPT
+
+    for phrase in (
+        "两条独立主线",
+        "主线 A（美国市场重要新闻）",
+        "主线 B（大型科技公司重要动态）",
+        "不需要证明其对美股大盘、利率、汇率或其他宏观变量存在明确影响",
+        "重点科技公司名单：Apple、Microsoft、Alphabet / Google、Amazon、Meta、NVIDIA、Tesla、SpaceX",
+        "大型科技公司独立重要性标准（主线 B）",
+        "普通产品小更新、一般性营销活动、小型合作、人物花边等低重要度信息即使提到这些公司也必须排除",
+        "此硬门槛适用于主线 A",
+        "此硬判断同样只适用于主线 A",
+    ):
+        assert phrase in SYSTEM_PROMPT
+
+
+def test_stage_b_prompt_has_default_exclude_categories_for_geopolitics_cyber_and_china_policy():
+    from src.news_prompt import SYSTEM_PROMPT
+
+    for phrase in (
+        "默认排除类别",
+        "泛地缘政治：一般外交冲突、军事行动、国家间政治对抗、普通制裁或外交表态",
+        "台海、俄乌、中东等事件的常规进展",
+        "泛网络安全事件：黑客组织活动、政府网站攻击、国家间网络攻击、僵尸网络、网络安全执法行动默认排除",
+        "中国国内政策新闻：继续默认排除",
+        "泛国际新闻：与美国宏观经济、美国金融市场、重点科技公司均没有明确关系的新闻默认排除",
+    ):
+        assert phrase in SYSTEM_PROMPT
+
+
+def test_stage_b_prompt_bans_vague_market_correlation_phrases():
+    from src.news_prompt import SYSTEM_PROMPT
+
+    assert "禁止强行建立市场关联" in SYSTEM_PROMPT
+    for banned_phrase in (
+        "可能影响市场风险偏好",
+        "可能提升科技股风险溢价",
+        "可能影响投资者情绪",
+        "值得关注后续市场影响",
+        "可能加剧市场不确定性",
+        "可能对科技板块产生影响",
+    ):
+        assert banned_phrase in SYSTEM_PROMPT
+
+
+def test_stage_b_prompt_requires_verifiable_selection_reason_format():
+    from src.news_prompt import SYSTEM_PROMPT
+
+    assert "selection_reason 必须是可验证的具体事实依据，并以所属主线开头" in SYSTEM_PROMPT
+    for example in ("美国宏观：关键通胀数据", "大型科技：NVIDIA 财报", "大型科技：Amazon AI资本开支",
+                    "市场影响：关税可能直接推高美国消费品价格"):
+        assert example in SYSTEM_PROMPT
+
+
 def test_stage_b_prompt_concentrates_by_company_and_incremental_information_without_hard_quota():
     from src.news_prompt import SYSTEM_PROMPT
 

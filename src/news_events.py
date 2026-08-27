@@ -31,7 +31,7 @@ MAX_SOURCE_PENALTY = 2.0
 # ranking without asking an LLM to classify candidates or changing source data.
 IMPORTANCE_SIGNAL_GROUPS = (
     ("macro_rates", 3, ("treasury", "federal reserve", "fed ", "interest rate", "rates", "yield", "bond", "inflation", "employment", "jobs")),
-    ("mega_cap_tech", 3, ("apple", "microsoft", "amazon", "tesla", "nvidia", "alphabet", "google", "meta")),
+    ("mega_cap_tech", 3, ("apple", "microsoft", "amazon", "tesla", "nvidia", "alphabet", "google", "meta", "spacex")),
     ("ai_chips", 3, ("artificial intelligence", " ai ", "semiconductor", "chip", "data center", "datacenter", "gpu")),
     ("geopolitics_policy", 2, ("sanction", "tariff", "trade war", "iran", "ukraine", "russia", "regulation", "regulator", "export control")),
 )

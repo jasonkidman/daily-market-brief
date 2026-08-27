@@ -289,6 +289,17 @@ def test_importance_keyword_requires_event_significance_for_mega_cap_promotion()
     assert major_score > promo_score
 
 
+def test_importance_signal_recognizes_spacex_as_mega_cap_tech():
+    minor = {**candidate("spacex-minor"), "title": "SpaceX shares a new wallpaper for fans"}
+    major = {**candidate("spacex-major"), "title": "SpaceX announces major new launch facility capital expenditure"}
+
+    minor_score, minor_reason = _importance_signal(minor)
+    major_score, major_reason = _importance_signal(major)
+
+    assert "mega_cap_tech" in major_reason
+    assert major_score > minor_score
+
+
 def test_pre_cap_ranking_softly_diversifies_quality_matched_sources():
     pool = [
         {**candidate(f"bbc-{index}", priority="P0", published_at="2026-08-24T12:00:00+00:00"),
