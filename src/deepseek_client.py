@@ -341,7 +341,7 @@ def _validate_selection_items(payload: Any, candidates: list[dict]) -> dict[str,
         topic_group = item["topic_group"]
         if topic_group:
             topic_counts[topic_group] = topic_counts.get(topic_group, 0) + 1
-            if topic_counts[topic_group] > 2 and (
+            if topic_counts[topic_group] > 4 and (
                 item["investment_relevance_score"] < 85
                 or "主题上限例外" not in item["selection_reason"]
             ):
@@ -399,7 +399,7 @@ def validate_selection(payload: Any, candidates: list[dict]) -> list[dict]:
         if not topic_group:
             continue
         topic_counts[topic_group] = topic_counts.get(topic_group, 0) + 1
-        if topic_counts[topic_group] > 2 and (
+        if topic_counts[topic_group] > 4 and (
             item["investment_relevance_score"] < 85 or "主题上限例外" not in item["selection_reason"]
         ):
             raise NewsSelectionError("topic_group 超过主题上限。")

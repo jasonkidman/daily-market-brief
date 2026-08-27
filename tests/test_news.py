@@ -248,8 +248,8 @@ def test_stage_b_does_not_backfill_reserve_after_selected_item_is_dropped():
 
 
 def test_stage_b_does_not_backfill_selected_topic_drop():
-    ids = [str(i) for i in range(8)]
-    pool = stage_b_pool(ids[:7], topic_group="AI_CHIPS") + stage_b_pool(ids[7:])
+    ids = [str(i) for i in range(10)]
+    pool = stage_b_pool(ids[:9], topic_group="AI_CHIPS") + stage_b_pool(ids[9:])
     pool[0]["topic_group"] = "US_MARKET_MACRO"
     pool[1]["topic_group"] = "US_MARKET_MACRO"
     pool[2]["topic_group"] = "MEGA_CAP_TECH"
@@ -258,12 +258,13 @@ def test_stage_b_does_not_backfill_selected_topic_drop():
     pool[5]["topic_group"] = "AI_CHIPS"
     pool[6]["topic_group"] = "AI_CHIPS"
     pool[7]["topic_group"] = "AI_CHIPS"
+    pool[8]["topic_group"] = "AI_CHIPS"
 
     def model(system_prompt, user_payload, api_key):
-        selected = [stage_b_item(str(i), i + 1, 92 - i * 2) for i in range(7)]
-        selected[6]["investment_relevance_score"] = 80
-        reserve = [stage_b_item("7", 1, 79)]
-        pool[7]["topic_group"] = "OTHER_SYSTEMIC"
+        selected = [stage_b_item(str(i), i + 1, 96 - i * 2) for i in range(9)]
+        selected[8]["investment_relevance_score"] = 78
+        reserve = [stage_b_item("9", 1, 77)]
+        pool[9]["topic_group"] = "OTHER_SYSTEMIC"
         return json.dumps({"selected": selected, "reserve": reserve}, ensure_ascii=False)
 
     observability = {}
@@ -272,35 +273,35 @@ def test_stage_b_does_not_backfill_selected_topic_drop():
                                     observability=observability)
 
     assert warning is None
-    assert [item["candidate_id"] for item in selected] == [str(i) for i in range(6)]
-    assert observability["stage_b_target_count"] == 7
+    assert [item["candidate_id"] for item in selected] == [str(i) for i in range(8)]
+    assert observability["stage_b_target_count"] == 9
     assert observability["stage_b_backfilled_count"] == 0
 
 
 def test_stage_b_reserve_is_not_used_to_restore_selected_count():
-    pool = stage_b_pool([str(i) for i in range(5)], topic_group="AI_CHIPS")
+    pool = stage_b_pool([str(i) for i in range(7)], topic_group="AI_CHIPS")
 
     def model(system_prompt, user_payload, api_key):
-        selected = [stage_b_item(str(i), i + 1, 92 - i * 2) for i in range(3)]
-        selected[2]["investment_relevance_score"] = 80
-        reserve = [stage_b_item("3", 1, 78), stage_b_item("4", 2, 77)]
-        pool[3]["topic_group"] = "AI_CHIPS"
-        pool[4]["topic_group"] = "OTHER_SYSTEMIC"
+        selected = [stage_b_item(str(i), i + 1, 96 - i * 2) for i in range(5)]
+        selected[4]["investment_relevance_score"] = 78
+        reserve = [stage_b_item("5", 1, 76), stage_b_item("6", 2, 75)]
+        pool[5]["topic_group"] = "AI_CHIPS"
+        pool[6]["topic_group"] = "OTHER_SYSTEMIC"
         return json.dumps({"selected": selected, "reserve": reserve}, ensure_ascii=False)
 
     selected, warning = select_news(pool, "key", call_model=model, sleep_fn=lambda _: None)
 
     assert warning is None
-    assert [item["candidate_id"] for item in selected] == ["0", "1"]
+    assert [item["candidate_id"] for item in selected] == ["0", "1", "2", "3"]
 
 
 def test_stage_b_reserve_exhaustion_does_not_overfill_or_lower_target():
-    pool = stage_b_pool([str(i) for i in range(4)], topic_group="AI_CHIPS")
+    pool = stage_b_pool([str(i) for i in range(6)], topic_group="AI_CHIPS")
 
     def model(system_prompt, user_payload, api_key):
-        selected = [stage_b_item(str(i), i + 1, 92 - i * 2) for i in range(3)]
-        selected[2]["investment_relevance_score"] = 80
-        reserve = [stage_b_item("3", 1, 77)]
+        selected = [stage_b_item(str(i), i + 1, 96 - i * 2) for i in range(5)]
+        selected[4]["investment_relevance_score"] = 78
+        reserve = [stage_b_item("5", 1, 76)]
         reserve[0]["tags"] = []
         return json.dumps({"selected": selected, "reserve": reserve}, ensure_ascii=False)
 
@@ -310,9 +311,9 @@ def test_stage_b_reserve_exhaustion_does_not_overfill_or_lower_target():
                                     observability=observability)
 
     assert warning is None
-    assert len(selected) == 2
-    assert observability["stage_b_target_count"] == 3
-    assert observability["stage_b_final_count"] == 2
+    assert len(selected) == 4
+    assert observability["stage_b_target_count"] == 5
+    assert observability["stage_b_final_count"] == 4
 
 
 def test_stage_b_dynamic_target_is_selected_count_not_eight():
@@ -362,7 +363,10 @@ def test_stage_b_duplicate_reserve_cannot_enter_final():
     assert [item["candidate_id"] for item in selected] == ["0"]
 
 
-def test_run_32822389426_fixture_keeps_amazon_drop_without_reserve_backfill(capsys):
+def test_run_32822389426_fixture_keeps_all_selected_under_relaxed_topic_cap(capsys):
+    # This fixture was captured when the topic_group cap was 2 (Amazon, the
+    # 3rd MEGA_CAP_TECH item, used to be dropped). The cap is now 4, so all
+    # 3 MEGA_CAP_TECH items in this fixture fit and none are dropped.
     fixture = json.load(open(CONTRACT_FIXTURE, encoding="utf-8"))
     contract = fixture["stage_b_response_fixture"]
     ids = contract["selected"] + contract["reserve"]
@@ -391,8 +395,8 @@ def test_run_32822389426_fixture_keeps_amazon_drop_without_reserve_backfill(caps
 
     output = capsys.readouterr().out
     assert warning is None
-    assert len(selected) == 6
-    assert "Amazon" not in [item["candidate_id"] for item in selected]
+    assert len(selected) == 7
+    assert "Amazon" in [item["candidate_id"] for item in selected]
     assert "SEC probe" not in [item["candidate_id"] for item in selected]
     assert observability["stage_b_target_count"] == 7
     assert observability["stage_b_backfilled_count"] == 0
@@ -441,28 +445,30 @@ def test_normalizes_non_increasing_scores_without_dropping_valid_news():
     assert [item["investment_relevance_score"] for item in news] == [90, 70]
 
 
-def test_rejects_third_same_topic_without_high_score_exception_reason():
+def test_rejects_fifth_same_topic_without_high_score_exception_reason():
     pool = [{**candidate(str(i), f"Title {i}", f"https://x/{i}"), "topic_group": "AI_CHIPS"}
-            for i in range(1, 4)]
-    payload = {"news": [enriched_selection(str(i), i, 90 - i) for i in range(1, 4)]}
+            for i in range(1, 6)]
+    payload = {"news": [enriched_selection(str(i), i, 94 - i) for i in range(1, 6)]}
 
     with pytest.raises(NewsSelectionError):
         validate_selection(payload, pool)
 
 
-def test_allows_third_same_topic_with_high_score_and_exception_reason():
+def test_allows_fifth_same_topic_with_high_score_and_exception_reason():
     pool = [{**candidate(str(i), f"Title {i}", f"https://x/{i}"), "topic_group": "AI_CHIPS"}
-            for i in range(1, 4)]
+            for i in range(1, 6)]
     payload = {"news": [
         enriched_selection("1", 1, 95),
-        enriched_selection("2", 2, 90),
-        enriched_selection("3", 3, 85),
+        enriched_selection("2", 2, 92),
+        enriched_selection("3", 3, 89),
+        enriched_selection("4", 4, 87),
+        enriched_selection("5", 5, 85),
     ]}
-    payload["news"][2]["selection_reason"] = "主题上限例外：该事件具有独立系统性影响。"
+    payload["news"][4]["selection_reason"] = "主题上限例外：该事件具有独立系统性影响。"
 
     news = validate_selection(payload, pool)
 
-    assert [item["candidate_id"] for item in news] == ["1", "2", "3"]
+    assert [item["candidate_id"] for item in news] == ["1", "2", "3", "4", "5"]
 
 
 def test_dedupes_canonical_url_and_normalized_title():
@@ -915,7 +921,7 @@ def test_recent_news_events_supports_legacy_and_v2_reports():
 def test_event_selection_prompt_has_topic_concentration_contract():
     from src.news_prompt import SYSTEM_PROMPT
 
-    assert "同一 topic_group 通常最多2条" in SYSTEM_PROMPT
+    assert "同一 topic_group 通常最多4条" in SYSTEM_PROMPT
     assert "重大独立事件允许突破" in SYSTEM_PROMPT
     assert "突破必须说明理由" in SYSTEM_PROMPT
 
