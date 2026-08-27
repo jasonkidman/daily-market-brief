@@ -739,7 +739,7 @@ def test_deepseek_client_uses_bounded_timeout_and_disables_sdk_retries(monkeypat
     assert deepseek_client.call_deepseek("system", "user", "key") == "{}"
     assert captured["max_retries"] == 0
     assert captured["timeout"].connect == 5.0
-    assert captured["timeout"].read == 25.0
+    assert captured["timeout"].read == 60.0
     assert captured["timeout"].write == 15.0
     assert captured["timeout"].pool == 5.0
     assert captured["request"]["model"] == "gpt-5.6-terra"
@@ -908,13 +908,37 @@ def test_recent_news_events_supports_legacy_and_v2_reports():
         {"report_date": "2026-08-11", "news": [{
             "original_title": "New headline", "event_summary": "Fed held rates", "topic_group": "US_MARKET_MACRO",
         }]},
-    ])
+    ], "2026-08-13")
 
     assert events == [
         {"report_date": "2026-08-12", "event_summary": "Legacy Fed headline", "topic_group": None,
          "original_title": "Legacy Fed headline"},
         {"report_date": "2026-08-11", "event_summary": "Fed held rates", "topic_group": "US_MARKET_MACRO",
          "original_title": "New headline"},
+    ]
+
+
+def test_recent_news_events_excludes_same_day_reports():
+    events = _recent_news_events([
+        {"report_date": "2026-08-27", "news": [{
+            "original_title": "Already published earlier today", "event_summary": "Nvidia earnings",
+        }]},
+        {"report_date": "2026-08-26", "news": [{
+            "original_title": "Yesterday headline", "event_summary": "Fed held rates",
+        }]},
+    ], "2026-08-27")
+
+    assert [event["report_date"] for event in events] == ["2026-08-26"]
+
+
+def test_recent_news_events_takes_seven_days_strictly_before_current_date():
+    reports = [{"report_date": f"2026-08-{day:02d}", "news": [{"event_summary": f"Event {day}"}]}
+               for day in range(27, 19, -1)]
+
+    events = _recent_news_events(reports, "2026-08-27")
+
+    assert [event["report_date"] for event in events] == [
+        "2026-08-26", "2026-08-25", "2026-08-24", "2026-08-23", "2026-08-22", "2026-08-21", "2026-08-20",
     ]
 
 

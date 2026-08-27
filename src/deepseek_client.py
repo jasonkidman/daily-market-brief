@@ -29,7 +29,7 @@ SUMMARY_ZH_LIMIT = 180
 FOCUS_LIMIT = 80
 SELECTION_REASON_LIMIT = 120
 TAG_LIMIT = 16
-DEEPSEEK_TIMEOUT = httpx.Timeout(connect=5.0, read=25.0, write=15.0, pool=5.0)
+LLM_TIMEOUT = httpx.Timeout(connect=5.0, read=60.0, write=15.0, pool=5.0)
 DEEPSEEK_MAX_RETRIES = 0
 DEEPSEEK_MAX_ATTEMPTS = 2
 DEEPSEEK_MODEL = "gpt-5.6-terra"
@@ -422,7 +422,7 @@ def call_deepseek(system_prompt: str, user_payload: str, api_key: str, *,
     client = OpenAI(
         api_key=api_key,
         base_url=DEEPSEEK_BASE_URL,
-        timeout=DEEPSEEK_TIMEOUT,
+        timeout=LLM_TIMEOUT,
         max_retries=DEEPSEEK_MAX_RETRIES,
     )
     request = {

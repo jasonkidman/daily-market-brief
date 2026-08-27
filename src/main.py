@@ -171,10 +171,16 @@ def _recent_news(reports: list[dict]) -> list[dict]:
     return selected
 
 
-def _recent_news_events(reports: list[dict]) -> list[dict]:
-    """Load seven days of event summaries while preserving legacy report compatibility."""
+def _recent_news_events(reports: list[dict], current_report_date: str) -> list[dict]:
+    """Load seven days of event summaries strictly before the current report date.
+
+    Excludes reports dated the same as `current_report_date` so a same-day re-run
+    (e.g. a manual re-trigger after an earlier run already published today's news)
+    does not treat today's own selections as "already covered" duplicates.
+    """
+    prior_reports = [report for report in reports if report.get("report_date") != current_report_date]
     events = []
-    for report in reports[:7]:
+    for report in prior_reports[:7]:
         for item in report.get("news", []):
             original_title = item.get("original_title", item.get("title_zh", ""))
             events.append({
@@ -360,7 +366,7 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         window_candidate_count = len(candidates)
         candidates = dedupe_candidates(candidates)
         stage_a_pre_cap_count, stage_a_actual_input_count = stage_a_input_counts(candidates)
-        recent_events = _recent_news_events(retained)
+        recent_events = _recent_news_events(retained, report_date)
         if not api_key:
             news, ai_warning = [], "⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：未配置 AI 凭据。"
             event_representatives = []
