@@ -213,7 +213,7 @@ def test_today_summary_is_the_readable_primary_visual_focus(tmp_path):
     assert "font-size:22px" in compact_css
     assert ".summary-focus-label{flex:00auto" in compact_css
     assert ".strategy-title{margin:006px" in compact_css
-    assert ".summary-src{margin-top:11px;text-align:right" in compact_css
+    assert ".summary-src{margin-top:auto;padding-top:11px;text-align:right" in compact_css
     assert "@media(max-width:600px)" in compact_css
 
 
