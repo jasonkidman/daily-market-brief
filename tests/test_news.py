@@ -1027,8 +1027,8 @@ def test_stage_b_prompt_has_us_market_hard_gate_and_no_padding_rules():
         "Ordinary Series A/B/C/D financing",
         "AI-related news is not automatically important.",
         "event → market / macro / industry variable → U.S. asset prices or major listed companies",
-        "Before finalizing the list, apply a marginal-value test:",
-        "If this story were removed, would the investor materially lose understanding of today's market, macro, technology, or geopolitical environment?",
+        'If this macro/financial-markets/geopolitics story were removed, would the investor materially lose understanding of today\'s U.S. market, macro, or geopolitical environment?',
+        'If this big-tech story were removed, would the investor materially lose understanding of that company\'s business, financial, product, strategic, or regulatory trajectory?',
         "Before returning JSON, ensure selected rank and investment_relevance_score are in non-increasing order; reorder items instead of dropping a qualifying story.",
         "No story with a score below 70 may be selected.",
         "A local fusion demonstration project",
@@ -1122,6 +1122,18 @@ def test_stage_b_prompt_has_dual_track_and_big_tech_independent_standard():
         assert phrase in SYSTEM_PROMPT
 
 
+def test_stage_b_prompt_scopes_marginal_value_test_by_track():
+    from src.news_prompt import SYSTEM_PROMPT
+
+    for phrase in (
+        "必须按主线分别应用测试标准，不得用统一的\"市场环境\"标准覆盖主线 B",
+        "如果删除该新闻不会明显损失投资者对该公司业务、财务、产品、战略或监管环境的理解，应删除",
+        "这一测试不要求证明其对美股大盘、利率、汇率或其他宏观变量的影响",
+        "不得借边际价值复筛之名，重新对主线 B 新闻施加主线 A 的美国市场传导硬门槛",
+    ):
+        assert phrase in SYSTEM_PROMPT
+
+
 def test_stage_b_prompt_has_default_exclude_categories_for_geopolitics_cyber_and_china_policy():
     from src.news_prompt import SYSTEM_PROMPT
 
@@ -1170,5 +1182,48 @@ def test_stage_b_prompt_concentrates_by_company_and_incremental_information_with
         "信息增量更高",
         "只有当两条事件彼此独立且都达到明显高重要性时",
         "不做硬 company quota",
+    ):
+        assert phrase in SYSTEM_PROMPT
+
+
+def test_stage_b_prompt_covers_recall_priority_scenarios_should_retain():
+    """Each of these should be retainable under the prompt's actual selection rules.
+
+    Regression guard for the recall-priority rework: big-tech events (track B) must not
+    need a proven market-impact path, and macro events (track A) are retained on their
+    own importance without requiring same-day price-impact proof.
+    """
+    from src.news_prompt import SYSTEM_PROMPT
+
+    for phrase in (
+        "财报或业绩指引",
+        "大规模资本开支",
+        "重大诉讼或和解",
+        "重大产品或平台发布",
+        "AI、芯片或云计算等核心业务的实质变化",
+        "Fed",
+        "关税",
+        "通胀",
+        "就业",
+    ):
+        assert phrase in SYSTEM_PROMPT
+    assert "不需要证明其对美股大盘、利率、汇率或其他宏观变量存在明确影响" in SYSTEM_PROMPT
+
+
+def test_stage_b_prompt_covers_recall_priority_scenarios_should_filter():
+    """Each of these should stay excluded by default under the prompt's exclusion rules.
+
+    Regression guard: a government-agency cyber victim with no disclosed commercial
+    impact, routine geopolitical/diplomatic progress, ordinary China domestic policy, and
+    trivial big-tech product tweaks/marketing must not be recalled just because recall
+    priority increased for the retain-worthy categories above.
+    """
+    from src.news_prompt import SYSTEM_PROMPT
+
+    for phrase in (
+        "缺乏这类具体证据的网络安全新闻（例如某国网络攻击、僵尸网络域名查封等，即使受害机构包括政府部门）应排除",
+        "台海、俄乌、中东等事件的常规进展",
+        "中国国内政策新闻：继续默认排除",
+        "普通产品小更新、一般性营销活动、小型合作、人物花边等低重要度信息即使提到这些公司也必须排除",
     ):
         assert phrase in SYSTEM_PROMPT
