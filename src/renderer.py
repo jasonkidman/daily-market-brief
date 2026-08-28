@@ -2,11 +2,16 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
 import json
 from pathlib import Path
 import shutil
+from zoneinfo import ZoneInfo
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+
+
+SHANGHAI = ZoneInfo("Asia/Shanghai")
 
 
 def _percent(value, signed=False):
@@ -23,6 +28,35 @@ def _number(value):
     return f"{float(value):,.2f}" if value is not None else "—"
 
 
+def _relative_time(published_at, generated_at):
+    """Render a Chinese relative-time string ("3小时前") from real timestamps.
+
+    Falls back to None (caller should show an absolute date instead) when either
+    timestamp is missing or unparsable, rather than fabricating an elapsed time.
+    """
+    if not published_at or not generated_at:
+        return None
+    try:
+        published = datetime.fromisoformat(str(published_at).replace("Z", "+00:00"))
+        if published.tzinfo is None:
+            published = published.replace(tzinfo=timezone.utc)
+        generated_text = str(generated_at).replace(" CST", "").strip()
+        generated = datetime.strptime(generated_text, "%Y-%m-%d %H:%M").replace(tzinfo=SHANGHAI)
+    except (ValueError, TypeError):
+        return None
+    seconds = (generated - published).total_seconds()
+    if seconds < 0:
+        return None
+    minutes = seconds / 60
+    if minutes < 60:
+        return f"{max(int(minutes), 1)}分钟前"
+    hours = minutes / 60
+    if hours < 24:
+        return f"{int(hours)}小时前"
+    days = hours / 24
+    return f"{int(days)}天前"
+
+
 def render_site(reports_dir: Path, template_path: Path, style_path: Path, site_dir: Path) -> None:
     reports_dir, template_path, style_path, site_dir = map(Path, (reports_dir, template_path, style_path, site_dir))
     site_dir.mkdir(parents=True, exist_ok=True)
@@ -37,7 +71,7 @@ def render_site(reports_dir: Path, template_path: Path, style_path: Path, site_d
         trim_blocks=True,
         lstrip_blocks=True,
     )
-    env.filters.update(percent=_percent, money=_money, number=_number)
+    env.filters.update(percent=_percent, money=_money, number=_number, relative_time=_relative_time)
     template = env.get_template(template_path.name)
     reports = [json.loads(path.read_text(encoding="utf-8"))
                for path in sorted(reports_dir.glob("????-??-??.json"), reverse=True)]

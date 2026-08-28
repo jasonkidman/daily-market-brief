@@ -1,20 +1,22 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="robots" content="noindex,nofollow">
-  <title>Daily Market Brief · {{ report.report_date }}</title>
-  <link rel="stylesheet" href="{{ asset_prefix }}style.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Daily Market Brief · {{ report.report_date }}</title>
+<link rel="stylesheet" href="{{ asset_prefix }}style.css" />
 </head>
 <body>
 <div class="page">
-  <header>
-    <div>
-      <h1>Daily Market Brief</h1>
-      <div class="header-meta">报告日期：{{ report.report_date }}　更新时间：{{ report.generated_at }}</div>
-    </div>
-    <div class="header-tools">
+<header class="topbar">
+  <div>
+    <h1 class="title">Daily Market Brief</h1>
+    <div class="meta">报告日期：{{ report.report_date }}　更新时间：{{ report.generated_at }}</div>
+  </div>
+  <div class="top-right">
+    <div class="datebox">
+      <span class="datebox-icon" aria-hidden="true">▣</span>
       <select class="report-select" aria-label="选择日报日期">
         {% for item in nav %}
         {% if is_index %}{% set target = 'index.html' if loop.first else 'history/' ~ item.date ~ '.html' %}
@@ -22,203 +24,305 @@
         <option value="{{ target }}"{% if item.date == current_date %} selected{% endif %}>{% if loop.first %}今日 · {{ item.date }}{% else %}{{ item.date }}{% endif %}</option>
         {% endfor %}
       </select>
-      <div class="status status-{{ report.status }}">{{ report.status_label }}</div>
+      <span class="datebox-caret" aria-hidden="true">⌄</span>
     </div>
-  </header>
+    {% set status_text = report.status_label.split(' ', 1)[-1] if report.status_label and ' ' in report.status_label else (report.status_label or '') %}
+    <div class="status status-{{ report.status }}">● {{ status_text }}</div>
+  </div>
+</header>
 
-  {% if report.market_summary %}
-  {% set dd = report.drawdown or {} %}
-  {% set market_valid = report.get('market_data_valid', true) %}
-  {% set risk = namespace(level='normal') %}
-  {% set pending = namespace(items=[], amount=0) %}
-  {% set executed = namespace(amount=0, any=false) %}
-  {% for key in ['sp500', 'nasdaq100'] %}{% if key in dd %}{% set idx = dd[key] %}
-    {% if idx.get('status') == 'pending' %}{% set risk.level = 'pending' %}
-    {% elif idx.get('status') == 'near' and risk.level == 'normal' %}{% set risk.level = 'near' %}{% endif %}
-    {% set pending.amount = pending.amount + (idx.get('pending_amount') or 0) %}
-    {% set executed.amount = executed.amount + (idx.get('executed_amount') or 0) %}
-    {% if idx.get('executed_amount') %}{% set executed.any = true %}{% endif %}
-    {% if idx.get('pending_tiers') %}{% set pending.items = pending.items + [{'index': idx.get('name'), 'tier': idx['pending_tiers'][0]}] %}{% endif %}
-  {% endif %}{% endfor %}
-  {% if not market_valid %}
-    {% set action_main, action_sub = '暂停额外操作', '行情数据校验失败，今日暂停回撤判断' %}
-  {% elif pending.items %}
-    {% set first_pending = pending.items[0] %}
-    {% set alloc = first_pending.tier.get('allocation') %}
-    {% set action_main = ('加仓 ' ~ (alloc * 100)|round|int ~ '%') if alloc is not none else '加仓' %}
-    {% set action_sub = first_pending.index ~ ' 已触发' ~ (first_pending.tier.get('label') or '加仓') ~ '，等待确认' %}
-  {% elif executed.any %}
-    {% set action_main, action_sub = '已完成加仓', '本轮回撤加仓已执行，继续正常定投' %}
-  {% else %}
-    {% set action_main, action_sub = '正常定投', '未触发回撤加仓' %}
-  {% endif %}
-  {% if not market_valid or (pending.amount == 0 and executed.amount == 0) %}
-    {% set reserve_label = '保持不动' %}
-  {% elif pending.amount > 0 %}
-    {% set reserve_label = '待执行 ' ~ (pending.amount|money) %}
-  {% else %}
-    {% set reserve_label = '已使用 ' ~ (executed.amount|money) %}
-  {% endif %}
-  {% if not market_valid %}
-    {% set risk_label, risk_class = '数据异常', 'critical' %}
-  {% elif risk.level == 'pending' %}
-    {% set risk_label, risk_class = '已触发', 'pending' %}
-  {% elif risk.level == 'near' %}
-    {% set risk_label, risk_class = '临近触发', 'near' %}
-  {% else %}
-    {% set risk_label, risk_class = '正常', 'normal' %}
-  {% endif %}
-  <section class="summary-grid" aria-labelledby="today-summary-title">
-      <div class="card summary">
-        <div class="summary-inner">
-        <div class="summary-icon" aria-hidden="true">☼</div>
-        <div class="summary-body">
-          <h2 id="today-summary-title">今日市场一句话</h2>
-          <div class="summary-content">
-            <p class="market-summary"><strong>{{ report.market_summary.market }}</strong></p>
-            <div class="summary-focus">
-              <div class="summary-focus-label">今日关注</div>
-              <div class="summary-focus-text">{{ report.market_summary.drivers }}</div>
-            </div>
-            {% if report.market_breadth and report.market_breadth.get('health', {}).get('valid') %}
-            <div class="summary-interpretation">
-              <div class="summary-interpretation-label">市场解读</div>
-              <div class="summary-interpretation-text">{{ report.market_breadth.health.summary }}</div>
-            </div>
-            {% endif %}
-          </div>
-          <div class="summary-src">基于市场数据 · Market Breadth · Top News</div>
-        </div>
-        </div>
-      </div>
+{% if report.status == 'critical' %}
+<div class="alert critical"><strong>🔴 行情数据校验失败</strong> · 今日暂停回撤预警判断</div>
+{% elif report.warnings %}
+<div class="alert">🟠 部分数据源异常{% for warning in report.warnings %} · {{ warning }}{% endfor %}</div>
+{% endif %}
 
-      <aside class="card strategy-card" aria-labelledby="today-strategy-title">
-        <h2 id="today-strategy-title" class="strategy-title">今日策略</h2>
-        <div class="strategy-action strategy-{{ risk_class }}">{{ action_main }}</div>
-        <div class="strategy-sub">{{ action_sub }}</div>
-        <div class="strategy-row"><span>备用金状态</span><strong>{{ reserve_label }}</strong></div>
-        <div class="strategy-row"><span>当前风险状态</span><strong class="risk-{{ risk_class }}">{{ risk_label }}</strong></div>
-        {% if dd %}
-        <button type="button" class="strategy-link" id="drawdown-rules-open" aria-haspopup="dialog" aria-controls="drawdown-rules-drawer">查看回撤加仓规则　→</button>
-        {% endif %}
-      </aside>
-  </section>
-  {% endif %}
-
-  {% if report.status == 'critical' %}
-  <section class="alert critical"><strong>🔴 行情数据校验失败</strong><span>今日暂停回撤预警判断</span></section>
-  {% elif report.warnings %}
-  <section class="alert warning"><span>🟠 部分数据源异常{% for warning in report.warnings %} · {{ warning }}{% endfor %}</span></section>
-  {% endif %}
-
-  <section class="section">
-    <div class="section-title"><div class="section-left"><span class="marker"></span><h2>美国主要指数</h2></div><div class="note">行情数据日期：{{ report.market_date }} 美股收盘</div></div>
-    <div class="market-grid">
-      {% for key in ['sp500', 'nasdaq100', 'dow'] %}{% set item = report.market[key] %}
-      <article class="card market-card">
-        <div class="market-top"><h3>{{ item.name }}</h3><span class="ticker">{{ item.ticker or '' }}</span></div>
+{% if report.market_summary %}
+{% set dd = report.drawdown or {} %}
+{% set market_valid = report.get('market_data_valid', true) %}
+{% set risk = namespace(level='normal') %}
+{% set pending = namespace(items=[], amount=0) %}
+{% set executed = namespace(amount=0, any=false) %}
+{% for key in ['sp500', 'nasdaq100'] %}{% if key in dd %}{% set idx = dd[key] %}
+  {% if idx.get('status') == 'pending' %}{% set risk.level = 'pending' %}
+  {% elif idx.get('status') == 'near' and risk.level == 'normal' %}{% set risk.level = 'near' %}{% endif %}
+  {% set pending.amount = pending.amount + (idx.get('pending_amount') or 0) %}
+  {% set executed.amount = executed.amount + (idx.get('executed_amount') or 0) %}
+  {% if idx.get('executed_amount') %}{% set executed.any = true %}{% endif %}
+  {% if idx.get('pending_tiers') %}{% set pending.items = pending.items + [{'index': idx.get('name'), 'tier': idx['pending_tiers'][0]}] %}{% endif %}
+{% endif %}{% endfor %}
+{% if not market_valid %}
+  {% set action_main, action_sub = '暂停额外操作', '行情数据校验失败，今日暂停回撤判断' %}
+{% elif pending.items %}
+  {% set first_pending = pending.items[0] %}
+  {% set alloc = first_pending.tier.get('allocation') %}
+  {% set action_main = ('加仓 ' ~ (alloc * 100)|round|int ~ '%') if alloc is not none else '加仓' %}
+  {% set action_sub = first_pending.index ~ ' 已触发' ~ (first_pending.tier.get('label') or '加仓') ~ '，等待确认' %}
+{% elif executed.any %}
+  {% set action_main, action_sub = '已完成加仓', '本轮回撤加仓已执行，继续正常定投' %}
+{% else %}
+  {% set action_main, action_sub = '正常定投', '未触发回撤加仓' %}
+{% endif %}
+{% if not market_valid or (pending.amount == 0 and executed.amount == 0) %}
+  {% set reserve_label = '保持不动' %}
+{% elif pending.amount > 0 %}
+  {% set reserve_label = '待执行 ' ~ (pending.amount|money) %}
+{% else %}
+  {% set reserve_label = '已使用 ' ~ (executed.amount|money) %}
+{% endif %}
+{% if not market_valid %}
+  {% set risk_label, risk_class = '数据异常', 'critical' %}
+{% elif risk.level == 'pending' %}
+  {% set risk_label, risk_class = '已触发', 'pending' %}
+{% elif risk.level == 'near' %}
+  {% set risk_label, risk_class = '临近触发', 'near' %}
+{% else %}
+  {% set risk_label, risk_class = '正常', 'normal' %}
+{% endif %}
+<div class="hero">
+  <div class="card market-summary">
+    <div class="indices">
+      {% for key, extra_class in [('sp500', ' sp500-day-change'), ('nasdaq100', ' sp500-day-change')] %}
+      {% set item = report.market[key] %}
+      <div class="index-card">
+        <div class="index-head"><span>{{ item.name }}</span><span class="ticker">{{ item.ticker or '' }}</span></div>
         {% if item.get('valid', true) %}
-        {% if item.daily_return > 0 %}{% set direction = 'up' %}{% set arrow = '▲' %}{% elif item.daily_return < 0 %}{% set direction = 'down' %}{% set arrow = '▼' %}{% else %}{% set direction = 'flat' %}{% set arrow = '→' %}{% endif %}
-        <div class="market-value">{{ item.close|number }}</div>
-        <div class="market-performance"><div class="market-daily stat"><strong class="{{ direction }}"><span class="arrow">{{ arrow }}</span> {{ item.daily_return|percent(true) }}</strong><span>昨日</span></div><div class="market-ytd stat"><strong class="{% if item.ytd_return > 0 %}up{% elif item.ytd_return < 0 %}down{% else %}flat{% endif %}">{{ item.ytd_return|percent(true) }}</strong><span>YTD</span></div></div>
-        {% else %}<p class="unavailable">行情不可用</p>{% endif %}
-      </article>
+        {% if item.daily_return > 0 %}{% set direction = 'up' %}{% set arrow = '▲' %}
+        {% elif item.daily_return < 0 %}{% set direction = 'down' %}{% set arrow = '▼' %}
+        {% else %}{% set direction = 'flat' %}{% set arrow = '→' %}{% endif %}
+        {% if item.ytd_return > 0 %}{% set ytd_direction = 'up' %}{% elif item.ytd_return < 0 %}{% set ytd_direction = 'down' %}{% else %}{% set ytd_direction = 'flat' %}{% endif %}
+        <div class="index-value">{{ item.close|number }}</div>
+        <div class="index-bottom">
+          <div><span class="day-change {{ direction }}{{ extra_class }}">{{ arrow }} {{ item.daily_return|percent(true) }}</span> <span class="small">昨日</span></div>
+          <div class="ytd {{ ytd_direction }}">{{ item.ytd_return|percent(true) }} <span class="small">YTD</span></div>
+        </div>
+        {% if item.sparkline %}
+        <div class="spark">
+          <svg viewBox="0 0 420 52" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="spark-{{ key }}" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#15975a" stop-opacity="0.18"/>
+                <stop offset="55%" stop-color="#15975a" stop-opacity="0.08"/>
+                <stop offset="100%" stop-color="#15975a" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="{{ item.sparkline.area }}" fill="url(#spark-{{ key }})"/>
+            <path d="{{ item.sparkline.line }}" fill="none" stroke="#15975a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        {% else %}
+        <div class="spark-empty">暂无历史走势数据</div>
+        {% endif %}
+        {% else %}
+        <p class="unavailable">行情不可用</p>
+        {% endif %}
+      </div>
       {% endfor %}
     </div>
-  </section>
 
-  {% if report.market_context %}
-  <section class="section">
-    <div class="section-title"><div class="section-left"><span class="marker"></span><h2>市场环境</h2></div></div>
-    <div class="context-grid">
-      {% for key in ['russell2000', 'vix', 'dxy', 'us10y'] %}{% if key in report.market_context %}{% set item = report.market_context[key] %}
-      {% if key == 'russell2000' %}{% set signal_key = 'small_cap_relative' %}{% elif key == 'vix' %}{% set signal_key = 'vix_daily_return' %}{% elif key == 'dxy' %}{% set signal_key = 'dxy_daily_return' %}{% else %}{% set signal_key = 'us10y_bp_change' %}{% endif %}
-      {% set signal_level = namespace(value='normal') %}{% for signal in report.get('market_signals', {}).get('signals', []) %}{% if signal.key == signal_key and signal.level in ['significant', 'strong'] %}{% set signal_level.value = signal.level %}{% endif %}{% endfor %}
-      <article class="card context-card context-{{ signal_level.value }}">
-        <div class="icon-wrap" aria-hidden="true">
-          {% if key == 'russell2000' %}<svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 19V5M4 19H20"/><path d="M7 15l4-4 3 2 5-6"/><path d="M16 7h3v3"/></svg>
-          {% elif key == 'vix' %}<svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 13h3l2-6 4 11 3-9 2 4h4"/></svg>
-          {% elif key == 'dxy' %}<div class="icon-dollar">$</div>
-          {% else %}<svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 9l9-5 9 5"/><path d="M5 10h14"/><path d="M6 10v7M10 10v7M14 10v7M18 10v7"/><path d="M4 18h16M3 20h18"/></svg>{% endif %}
-        </div>
-        <div class="context-info"><div class="context-name">{{ item.name }}</div>
-          {% if item.valid %}<strong class="context-value">{{ item.close|number }}{% if key == 'us10y' %}%{% endif %}</strong>
-          {% if key == 'us10y' %}<span class="context-change {% if item.yield_change_bp >= 0 %}up{% else %}down{% endif %}">{% if item.yield_change_bp >= 0 %}▲{% else %}▼{% endif %} {{ '%+.0f'|format(item.yield_change_bp) }}bp</span>
-          {% else %}<span class="context-change {% if item.daily_return >= 0 %}up{% else %}down{% endif %}">{% if item.daily_return >= 0 %}▲{% else %}▼{% endif %} {{ item.daily_return|percent(true) }}</span>{% endif %}
-          {% else %}<strong class="context-unavailable">数据暂不可用</strong>{% endif %}
-        </div>
-        <button class="help context-help-button" type="button" aria-label="了解 {{ item.name }} 的作用" aria-expanded="false" aria-controls="context-help-{{ key }}">?</button>
-        <div class="tooltip context-tooltip" id="context-help-{{ key }}" role="tooltip" hidden>
-          {% if key == 'russell2000' %}<strong>Russell 2000 的作用</strong><p>衡量美国小盘股整体表现。相对 S&amp;P 500 更强时，通常意味着市场上涨参与度扩大或风险偏好改善；明显落后时，则可能反映行情更集中于大型权重股。单日变化不作为独立买卖信号。</p>
-          {% elif key == 'vix' %}<strong>VIX 的作用</strong><p>基于 S&amp;P 500 期权计算的未来约30天隐含波动率。快速上升通常表示市场风险定价和预期波动增加，下降则表示风险情绪趋于缓和。</p>
-          {% elif key == 'dxy' %}<strong>美元指数的作用</strong><p>衡量美元相对一篮子主要货币的强弱。美元快速走强通常意味着全球金融条件趋紧，但不能单独作为交易信号。</p>
-          {% else %}<strong>10Y 美债的作用</strong><p>美国10年期国债收益率是全球资产定价的重要利率基准。快速上行通常会提高股票估值的折现压力。</p>{% endif %}
-        </div>
-      </article>
-      {% endif %}{% endfor %}
+    <div class="summary-text">
+      <div class="summary-icon" aria-hidden="true">☼</div>
+      <div>
+        <div class="summary-title">今日市场一句话</div>
+        <div class="summary-copy">{{ report.market_summary.market }}</div>
+      </div>
     </div>
-  </section>
-  {% endif %}
+  </div>
 
-  {% if report.market_breadth %}{% set breadth = report.market_breadth %}{% set stocks = breadth.stocks %}{% set sectors = breadth.sectors %}{% set health = breadth.health %}
-  <section class="section">
-    <div class="section-title"><div class="section-left breadth-title"><span class="marker"></span><h2>市场宽度</h2><button class="help breadth-help-button" type="button" aria-label="了解市场健康度的作用" aria-expanded="false" aria-controls="breadth-health-help">?</button><div class="tooltip breadth-tooltip" id="breadth-health-help" role="tooltip" hidden><strong>Market Health 的作用</strong><p>市场健康度综合 S&amp;P 500 成分股上涨比例和 11 个一级板块上涨比例，用于判断指数上涨或下跌是否得到广泛市场参与。该指标用于观察市场内部结构，不作为独立买卖信号。</p></div></div></div>
-    {% if health.valid %}
-    <div class="breadth-grid">
-      <article class="card breadth-left">
-        <div><div class="ratio-label">上涨占比</div><div class="ratio">{{ stocks.advance_ratio|percent }}</div><div class="breadth-status">市场状态：<span class="badge health-level-{{ health.level }}">{{ health.label }}</span></div></div>
-        <div class="breadth-copy">{{ health.summary }}</div>
-        <div class="mini"><div><span>上涨</span><strong class="up">{{ stocks.advancers }}</strong></div><div><span>下跌</span><strong class="down">{{ stocks.decliners }}</strong></div><div><span>平盘</span><strong>{{ stocks.unchanged }}</strong></div></div>
-        <div class="bbar" aria-label="S&P 500 成分股上涨、平盘与下跌比例"><span class="g" style="width:{{ (stocks.advance_ratio * 100)|round(1) }}%"></span><span class="n" style="width:{{ (stocks.unchanged_ratio * 100)|round(1) }}%"></span><span class="r" style="width:{{ (stocks.decline_ratio * 100)|round(1) }}%"></span></div>
-        <div class="formula">有效样本 {{ stocks.valid_count }} / {{ stocks.total_constituents }}{% if stocks.status == 'partial' %} · 部分行情缺失{% endif %}</div>
-      </article>
-      <article class="card sector-card">
-        {% set valid_sector_items = sectors["items"]|selectattr("valid")|sort(attribute="daily_return", reverse=true)|list %}{% set invalid_sector_items = sectors["items"]|rejectattr("valid")|list %}
-        <div class="sector-head"><strong>板块表现（{{ valid_sector_items|length }}个板块）</strong><span>{{ sectors.advancers }}涨 / {{ sectors.decliners }}跌 · 固定尺度 ±3%</span></div>
-        <div class="sector-cols">
-          <div class="sector-list">{% for item in valid_sector_items if item.daily_return >= 0 %}<div class="sector-row" tabindex="0"><span class="sector-name">{{ item.name }}</span><div class="track"><div class="fill up" style="width:{{ (item.bar_strength * 100)|round(1) }}%"></div></div><span class="sret {% if item.daily_return > 0 %}up{% else %}flat{% endif %}">{{ item.daily_return|percent(true) }}</span><span class="sector-tooltip" role="tooltip"><strong>{{ item.name }} · {{ item.daily_return|percent(true) }}</strong><small>当日排名：{{ valid_sector_items.index(item) + 1 }} / {{ valid_sector_items|length }}</small></span></div>{% endfor %}</div>
-          <div class="sector-list">{% for item in valid_sector_items if item.daily_return < 0 %}<div class="sector-row" tabindex="0"><span class="sector-name">{{ item.name }}</span><div class="track"><div class="fill down" style="width:{{ (item.bar_strength * 100)|round(1) }}%"></div></div><span class="sret down">{{ item.daily_return|percent(true) }}</span><span class="sector-tooltip" role="tooltip"><strong>{{ item.name }} · {{ item.daily_return|percent(true) }}</strong><small>当日排名：{{ valid_sector_items.index(item) + 1 }} / {{ valid_sector_items|length }}</small></span></div>{% endfor %}{% for item in invalid_sector_items %}<div class="sector-row unavailable"><span class="sector-name">{{ item.name }}</span><div class="track"></div><span class="sret">—</span></div>{% endfor %}</div>
-        </div>
-      </article>
+  <aside class="card strategy">
+    <div class="strategy-title"><div class="target" aria-hidden="true">◎</div><span>今日策略</span></div>
+    <div class="strategy-main">
+      <strong class="strategy-{{ risk_class }}">{{ action_main }}</strong>
+      <div class="strategy-tag"><span class="dot"></span><span>{{ action_sub }}</span></div>
     </div>
-    {% else %}<p class="empty">市场宽度数据暂不可用</p>{% endif %}
-  </section>
+    <div class="strategy-row"><span class="label">备用金状态</span><span class="value">{{ reserve_label }}</span></div>
+    <div class="strategy-row"><span class="label">当前风险状态</span><span class="value{% if risk_class == 'normal' %} good{% elif risk_class == 'critical' %} critical{% endif %}">{{ risk_label }}</span></div>
+    {% if dd %}
+    <button type="button" class="strategy-link" id="drawdown-rules-open" aria-haspopup="dialog" aria-controls="drawdown-rules-drawer">查看回撤加仓规则　→</button>
+    {% endif %}
+  </aside>
+</div>
+{% endif %}
+
+<section>
+  <div class="section-head">
+    <div class="section-title"><span class="bar"></span><span>今日重要新闻</span><span class="small">（按重要性排序）</span></div>
+  </div>
+  <div class="card news-card">
+    {% if report.news_degraded %}
+    <div class="alert">⚠️ 新闻 AI 处理暂时失败，RSS 数据已获取，等待下一次更新</div>
+    {% elif report.news %}
+    {% for item in report.news %}
+    <div class="news-item">
+      <div class="rank">{{ item.rank }}</div>
+      <div>
+        <div class="category">{{ item.category }}</div>
+        {% set relative = item.published_at|relative_time(report.generated_at) %}
+        <div class="time">{{ relative or (item.published_at[:10] if item.published_at else '') }}</div>
+      </div>
+      <div>
+        <div class="news-title"><a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.title_zh }}</a></div>
+        <div class="news-desc">{{ item.summary_zh }}</div>
+      </div>
+      <div class="impact">
+        <div class="impact-label">市场影响：</div>
+        {% if item.get('tags') %}<div class="chips">{% for tag in item.get('tags') %}<span class="chip">{{ tag }}</span>{% endfor %}</div>{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p class="empty">最近 30 小时暂无足够重要的有效新闻。</p>
+    {% endif %}
+  </div>
+</section>
+
+{% if report.market_context %}
+<section>
+  <div class="section-head"><div class="section-title"><span class="bar"></span><span>市场环境</span></div></div>
+  <div class="metric-grid">
+    {% for key, label in [('vix', 'VIX 恐慌指数'), ('us10y', '10Y 美国收益率'), ('dxy', '美元指数 (DXY)'), ('gold', '黄金 (COMEX)'), ('wti', '原油 (WTI)')] %}
+    {% set item = report.market_context.get(key) %}
+    <div class="card metric">
+      <div class="metric-name">{{ label }}</div>
+      {% if item and item.get('valid') %}
+      {% if key == 'us10y' %}
+      {% set change = item.get('yield_change_bp') %}
+      {% set direction = 'up' if change is not none and change >= 0 else 'down' %}
+      <div class="metric-value">{{ item.close|number }}%</div>
+      <div class="metric-change {{ direction }}">{% if direction == 'up' %}▲{% else %}▼{% endif %} {{ '%+.0f'|format(change) }}bp</div>
+      {% else %}
+      {% set change = item.get('daily_return') %}
+      {% set direction = 'up' if change is not none and change > 0 else ('down' if change is not none and change < 0 else 'flat') %}
+      <div class="metric-value">{{ item.close|number }}</div>
+      <div class="metric-change {{ direction }}">{% if direction == 'up' %}▲{% elif direction == 'down' %}▼{% else %}→{% endif %} {{ item.daily_return|percent(true) }}</div>
+      {% endif %}
+      {% else %}
+      <div class="metric-value">—</div>
+      <div class="metric-change">数据暂不可用</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if report.market_breadth %}{% set breadth = report.market_breadth %}{% set stocks = breadth.stocks %}{% set sectors = breadth.sectors %}
+<section>
+  <div class="section-head"><div class="section-title"><span class="bar"></span><span>市场广度</span></div></div>
+  {% if stocks and stocks.get('advance_ratio') is not none %}
+  <div class="card breadth">
+    <div>
+      <h4>美股上涨比例（按市值）</h4>
+      <div class="big-green">{{ stocks.advance_ratio|percent }}</div>
+      <div class="risk-note">上涨 <strong>{{ stocks.advancers }}</strong>　 下跌 <strong>{{ stocks.decliners }}</strong></div>
+      <div class="ratio" style="background:linear-gradient(90deg,#16a05d 0 {{ (stocks.advance_ratio * 100)|round(1) }}%,#e04a45 {{ (stocks.advance_ratio * 100)|round(1) }}% 100%)"></div>
+    </div>
+    <div>
+      <h4>板块表现（1日）</h4>
+      {% set sorted_sectors = sectors.get('items', [])|selectattr('valid')|sort(attribute='daily_return', reverse=true)|list %}
+      {% for item in sorted_sectors %}
+      <div class="sector-row">
+        <span>{{ item.name }}</span>
+        <div class="sector-bar"><div class="sector-fill{% if item.daily_return < 0 %} red{% endif %}" style="width:{{ (item.bar_strength * 100)|round(1) }}%"></div></div>
+        <span class="{{ 'up' if item.daily_return >= 0 else 'down' }}">{{ item.daily_return|percent(true) }}</span>
+      </div>
+      {% endfor %}
+      {% for item in sectors.get('items', [])|rejectattr('valid') %}
+      <div class="sector-row unavailable"><span>{{ item.name }}</span><div class="sector-bar"></div><span>—</span></div>
+      {% endfor %}
+    </div>
+    <div>
+      <h4>市场情绪</h4>
+      {% set sentiment = report.get('market_sentiment', {}) %}
+      {% set sentiment_score = sentiment.get('market_sentiment_score') %}
+      {% set gauge_deg = ((sentiment_score / 100) * 180) if sentiment_score is not none else 90 %}
+      {% set gauge_fill = '#26a467' if sentiment_score is not none else '#c3cdd6' %}
+      <div class="gauge"><div class="gauge-circle" style="background:conic-gradient(from 270deg at 50% 100%,{{ gauge_fill }} 0deg {{ gauge_deg|round(1) }}deg,#e5eaee {{ gauge_deg|round(1) }}deg 180deg)"></div></div>
+      <div class="gauge-text{% if sentiment_score is none %} unavailable{% endif %}"><strong>{{ sentiment_score|round|int if sentiment_score is not none else '—' }}</strong><span>{{ sentiment.get('market_sentiment_label') or '数据不足，暂无法评分' }}</span></div>
+    </div>
+  </div>
+  {% else %}
+  <p class="empty">市场广度数据暂不可用</p>
   {% endif %}
+</section>
+{% endif %}
 
-  <section class="section">
-    <div class="section-title"><div class="section-left"><span class="marker"></span><h2>回撤加仓预警</h2></div><div class="note">专项备用金 ¥200,000 · 不含月度定投</div></div>
-    {% if report.market_data_valid %}<div class="draw-grid">
-      {% for key in ['sp500', 'nasdaq100'] %}{% if key in report.drawdown %}{% set item = report.drawdown[key] %}
-      <article class="card draw-card draw-{{ item.status }}">
-        <div class="draw-layout">
-          <div class="draw-index"><h3>{{ item.name }} <span class="draw-status status-{{ item.status }}">{% if item.status == 'near' %}● 接近触发{% elif item.status == 'pending' %}● 待执行{% elif item.status == 'executed' %}✓ 已执行{% else %}● 未触发{% endif %}</span></h3><div class="dd">-{{ item.current_drawdown|percent }}</div><div class="small">当前回撤</div></div>
-          <div class="draw-mid"><div><span>历史高点 ATH</span><strong title="ATH 日期：{{ item.ath_date }}">{{ item.ath|number }}</strong></div><div><span>下一档触发值</span><strong>{% if item.next_threshold is not none %}-{{ item.next_threshold|percent }}{% else %}无{% endif %}</strong></div><div><span>距离下一档</span><strong class="distance">{% if item.distance_to_next is not none %}{{ (item.distance_to_next * 100)|round(1) }} 个百分点{% else %}—{% endif %}</strong></div>{% if item.next_threshold is not none %}{% set marker_position = item.current_drawdown / item.next_threshold * 100 %}{% if marker_position > 100 %}{% set marker_position = 100 %}{% endif %}<div class="dtrack" aria-label="当前回撤相对下一档触发线的视觉进度"><i style="width:{{ marker_position|round(1) }}%"></i><b style="left:{{ marker_position|round(1) }}%"></b></div>{% else %}<div class="dtrack complete" aria-label="已到最后一档"></div>{% endif %}</div>
-          <div class="cash"><span>可用金额</span><strong>{{ item.remaining_amount|money }}</strong></div>
+{% if report.drawdown %}{% set dd2 = report.drawdown %}
+<section>
+  <div class="section-head"><div class="section-title"><span class="bar"></span><span>长期投资与风险管理</span></div></div>
+  {% if report.get('market_data_valid', true) %}
+  <div class="risk-grid">
+    <div class="card risk-card">
+      <h4>当前回撤（相对最高点）</h4>
+      <div class="risk-pair">
+        {% for key in ['sp500', 'nasdaq100'] %}{% if key in dd2 %}{% set item = dd2[key] %}
+        <div><div class="risk-label">{{ item.name }}</div><div class="risk-value up">-{{ item.current_drawdown|percent }}</div></div>
+        {% endif %}{% endfor %}
+      </div>
+      <div class="risk-note">
+        距离下一档加仓：<br>
+        {% for key in ['sp500', 'nasdaq100'] %}{% if key in dd2 %}{% set item = dd2[key] %}
+        {% if item.distance_to_next is not none %}还差 {{ (item.distance_to_next * 100)|round(1) }}%{% else %}已到最后一档{% endif %}{% if not loop.last %}　｜　{% endif %}
+        {% endif %}{% endfor %}
+      </div>
+    </div>
+    <div class="card risk-card">
+      <h4>下一档加仓参考</h4>
+      <div class="risk-pair">
+        {% for key in ['sp500', 'nasdaq100'] %}{% if key in dd2 %}{% set item = dd2[key] %}
+        {% set tier_list = item.get('tiers', {}).values()|list %}
+        {% set next_tier = (tier_list|selectattr('threshold', 'equalto', item.next_threshold)|list|first) if item.next_threshold is not none else none %}
+        <div>
+          <div class="risk-label">{{ item.name }}</div>
+          {% if next_tier %}
+          {% set next_index = tier_list.index(next_tier) %}
+          {% set upper = tier_list[next_index + 1].threshold if next_index + 1 < tier_list|length else none %}
+          <div class="risk-value">{{ (next_tier.threshold * 100)|round|int }}%{% if upper is not none %}~{{ (upper * 100)|round|int }}%{% else %}+{% endif %}</div>
+          <div class="risk-note">回撤<br>使用备用金 {{ (next_tier.allocation * 100)|round|int }}%</div>
+          {% else %}
+          <div class="risk-value">已用完</div>
+          <div class="risk-note">全部档位已执行</div>
+          {% endif %}
         </div>
-        {% if item.pending_tiers %}<div class="draw-extra"><span>{% for tier in item.pending_tiers %}{{ tier.label }} {{ tier.amount|money }} 待执行{% if not loop.last %} · {% endif %}{% endfor %}</span><strong>累计待执行 {{ item.pending_amount|money }}</strong><small>完成实际买入后：GitHub → Actions → 确认回撤加仓</small></div>{% endif %}
-      </article>
-      {% endif %}{% endfor %}
-    </div>{% else %}<div class="alert critical"><strong>🔴 行情数据校验失败</strong><span>今日暂停回撤预警判断；现有档位状态未被修改。</span></div>{% endif %}
-  </section>
+        {% endif %}{% endfor %}
+      </div>
+      <div class="risk-note" style="text-align:center;color:var(--blue);font-weight:700"><button type="button" class="strategy-link" style="padding:0;margin-top:0;border-top:0" id="drawdown-rules-open-2" aria-haspopup="dialog" aria-controls="drawdown-rules-drawer">查看完整规则 →</button></div>
+    </div>
+    <div class="card risk-card">
+      <h4>备用金使用情况</h4>
+      {% set reserve = report.get('reserve', {}) %}
+      {% set ratio = reserve.get('ratio') %}
+      <div class="reserve">
+        <div class="donut" style="--reserve-deg:{{ ((ratio or 0) * 360)|round(1) }}deg" data-pct="{{ (ratio * 100)|round|int ~ '%' if ratio is not none else '—' }}"></div>
+        <div>
+          <p>可用金额</p><strong>{{ reserve.get('remaining')|money }}</strong>
+          <p style="margin-top:10px">总备用金</p><strong>{{ reserve.get('total')|money }}</strong>
+        </div>
+      </div>
+    </div>
+    <div class="card risk-card">
+      <h4>投资纪律提醒</h4>
+      {% set discipline = report.get('discipline', {}) %}
+      <div class="checks">
+        <div class="check-row"><span>每月定投：</span><strong>{{ discipline.get('monthly_dca')|money }}</strong><span class="check-ok">✓</span></div>
+        <div class="check-row"><span>回撤加仓：</span><strong>阶梯执行</strong><span class="check-ok">✓</span></div>
+        <div class="check-row"><span>长期持有：</span><strong>{% if discipline.get('holding_years_min') %}{{ discipline.holding_years_min }}年以上{% else %}—{% endif %}</strong><span class="check-ok">✓</span></div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="alert critical"><strong>🔴 行情数据校验失败</strong>：今日暂停回撤预警判断，现有档位状态未被修改。</div>
+  {% endif %}
+</section>
+{% endif %}
 
-  <section class="section">
-    <div class="section-title news-section-title"><div class="section-left"><span class="marker"></span><h2>今日重要新闻</h2></div><div class="news-section-meta">优先级：宏观政策 · 利率就业 · 金融 · AI · 地缘政治</div></div>
-    {% if report.news_degraded %}<div class="alert warning"><strong>⚠️ 新闻 AI 处理暂时失败</strong><span>RSS 数据已获取，等待下一次更新</span></div>
-    {% elif report.news %}<div class="news-layout">
-      {% for item in report.news %}<article class="card news-card">
-        <div class="news-meta"><span class="rank">{{ '%02d'|format(item.rank) }}</span><span class="news-category">{{ item.category }}</span><span class="news-source">{{ item.source }}</span></div>
-        <h3>{{ item.title_zh }}</h3>
-        <p class="news-summary">{{ item.summary_zh }}</p>
-        {% if item.get('tags') %}<div class="news-tags">{% for tag in item.get('tags') %}<span>{{ tag }}</span>{% endfor %}</div>{% endif %}
-        <div class="news-footer"><span class="news-focus">关注：{{ item.get('focus') or '查看原文后续进展' }}</span><a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">查看原文 →</a></div>
-      </article>{% endfor %}
-    </div>{% else %}<p class="empty">最近 30 小时暂无足够重要的有效新闻。</p>{% endif %}
-  </section>
-
-  <footer>Market Data: Yahoo Finance via yfinance　　News: RSS feeds　　AI Processing: DeepSeek　　Last generated: {{ report.generated_at }}　　<span>数据仅用于信息与个人投资纪律辅助，不构成投资建议。</span></footer>
+<footer>
+  <span>数据来源：Market Breadth、Top News、彭博、TradingView、公开信息整理 ｜ 本报告仅供参考，不构成投资建议。</span>
+  <span>Daily Market Brief 由 AI 驱动生成 · Last generated: {{ report.generated_at }}</span>
+</footer>
 </div>
 
-{% if report.market_summary and report.drawdown %}
+{% if report.drawdown %}
 <div class="drawer-backdrop" id="drawdown-rules-backdrop"></div>
 <aside class="drawer" id="drawdown-rules-drawer" role="dialog" aria-modal="true" aria-labelledby="drawdown-rules-title">
   <div class="drawer-header">
@@ -269,7 +373,7 @@
 (() => {
   const drawer = document.getElementById('drawdown-rules-drawer');
   const drawerBackdrop = document.getElementById('drawdown-rules-backdrop');
-  const drawerOpenBtn = document.getElementById('drawdown-rules-open');
+  const drawerOpenBtns = document.querySelectorAll('#drawdown-rules-open, #drawdown-rules-open-2');
   const drawerCloseBtn = document.getElementById('drawdown-rules-close');
   const openDrawer = () => {
     if (!drawer) return;
@@ -283,7 +387,7 @@
     drawerBackdrop.classList.remove('open');
     document.body.style.overflow = '';
   };
-  drawerOpenBtn?.addEventListener('click', openDrawer);
+  drawerOpenBtns.forEach((btn) => btn.addEventListener('click', openDrawer));
   drawerCloseBtn?.addEventListener('click', closeDrawer);
   drawerBackdrop?.addEventListener('click', closeDrawer);
   document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeDrawer(); });
@@ -295,24 +399,6 @@
     loading.hidden = false;
     window.requestAnimationFrame(() => { window.location.href = select.value; });
   });
-
-  const buttons = Array.from(document.querySelectorAll('.context-help-button, .breadth-help-button'));
-  const closeAll = (except) => buttons.forEach((button) => {
-    if (button === except) return;
-    button.setAttribute('aria-expanded', 'false');
-    document.getElementById(button.getAttribute('aria-controls')).hidden = true;
-  });
-  buttons.forEach((button) => button.addEventListener('click', (event) => {
-    event.stopPropagation();
-    const opening = button.getAttribute('aria-expanded') !== 'true';
-    closeAll(opening ? button : null);
-    button.setAttribute('aria-expanded', String(opening));
-    document.getElementById(button.getAttribute('aria-controls')).hidden = !opening;
-  }));
-  document.addEventListener('click', (event) => {
-    if (!event.target.closest('.tooltip')) closeAll();
-  });
-  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeAll(); });
 })();
 </script>
 </body>

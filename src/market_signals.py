@@ -91,7 +91,10 @@ def calculate_market_signals(core: dict[str, dict], context: dict[str, dict]) ->
 def build_market_context_for_ai(core: dict[str, dict], context: dict[str, dict],
                                 market_signals: dict[str, Any]) -> str:
     core_names = {"sp500": "S&P 500", "nasdaq100": "Nasdaq-100", "dow": "Dow Jones"}
-    context_names = {"russell2000": "Russell 2000", "vix": "VIX", "dxy": "美元指数"}
+    context_names = {
+        "russell2000": "Russell 2000", "vix": "VIX", "dxy": "美元指数",
+        "gold": "黄金 (COMEX)", "wti": "原油 (WTI)",
+    }
     lines = ["【核心市场】"]
     for key, name in core_names.items():
         value = _number(core.get(key, {}), "daily_return")

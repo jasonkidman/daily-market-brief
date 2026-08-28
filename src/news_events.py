@@ -259,8 +259,18 @@ def _log_stage_a_events(events: list[dict]) -> None:
 def cluster_news_events(candidates: list[dict], api_key: str,
                         call_model: Callable = call_deepseek,
                         sleep_fn: Callable = time.sleep,
-                        usage_tracker: DeepSeekUsageTracker | None = None) -> tuple[list[dict], Optional[str]]:
-    """Cluster deterministic candidates, falling back safely if Stage A is unavailable."""
+                        usage_tracker: DeepSeekUsageTracker | None = None,
+                        max_attempts: int = DEEPSEEK_MAX_ATTEMPTS + 1) -> tuple[list[dict], Optional[str]]:
+    """Cluster deterministic candidates, falling back safely if Stage A is unavailable.
+
+    Uses its own `max_attempts` (one more than the shared DEEPSEEK_MAX_ATTEMPTS
+    used by Stage B/Layer 2) rather than the shared constant directly: the
+    observed failures here are LLM structural-output-contract violations
+    (e.g. "candidate_id 不在候选池", "所有 candidate 必须恰好被一个 event 覆盖"),
+    not network errors, and are plausibly transient given LLM output
+    non-determinism -- one extra attempt is a cheap, isolated mitigation that
+    does not change Stage B/Layer 2 retry behavior or any selection rule.
+    """
     cluster_input = _cluster_candidate_input(candidates)
     _log_stage_a_cap(candidates, cluster_input)
     print(f"[NEWS STAGE A] input candidates: {len(cluster_input)}")
@@ -272,7 +282,7 @@ def cluster_news_events(candidates: list[dict], api_key: str,
     user_payload = json.dumps({"candidates": cluster_input}, ensure_ascii=False)
     last_error = None
     started = time.monotonic()
-    for attempt in range(DEEPSEEK_MAX_ATTEMPTS):
+    for attempt in range(max_attempts):
         try:
             raw = invoke_model(
                 call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=False, reasoning_effort=None,
@@ -291,11 +301,11 @@ def cluster_news_events(candidates: list[dict], api_key: str,
         except Exception as exc:
             last_error = exc
             print(
-                f"[NEWS AI] event clustering attempt {attempt + 1}/{DEEPSEEK_MAX_ATTEMPTS} failed "
+                f"[NEWS AI] event clustering attempt {attempt + 1}/{max_attempts} failed "
                 f"after {time.monotonic() - started:.1f}s: {exc}"
             )
-            if attempt < DEEPSEEK_MAX_ATTEMPTS - 1:
-                sleep_fn((5, 10)[attempt])
+            if attempt < max_attempts - 1:
+                sleep_fn((5, 10, 10)[min(attempt, 2)])
     events = _fallback_events(cluster_input)
     _log_stage_a_events(events)
     _log_stage_a_mapping(events)

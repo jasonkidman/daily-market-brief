@@ -1,4 +1,7 @@
 total_reserve: 200000
+discipline:
+  monthly_dca: 10000
+  holding_years_min: 20
 sp500:
   name: "S&P 500"
   pool: 140000

@@ -518,10 +518,78 @@ def test_rss_failure_does_not_block_other_sources():
          {"name": "Good", "url": "https://good/rss", "priority": "P1"}],
         now,
         parser=parser,
+        sleep=lambda *_: None,
     )
     assert len(candidates) == 1
     assert candidates[0]["source"] == "Good"
     assert len(warnings) == 1
+
+
+def test_rss_transient_failure_recovers_on_retry_without_a_warning():
+    """Simulates the real observed SSLEOFError pattern: the same source fails on
+    the first attempt(s) and succeeds on a later one. This must not surface as
+    a source failure at all once a retry succeeds."""
+    now = datetime(2026, 8, 12, tzinfo=ZoneInfo("UTC"))
+    attempts = {"count": 0}
+
+    def flaky_parser(url):
+        attempts["count"] += 1
+        if attempts["count"] < 2:
+            import ssl
+            raise ssl.SSLEOFError("EOF occurred in violation of protocol")
+        entry = SimpleNamespace(title="Recovered story", link="https://ok/story", summary="Summary",
+                                published_parsed=now.timetuple())
+        return SimpleNamespace(entries=[entry])
+
+    candidates, warnings = fetch_candidates(
+        [{"name": "Flaky", "url": "https://flaky/rss", "priority": "P1"}],
+        now,
+        parser=flaky_parser,
+        sleep=lambda *_: None,
+    )
+    assert attempts["count"] == 2
+    assert warnings == []
+    assert len(candidates) == 1
+    assert candidates[0]["title"] == "Recovered story"
+
+
+def test_rss_failure_after_exhausting_all_retries_is_still_reported():
+    now = datetime(2026, 8, 12, tzinfo=ZoneInfo("UTC"))
+    attempts = {"count": 0}
+
+    def always_fails(url):
+        attempts["count"] += 1
+        raise RuntimeError("persistently down")
+
+    candidates, warnings = fetch_candidates(
+        [{"name": "Down", "url": "https://down/rss", "priority": "P1"}],
+        now,
+        parser=always_fails,
+        max_attempts=3,
+        sleep=lambda *_: None,
+    )
+    assert attempts["count"] == 3
+    assert candidates == []
+    assert len(warnings) == 1
+    assert "persistently down" in warnings[0]
+
+
+def test_rss_retry_uses_backoff_between_attempts():
+    now = datetime(2026, 8, 12, tzinfo=ZoneInfo("UTC"))
+    delays = []
+
+    def always_fails(url):
+        raise RuntimeError("down")
+
+    fetch_candidates(
+        [{"name": "Down", "url": "https://down/rss", "priority": "P1"}],
+        now,
+        parser=always_fails,
+        max_attempts=3,
+        retry_delay_seconds=0.5,
+        sleep=lambda seconds: delays.append(seconds),
+    )
+    assert delays == [0.5, 1.0]
 
 
 def test_rss_logs_source_counts_and_received_candidate(capsys):

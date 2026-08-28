@@ -94,11 +94,61 @@ def calculate_context_snapshot(rows: Iterable[dict[str, Any]], now: datetime,
     return snapshot
 
 
-def fetch_close_history(ticker: str) -> list[dict[str, Any]]:
-    """Fetch the complete daily close history for one ticker via yfinance."""
+def build_sparkline(history: Iterable[dict[str, Any]], points: int = 30,
+                     width: int = 420, height: int = 52) -> dict[str, str] | None:
+    """Build SVG path `d` strings for a sparkline from real historical closes.
+
+    Uses the same row-cleaning rules as the rest of the market pipeline (sorted,
+    de-duplicated, validated closes) so the sparkline never plots fabricated data.
+    Returns None when fewer than 2 usable points are available.
+    """
+    try:
+        cleaned = _clean_rows(history)
+    except MarketDataError:
+        return None
+    if len(cleaned) < 2:
+        return None
+    recent = cleaned[-points:]
+    closes = [item["close"] for item in recent]
+    count = len(closes)
+    low, high = min(closes), max(closes)
+    span = high - low
+    top_pad, bottom_pad = 4, 4
+    plot_height = max(height - top_pad - bottom_pad, 1)
+
+    def _x(index: int) -> float:
+        if count == 1:
+            return 0.0
+        return round(index * width / (count - 1), 2)
+
+    def _y(close: float) -> float:
+        if span <= 0:
+            return round(top_pad + plot_height / 2, 2)
+        return round(top_pad + (1 - (close - low) / span) * plot_height, 2)
+
+    coords = [(_x(i), _y(close)) for i, close in enumerate(closes)]
+    line = " ".join(f"{'M' if i == 0 else 'L'}{x},{y}" for i, (x, y) in enumerate(coords))
+    area = f"{line} L{coords[-1][0]},{height} L{coords[0][0]},{height} Z"
+    return {"line": line, "area": area}
+
+
+def fetch_close_history(ticker: str, period: str = "max") -> list[dict[str, Any]]:
+    """Fetch daily close history for one ticker via yfinance.
+
+    `period` controls how far back the request goes. Core indices need the
+    full history (ATH-since-inception, YTD-vs-prior-year-end), so they must
+    use "max". Context indicators only ever read the latest and previous
+    close (see `calculate_context_snapshot`), so they should use a short,
+    bounded period instead of "max": some tickers' full history legitimately
+    contains an old, real, unusual print (e.g. WTI crude futures traded at
+    -$37.63 on 2020-04-20, the widely reported real-world negative oil price
+    event) that `validate_close_rows` correctly rejects as a bad *current*
+    close but that is irrelevant noise for a same-day snapshot. Fetching a
+    bounded window avoids failing today's snapshot over years-old data.
+    """
     import yfinance as yf
 
-    frame = yf.Ticker(ticker).history(period="max", auto_adjust=False, actions=False)
+    frame = yf.Ticker(ticker).history(period=period, auto_adjust=False, actions=False)
     if frame is None or frame.empty or "Close" not in frame:
         raise MarketDataError(f"{ticker} 未返回有效历史 Close。")
     rows = []
@@ -115,7 +165,10 @@ def fetch_market(config: dict[str, Any], now: datetime) -> tuple[dict[str, Any],
         try:
             history = fetch_close_history(item["ticker"])
             snapshot = calculate_market_snapshot(history, now)
-            snapshot.update({"name": item["name"], "ticker": item["ticker"], "valid": True})
+            snapshot.update({
+                "name": item["name"], "ticker": item["ticker"], "valid": True,
+                "sparkline": build_sparkline(history),
+            })
             snapshots[key], histories[key] = snapshot, history
         except Exception as exc:
             warnings.append(f"{item['name']} 行情获取或校验失败：{exc}")
@@ -124,11 +177,17 @@ def fetch_market(config: dict[str, Any], now: datetime) -> tuple[dict[str, Any],
 
 
 def fetch_market_context(config: dict[str, Any], now: datetime) -> tuple[dict[str, Any], list[str]]:
-    """Fetch each context indicator independently so one failure cannot block peers."""
+    """Fetch each context indicator independently so one failure cannot block peers.
+
+    Uses a bounded 3-month lookback rather than "max": context snapshots only
+    need the latest and previous close (see `calculate_context_snapshot`), and
+    a short window avoids failing today's value over an unrelated, real, old
+    print elsewhere in a ticker's full history (see `fetch_close_history`).
+    """
     snapshots, warnings = {}, []
     for key, item in config.items():
         try:
-            history = fetch_close_history(item["ticker"])
+            history = fetch_close_history(item["ticker"], period="3mo")
             snapshot = calculate_context_snapshot(history, now, is_yield=(key == "us10y"))
             snapshot.update({"name": item["name"], "ticker": item["ticker"], "valid": True})
             snapshots[key] = snapshot

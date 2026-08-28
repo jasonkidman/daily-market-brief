@@ -349,7 +349,11 @@ def test_cluster_logs_cap_counts_and_each_cap_drop(capsys):
     assert "[NEWS STAGE A MAPPING] candidate_id=candidate-" in output
 
 
-def test_cluster_two_failures_uses_candidate_per_event_fallback():
+def test_cluster_exhausts_all_retries_then_uses_candidate_per_event_fallback():
+    """Stage A gets one extra attempt beyond the shared DEEPSEEK_MAX_ATTEMPTS
+    (3 total by default) because observed failures here are LLM structural-
+    output-contract violations, not network errors, and are plausibly
+    transient given LLM output non-determinism."""
     calls, sleeps = [], []
 
     def failing(*args):
@@ -360,8 +364,45 @@ def test_cluster_two_failures_uses_candidate_per_event_fallback():
         [candidate("a"), candidate("b")], "key", call_model=failing, sleep_fn=sleeps.append
     )
 
-    assert len(calls) == 2
-    assert sleeps == [5]
+    assert len(calls) == 3
+    assert sleeps == [5, 10]
     assert [item["candidate_ids"] for item in events] == [["a"], ["b"]]
     assert all(item["topic_group"] == "OTHER_SYSTEMIC" for item in events)
+    assert "事件级去重暂时失败" in warning
+
+
+def test_cluster_recovers_on_final_extra_retry_attempt():
+    """A third attempt succeeding (after two structural-contract failures) must
+    return real clustered events, not the fallback, and no warning."""
+    calls = []
+
+    def flaky(system_prompt, user_payload, api_key):
+        calls.append(1)
+        if len(calls) < 3:
+            return "not json"
+        ids = [item["candidate_id"] for item in __import__("json").loads(user_payload)["candidates"]]
+        return cluster_payload(event("event_001", ids))
+
+    events, warning = cluster_news_events(
+        [candidate("a"), candidate("b")], "key", call_model=flaky, sleep_fn=lambda _: None
+    )
+
+    assert len(calls) == 3
+    assert warning is None
+    assert events == [event("event_001", ["a", "b"])]
+
+
+def test_cluster_max_attempts_is_configurable_independent_of_shared_stage_b_constant():
+    calls = []
+
+    def failing(*args):
+        calls.append(1)
+        return "not json"
+
+    events, warning = cluster_news_events(
+        [candidate("a"), candidate("b")], "key", call_model=failing, sleep_fn=lambda _: None, max_attempts=1,
+    )
+
+    assert len(calls) == 1
+    assert [item["candidate_ids"] for item in events] == [["a"], ["b"]]
     assert "事件级去重暂时失败" in warning

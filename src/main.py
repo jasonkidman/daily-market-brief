@@ -13,9 +13,16 @@ import yaml
 
 from .deepseek_client import DeepSeekUsageTracker, select_news, validate_selection
 from .drawdown import summarize_index_state, update_drawdown_state
-from .market import calculate_context_snapshot, calculate_market_snapshot, fetch_market, fetch_market_context
+from .market import (
+    build_sparkline,
+    calculate_context_snapshot,
+    calculate_market_snapshot,
+    fetch_market,
+    fetch_market_context,
+)
 from .market_breadth import build_market_breadth, build_offline_market_breadth, unavailable_market_breadth
 from .market_health import build_market_breadth_text
+from .market_sentiment import calculate_market_sentiment
 from .market_signals import build_market_context_for_ai, calculate_market_signals
 from .market_summary import derive_portfolio_action, generate_market_summary
 from .news_dedupe import dedupe_candidates
@@ -34,6 +41,40 @@ from .rss_news import fetch_candidates, filter_final_candidates
 
 ROOT = Path(__file__).resolve().parents[1]
 SHANGHAI = ZoneInfo("Asia/Shanghai")
+
+# A single supplementary (non-P0) RSS source failing should not, by itself,
+# flip the page-top status banner as long as the remaining sources still
+# produced a healthy candidate pool. A core (P0) source failing, or the
+# overall pool falling below this floor, is treated as materially degraded
+# and does surface to users. See `_classify_rss_warnings`.
+RSS_CORE_SOURCE_PRIORITY = "P0"
+RSS_MATERIAL_CANDIDATE_FLOOR = 10
+
+
+def _classify_rss_warnings(rss_warnings: list[str], news_sources: list[dict],
+                           rss_candidate_count: int) -> tuple[list[dict], list[str]]:
+    """Split RSS acquisition warnings into always-kept diagnostics and the
+    subset material enough to surface as a user-facing page warning.
+
+    Returns (diagnostics, material_warnings). `diagnostics` covers every RSS
+    warning (kept for troubleshooting regardless of materiality); the
+    `warning` text is reused verbatim from `fetch_candidates`, which formats
+    it as f"{source_name} RSS 获取失败：{exc}".
+    """
+    priority_by_name = {source["name"]: source.get("priority", "P2") for source in news_sources}
+    diagnostics, material = [], []
+    for warning in rss_warnings:
+        source_name = next(
+            (name for name in priority_by_name if warning.startswith(f"{name} RSS 获取失败")), None
+        )
+        priority = priority_by_name.get(source_name, "P2")
+        is_material = priority == RSS_CORE_SOURCE_PRIORITY or rss_candidate_count < RSS_MATERIAL_CANDIDATE_FLOOR
+        diagnostics.append({
+            "source": source_name, "priority": priority, "warning": warning, "material": is_material,
+        })
+        if is_material:
+            material.append(warning)
+    return diagnostics, material
 
 
 def _load_yaml(path: Path):
@@ -77,12 +118,17 @@ def _offline_market(now: datetime, core_config: dict, context_config: dict):
         "vix": [("2026-08-10", 15), ("2026-08-11", 16.5)],
         "dxy": [("2026-08-10", 100), ("2026-08-11", 100.5)],
         "us10y": [("2026-08-10", 4.20), ("2026-08-11", 4.28)],
+        "gold": [("2026-08-10", 1920), ("2026-08-11", 1931)],
+        "wti": [("2026-08-10", 79), ("2026-08-11", 78.3)],
     }
     snapshots, histories = {}, {}
     for key, pairs in core_raw.items():
         history = [{"date": day, "close": close} for day, close in pairs]
         snapshot = calculate_market_snapshot(history, now)
-        snapshot.update({"name": core_config[key]["name"], "ticker": core_config[key]["ticker"], "valid": True})
+        snapshot.update({
+            "name": core_config[key]["name"], "ticker": core_config[key]["ticker"], "valid": True,
+            "sparkline": build_sparkline(history),
+        })
         snapshots[key], histories[key] = snapshot, history
     context_snapshots = {}
     for key, pairs in context_raw.items():
@@ -356,12 +402,17 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
     api_key = os.environ.get("DEEPSEEK_API_KEY")
     usage_tracker = DeepSeekUsageTracker()
     stage_b_observability = {"raw_count": 0, "validated_count": 0}
+    news_source_diagnostics = []
+    event_clustering_diagnostics = {"fallback_used": False, "reason": None}
     if offline_fixture:
         news = _offline_news()
     else:
         candidates, rss_warnings = fetch_candidates(news_sources, now)
-        warnings.extend(rss_warnings)
         rss_candidate_count = len(candidates)
+        news_source_diagnostics, material_rss_warnings = _classify_rss_warnings(
+            rss_warnings, news_sources, rss_candidate_count
+        )
+        warnings.extend(material_rss_warnings)
         candidates = filter_final_candidates(candidates, now)
         window_candidate_count = len(candidates)
         candidates = dedupe_candidates(candidates)
@@ -374,8 +425,19 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
             stage_a_actual_input_count = 0
         else:
             events, clustering_warning = cluster_news_events(candidates, api_key, usage_tracker=usage_tracker)
-            if clustering_warning:
-                warnings.append(clustering_warning)
+            # The fallback (one event per candidate) always preserves basic
+            # (exact-URL-level) dedup -- `dedupe_candidates` already ran above
+            # unconditionally -- and can never leave the pipeline empty for a
+            # non-empty candidate pool, so this never rises to a page-top
+            # banner; it's still fully captured for troubleshooting. Its one
+            # real cost is a quality nuance, not a broken/incomplete result:
+            # articles from different outlets about the same real event may
+            # surface as separate Stage B events instead of being merged into
+            # one, when it would normally have been merged.
+            event_clustering_diagnostics = {
+                "fallback_used": clustering_warning is not None,
+                "reason": clustering_warning,
+            }
             event_representatives = build_event_representatives(events, candidates)
             selection_candidates = event_selection_candidates(event_representatives)
             ai_market_context = None
@@ -451,6 +513,14 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
     else:
         status, status_label = "ok", "🟢 数据更新正常"
     valid_market_dates = [item["market_date"] for item in snapshots.values() if item.get("valid")]
+    total_reserve = drawdown_rules.get("total_reserve", 0)
+    remaining_reserve = sum(
+        value.get("remaining_amount", 0) for value in drawdown_summary.values()
+    )
+    discipline_config = drawdown_rules.get("discipline", {})
+    market_sentiment = calculate_market_sentiment(
+        context_snapshots, snapshots, histories, market_breadth.get("health", {})
+    )
     report = {
         "report_date": report_date,
         "generated_at": now.strftime("%Y-%m-%d %H:%M CST"),
@@ -465,11 +535,24 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         "market_context": context_snapshots,
         "market_signals": market_signals,
         "market_breadth": market_breadth,
+        "market_sentiment": market_sentiment,
         "drawdown": drawdown_summary,
+        "reserve": {
+            "total": total_reserve,
+            "remaining": remaining_reserve,
+            "used": max(total_reserve - remaining_reserve, 0),
+            "ratio": (remaining_reserve / total_reserve) if total_reserve else None,
+        },
+        "discipline": {
+            "monthly_dca": discipline_config.get("monthly_dca"),
+            "holding_years_min": discipline_config.get("holding_years_min"),
+        },
         "portfolio_action": portfolio_action,
         "market_summary": market_summary,
         "news": news,
         "news_degraded": news_degraded,
+        "news_source_diagnostics": news_source_diagnostics,
+        "event_clustering_diagnostics": event_clustering_diagnostics,
         "warnings": warnings,
     }
     reports_dir = base_dir / "data" / "reports"

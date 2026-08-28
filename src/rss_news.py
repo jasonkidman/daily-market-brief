@@ -7,6 +7,7 @@ import calendar
 import hashlib
 import html
 import re
+import time
 from typing import Any, Optional
 
 import feedparser
@@ -16,6 +17,15 @@ from .news_dedupe import canonical_url
 
 RSS_USER_AGENT = "daily-market-brief/1.0 (github.com/jasonkidman/daily-market-brief)"
 FINAL_NEWS_WINDOW_HOURS = 24
+
+# RSS fetches are read-only and idempotent, and real-world observation shows
+# transient TLS/network drops (e.g. SSLEOFError mid-handshake) that succeed
+# on a bare retry -- not certificate or configuration problems (the same
+# client config succeeds on most attempts against the same host). Retrying a
+# few times with a short backoff before recording a failure is safe and
+# resolves most of these without masking a genuinely broken source.
+RSS_FETCH_MAX_ATTEMPTS = 3
+RSS_FETCH_RETRY_DELAY_SECONDS = 0.5
 
 
 def _parse_feed(url: str):
@@ -43,8 +53,31 @@ def _log_candidate(candidate: dict, stage: str, action: str, reason: str = "") -
     )
 
 
+def _fetch_feed_with_retry(parser, url: str, max_attempts: int, retry_delay_seconds: float,
+                           sleep=time.sleep):
+    """Call `parser(url)` with a bounded retry for transient fetch failures.
+
+    Raises the last exception (or a RuntimeError built from a bozo
+    exception with no entries) if every attempt fails.
+    """
+    last_exc: Exception | None = None
+    for attempt in range(1, max_attempts + 1):
+        try:
+            feed = parser(url)
+            if getattr(feed, "bozo", False) and not getattr(feed, "entries", []):
+                raise RuntimeError(str(getattr(feed, "bozo_exception", "RSS 解析失败")))
+            return feed
+        except Exception as exc:  # noqa: BLE001 - any fetch/parse failure is retry-eligible
+            last_exc = exc
+            if attempt < max_attempts:
+                sleep(retry_delay_seconds * attempt)
+    raise last_exc
+
+
 def fetch_candidates(sources: list[dict], now: datetime, hours: int = 30,
-                     parser=_parse_feed) -> tuple[list[dict], list[str]]:
+                     parser=_parse_feed, max_attempts: int = RSS_FETCH_MAX_ATTEMPTS,
+                     retry_delay_seconds: float = RSS_FETCH_RETRY_DELAY_SECONDS,
+                     sleep=time.sleep) -> tuple[list[dict], list[str]]:
     now_utc = now.astimezone(timezone.utc)
     cutoff = now_utc - timedelta(hours=hours)
     candidates, warnings = [], []
@@ -55,9 +88,7 @@ def fetch_candidates(sources: list[dict], now: datetime, hours: int = 30,
         accepted_count = 0
         source_warning = "<none>"
         try:
-            feed = parser(source["url"])
-            if getattr(feed, "bozo", False) and not getattr(feed, "entries", []):
-                raise RuntimeError(str(getattr(feed, "bozo_exception", "RSS 解析失败")))
+            feed = _fetch_feed_with_retry(parser, source["url"], max_attempts, retry_delay_seconds, sleep)
             entries = getattr(feed, "entries", [])
             raw_count = len(entries)
             for entry in entries:

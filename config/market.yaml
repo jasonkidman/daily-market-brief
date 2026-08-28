@@ -22,3 +22,9 @@ context:
   us10y:
     name: "10Y 美债"
     ticker: "^TNX"
+  gold:
+    name: "黄金 (COMEX)"
+    ticker: "GC=F"
+  wti:
+    name: "原油 (WTI)"
+    ticker: "CL=F"
