@@ -27,21 +27,80 @@
   </header>
 
   {% if report.market_summary %}
+  {% set dd = report.drawdown or {} %}
+  {% set market_valid = report.get('market_data_valid', true) %}
+  {% set risk = namespace(level='normal') %}
+  {% set pending = namespace(items=[], amount=0) %}
+  {% set executed = namespace(amount=0, any=false) %}
+  {% for key in ['sp500', 'nasdaq100'] %}{% if key in dd %}{% set idx = dd[key] %}
+    {% if idx.get('status') == 'pending' %}{% set risk.level = 'pending' %}
+    {% elif idx.get('status') == 'near' and risk.level == 'normal' %}{% set risk.level = 'near' %}{% endif %}
+    {% set pending.amount = pending.amount + (idx.get('pending_amount') or 0) %}
+    {% set executed.amount = executed.amount + (idx.get('executed_amount') or 0) %}
+    {% if idx.get('executed_amount') %}{% set executed.any = true %}{% endif %}
+    {% if idx.get('pending_tiers') %}{% set pending.items = pending.items + [{'index': idx.get('name'), 'tier': idx['pending_tiers'][0]}] %}{% endif %}
+  {% endif %}{% endfor %}
+  {% if not market_valid %}
+    {% set action_main, action_sub = '暂停额外操作', '行情数据校验失败，今日暂停回撤判断' %}
+  {% elif pending.items %}
+    {% set first_pending = pending.items[0] %}
+    {% set alloc = first_pending.tier.get('allocation') %}
+    {% set action_main = ('加仓 ' ~ (alloc * 100)|round|int ~ '%') if alloc is not none else '加仓' %}
+    {% set action_sub = first_pending.index ~ ' 已触发' ~ (first_pending.tier.get('label') or '加仓') ~ '，等待确认' %}
+  {% elif executed.any %}
+    {% set action_main, action_sub = '已完成加仓', '本轮回撤加仓已执行，继续正常定投' %}
+  {% else %}
+    {% set action_main, action_sub = '正常定投', '未触发回撤加仓' %}
+  {% endif %}
+  {% if not market_valid or (pending.amount == 0 and executed.amount == 0) %}
+    {% set reserve_label = '保持不动' %}
+  {% elif pending.amount > 0 %}
+    {% set reserve_label = '待执行 ' ~ (pending.amount|money) %}
+  {% else %}
+    {% set reserve_label = '已使用 ' ~ (executed.amount|money) %}
+  {% endif %}
+  {% if not market_valid %}
+    {% set risk_label, risk_class = '数据异常', 'critical' %}
+  {% elif risk.level == 'pending' %}
+    {% set risk_label, risk_class = '已触发', 'pending' %}
+  {% elif risk.level == 'near' %}
+    {% set risk_label, risk_class = '临近触发', 'near' %}
+  {% else %}
+    {% set risk_label, risk_class = '正常', 'normal' %}
+  {% endif %}
   <section class="summary" aria-labelledby="today-summary-title">
-    <div class="summary-inner">
-      <div class="summary-icon" aria-hidden="true">☼</div>
-      <div>
-        <h2 id="today-summary-title">今日市场一句话</h2>
-        <div class="summary-content">
-          <p class="market-summary"><strong>{{ report.market_summary.market }}</strong></p>
-          <div class="summary-focus">
-            <div class="summary-focus-label">今日关注</div>
-            <div class="summary-focus-text">{{ report.market_summary.drivers }}</div>
+    <div class="summary-grid">
+      <div class="summary-inner">
+        <div class="summary-icon" aria-hidden="true">☼</div>
+        <div>
+          <h2 id="today-summary-title">今日市场一句话</h2>
+          <div class="summary-content">
+            <p class="market-summary"><strong>{{ report.market_summary.market }}</strong></p>
+            <div class="summary-focus">
+              <div class="summary-focus-label">今日关注</div>
+              <div class="summary-focus-text">{{ report.market_summary.drivers }}</div>
+            </div>
+            {% if report.market_breadth and report.market_breadth.get('health', {}).get('valid') %}
+            <div class="summary-interpretation">
+              <div class="summary-interpretation-label">市场解读</div>
+              <div class="summary-interpretation-text">{{ report.market_breadth.health.summary }}</div>
+            </div>
+            {% endif %}
           </div>
-          <div class="summary-strategy">策略：{{ report.market_summary.action }}</div>
+          <div class="summary-src">基于市场数据 · Market Breadth · Top News</div>
         </div>
-        <div class="summary-src">基于市场数据 · Market Breadth · Top News</div>
       </div>
+
+      <aside class="card strategy-card" aria-labelledby="today-strategy-title">
+        <h2 id="today-strategy-title" class="strategy-title">今日策略</h2>
+        <div class="strategy-action strategy-{{ risk_class }}">{{ action_main }}</div>
+        <div class="strategy-sub">{{ action_sub }}</div>
+        <div class="strategy-row"><span>备用金状态</span><strong>{{ reserve_label }}</strong></div>
+        <div class="strategy-row"><span>当前风险状态</span><strong class="risk-{{ risk_class }}">{{ risk_label }}</strong></div>
+        {% if dd %}
+        <button type="button" class="strategy-link" id="drawdown-rules-open" aria-haspopup="dialog" aria-controls="drawdown-rules-drawer">查看回撤加仓规则　→</button>
+        {% endif %}
+      </aside>
     </div>
   </section>
   {% endif %}
@@ -159,9 +218,76 @@
   <footer>Market Data: Yahoo Finance via yfinance　　News: RSS feeds　　AI Processing: DeepSeek　　Last generated: {{ report.generated_at }}　　<span>数据仅用于信息与个人投资纪律辅助，不构成投资建议。</span></footer>
 </div>
 
+{% if report.market_summary and report.drawdown %}
+<div class="drawer-backdrop" id="drawdown-rules-backdrop"></div>
+<aside class="drawer" id="drawdown-rules-drawer" role="dialog" aria-modal="true" aria-labelledby="drawdown-rules-title">
+  <div class="drawer-header">
+    <h2 id="drawdown-rules-title">回撤加仓规则</h2>
+    <button type="button" class="drawer-close" id="drawdown-rules-close" aria-label="关闭">✕</button>
+  </div>
+  <div class="drawer-body">
+    {% for key in ['sp500', 'nasdaq100'] %}{% if key in report.drawdown %}{% set item = report.drawdown[key] %}
+    <div class="drawer-index-block">
+      <div class="drawer-index-name">{{ item.name }}</div>
+      <div class="drawer-status-panel{% if item.get('pending_tiers') %} triggered{% endif %}">
+        {% if item.get('pending_tiers') %}
+        {% set tier = item['pending_tiers'][0] %}
+        <div class="drawer-status-title">当前已进入{{ tier.get('label') or '加仓档位' }}</div>
+        <div class="drawer-status-line"><span>当前指数回撤幅度</span><strong>{{ item.current_drawdown|percent }}</strong></div>
+        {% if tier.get('allocation') is not none %}<div class="drawer-status-line"><span>建议使用备用金比例</span><strong>{{ (tier.allocation * 100)|round|int }}%</strong></div>{% endif %}
+        <div class="drawer-status-line"><span>建议投入金额</span><strong>{{ tier.amount|money }}</strong></div>
+        {% if item.next_threshold is not none %}<div class="drawer-status-line"><span>距离下一档还差</span><strong>{{ (item.distance_to_next * 100)|round(1) }}%</strong></div>{% endif %}
+        <div class="drawer-status-line"><span>剩余备用金</span><strong>{{ item.remaining_amount|money }}</strong></div>
+        {% else %}
+        <div class="drawer-status-title">当前状态：{% if item.next_threshold is none %}已用完全部档位{% else %}未触发{% endif %}</div>
+        <div class="drawer-status-line"><span>当前指数回撤幅度</span><strong>{{ item.current_drawdown|percent }}</strong></div>
+        {% if item.next_threshold is not none %}
+        <div class="drawer-status-line"><span>{{ '距离第一档还有' if not item.get('executed_tiers') else '距离下一档还有' }}</span><strong>{{ (item.distance_to_next * 100)|round(1) }}%</strong></div>
+        {% endif %}
+        <div class="drawer-status-line"><span>剩余备用金</span><strong>{{ item.remaining_amount|money }}</strong></div>
+        {% endif %}
+      </div>
+      {% if item.get('tiers') %}{% set tier_list = item.tiers.values()|list %}
+      <table class="drawer-tier-table">
+        {% for tier in tier_list %}
+        {% set upper = tier_list[loop.index0 + 1].threshold if not loop.last else none %}
+        <tr class="{% if tier.get('status') in ('pending', 'executed') %}active-tier{% endif %}">
+          <td>回撤 {{ (tier.threshold * 100)|round|int }}%{% if upper is not none %}~{{ (upper * 100)|round|int }}%{% else %}+{% endif %}</td>
+          <td>使用备用金 {{ (tier.allocation * 100)|round|int }}%</td>
+        </tr>
+        {% endfor %}
+      </table>
+      {% endif %}
+    </div>
+    {% endif %}{% endfor %}
+  </div>
+</aside>
+{% endif %}
+
 <div class="archive-loading" id="archive-loading" role="status" aria-live="polite" hidden><div class="archive-loading-card"><span class="archive-spinner" aria-hidden="true"></span><strong>正在加载日报…</strong></div></div>
 <script>
 (() => {
+  const drawer = document.getElementById('drawdown-rules-drawer');
+  const drawerBackdrop = document.getElementById('drawdown-rules-backdrop');
+  const drawerOpenBtn = document.getElementById('drawdown-rules-open');
+  const drawerCloseBtn = document.getElementById('drawdown-rules-close');
+  const openDrawer = () => {
+    if (!drawer) return;
+    drawer.classList.add('open');
+    drawerBackdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+  const closeDrawer = () => {
+    if (!drawer) return;
+    drawer.classList.remove('open');
+    drawerBackdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+  drawerOpenBtn?.addEventListener('click', openDrawer);
+  drawerCloseBtn?.addEventListener('click', closeDrawer);
+  drawerBackdrop?.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeDrawer(); });
+
   const select = document.querySelector('.report-select');
   const loading = document.getElementById('archive-loading');
   select?.addEventListener('change', () => {

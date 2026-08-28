@@ -29,20 +29,34 @@
   </header>
 
   <section class="summary" aria-labelledby="today-summary-title">
-    <div class="summary-inner">
-      <div class="summary-icon" aria-hidden="true">☼</div>
-      <div>
-        <h2 id="today-summary-title">今日市场一句话</h2>
-        <div class="summary-content">
-          <p class="market-summary"><strong>标普500上涨0.72%、纳斯达克100上涨1.43%，但上涨集中于科技板块，标普成分股中仅约30%上涨，市场广度偏弱。</strong></p>
-          <div class="summary-focus">
-            <div class="summary-focus-label">今日关注</div>
-            <div class="summary-focus-text">市场同时关注Anthropic与特朗普政府相关裁定及其新的AI硬件标准，以及Meta涉及儿童数据的180亿美元和解。</div>
+    <div class="summary-grid">
+      <div class="summary-inner">
+        <div class="summary-icon" aria-hidden="true">☼</div>
+        <div>
+          <h2 id="today-summary-title">今日市场一句话</h2>
+          <div class="summary-content">
+            <p class="market-summary"><strong>标普500上涨0.72%、纳斯达克100上涨1.43%，但上涨集中于科技板块，标普成分股中仅约30%上涨，市场广度偏弱。</strong></p>
+            <div class="summary-focus">
+              <div class="summary-focus-label">今日关注</div>
+              <div class="summary-focus-text">市场同时关注Anthropic与特朗普政府相关裁定及其新的AI硬件标准，以及Meta涉及儿童数据的180亿美元和解。</div>
+            </div>
+            <div class="summary-interpretation">
+              <div class="summary-interpretation-label">市场解读</div>
+              <div class="summary-interpretation-text">指数上涨但市场参与度不足，上涨较集中于少数股票或板块。</div>
+            </div>
           </div>
-          <div class="summary-strategy">策略：未触发额外回撤加仓，维持正常定投，备用金保持不动。</div>
+          <div class="summary-src">基于市场数据 · Market Breadth · Top News</div>
         </div>
-        <div class="summary-src">基于市场数据 · Market Breadth · Top News</div>
       </div>
+
+      <aside class="card strategy-card" aria-labelledby="today-strategy-title">
+        <h2 id="today-strategy-title" class="strategy-title">今日策略</h2>
+        <div class="strategy-action strategy-normal">正常定投</div>
+        <div class="strategy-sub">未触发回撤加仓</div>
+        <div class="strategy-row"><span>备用金状态</span><strong>保持不动</strong></div>
+        <div class="strategy-row"><span>当前风险状态</span><strong class="risk-normal">正常</strong></div>
+        <button type="button" class="strategy-link" id="drawdown-rules-open" aria-haspopup="dialog" aria-controls="drawdown-rules-drawer">查看回撤加仓规则　→</button>
+      </aside>
     </div>
   </section>
 
@@ -188,9 +202,94 @@
   <footer>Market Data: Yahoo Finance via yfinance　　News: RSS feeds　　AI Processing: DeepSeek　　Last generated: 2026-08-28 10:59 CST　　<span>数据仅用于信息与个人投资纪律辅助，不构成投资建议。</span></footer>
 </div>
 
+<div class="drawer-backdrop" id="drawdown-rules-backdrop"></div>
+<aside class="drawer" id="drawdown-rules-drawer" role="dialog" aria-modal="true" aria-labelledby="drawdown-rules-title">
+  <div class="drawer-header">
+    <h2 id="drawdown-rules-title">回撤加仓规则</h2>
+    <button type="button" class="drawer-close" id="drawdown-rules-close" aria-label="关闭">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div class="drawer-index-block">
+      <div class="drawer-index-name">S&amp;P 500</div>
+      <div class="drawer-status-panel">
+        <div class="drawer-status-title">当前状态：未触发</div>
+        <div class="drawer-status-line"><span>当前指数回撤幅度</span><strong>0.9%</strong></div>
+        <div class="drawer-status-line"><span>距离第一档还有</span><strong>9.1%</strong></div>
+        <div class="drawer-status-line"><span>剩余备用金</span><strong>¥140,000</strong></div>
+      </div>
+      <table class="drawer-tier-table">
+        <tr class="">
+          <td>回撤 10%~15%</td>
+          <td>使用备用金 20%</td>
+        </tr>
+        <tr class="">
+          <td>回撤 15%~20%</td>
+          <td>使用备用金 30%</td>
+        </tr>
+        <tr class="">
+          <td>回撤 20%~25%</td>
+          <td>使用备用金 30%</td>
+        </tr>
+        <tr class="">
+          <td>回撤 25%+</td>
+          <td>使用备用金 20%</td>
+        </tr>
+      </table>
+    </div>
+    <div class="drawer-index-block">
+      <div class="drawer-index-name">Nasdaq-100</div>
+      <div class="drawer-status-panel">
+        <div class="drawer-status-title">当前状态：未触发</div>
+        <div class="drawer-status-line"><span>当前指数回撤幅度</span><strong>3.3%</strong></div>
+        <div class="drawer-status-line"><span>距离第一档还有</span><strong>11.7%</strong></div>
+        <div class="drawer-status-line"><span>剩余备用金</span><strong>¥60,000</strong></div>
+      </div>
+      <table class="drawer-tier-table">
+        <tr class="">
+          <td>回撤 15%~20%</td>
+          <td>使用备用金 20%</td>
+        </tr>
+        <tr class="">
+          <td>回撤 20%~30%</td>
+          <td>使用备用金 30%</td>
+        </tr>
+        <tr class="">
+          <td>回撤 30%~40%</td>
+          <td>使用备用金 30%</td>
+        </tr>
+        <tr class="">
+          <td>回撤 40%+</td>
+          <td>使用备用金 20%</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</aside>
+
 <div class="archive-loading" id="archive-loading" role="status" aria-live="polite" hidden><div class="archive-loading-card"><span class="archive-spinner" aria-hidden="true"></span><strong>正在加载日报…</strong></div></div>
 <script>
 (() => {
+  const drawer = document.getElementById('drawdown-rules-drawer');
+  const drawerBackdrop = document.getElementById('drawdown-rules-backdrop');
+  const drawerOpenBtn = document.getElementById('drawdown-rules-open');
+  const drawerCloseBtn = document.getElementById('drawdown-rules-close');
+  const openDrawer = () => {
+    if (!drawer) return;
+    drawer.classList.add('open');
+    drawerBackdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+  const closeDrawer = () => {
+    if (!drawer) return;
+    drawer.classList.remove('open');
+    drawerBackdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+  drawerOpenBtn?.addEventListener('click', openDrawer);
+  drawerCloseBtn?.addEventListener('click', closeDrawer);
+  drawerBackdrop?.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeDrawer(); });
+
   const select = document.querySelector('.report-select');
   const loading = document.getElementById('archive-loading');
   select?.addEventListener('change', () => {

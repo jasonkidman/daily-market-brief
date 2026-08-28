@@ -162,7 +162,10 @@ def test_renders_today_in_one_line_after_header_and_omits_it_for_legacy_reports(
     assert 'class="market-summary"' in index_html
     assert 'class="summary-focus-label">今日关注</div>' in index_html
     assert 'class="summary-focus-text">市场同时关注利率预期与人工智能相关事件。</div>' in index_html
-    assert 'class="summary-strategy">策略：未触发额外回撤加仓，维持正常定投，备用金保持不动。</div>' in index_html
+    assert 'class="card strategy-card"' in index_html
+    assert 'id="today-strategy-title" class="strategy-title">今日策略</h2>' in index_html
+    assert 'class="strategy-action strategy-pending">加仓</div>' in index_html
+    assert 'class="strategy-sub">Nasdaq-100 已触发第一档，等待确认</div>' in index_html
     assert index_html.index("今日市场一句话") > index_html.index("</header>")
     assert index_html.index("今日市场一句话") < index_html.index("美国主要指数")
     assert "标普500小幅上涨" in index_html
@@ -172,7 +175,7 @@ def test_renders_today_in_one_line_after_header_and_omits_it_for_legacy_reports(
     assert ".summary-inner{display:grid;grid-template-columns:46pxminmax(0,1fr)" in compact_css
     assert ".summary-content{max-width:1180px}" in compact_css
     assert ".summary-focus{margin-top:12px;display:flex" in compact_css
-    assert ".summary-strategy{margin-top:14px" in compact_css
+    assert ".strategy-action{font-size:24px" in compact_css
     assert ".page{width:min(1440px,calc(100%-34px))" in compact_css
     assert "@media(max-width:900px)" in compact_css
 
@@ -199,7 +202,8 @@ def test_today_summary_is_the_readable_primary_visual_focus(tmp_path):
     assert 'class="market-summary"' in html
     assert 'class="summary-focus-label">今日关注</div>' in html
     assert 'class="summary-focus-text">市场同时关注利率预期。</div>' in html
-    assert 'class="summary-strategy">策略：未触发额外回撤加仓，维持正常定投，备用金保持不动。</div>' in html
+    assert 'class="card strategy-card"' in html
+    assert 'id="today-strategy-title" class="strategy-title">今日策略</h2>' in html
     assert ".summary{margin-top:18px;padding:20px22px16px" in compact_css
     assert ".summary-inner{display:grid;grid-template-columns:46pxminmax(0,1fr)" in compact_css
     assert ".summaryh2{margin:2px010px" in compact_css
@@ -208,7 +212,7 @@ def test_today_summary_is_the_readable_primary_visual_focus(tmp_path):
     assert ".summary-icon{width:44px;height:44px" in compact_css
     assert "font-size:22px" in compact_css
     assert ".summary-focus-label{flex:00auto" in compact_css
-    assert ".summary-strategy{margin-top:14px" in compact_css
+    assert ".strategy-title{margin:0010px" in compact_css
     assert ".summary-src{margin-top:11px;text-align:right" in compact_css
     assert "@media(max-width:600px)" in compact_css
 
@@ -307,6 +311,105 @@ def test_drawdown_cards_render_three_action_zones_and_visual_progress(tmp_path):
     assert '.market-value{' in compact_css and 'font-variant-numeric:tabular-nums' in compact_css
     assert 'font-family:Inter,Arial,"PingFangSC","MicrosoftYaHei",sans-serif' in compact_css
     assert 'h1{margin:0;font:50031px/1.05Georgia' in compact_css
+
+
+def test_strategy_card_shows_hold_state_and_drawdown_rules_drawer(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["market_summary"] = {
+        "market": "标普500上涨0.72%。", "drivers": "市场关注利率预期。",
+        "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
+    }
+    payload["drawdown"]["sp500"].update({
+        "status": "normal", "pending_amount": 0, "pending_tiers": [], "executed_amount": 0,
+        "tiers": {
+            "tier_1": {"threshold": 0.10, "allocation": 0.20, "amount": 28000, "status": "not_triggered"},
+            "tier_2": {"threshold": 0.15, "allocation": 0.30, "amount": 42000, "status": "not_triggered"},
+            "tier_3": {"threshold": 0.20, "allocation": 0.30, "amount": 42000, "status": "not_triggered"},
+            "tier_4": {"threshold": 0.25, "allocation": 0.20, "amount": 28000, "status": "not_triggered"},
+        },
+    })
+    payload["drawdown"]["nasdaq100"].update({
+        "status": "normal", "pending_amount": 0, "pending_tiers": [], "executed_amount": 0,
+        "next_threshold": 0.15, "distance_to_next": 0.02,
+        "tiers": {
+            "tier_1": {"threshold": 0.15, "allocation": 0.20, "amount": 12000, "status": "not_triggered"},
+            "tier_2": {"threshold": 0.20, "allocation": 0.30, "amount": 18000, "status": "not_triggered"},
+            "tier_3": {"threshold": 0.30, "allocation": 0.30, "amount": 18000, "status": "not_triggered"},
+            "tier_4": {"threshold": 0.40, "allocation": 0.20, "amount": 12000, "status": "not_triggered"},
+        },
+    })
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    compact_css = "".join((site / "style.css").read_text(encoding="utf-8").split())
+    assert 'class="strategy-action strategy-normal">正常定投</div>' in html
+    assert 'class="strategy-sub">未触发回撤加仓</div>' in html
+    assert 'class="strategy-row"><span>备用金状态</span><strong>保持不动</strong></div>' in html
+    assert 'class="risk-normal">正常</strong>' in html
+    assert 'id="drawdown-rules-open"' in html
+    assert 'id="drawdown-rules-drawer"' in html
+    assert "回撤加仓规则" in html
+    assert "回撤 10%~15%" in html and "使用备用金 20%" in html
+    assert "回撤 25%+" in html
+    assert "回撤 15%~20%" in html and "回撤 40%+" in html
+    assert "距离第一档还有" in html
+    assert ".drawer{position:fixed;top:0;right:0" in compact_css
+    assert ".drawer-backdrop{position:fixed;inset:0" in compact_css
+
+
+def test_strategy_card_shows_pending_tier_allocation_and_amount(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["market_summary"] = {
+        "market": "标普500下跌。", "drivers": "市场关注利率预期。",
+        "action": "已触发回撤加仓条件，等待人工确认。",
+    }
+    payload["drawdown"]["sp500"]["pending_tiers"] = []
+    payload["drawdown"]["nasdaq100"]["pending_tiers"] = [
+        {"id": "tier_1", "label": "第一档", "amount": 12000, "allocation": 0.20, "threshold": 0.15},
+    ]
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    assert 'class="strategy-action strategy-pending">加仓 20%</div>' in html
+    assert 'class="strategy-sub">Nasdaq-100 已触发第一档，等待确认</div>' in html
+    assert 'class="strategy-row"><span>备用金状态</span><strong>待执行 ¥12,000</strong></div>' in html
+    assert 'class="risk-pending">已触发</strong>' in html
+    assert "当前已进入第一档" in html
+    assert "建议使用备用金比例" in html and "20%" in html
+    assert "建议投入金额" in html and "¥12,000" in html
+
+
+def test_strategy_card_pauses_when_market_data_invalid(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["market_summary"] = {
+        "market": "行情数据暂不可用。", "drivers": "市场关注利率预期。",
+        "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
+    }
+    payload["market_data_valid"] = False
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    root = __import__("pathlib").Path(__file__).parents[1]
+    site = tmp_path / "site"
+
+    render_site(reports, root / "templates" / "report.html", root / "static" / "style.css", site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    assert 'class="strategy-action strategy-critical">暂停额外操作</div>' in html
+    assert 'class="strategy-sub">行情数据校验失败，今日暂停回撤判断</div>' in html
+    assert 'class="risk-critical">数据异常</strong>' in html
 
 
 def test_drawdown_card_replaces_progress_with_last_tier_message(tmp_path):
