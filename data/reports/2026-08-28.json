@@ -1,0 +1,382 @@
+{
+  "report_date": "2026-08-28",
+  "generated_at": "2026-08-28 09:01 CST",
+  "market_date": "2026-08-27",
+  "status": "ok",
+  "status_label": "🟢 数据更新正常",
+  "market_data_valid": true,
+  "core_market_valid": true,
+  "context_market_valid": true,
+  "drawdown_market_valid": true,
+  "market": {
+    "sp500": {
+      "market_date": "2026-08-27",
+      "close": 7730.990234375,
+      "daily_return": 0.0072032567265023495,
+      "ytd_return": 0.12935362418742247,
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "drawdown": 0.008719077464705793,
+      "name": "S&P 500",
+      "ticker": "^GSPC",
+      "valid": true
+    },
+    "nasdaq100": {
+      "market_date": "2026-08-27",
+      "close": 29641.560546875,
+      "daily_return": 0.01427024369653207,
+      "ytd_return": 0.17393018197896137,
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "drawdown": 0.03323611003968796,
+      "name": "Nasdaq-100",
+      "ticker": "^NDX",
+      "valid": true
+    },
+    "dow": {
+      "market_date": "2026-08-27",
+      "close": 53569.44140625,
+      "daily_return": 0.0019744639214283044,
+      "ytd_return": 0.11456045666350412,
+      "ath": 54349.12109375,
+      "ath_date": "2026-08-05",
+      "drawdown": 0.014345764417332263,
+      "name": "Dow Jones",
+      "ticker": "^DJI",
+      "valid": true
+    }
+  },
+  "market_context": {
+    "russell2000": {
+      "market_date": "2026-08-27",
+      "close": 3014.33935546875,
+      "daily_return": 0.002807629461786032,
+      "name": "Russell 2000",
+      "ticker": "^RUT",
+      "valid": true
+    },
+    "vix": {
+      "market_date": "2026-08-27",
+      "close": 14.510000228881836,
+      "daily_return": -0.04602234105914027,
+      "name": "VIX",
+      "ticker": "^VIX",
+      "valid": true
+    },
+    "dxy": {
+      "market_date": "2026-08-27",
+      "close": 99.11799621582031,
+      "daily_return": -0.0005243718270158126,
+      "name": "美元指数",
+      "ticker": "DX-Y.NYB",
+      "valid": true
+    },
+    "us10y": {
+      "market_date": "2026-08-27",
+      "close": 4.671999931335449,
+      "yield_change_bp": 0.7999897003173828,
+      "name": "10Y 美债",
+      "ticker": "^TNX",
+      "valid": true
+    }
+  },
+  "market_signals": {
+    "tech_relative": 0.0070669869700297205,
+    "small_cap_relative": -0.0043956272647163175,
+    "vix_daily_return": -0.04602234105914027,
+    "dxy_daily_return": -0.0005243718270158126,
+    "us10y_bp_change": 0.7999897003173828,
+    "signals": [
+      {
+        "key": "tech_relative",
+        "value": 0.0070669869700297205,
+        "level": "significant",
+        "message": "Nasdaq-100 比 S&P 500 领先 0.71 个百分点，科技/成长相对占优"
+      }
+    ]
+  },
+  "market_breadth": {
+    "market_date": "2026-08-27",
+    "stocks": {
+      "market_date": "2026-08-27",
+      "constituent_date": "2026-08-20",
+      "total_constituents": 505,
+      "valid_count": 503,
+      "invalid_count": 2,
+      "advancers": 152,
+      "decliners": 349,
+      "unchanged": 2,
+      "advance_ratio": 0.30218687872763417,
+      "decline_ratio": 0.6938369781312127,
+      "unchanged_ratio": 0.003976143141153081,
+      "coverage_ratio": 0.996039603960396,
+      "status": "ok"
+    },
+    "sectors": {
+      "market_date": "2026-08-27",
+      "items": [
+        {
+          "key": "technology",
+          "name": "科技",
+          "ticker": "XLK",
+          "valid": true,
+          "daily_return": 0.03155767002859644,
+          "direction": "up",
+          "bar_strength": 1.0
+        },
+        {
+          "key": "energy",
+          "name": "能源",
+          "ticker": "XLE",
+          "valid": true,
+          "daily_return": -0.0022425018254698115,
+          "direction": "down",
+          "bar_strength": 0.07475006084899372
+        },
+        {
+          "key": "financials",
+          "name": "金融",
+          "ticker": "XLF",
+          "valid": true,
+          "daily_return": -0.006522438454611534,
+          "direction": "down",
+          "bar_strength": 0.21741461515371782
+        },
+        {
+          "key": "utilities",
+          "name": "公用事业",
+          "ticker": "XLU",
+          "valid": true,
+          "daily_return": -0.007584418043843133,
+          "direction": "down",
+          "bar_strength": 0.2528139347947711
+        },
+        {
+          "key": "materials",
+          "name": "材料",
+          "ticker": "XLB",
+          "valid": true,
+          "daily_return": -0.008198223248004122,
+          "direction": "down",
+          "bar_strength": 0.2732741082668041
+        },
+        {
+          "key": "industrials",
+          "name": "工业",
+          "ticker": "XLI",
+          "valid": true,
+          "daily_return": -0.008539388474021248,
+          "direction": "down",
+          "bar_strength": 0.28464628246737494
+        },
+        {
+          "key": "real_estate",
+          "name": "房地产",
+          "ticker": "XLRE",
+          "valid": true,
+          "daily_return": -0.009536489326250397,
+          "direction": "down",
+          "bar_strength": 0.31788297754167993
+        },
+        {
+          "key": "communication_services",
+          "name": "通信服务",
+          "ticker": "XLC",
+          "valid": true,
+          "daily_return": -0.010656220066940336,
+          "direction": "down",
+          "bar_strength": 0.3552073355646779
+        },
+        {
+          "key": "consumer_discretionary",
+          "name": "非必需消费",
+          "ticker": "XLY",
+          "valid": true,
+          "daily_return": -0.010925284812920988,
+          "direction": "down",
+          "bar_strength": 0.3641761604306996
+        },
+        {
+          "key": "health_care",
+          "name": "医疗保健",
+          "ticker": "XLV",
+          "valid": true,
+          "daily_return": -0.011294177313044385,
+          "direction": "down",
+          "bar_strength": 0.3764725771014795
+        },
+        {
+          "key": "consumer_staples",
+          "name": "必需消费",
+          "ticker": "XLP",
+          "valid": true,
+          "daily_return": -0.01379384326320543,
+          "direction": "down",
+          "bar_strength": 0.459794775440181
+        }
+      ],
+      "valid_count": 11,
+      "advancers": 1,
+      "decliners": 10,
+      "unchanged": 0,
+      "advance_ratio": 0.09090909090909091
+    },
+    "health": {
+      "valid": true,
+      "score": 0.21767576360021687,
+      "level": "very_weak",
+      "label": "广泛走弱",
+      "divergence": "narrow_rally",
+      "summary": "指数上涨但市场参与度不足，上涨较集中于少数股票或板块。"
+    }
+  },
+  "drawdown": {
+    "sp500": {
+      "index": "sp500",
+      "name": "S&P 500",
+      "cycle_id": "sp500-2026-08-13-77989902",
+      "started_at": "2026-08-14T10:42:09.022326+08:00",
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "last_market_date": "2026-08-27",
+      "last_updated_at": "2026-08-28T09:01:07.521634+08:00",
+      "current_close": 7730.990234375,
+      "current_drawdown": 0.008719077464705793,
+      "pool": 140000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.1,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.15,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.25,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 140000,
+      "next_threshold": 0.1,
+      "distance_to_next": 0.09128092253529421,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    },
+    "nasdaq100": {
+      "index": "nasdaq100",
+      "name": "Nasdaq-100",
+      "cycle_id": "nasdaq100-2026-06-02-306605996",
+      "started_at": "2026-08-12T10:00:00+08:00",
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "last_market_date": "2026-08-27",
+      "last_updated_at": "2026-08-28T09:01:07.521634+08:00",
+      "current_close": 29641.560546875,
+      "current_drawdown": 0.03323611003968796,
+      "pool": 60000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.15,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.3,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.4,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 60000,
+      "next_threshold": 0.15,
+      "distance_to_next": 0.11676388996031203,
+      "status": "normal",
+      "status_label": "🟢 未触发"
+    }
+  },
+  "portfolio_action": "hold",
+  "market_summary": {
+    "market": "8月27日美股指数收涨，标普500涨0.72%、纳斯达克100涨1.43%，科技/成长相对占优；但标普成份股仅约三成上涨、11个板块中仅科技上涨，呈现指数走强而参与度不足的窄幅上涨结构。",
+    "drivers": "市场同时关注Meta与29个州达成180亿美元和解，其中涉及儿童数据保留及平台监管的隐私与合规权衡。",
+    "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
+    "degraded": false
+  },
+  "news": [
+    {
+      "rank": 1,
+      "candidate_id": "979a8de0738849c0",
+      "category": "政策 / 监管",
+      "title_zh": "Meta与29州达成180亿美元和解，涉及儿童数据保留",
+      "summary_zh": "Meta与美国29个州达成180亿美元和解。协议允许其保留部分13岁以下儿童数据，用于训练和测试年龄识别模型，明确了平台未成年人数据治理中的隐私与合规权衡。",
+      "focus": "和解具体条款、儿童数据使用边界及后续监管执行。",
+      "tags": [
+        "Meta",
+        "未成年人数据",
+        "隐私监管",
+        "州检方"
+      ],
+      "investment_relevance_score": 85,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/27/buried-in-metas-18b-settlement-is-a-legal-pass-on-kids-data/",
+      "published_at": "2026-08-27T20:04:26+00:00",
+      "original_title": "Buried in Meta’s $18B settlement is a legal pass on kids’ data",
+      "selection_reason": "大型科技：Meta与29州达成180亿美元和解，并获得保留部分儿童数据用于年龄识别模型的安排。",
+      "event_summary": "Meta与29个州达成的和解涉及儿童数据保留及平台监管争议。",
+      "topic_group": "MEGA_CAP_TECH",
+      "event_category": "other",
+      "source_channel": null
+    }
+  ],
+  "news_degraded": false,
+  "warnings": []
+}
