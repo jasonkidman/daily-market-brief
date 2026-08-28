@@ -1,6 +1,6 @@
 {
   "report_date": "2026-08-28",
-  "generated_at": "2026-08-28 22:08 CST",
+  "generated_at": "2026-08-28 23:02 CST",
   "market_date": "2026-08-28",
   "status": "ok",
   "status_label": "🟢 数据更新正常",
@@ -11,110 +11,117 @@
   "market": {
     "sp500": {
       "market_date": "2026-08-28",
-      "close": 7727.1298828125,
-      "daily_return": -0.0004993346835875379,
-      "ytd_return": 0.1287896987528303,
+      "close": 7769.4501953125,
+      "daily_return": 0.0049747781036499905,
+      "ytd_return": 0.1349719078683076,
       "ath": 7798.990234375,
       "ath_date": "2026-08-13",
-      "drawdown": 0.009214058410506376,
+      "drawdown": 0.0037876748367113855,
       "name": "S&P 500",
       "ticker": "^GSPC",
       "valid": true,
       "sparkline": {
-        "line": "M0.0,36.41 L14.48,30.41 L28.97,31.34 L43.45,39.6 L57.93,39.27 L72.41,39.16 L86.9,37.74 L101.38,48.0 L115.86,36.93 L130.34,32.18 L144.83,22.09 L159.31,9.69 L173.79,10.87 L188.28,12.11 L202.76,7.77 L217.24,8.18 L231.72,10.45 L246.21,8.6 L260.69,4.0 L275.17,5.21 L289.66,8.91 L304.14,13.77 L318.62,12.29 L333.1,18.38 L347.59,15.36 L362.07,17.32 L376.55,15.09 L391.03,15.24 L405.52,10.2 L420.0,10.55",
-        "area": "M0.0,36.41 L14.48,30.41 L28.97,31.34 L43.45,39.6 L57.93,39.27 L72.41,39.16 L86.9,37.74 L101.38,48.0 L115.86,36.93 L130.34,32.18 L144.83,22.09 L159.31,9.69 L173.79,10.87 L188.28,12.11 L202.76,7.77 L217.24,8.18 L231.72,10.45 L246.21,8.6 L260.69,4.0 L275.17,5.21 L289.66,8.91 L304.14,13.77 L318.62,12.29 L333.1,18.38 L347.59,15.36 L362.07,17.32 L376.55,15.09 L391.03,15.24 L405.52,10.2 L420.0,10.55 L420.0,52 L0.0,52 Z"
+        "line": "M0.0,36.41 L14.48,30.41 L28.97,31.34 L43.45,39.6 L57.93,39.27 L72.41,39.16 L86.9,37.74 L101.38,48.0 L115.86,36.93 L130.34,32.18 L144.83,22.09 L159.31,9.69 L173.79,10.87 L188.28,12.11 L202.76,7.77 L217.24,8.18 L231.72,10.45 L246.21,8.6 L260.69,4.0 L275.17,5.21 L289.66,8.91 L304.14,13.77 L318.62,12.29 L333.1,18.38 L347.59,15.36 L362.07,17.32 L376.55,15.09 L391.03,15.24 L405.52,10.2 L420.0,6.69",
+        "area": "M0.0,36.41 L14.48,30.41 L28.97,31.34 L43.45,39.6 L57.93,39.27 L72.41,39.16 L86.9,37.74 L101.38,48.0 L115.86,36.93 L130.34,32.18 L144.83,22.09 L159.31,9.69 L173.79,10.87 L188.28,12.11 L202.76,7.77 L217.24,8.18 L231.72,10.45 L246.21,8.6 L260.69,4.0 L275.17,5.21 L289.66,8.91 L304.14,13.77 L318.62,12.29 L333.1,18.38 L347.59,15.36 L362.07,17.32 L376.55,15.09 L391.03,15.24 L405.52,10.2 L420.0,6.69 L420.0,52 L0.0,52 Z"
       }
     },
     "nasdaq100": {
       "market_date": "2026-08-28",
-      "close": 29520.72265625,
-      "daily_return": -0.004076637275352235,
-      "ytd_return": 0.169144494440445,
+      "close": 29733.580078125,
+      "daily_return": 0.0031044091320522327,
+      "ytd_return": 0.1775745415562886,
       "ath": 30660.599609375,
       "ath_date": "2026-06-02",
-      "drawdown": 0.037177255749964666,
+      "drawdown": 0.030234879391156766,
       "name": "Nasdaq-100",
       "ticker": "^NDX",
       "valid": true,
       "sparkline": {
-        "line": "M0.0,26.52 L14.48,18.14 L28.97,20.53 L43.45,28.79 L57.93,33.76 L72.41,35.12 L86.9,39.32 L101.38,48.0 L115.86,34.09 L130.34,31.54 L144.83,23.89 L159.31,9.35 L173.79,13.08 L188.28,14.82 L202.76,9.51 L217.24,11.04 L231.72,12.5 L246.21,9.2 L260.69,4.0 L275.17,4.58 L289.66,5.36 L304.14,13.03 L318.62,14.02 L333.1,17.26 L347.59,15.8 L362.07,20.15 L376.55,17.32 L391.03,17.08 L405.52,10.74 L420.0,12.58",
-        "area": "M0.0,26.52 L14.48,18.14 L28.97,20.53 L43.45,28.79 L57.93,33.76 L72.41,35.12 L86.9,39.32 L101.38,48.0 L115.86,34.09 L130.34,31.54 L144.83,23.89 L159.31,9.35 L173.79,13.08 L188.28,14.82 L202.76,9.51 L217.24,11.04 L231.72,12.5 L246.21,9.2 L260.69,4.0 L275.17,4.58 L289.66,5.36 L304.14,13.03 L318.62,14.02 L333.1,17.26 L347.59,15.8 L362.07,20.15 L376.55,17.32 L391.03,17.08 L405.52,10.74 L420.0,12.58 L420.0,52 L0.0,52 Z"
+        "line": "M0.0,26.52 L14.48,18.14 L28.97,20.53 L43.45,28.79 L57.93,33.76 L72.41,35.12 L86.9,39.32 L101.38,48.0 L115.86,34.09 L130.34,31.54 L144.83,23.89 L159.31,9.35 L173.79,13.08 L188.28,14.82 L202.76,9.51 L217.24,11.04 L231.72,12.5 L246.21,9.2 L260.69,4.0 L275.17,4.58 L289.66,5.36 L304.14,13.03 L318.62,14.02 L333.1,17.26 L347.59,15.8 L362.07,20.15 L376.55,17.32 L391.03,17.08 L405.52,10.74 L420.0,9.34",
+        "area": "M0.0,26.52 L14.48,18.14 L28.97,20.53 L43.45,28.79 L57.93,33.76 L72.41,35.12 L86.9,39.32 L101.38,48.0 L115.86,34.09 L130.34,31.54 L144.83,23.89 L159.31,9.35 L173.79,13.08 L188.28,14.82 L202.76,9.51 L217.24,11.04 L231.72,12.5 L246.21,9.2 L260.69,4.0 L275.17,4.58 L289.66,5.36 L304.14,13.03 L318.62,14.02 L333.1,17.26 L347.59,15.8 L362.07,20.15 L376.55,17.32 L391.03,17.08 L405.52,10.74 L420.0,9.34 L420.0,52 L0.0,52 Z"
       }
     },
     "dow": {
       "market_date": "2026-08-28",
-      "close": 53627.94921875,
-      "daily_return": 0.0010921863466206716,
-      "ytd_return": 0.11577776437675524,
+      "close": 53795.921875,
+      "daily_return": 0.004227792241335182,
+      "ytd_return": 0.11927258671468488,
       "ath": 54349.12109375,
       "ath_date": "2026-08-05",
-      "drawdown": 0.013269246318740047,
+      "drawdown": 0.01017862308749673,
       "name": "Dow Jones",
       "ticker": "^DJI",
       "valid": true,
       "sparkline": {
-        "line": "M0.0,44.09 L14.48,37.93 L28.97,38.03 L43.45,46.12 L57.93,42.36 L72.41,38.16 L86.9,29.58 L101.38,48.0 L115.86,38.2 L130.34,33.77 L144.83,22.7 L159.31,8.2 L173.79,4.0 L188.28,11.41 L202.76,8.99 L217.24,9.96 L231.72,12.9 L246.21,13.24 L260.69,12.13 L275.17,13.85 L289.66,18.2 L304.14,20.06 L318.62,18.15 L333.1,29.39 L347.59,21.12 L362.07,18.88 L376.55,16.33 L391.03,18.14 L405.52,16.45 L420.0,15.52",
-        "area": "M0.0,44.09 L14.48,37.93 L28.97,38.03 L43.45,46.12 L57.93,42.36 L72.41,38.16 L86.9,29.58 L101.38,48.0 L115.86,38.2 L130.34,33.77 L144.83,22.7 L159.31,8.2 L173.79,4.0 L188.28,11.41 L202.76,8.99 L217.24,9.96 L231.72,12.9 L246.21,13.24 L260.69,12.13 L275.17,13.85 L289.66,18.2 L304.14,20.06 L318.62,18.15 L333.1,29.39 L347.59,21.12 L362.07,18.88 L376.55,16.33 L391.03,18.14 L405.52,16.45 L420.0,15.52 L420.0,52 L0.0,52 Z"
+        "line": "M0.0,44.09 L14.48,37.93 L28.97,38.03 L43.45,46.12 L57.93,42.36 L72.41,38.16 L86.9,29.58 L101.38,48.0 L115.86,38.2 L130.34,33.77 L144.83,22.7 L159.31,8.2 L173.79,4.0 L188.28,11.41 L202.76,8.99 L217.24,9.96 L231.72,12.9 L246.21,13.24 L260.69,12.13 L275.17,13.85 L289.66,18.2 L304.14,20.06 L318.62,18.15 L333.1,29.39 L347.59,21.12 L362.07,18.88 L376.55,16.33 L391.03,18.14 L405.52,16.45 L420.0,12.84",
+        "area": "M0.0,44.09 L14.48,37.93 L28.97,38.03 L43.45,46.12 L57.93,42.36 L72.41,38.16 L86.9,29.58 L101.38,48.0 L115.86,38.2 L130.34,33.77 L144.83,22.7 L159.31,8.2 L173.79,4.0 L188.28,11.41 L202.76,8.99 L217.24,9.96 L231.72,12.9 L246.21,13.24 L260.69,12.13 L275.17,13.85 L289.66,18.2 L304.14,20.06 L318.62,18.15 L333.1,29.39 L347.59,21.12 L362.07,18.88 L376.55,16.33 L391.03,18.14 L405.52,16.45 L420.0,12.84 L420.0,52 L0.0,52 Z"
       }
     }
   },
   "market_context": {
     "russell2000": {
       "market_date": "2026-08-28",
-      "close": 3009.380615234375,
-      "daily_return": -0.0016452930033254987,
+      "close": 2999.313720703125,
+      "daily_return": -0.004984960803813943,
       "name": "Russell 2000",
       "ticker": "^RUT",
       "valid": true
     },
     "vix": {
       "market_date": "2026-08-28",
-      "close": 14.579999923706055,
-      "daily_return": 0.004824238023434679,
+      "close": 14.220000267028809,
+      "daily_return": -0.019986213458204394,
       "name": "VIX",
       "ticker": "^VIX",
       "valid": true
     },
     "dxy": {
       "market_date": "2026-08-28",
-      "close": 99.1969985961914,
-      "daily_return": 0.0003730832262580641,
+      "close": 99.48699951171875,
+      "daily_return": 0.0032976587084811992,
       "name": "美元指数",
       "ticker": "DX-Y.NYB",
       "valid": true
     },
     "us10y": {
       "market_date": "2026-08-28",
-      "close": 4.675999641418457,
-      "yield_change_bp": 0.39997100830078125,
+      "close": 4.670000076293945,
+      "yield_change_bp": -0.19998550415039062,
       "name": "10Y 美债",
       "ticker": "^TNX",
       "valid": true
     },
     "gold": {
       "market_date": "2026-08-28",
-      "close": 4675.0,
-      "daily_return": 0.014165737883323093,
+      "close": 4611.0,
+      "daily_return": 0.00028197163208609766,
       "name": "黄金 (COMEX)",
       "ticker": "GC=F",
       "valid": true
     },
     "wti": {
       "market_date": "2026-08-28",
-      "close": 82.51000213623047,
-      "daily_return": -0.012211141601491504,
+      "close": 83.01000213623047,
+      "daily_return": -0.006225268175094056,
       "name": "原油 (WTI)",
       "ticker": "CL=F",
       "valid": true
     }
   },
   "market_signals": {
-    "tech_relative": -0.0035773025917646972,
-    "small_cap_relative": -0.0011459583197379608,
-    "vix_daily_return": 0.004824238023434679,
-    "dxy_daily_return": 0.0003730832262580641,
-    "us10y_bp_change": 0.39997100830078125,
-    "signals": []
+    "tech_relative": -0.0018703689715977578,
+    "small_cap_relative": -0.009959738907463933,
+    "vix_daily_return": -0.019986213458204394,
+    "dxy_daily_return": 0.0032976587084811992,
+    "us10y_bp_change": -0.19998550415039062,
+    "signals": [
+      {
+        "key": "small_cap_relative",
+        "value": -0.009959738907463933,
+        "level": "significant",
+        "message": "Russell 2000 比 S&P 500 落后 1.00 个百分点，小盘相对落后"
+      }
+    ]
   },
   "market_breadth": {
     "market_date": "2026-08-28",
@@ -122,15 +129,15 @@
       "market_date": "2026-08-28",
       "constituent_date": "2026-08-20",
       "total_constituents": 505,
-      "valid_count": 485,
-      "invalid_count": 20,
-      "advancers": 278,
-      "decliners": 207,
-      "unchanged": 0,
-      "advance_ratio": 0.5731958762886598,
-      "decline_ratio": 0.4268041237113402,
-      "unchanged_ratio": 0.0,
-      "coverage_ratio": 0.9603960396039604,
+      "valid_count": 503,
+      "invalid_count": 2,
+      "advancers": 271,
+      "decliners": 229,
+      "unchanged": 3,
+      "advance_ratio": 0.5387673956262425,
+      "decline_ratio": 0.4552683896620278,
+      "unchanged_ratio": 0.005964214711729622,
+      "coverage_ratio": 0.996039603960396,
       "status": "ok"
     },
     "sectors": {
@@ -141,36 +148,36 @@
           "name": "通信服务",
           "ticker": "XLC",
           "valid": true,
-          "daily_return": 0.010770998194036485,
+          "daily_return": 0.017323333743302305,
           "direction": "up",
-          "bar_strength": 0.3590332731345495
+          "bar_strength": 0.5774444581100768
         },
         {
           "key": "consumer_discretionary",
           "name": "非必需消费",
           "ticker": "XLY",
           "valid": true,
-          "daily_return": 0.007162597952427907,
+          "daily_return": 0.013462247367651337,
           "direction": "up",
-          "bar_strength": 0.23875326508093025
-        },
-        {
-          "key": "consumer_staples",
-          "name": "必需消费",
-          "ticker": "XLP",
-          "valid": true,
-          "daily_return": 0.005524226734696436,
-          "direction": "up",
-          "bar_strength": 0.18414089115654786
+          "bar_strength": 0.44874157892171124
         },
         {
           "key": "financials",
           "name": "金融",
           "ticker": "XLF",
           "valid": true,
-          "daily_return": 0.005442270575259478,
+          "daily_return": 0.006824472192024089,
           "direction": "up",
-          "bar_strength": 0.18140901917531593
+          "bar_strength": 0.22748240640080297
+        },
+        {
+          "key": "consumer_staples",
+          "name": "必需消费",
+          "ticker": "XLP",
+          "valid": true,
+          "daily_return": 0.0028208493018853087,
+          "direction": "up",
+          "bar_strength": 0.09402831006284362
         },
         {
           "key": "real_estate",
@@ -180,6 +187,15 @@
           "daily_return": 0.0023510869367460163,
           "direction": "up",
           "bar_strength": 0.07836956455820054
+        },
+        {
+          "key": "energy",
+          "name": "能源",
+          "ticker": "XLE",
+          "valid": true,
+          "daily_return": 0.0015250827517996335,
+          "direction": "up",
+          "bar_strength": 0.05083609172665445
         },
         {
           "key": "utilities",
@@ -195,56 +211,47 @@
           "name": "材料",
           "ticker": "XLB",
           "valid": true,
-          "daily_return": -0.0013150421834716708,
+          "daily_return": -0.0007514731518193374,
           "direction": "down",
-          "bar_strength": 0.04383473944905569
-        },
-        {
-          "key": "health_care",
-          "name": "医疗保健",
-          "ticker": "XLV",
-          "valid": true,
-          "daily_return": -0.0017484732984978102,
-          "direction": "down",
-          "bar_strength": 0.05828244328326034
-        },
-        {
-          "key": "energy",
-          "name": "能源",
-          "ticker": "XLE",
-          "valid": true,
-          "daily_return": -0.0025670358473753874,
-          "direction": "down",
-          "bar_strength": 0.08556786157917959
-        },
-        {
-          "key": "industrials",
-          "name": "工业",
-          "ticker": "XLI",
-          "valid": true,
-          "daily_return": -0.0031319773436001563,
-          "direction": "down",
-          "bar_strength": 0.10439924478667188
+          "bar_strength": 0.02504910506064458
         },
         {
           "key": "technology",
           "name": "科技",
           "ticker": "XLK",
           "valid": true,
-          "daily_return": -0.006945536049809298,
+          "daily_return": -0.0010094860787113191,
           "direction": "down",
-          "bar_strength": 0.2315178683269766
+          "bar_strength": 0.03364953595704397
+        },
+        {
+          "key": "health_care",
+          "name": "医疗保健",
+          "ticker": "XLV",
+          "valid": true,
+          "daily_return": -0.0019233117352430718,
+          "direction": "down",
+          "bar_strength": 0.06411039117476906
+        },
+        {
+          "key": "industrials",
+          "name": "工业",
+          "ticker": "XLI",
+          "valid": true,
+          "daily_return": -0.00648771612030441,
+          "direction": "down",
+          "bar_strength": 0.216257204010147
         }
       ],
       "valid_count": 11,
-      "advancers": 6,
-      "decliners": 5,
+      "advancers": 7,
+      "decliners": 4,
       "unchanged": 0,
-      "advance_ratio": 0.5454545454545454
+      "advance_ratio": 0.6363636363636364
     },
     "health": {
       "valid": true,
-      "score": 0.562099343955014,
+      "score": 0.5778058919212001,
       "level": "mixed",
       "label": "市场分化",
       "divergence": null,
@@ -252,12 +259,12 @@
     }
   },
   "market_sentiment": {
-    "vix_score": 77.1,
-    "breadth_score": 56.2,
-    "momentum_score": 68.9,
-    "risk_appetite_score": 44.3,
-    "market_sentiment_score": 64.3,
-    "market_sentiment_label": "偏乐观"
+    "vix_score": 78.9,
+    "breadth_score": 57.8,
+    "momentum_score": 72.2,
+    "risk_appetite_score": 0.2,
+    "market_sentiment_score": 59.4,
+    "market_sentiment_label": "中性"
   },
   "drawdown": {
     "sp500": {
@@ -268,9 +275,9 @@
       "ath": 7798.990234375,
       "ath_date": "2026-08-13",
       "last_market_date": "2026-08-28",
-      "last_updated_at": "2026-08-28T22:08:01.254303+08:00",
-      "current_close": 7727.1298828125,
-      "current_drawdown": 0.009214058410506376,
+      "last_updated_at": "2026-08-28T23:02:08.387086+08:00",
+      "current_close": 7769.4501953125,
+      "current_drawdown": 0.0037876748367113855,
       "pool": 140000,
       "tiers": {
         "tier_1": {
@@ -312,7 +319,7 @@
       "executed_amount": 0,
       "remaining_amount": 140000,
       "next_threshold": 0.1,
-      "distance_to_next": 0.09078594158949363,
+      "distance_to_next": 0.09621232516328862,
       "status": "normal",
       "status_label": "🟢 未触发"
     },
@@ -324,9 +331,9 @@
       "ath": 30660.599609375,
       "ath_date": "2026-06-02",
       "last_market_date": "2026-08-28",
-      "last_updated_at": "2026-08-28T22:08:01.254303+08:00",
-      "current_close": 29520.72265625,
-      "current_drawdown": 0.037177255749964666,
+      "last_updated_at": "2026-08-28T23:02:08.387086+08:00",
+      "current_close": 29733.580078125,
+      "current_drawdown": 0.030234879391156766,
       "pool": 60000,
       "tiers": {
         "tier_1": {
@@ -368,7 +375,7 @@
       "executed_amount": 0,
       "remaining_amount": 60000,
       "next_threshold": 0.15,
-      "distance_to_next": 0.11282274425003533,
+      "distance_to_next": 0.11976512060884323,
       "status": "normal",
       "status_label": "🟢 未触发"
     }
@@ -385,8 +392,8 @@
   },
   "portfolio_action": "hold",
   "market_summary": {
-    "market": "标普500微跌0.05%，纳斯达克100跌0.41%，道指上涨0.11%；上涨个股略多于下跌个股，但科技板块走弱、通信服务等板块上涨，市场内部呈现分化。",
-    "drivers": "市场同时关注法院裁定将Anthropic列为供应链风险的做法违法，以及Meta因儿童安全诉讼和解而限制年轻用户使用其应用。",
+    "market": "8月28日美股主要指数上涨，标普500涨0.50%、纳斯达克100涨0.31%；但市场内部存在分化，标普成分股271只上涨、229只下跌，小盘股相对标普落后1.00个百分点，通信服务和非必需消费领涨而科技、工业走弱。",
+    "drivers": "市场同时关注美联储官员关于高通胀尚未缓解前政策工作仍未完成的表态，以及Anthropic就五角大楼供应链风险标签取得法院裁决。",
     "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
     "degraded": false
   },
@@ -396,67 +403,69 @@
       "candidate_id": "0c24a3ca3dcbcabd",
       "category": "政策 / 监管",
       "title_zh": "法院裁定特朗普政府将Anthropic列为供应链风险违法",
-      "summary_zh": "联邦法官裁定，特朗普政府将Anthropic列为供应链风险的做法违法。该裁决使这家AI公司在与五角大楼的法律争议中取得首个法院胜利。",
-      "focus": "后续关注第二起五角大楼诉讼及政府是否上诉",
+      "summary_zh": "联邦法官裁定特朗普政府将Anthropic列为供应链风险并据此采取报复措施违法。该裁决为Anthropic赢得首场法院胜利，相关五角大楼诉讼仍在继续。",
+      "focus": "第二起五角大楼诉讼及政府后续措施",
       "tags": [
         "Anthropic",
-        "AI监管",
-        "五角大楼"
+        "联邦法院",
+        "五角大楼",
+        "AI监管"
       ],
       "investment_relevance_score": 86,
       "source": "TechCrunch",
       "url": "https://techcrunch.com/2026/08/28/anthropic-gets-its-first-court-win-over-the-pentagons-supply-chain-risk-label/",
       "published_at": "2026-08-28T12:46:12+00:00",
       "original_title": "Anthropic gets its first court win over the Pentagon’s supply chain risk label",
-      "selection_reason": "大型科技：Anthropic获得联邦法院关键胜诉，直接改变其政府业务与监管环境，属于已确认的重大诉讼进展。",
-      "event_summary": "法院裁定特朗普政府将Anthropic列为供应链风险并采取相关行动违法",
+      "selection_reason": "美国宏观：联邦法院推翻针对AI公司的供应链风险认定，直接改变Anthropic的政府业务与监管环境。",
+      "event_summary": "法院裁定特朗普政府将Anthropic列为供应链风险并进行报复违法",
       "topic_group": "AI_CHIPS",
       "event_category": "other",
       "source_channel": null
     },
     {
       "rank": 2,
-      "candidate_id": "d6ecc957ec260db8",
-      "category": "政策 / 监管",
-      "title_zh": "Meta因儿童安全诉讼和解限制年轻用户使用应用",
-      "summary_zh": "Meta在一项涉及儿童安全的180亿美元诉讼和解中宣布限制年轻用户使用旗下应用。新措施将影响其平台运营和用户管理政策。",
-      "focus": "限制措施的执行范围及后续监管诉讼",
+      "candidate_id": "2026a63a088fffee",
+      "category": "美联储 / 利率",
+      "title_zh": "美联储沃什：高通胀未缓解前仍有工作要做",
+      "summary_zh": "美联储官员凯文·沃什表示，除非高通胀得到缓解，否则政策工作仍未完成。该表态涉及通胀与利率路径判断。",
+      "focus": "后续美联储官员通胀与利率表态",
       "tags": [
-        "Meta",
-        "儿童安全",
-        "诉讼和解"
+        "美联储",
+        "通胀",
+        "利率"
       ],
       "investment_relevance_score": 81,
-      "source": "BBC News",
-      "url": "https://www.bbc.co.uk/news/articles/cx2zn9zj361o?at_medium=RSS&at_campaign=rss",
-      "published_at": "2026-08-28T09:32:14+00:00",
-      "original_title": "'Not far enough' - US parents and teens on Meta's new limits for young users",
-      "selection_reason": "大型科技：Meta达成180亿美元儿童安全诉讼和解并宣布用户限制，实质影响平台政策、监管环境与经营责任。",
-      "event_summary": "Meta宣布因儿童安全诉讼和解而限制年轻用户使用其应用",
-      "topic_group": "MEGA_CAP_TECH",
+      "source": "The Guardian Business",
+      "url": "https://www.theguardian.com/business/live/2026/aug/28/us-federal-reserve-kevin-warsh-jackson-hole-conference-inflation-economy-ftse-stock-markets-latest-updates",
+      "published_at": "2026-08-28T14:49:02+00:00",
+      "original_title": "US Federal Reserve’s Kevin Warsh warns there will be ‘work to do’ unless high inflation eases – business live",
+      "selection_reason": "美国宏观：美联储官员明确强调高通胀尚未解决，为利率路径与通胀预期提供新政策信号。",
+      "event_summary": "美联储官员凯文·沃什表示高通胀未缓解前仍有工作要做",
+      "topic_group": "US_MARKET_MACRO",
       "event_category": "other",
       "source_channel": null
     },
     {
       "rank": 3,
-      "candidate_id": "5956c380babd629b",
-      "category": "AI / 资本开支",
-      "title_zh": "Anthropic推出让AI代理控制实体设备的硬件标准",
-      "summary_zh": "Anthropic推出标准化驱动接口，旨在让AI代理控制实体设备并实现设备间通信。该举措将其AI平台能力延伸至物理设备生态。",
-      "focus": "标准采用情况及合作设备范围",
+      "candidate_id": "d6ecc957ec260db8",
+      "category": "政策 / 监管",
+      "title_zh": "Meta以180亿美元儿童安全诉讼和解为代价限制年轻用户",
+      "summary_zh": "Meta在一宗儿童安全诉讼中达成180亿美元和解，并宣布限制年轻用户使用旗下应用。和解金额及产品限制均对公司业务与监管环境具有实质影响。",
+      "focus": "年轻用户限制的执行范围与合规成本",
       "tags": [
-        "Anthropic",
-        "AI代理",
-        "硬件标准"
+        "Meta",
+        "儿童安全",
+        "诉讼和解",
+        "平台监管"
       ],
-      "investment_relevance_score": 74,
-      "source": "Ars Technica",
-      "url": "https://arstechnica.com/ai/2026/08/anthropics-new-hardware-standard-lets-ai-agents-control-the-physical-world/",
-      "published_at": "2026-08-27T22:15:43+00:00",
-      "original_title": "Anthropic's new hardware standard lets AI agents control the physical world",
-      "selection_reason": "大型科技：Anthropic发布面向实体设备控制的硬件标准，属于核心AI平台能力的实质扩展，可能改变其产品与生态战略轨迹。",
-      "event_summary": "Anthropic推出旨在让AI代理控制实体设备的硬件标准",
-      "topic_group": "AI_CHIPS",
+      "investment_relevance_score": 79,
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/cx2zn9zj361o?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-28T09:32:14+00:00",
+      "original_title": "'Not far enough' - US parents and teens on Meta's new limits for young users",
+      "selection_reason": "大型科技：Meta达成180亿美元儿童安全诉讼和解并调整年轻用户政策，直接影响其成本、产品规则与监管轨迹。",
+      "event_summary": "Meta因儿童安全诉讼和解宣布限制年轻用户使用其应用",
+      "topic_group": "MEGA_CAP_TECH",
       "event_category": "other",
       "source_channel": null
     }

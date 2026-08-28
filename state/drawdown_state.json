@@ -9,9 +9,9 @@
       "ath": 7798.990234375,
       "ath_date": "2026-08-13",
       "last_market_date": "2026-08-28",
-      "last_updated_at": "2026-08-28T22:08:01.254303+08:00",
-      "current_close": 7727.1298828125,
-      "current_drawdown": 0.009214058410506376,
+      "last_updated_at": "2026-08-28T23:02:08.387086+08:00",
+      "current_close": 7769.4501953125,
+      "current_drawdown": 0.0037876748367113855,
       "pool": 140000,
       "tiers": {
         "tier_1": {
@@ -56,9 +56,9 @@
       "ath": 30660.599609375,
       "ath_date": "2026-06-02",
       "last_market_date": "2026-08-28",
-      "last_updated_at": "2026-08-28T22:08:01.254303+08:00",
-      "current_close": 29520.72265625,
-      "current_drawdown": 0.037177255749964666,
+      "last_updated_at": "2026-08-28T23:02:08.387086+08:00",
+      "current_close": 29733.580078125,
+      "current_drawdown": 0.030234879391156766,
       "pool": 60000,
       "tiers": {
         "tier_1": {
@@ -97,5 +97,5 @@
     }
   },
   "executions": [],
-  "updated_at": "2026-08-28T22:08:01.254303+08:00"
+  "updated_at": "2026-08-28T23:02:08.387086+08:00"
 }
