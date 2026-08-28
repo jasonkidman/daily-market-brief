@@ -8,10 +8,10 @@
       "started_at": "2026-08-14T10:42:09.022326+08:00",
       "ath": 7798.990234375,
       "ath_date": "2026-08-13",
-      "last_market_date": "2026-08-27",
-      "last_updated_at": "2026-08-28T10:59:27.338218+08:00",
-      "current_close": 7730.990234375,
-      "current_drawdown": 0.008719077464705793,
+      "last_market_date": "2026-08-28",
+      "last_updated_at": "2026-08-28T22:08:01.254303+08:00",
+      "current_close": 7727.1298828125,
+      "current_drawdown": 0.009214058410506376,
       "pool": 140000,
       "tiers": {
         "tier_1": {
@@ -55,10 +55,10 @@
       "started_at": "2026-08-12T10:00:00+08:00",
       "ath": 30660.599609375,
       "ath_date": "2026-06-02",
-      "last_market_date": "2026-08-27",
-      "last_updated_at": "2026-08-28T10:59:27.338218+08:00",
-      "current_close": 29641.560546875,
-      "current_drawdown": 0.03323611003968796,
+      "last_market_date": "2026-08-28",
+      "last_updated_at": "2026-08-28T22:08:01.254303+08:00",
+      "current_close": 29520.72265625,
+      "current_drawdown": 0.037177255749964666,
       "pool": 60000,
       "tiers": {
         "tier_1": {
@@ -97,5 +97,5 @@
     }
   },
   "executions": [],
-  "updated_at": "2026-08-28T10:59:27.338218+08:00"
+  "updated_at": "2026-08-28T22:08:01.254303+08:00"
 }

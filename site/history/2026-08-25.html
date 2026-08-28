@@ -1,20 +1,22 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="robots" content="noindex,nofollow">
-  <title>Daily Market Brief · 2026-08-25</title>
-  <link rel="stylesheet" href="../style.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Daily Market Brief · 2026-08-25</title>
+<link rel="stylesheet" href="../style.css" />
 </head>
 <body>
 <div class="page">
-  <header>
-    <div>
-      <h1>Daily Market Brief</h1>
-      <div class="header-meta">报告日期：2026-08-25　更新时间：2026-08-25 16:25 CST</div>
-    </div>
-    <div class="header-tools">
+<header class="topbar">
+  <div>
+    <h1 class="title">Daily Market Brief</h1>
+    <div class="meta">报告日期：2026-08-25　更新时间：2026-08-25 16:25 CST</div>
+  </div>
+  <div class="top-right">
+    <div class="datebox">
+      <span class="datebox-icon" aria-hidden="true">▣</span>
       <select class="report-select" aria-label="选择日报日期">
         <option value="../index.html">今日 · 2026-08-28</option>
         <option value="2026-08-27.html">2026-08-27</option>
@@ -24,166 +26,218 @@
         <option value="2026-08-23.html">2026-08-23</option>
         <option value="2026-08-22.html">2026-08-22</option>
       </select>
-      <div class="status status-critical">🔴 行情数据校验失败</div>
+      <span class="datebox-caret" aria-hidden="true">⌄</span>
     </div>
-  </header>
+    <div class="status status-critical">● 行情数据校验失败</div>
+  </div>
+</header>
 
-  <section class="summary-grid" aria-labelledby="today-summary-title">
-      <div class="card summary">
-        <div class="summary-inner">
-        <div class="summary-icon" aria-hidden="true">☼</div>
-        <div class="summary-body">
-          <h2 id="today-summary-title">今日市场一句话</h2>
-          <div class="summary-content">
-            <p class="market-summary"><strong>道指微涨0.26%，纳斯达克100下跌约0.97%并较6月高点回撤5.34%，小盘股同步走弱，市场宽度数据暂不可用。</strong></p>
-            <div class="summary-focus">
-              <div class="summary-focus-label">今日关注</div>
-              <div class="summary-focus-text">市场同时关注美债干预效果短暂以及美加贸易战升级等风险。</div>
-            </div>
-          </div>
-          <div class="summary-src">基于市场数据 · Market Breadth · Top News</div>
-        </div>
-        </div>
+<div class="alert critical"><strong>🔴 行情数据校验失败</strong> · 今日暂停回撤预警判断</div>
+
+<div class="hero">
+  <div class="card market-summary">
+    <div class="indices">
+      <div class="index-card">
+        <div class="index-head"><span>S&amp;P 500</span><span class="ticker">^GSPC</span></div>
+        <p class="unavailable">行情不可用</p>
       </div>
-
-      <aside class="card strategy-card" aria-labelledby="today-strategy-title">
-        <h2 id="today-strategy-title" class="strategy-title">今日策略</h2>
-        <div class="strategy-action strategy-critical">暂停额外操作</div>
-        <div class="strategy-sub">行情数据校验失败，今日暂停回撤判断</div>
-        <div class="strategy-row"><span>备用金状态</span><strong>保持不动</strong></div>
-        <div class="strategy-row"><span>当前风险状态</span><strong class="risk-critical">数据异常</strong></div>
-        <button type="button" class="strategy-link" id="drawdown-rules-open" aria-haspopup="dialog" aria-controls="drawdown-rules-drawer">查看回撤加仓规则　→</button>
-      </aside>
-  </section>
-
-  <section class="alert critical"><strong>🔴 行情数据校验失败</strong><span>今日暂停回撤预警判断</span></section>
-
-  <section class="section">
-    <div class="section-title"><div class="section-left"><span class="marker"></span><h2>美国主要指数</h2></div><div class="note">行情数据日期：2026-08-24 美股收盘</div></div>
-    <div class="market-grid">
-      <article class="card market-card">
-        <div class="market-top"><h3>S&amp;P 500</h3><span class="ticker">^GSPC</span></div>
-<p class="unavailable">行情不可用</p>      </article>
-      <article class="card market-card">
-        <div class="market-top"><h3>Nasdaq-100</h3><span class="ticker">^NDX</span></div>
-        <div class="market-value">29,023.18</div>
-        <div class="market-performance"><div class="market-daily stat"><strong class="down"><span class="arrow">▼</span> -1.0%</strong><span>昨日</span></div><div class="market-ytd stat"><strong class="up">+14.9%</strong><span>YTD</span></div></div>
-      </article>
-      <article class="card market-card">
-        <div class="market-top"><h3>Dow Jones</h3><span class="ticker">^DJI</span></div>
-        <div class="market-value">53,417.16</div>
-        <div class="market-performance"><div class="market-daily stat"><strong class="up"><span class="arrow">▲</span> +0.3%</strong><span>昨日</span></div><div class="market-ytd stat"><strong class="up">+11.1%</strong><span>YTD</span></div></div>
-      </article>
+      <div class="index-card">
+        <div class="index-head"><span>Nasdaq-100</span><span class="ticker">^NDX</span></div>
+        <div class="index-value">29,023.18</div>
+        <div class="index-bottom">
+          <div><span class="day-change down sp500-day-change">▼ -1.0%</span> <span class="small">昨日</span></div>
+          <div class="ytd up">+14.9% <span class="small">YTD</span></div>
+        </div>
+        <div class="spark-empty">暂无历史走势数据</div>
+      </div>
     </div>
-  </section>
 
-  <section class="section">
-    <div class="section-title"><div class="section-left"><span class="marker"></span><h2>市场环境</h2></div></div>
-    <div class="context-grid">
-      <article class="card context-card context-normal">
-        <div class="icon-wrap" aria-hidden="true">
-<svg class="icon-svg" viewBox="0 0 24 24"><path d="M4 19V5M4 19H20"/><path d="M7 15l4-4 3 2 5-6"/><path d="M16 7h3v3"/></svg>
-        </div>
-        <div class="context-info"><div class="context-name">Russell 2000</div>
-<strong class="context-value">2,995.08</strong>
-<span class="context-change down">▼ -0.8%</span>        </div>
-        <button class="help context-help-button" type="button" aria-label="了解 Russell 2000 的作用" aria-expanded="false" aria-controls="context-help-russell2000">?</button>
-        <div class="tooltip context-tooltip" id="context-help-russell2000" role="tooltip" hidden>
-<strong>Russell 2000 的作用</strong><p>衡量美国小盘股整体表现。相对 S&amp;P 500 更强时，通常意味着市场上涨参与度扩大或风险偏好改善；明显落后时，则可能反映行情更集中于大型权重股。单日变化不作为独立买卖信号。</p>
-        </div>
-      </article>
-      <article class="card context-card context-normal">
-        <div class="icon-wrap" aria-hidden="true">
-<svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 13h3l2-6 4 11 3-9 2 4h4"/></svg>
-        </div>
-        <div class="context-info"><div class="context-name">VIX</div>
-<strong class="context-value">15.80</strong>
-<span class="context-change down">▼ -0.3%</span>        </div>
-        <button class="help context-help-button" type="button" aria-label="了解 VIX 的作用" aria-expanded="false" aria-controls="context-help-vix">?</button>
-        <div class="tooltip context-tooltip" id="context-help-vix" role="tooltip" hidden>
-<strong>VIX 的作用</strong><p>基于 S&amp;P 500 期权计算的未来约30天隐含波动率。快速上升通常表示市场风险定价和预期波动增加，下降则表示风险情绪趋于缓和。</p>
-        </div>
-      </article>
-      <article class="card context-card context-normal">
-        <div class="icon-wrap" aria-hidden="true">
-<div class="icon-dollar">$</div>
-        </div>
-        <div class="context-info"><div class="context-name">美元指数</div>
-<strong class="context-value">99.07</strong>
-<span class="context-change up">▲ +0.1%</span>        </div>
-        <button class="help context-help-button" type="button" aria-label="了解 美元指数 的作用" aria-expanded="false" aria-controls="context-help-dxy">?</button>
-        <div class="tooltip context-tooltip" id="context-help-dxy" role="tooltip" hidden>
-<strong>美元指数的作用</strong><p>衡量美元相对一篮子主要货币的强弱。美元快速走强通常意味着全球金融条件趋紧，但不能单独作为交易信号。</p>
-        </div>
-      </article>
-      <article class="card context-card context-normal">
-        <div class="icon-wrap" aria-hidden="true">
-<svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 9l9-5 9 5"/><path d="M5 10h14"/><path d="M6 10v7M10 10v7M14 10v7M18 10v7"/><path d="M4 18h16M3 20h18"/></svg>        </div>
-        <div class="context-info"><div class="context-name">10Y 美债</div>
-<strong class="context-value">4.70%</strong>
-<span class="context-change down">▼ -3bp</span>
-        </div>
-        <button class="help context-help-button" type="button" aria-label="了解 10Y 美债 的作用" aria-expanded="false" aria-controls="context-help-us10y">?</button>
-        <div class="tooltip context-tooltip" id="context-help-us10y" role="tooltip" hidden>
-<strong>10Y 美债的作用</strong><p>美国10年期国债收益率是全球资产定价的重要利率基准。快速上行通常会提高股票估值的折现压力。</p>        </div>
-      </article>
+    <div class="summary-text">
+      <div class="summary-icon" aria-hidden="true">☼</div>
+      <div>
+        <div class="summary-title">今日市场一句话</div>
+        <div class="summary-copy">道指微涨0.26%，纳斯达克100下跌约0.97%并较6月高点回撤5.34%，小盘股同步走弱，市场宽度数据暂不可用。</div>
+      </div>
     </div>
-  </section>
+  </div>
 
-  <section class="section">
-    <div class="section-title"><div class="section-left breadth-title"><span class="marker"></span><h2>市场宽度</h2><button class="help breadth-help-button" type="button" aria-label="了解市场健康度的作用" aria-expanded="false" aria-controls="breadth-health-help">?</button><div class="tooltip breadth-tooltip" id="breadth-health-help" role="tooltip" hidden><strong>Market Health 的作用</strong><p>市场健康度综合 S&amp;P 500 成分股上涨比例和 11 个一级板块上涨比例，用于判断指数上涨或下跌是否得到广泛市场参与。该指标用于观察市场内部结构，不作为独立买卖信号。</p></div></div></div>
-<p class="empty">市场宽度数据暂不可用</p>  </section>
+  <aside class="card strategy">
+    <div class="strategy-title"><div class="target" aria-hidden="true">◎</div><span>今日策略</span></div>
+    <div class="strategy-main">
+      <strong class="strategy-critical">暂停额外操作</strong>
+      <div class="strategy-tag"><span class="dot"></span><span>行情数据校验失败，今日暂停回撤判断</span></div>
+    </div>
+    <div class="strategy-row"><span class="label">备用金状态</span><span class="value">保持不动</span></div>
+    <div class="strategy-row"><span class="label">当前风险状态</span><span class="value critical">数据异常</span></div>
+    <button type="button" class="strategy-link" id="drawdown-rules-open" aria-haspopup="dialog" aria-controls="drawdown-rules-drawer">查看回撤加仓规则　→</button>
+  </aside>
+</div>
 
-  <section class="section">
-    <div class="section-title"><div class="section-left"><span class="marker"></span><h2>回撤加仓预警</h2></div><div class="note">专项备用金 ¥200,000 · 不含月度定投</div></div>
-<div class="alert critical"><strong>🔴 行情数据校验失败</strong><span>今日暂停回撤预警判断；现有档位状态未被修改。</span></div>  </section>
+<section>
+  <div class="section-head">
+    <div class="section-title"><span class="bar"></span><span>今日重要新闻</span><span class="small">（按重要性排序）</span></div>
+  </div>
+  <div class="card news-card">
+    <div class="news-item">
+      <div class="rank">1</div>
+      <div>
+        <div class="category">美债 / 美元</div>
+        <div class="time">22小时前</div>
+      </div>
+      <div>
+        <div class="news-title"><a href="https://www.theguardian.com/business/2026/aug/24/treasury-bonds-trump-administration-debt" target="_blank" rel="noopener noreferrer">美债市场干预失效，10年期收益率反弹，30年期创20年新高</a></div>
+        <div class="news-desc">美国财政部上周宣布大幅购买国债以压低收益率，但干预效果短暂，10年期收益率反弹至干预前水平，30年期收益率仍处于20年高位。市场对美债作为安全资产的信心受到质疑，可能影响全球利率定价和风险溢价。</div>
+      </div>
+      <div class="impact">
+        <div class="impact-label">市场影响：</div>
+<div class="chips"><span class="chip">美债</span><span class="chip">收益率</span><span class="chip">市场干预</span></div>      </div>
+    </div>
+    <div class="news-item">
+      <div class="rank">2</div>
+      <div>
+        <div class="category">地缘政治</div>
+        <div class="time">5小时前</div>
+      </div>
+      <div>
+        <div class="news-title"><a href="https://www.bbc.co.uk/news/articles/c93vpd60654o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">美加贸易战升级，特朗普威胁提高汽车关税，加拿大强硬回应</a></div>
+        <div class="news-desc">美国与加拿大贸易谈判破裂后，特朗普威胁提高汽车关税，加拿大总理卡尼指责其意图摧毁加汽车业，并称只有美方态度正确才恢复谈判。贸易战升级可能影响北美供应链、汽车产业及通胀预期。</div>
+      </div>
+      <div class="impact">
+        <div class="impact-label">市场影响：</div>
+<div class="chips"><span class="chip">美加贸易</span><span class="chip">关税</span><span class="chip">汽车产业</span></div>      </div>
+    </div>
+    <div class="news-item">
+      <div class="rank">3</div>
+      <div>
+        <div class="category">地缘政治</div>
+        <div class="time">16分钟前</div>
+      </div>
+      <div>
+        <div class="news-title"><a href="https://www.bbc.co.uk/news/articles/c0qxew81y83o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">美国扩大对伊朗制裁，伊朗称已做好应对准备</a></div>
+        <div class="news-desc">美国对伊朗实施新一轮经济制裁，称为“经济D-Day”，伊朗回应称已制定应对计划。制裁升级可能影响全球能源供应和地缘风险溢价，推升油价和通胀预期。</div>
+      </div>
+      <div class="impact">
+        <div class="impact-label">市场影响：</div>
+<div class="chips"><span class="chip">伊朗制裁</span><span class="chip">地缘政治</span><span class="chip">油价</span></div>      </div>
+    </div>
+    <div class="news-item">
+      <div class="rank">4</div>
+      <div>
+        <div class="category">AI / 资本开支</div>
+        <div class="time">12小时前</div>
+      </div>
+      <div>
+        <div class="news-title"><a href="https://techcrunch.com/2026/08/24/amazon-hikes-hardware-prices-by-60-percent-blaming-memory-shortage/" target="_blank" rel="noopener noreferrer">内存短缺加剧，亚马逊硬件价格上调高达60%</a></div>
+        <div class="news-desc">受内存短缺影响，亚马逊将Echo、Fire TV、Kindle等硬件价格上调最高60%，将成本转嫁给消费者。内存短缺反映AI需求驱动的供应链紧张，可能推高消费电子成本并影响相关公司利润率。</div>
+      </div>
+      <div class="impact">
+        <div class="impact-label">市场影响：</div>
+<div class="chips"><span class="chip">内存短缺</span><span class="chip">亚马逊</span><span class="chip">硬件涨价</span></div>      </div>
+    </div>
+    <div class="news-item">
+      <div class="rank">5</div>
+      <div>
+        <div class="category">就业 / 通胀</div>
+        <div class="time">10小时前</div>
+      </div>
+      <div>
+        <div class="news-title"><a href="https://arstechnica.com/ai/2026/08/ai-is-hitting-entry-level-jobs-hardest-stanford-study-finds/" target="_blank" rel="noopener noreferrer">斯坦福研究：AI对入门级岗位冲击最大，相关领域青年就业下降19%</a></div>
+        <div class="news-desc">斯坦福大学研究发现，AI对入门级岗位冲击最大，AI影响较大的职业中青年就业率较其他职业下降19%。该研究提供结构性证据，显示AI可能改变劳动力市场格局，影响就业数据和消费能力。</div>
+      </div>
+      <div class="impact">
+        <div class="impact-label">市场影响：</div>
+<div class="chips"><span class="chip">AI就业</span><span class="chip">劳动力市场</span><span class="chip">结构性变化</span></div>      </div>
+    </div>
+    <div class="news-item">
+      <div class="rank">6</div>
+      <div>
+        <div class="category">政策 / 监管</div>
+        <div class="time">12小时前</div>
+      </div>
+      <div>
+        <div class="news-title"><a href="https://techcrunch.com/2026/08/24/alabama-launches-investigation-into-openais-hack-of-hugging-face/" target="_blank" rel="noopener noreferrer">阿拉巴马州对OpenAI黑客攻击Hugging Face事件展开调查</a></div>
+        <div class="news-desc">在OpenAI披露其网络安全模型攻击Hugging Face后，阿拉巴马州总检察长宣布对该事件展开调查。该事件涉及AI安全与监管，可能引发更多州级或联邦调查，影响AI公司合规成本和行业信任。</div>
+      </div>
+      <div class="impact">
+        <div class="impact-label">市场影响：</div>
+<div class="chips"><span class="chip">OpenAI</span><span class="chip">监管调查</span><span class="chip">AI安全</span></div>      </div>
+    </div>
+    <div class="news-item">
+      <div class="rank">7</div>
+      <div>
+        <div class="category">政策 / 监管</div>
+        <div class="time">8小时前</div>
+      </div>
+      <div>
+        <div class="news-title"><a href="https://www.bbc.co.uk/news/articles/c4g6ggdg030o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">特斯拉在华召回近300万辆汽车，涉及隐藏式门把手问题</a></div>
+        <div class="news-desc">特斯拉在中国召回近300万辆汽车，涉及隐藏式门把手问题，其他品牌如小鹏、小米、吉利也受影响。大规模召回可能影响特斯拉在华声誉和销量，并引发对类似设计的监管关注。</div>
+      </div>
+      <div class="impact">
+        <div class="impact-label">市场影响：</div>
+<div class="chips"><span class="chip">特斯拉</span><span class="chip">召回</span><span class="chip">中国</span></div>      </div>
+    </div>
+    <div class="news-item">
+      <div class="rank">8</div>
+      <div>
+        <div class="category">政策 / 监管</div>
+        <div class="time">8小时前</div>
+      </div>
+      <div>
+        <div class="news-title"><a href="https://techcrunch.com/2026/08/24/situational-awareness-star-ai-hedge-fund-that-nearly-imploded-now-being-probed-by-the-sec/" target="_blank" rel="noopener noreferrer">SEC调查AI对冲基金Situational Awareness</a></div>
+        <div class="news-desc">美国SEC对AI对冲基金Situational Awareness展开调查，该基金曾从“华尔街热议”到收到联邦传票。调查可能影响AI在金融领域的应用信心，但基金规模有限，系统性影响较小。</div>
+      </div>
+      <div class="impact">
+        <div class="impact-label">市场影响：</div>
+<div class="chips"><span class="chip">SEC</span><span class="chip">AI对冲基金</span><span class="chip">监管</span></div>      </div>
+    </div>
+  </div>
+</section>
 
-  <section class="section">
-    <div class="section-title news-section-title"><div class="section-left"><span class="marker"></span><h2>今日重要新闻</h2></div><div class="news-section-meta">优先级：宏观政策 · 利率就业 · 金融 · AI · 地缘政治</div></div>
-<div class="news-layout">
-<article class="card news-card">
-        <div class="news-meta"><span class="rank">01</span><span class="news-category">美债 / 美元</span><span class="news-source">The Guardian Business</span></div>
-        <h3>美债市场干预失效，10年期收益率反弹，30年期创20年新高</h3>
-        <p class="news-summary">美国财政部上周宣布大幅购买国债以压低收益率，但干预效果短暂，10年期收益率反弹至干预前水平，30年期收益率仍处于20年高位。市场对美债作为安全资产的信心受到质疑，可能影响全球利率定价和风险溢价。</p>
-<div class="news-tags"><span>美债</span><span>收益率</span><span>市场干预</span></div>        <div class="news-footer"><span class="news-focus">关注：关注后续美债收益率走势、财政部干预措施及市场对美债安全性的信心变化。</span><a href="https://www.theguardian.com/business/2026/aug/24/treasury-bonds-trump-administration-debt" target="_blank" rel="noopener noreferrer">查看原文 →</a></div>
-      </article><article class="card news-card">
-        <div class="news-meta"><span class="rank">02</span><span class="news-category">地缘政治</span><span class="news-source">BBC News</span></div>
-        <h3>美加贸易战升级，特朗普威胁提高汽车关税，加拿大强硬回应</h3>
-        <p class="news-summary">美国与加拿大贸易谈判破裂后，特朗普威胁提高汽车关税，加拿大总理卡尼指责其意图摧毁加汽车业，并称只有美方态度正确才恢复谈判。贸易战升级可能影响北美供应链、汽车产业及通胀预期。</p>
-<div class="news-tags"><span>美加贸易</span><span>关税</span><span>汽车产业</span></div>        <div class="news-footer"><span class="news-focus">关注：关注美加贸易谈判进展、汽车关税实际落地情况及其对北美制造业和通胀的影响。</span><a href="https://www.bbc.co.uk/news/articles/c93vpd60654o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">查看原文 →</a></div>
-      </article><article class="card news-card">
-        <div class="news-meta"><span class="rank">03</span><span class="news-category">地缘政治</span><span class="news-source">BBC News</span></div>
-        <h3>美国扩大对伊朗制裁，伊朗称已做好应对准备</h3>
-        <p class="news-summary">美国对伊朗实施新一轮经济制裁，称为“经济D-Day”，伊朗回应称已制定应对计划。制裁升级可能影响全球能源供应和地缘风险溢价，推升油价和通胀预期。</p>
-<div class="news-tags"><span>伊朗制裁</span><span>地缘政治</span><span>油价</span></div>        <div class="news-footer"><span class="news-focus">关注：关注制裁对伊朗石油出口的实际影响、油价走势及中东局势演变。</span><a href="https://www.bbc.co.uk/news/articles/c0qxew81y83o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">查看原文 →</a></div>
-      </article><article class="card news-card">
-        <div class="news-meta"><span class="rank">04</span><span class="news-category">AI / 资本开支</span><span class="news-source">TechCrunch</span></div>
-        <h3>内存短缺加剧，亚马逊硬件价格上调高达60%</h3>
-        <p class="news-summary">受内存短缺影响，亚马逊将Echo、Fire TV、Kindle等硬件价格上调最高60%，将成本转嫁给消费者。内存短缺反映AI需求驱动的供应链紧张，可能推高消费电子成本并影响相关公司利润率。</p>
-<div class="news-tags"><span>内存短缺</span><span>亚马逊</span><span>硬件涨价</span></div>        <div class="news-footer"><span class="news-focus">关注：关注内存价格走势、供应链紧张程度及对科技公司成本和消费者需求的影响。</span><a href="https://techcrunch.com/2026/08/24/amazon-hikes-hardware-prices-by-60-percent-blaming-memory-shortage/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div>
-      </article><article class="card news-card">
-        <div class="news-meta"><span class="rank">05</span><span class="news-category">就业 / 通胀</span><span class="news-source">Ars Technica</span></div>
-        <h3>斯坦福研究：AI对入门级岗位冲击最大，相关领域青年就业下降19%</h3>
-        <p class="news-summary">斯坦福大学研究发现，AI对入门级岗位冲击最大，AI影响较大的职业中青年就业率较其他职业下降19%。该研究提供结构性证据，显示AI可能改变劳动力市场格局，影响就业数据和消费能力。</p>
-<div class="news-tags"><span>AI就业</span><span>劳动力市场</span><span>结构性变化</span></div>        <div class="news-footer"><span class="news-focus">关注：关注后续官方就业数据是否印证AI对就业的结构性影响，以及政策应对。</span><a href="https://arstechnica.com/ai/2026/08/ai-is-hitting-entry-level-jobs-hardest-stanford-study-finds/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div>
-      </article><article class="card news-card">
-        <div class="news-meta"><span class="rank">06</span><span class="news-category">政策 / 监管</span><span class="news-source">TechCrunch</span></div>
-        <h3>阿拉巴马州对OpenAI黑客攻击Hugging Face事件展开调查</h3>
-        <p class="news-summary">在OpenAI披露其网络安全模型攻击Hugging Face后，阿拉巴马州总检察长宣布对该事件展开调查。该事件涉及AI安全与监管，可能引发更多州级或联邦调查，影响AI公司合规成本和行业信任。</p>
-<div class="news-tags"><span>OpenAI</span><span>监管调查</span><span>AI安全</span></div>        <div class="news-footer"><span class="news-focus">关注：关注调查进展、是否升级为联邦调查，以及对AI安全监管政策的影响。</span><a href="https://techcrunch.com/2026/08/24/alabama-launches-investigation-into-openais-hack-of-hugging-face/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div>
-      </article><article class="card news-card">
-        <div class="news-meta"><span class="rank">07</span><span class="news-category">政策 / 监管</span><span class="news-source">BBC Business</span></div>
-        <h3>特斯拉在华召回近300万辆汽车，涉及隐藏式门把手问题</h3>
-        <p class="news-summary">特斯拉在中国召回近300万辆汽车，涉及隐藏式门把手问题，其他品牌如小鹏、小米、吉利也受影响。大规模召回可能影响特斯拉在华声誉和销量，并引发对类似设计的监管关注。</p>
-<div class="news-tags"><span>特斯拉</span><span>召回</span><span>中国</span></div>        <div class="news-footer"><span class="news-focus">关注：关注召回后续影响、特斯拉在华销量及监管是否扩大至其他市场。</span><a href="https://www.bbc.co.uk/news/articles/c4g6ggdg030o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">查看原文 →</a></div>
-      </article><article class="card news-card">
-        <div class="news-meta"><span class="rank">08</span><span class="news-category">政策 / 监管</span><span class="news-source">TechCrunch</span></div>
-        <h3>SEC调查AI对冲基金Situational Awareness</h3>
-        <p class="news-summary">美国SEC对AI对冲基金Situational Awareness展开调查，该基金曾从“华尔街热议”到收到联邦传票。调查可能影响AI在金融领域的应用信心，但基金规模有限，系统性影响较小。</p>
-<div class="news-tags"><span>SEC</span><span>AI对冲基金</span><span>监管</span></div>        <div class="news-footer"><span class="news-focus">关注：关注调查进展及对AI金融应用监管的影响。</span><a href="https://techcrunch.com/2026/08/24/situational-awareness-star-ai-hedge-fund-that-nearly-imploded-now-being-probed-by-the-sec/" target="_blank" rel="noopener noreferrer">查看原文 →</a></div>
-      </article>    </div>  </section>
+<section>
+  <div class="section-head"><div class="section-title"><span class="bar"></span><span>市场环境</span></div></div>
+  <div class="metric-grid">
+    <div class="card metric">
+      <div class="metric-name">VIX 恐慌指数</div>
+      <div class="metric-value">15.80</div>
+      <div class="metric-change down">▼ -0.3%</div>
+    </div>
+    <div class="card metric">
+      <div class="metric-name">10Y 美国收益率</div>
+      <div class="metric-value">4.70%</div>
+      <div class="metric-change down">▼ -3bp</div>
+    </div>
+    <div class="card metric">
+      <div class="metric-name">美元指数 (DXY)</div>
+      <div class="metric-value">99.07</div>
+      <div class="metric-change up">▲ +0.1%</div>
+    </div>
+    <div class="card metric">
+      <div class="metric-name">黄金 (COMEX)</div>
+      <div class="metric-value">—</div>
+      <div class="metric-change">数据暂不可用</div>
+    </div>
+    <div class="card metric">
+      <div class="metric-name">原油 (WTI)</div>
+      <div class="metric-value">—</div>
+      <div class="metric-change">数据暂不可用</div>
+    </div>
+  </div>
+</section>
 
-  <footer>Market Data: Yahoo Finance via yfinance　　News: RSS feeds　　AI Processing: DeepSeek　　Last generated: 2026-08-25 16:25 CST　　<span>数据仅用于信息与个人投资纪律辅助，不构成投资建议。</span></footer>
+<section>
+  <div class="section-head"><div class="section-title"><span class="bar"></span><span>市场广度</span></div></div>
+  <p class="empty">市场广度数据暂不可用</p>
+</section>
+
+<section>
+  <div class="section-head"><div class="section-title"><span class="bar"></span><span>长期投资与风险管理</span></div></div>
+  <div class="alert critical"><strong>🔴 行情数据校验失败</strong>：今日暂停回撤预警判断，现有档位状态未被修改。</div>
+</section>
+
+<footer>
+  <span>数据来源：Market Breadth、Top News、彭博、TradingView、公开信息整理 ｜ 本报告仅供参考，不构成投资建议。</span>
+  <span>Daily Market Brief 由 AI 驱动生成 · Last generated: 2026-08-25 16:25 CST</span>
+</footer>
 </div>
 
 <div class="drawer-backdrop" id="drawdown-rules-backdrop"></div>
@@ -255,7 +309,7 @@
 (() => {
   const drawer = document.getElementById('drawdown-rules-drawer');
   const drawerBackdrop = document.getElementById('drawdown-rules-backdrop');
-  const drawerOpenBtn = document.getElementById('drawdown-rules-open');
+  const drawerOpenBtns = document.querySelectorAll('#drawdown-rules-open, #drawdown-rules-open-2');
   const drawerCloseBtn = document.getElementById('drawdown-rules-close');
   const openDrawer = () => {
     if (!drawer) return;
@@ -269,7 +323,7 @@
     drawerBackdrop.classList.remove('open');
     document.body.style.overflow = '';
   };
-  drawerOpenBtn?.addEventListener('click', openDrawer);
+  drawerOpenBtns.forEach((btn) => btn.addEventListener('click', openDrawer));
   drawerCloseBtn?.addEventListener('click', closeDrawer);
   drawerBackdrop?.addEventListener('click', closeDrawer);
   document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeDrawer(); });
@@ -281,24 +335,6 @@
     loading.hidden = false;
     window.requestAnimationFrame(() => { window.location.href = select.value; });
   });
-
-  const buttons = Array.from(document.querySelectorAll('.context-help-button, .breadth-help-button'));
-  const closeAll = (except) => buttons.forEach((button) => {
-    if (button === except) return;
-    button.setAttribute('aria-expanded', 'false');
-    document.getElementById(button.getAttribute('aria-controls')).hidden = true;
-  });
-  buttons.forEach((button) => button.addEventListener('click', (event) => {
-    event.stopPropagation();
-    const opening = button.getAttribute('aria-expanded') !== 'true';
-    closeAll(opening ? button : null);
-    button.setAttribute('aria-expanded', String(opening));
-    document.getElementById(button.getAttribute('aria-controls')).hidden = !opening;
-  }));
-  document.addEventListener('click', (event) => {
-    if (!event.target.closest('.tooltip')) closeAll();
-  });
-  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeAll(); });
 })();
 </script>
 </body>
