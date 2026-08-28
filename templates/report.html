@@ -68,9 +68,9 @@
   {% else %}
     {% set risk_label, risk_class = '正常', 'normal' %}
   {% endif %}
-  <section class="summary" aria-labelledby="today-summary-title">
-    <div class="summary-grid">
-      <div class="summary-inner">
+  <section class="summary-grid" aria-labelledby="today-summary-title">
+      <div class="card summary">
+        <div class="summary-inner">
         <div class="summary-icon" aria-hidden="true">☼</div>
         <div>
           <h2 id="today-summary-title">今日市场一句话</h2>
@@ -89,6 +89,7 @@
           </div>
           <div class="summary-src">基于市场数据 · Market Breadth · Top News</div>
         </div>
+        </div>
       </div>
 
       <aside class="card strategy-card" aria-labelledby="today-strategy-title">
@@ -101,7 +102,6 @@
         <button type="button" class="strategy-link" id="drawdown-rules-open" aria-haspopup="dialog" aria-controls="drawdown-rules-drawer">查看回撤加仓规则　→</button>
         {% endif %}
       </aside>
-    </div>
   </section>
   {% endif %}
 

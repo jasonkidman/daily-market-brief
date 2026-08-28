@@ -171,11 +171,11 @@ def test_renders_today_in_one_line_after_header_and_omits_it_for_legacy_reports(
     assert "标普500小幅上涨" in index_html
     assert "今日市场一句话" not in legacy_html
     assert ".summary" in css
-    assert ".summary{margin-top:18px;padding:20px22px16px" in compact_css
+    assert ".summary-grid{margin-top:18px" in compact_css
     assert ".summary-inner{display:grid;grid-template-columns:46pxminmax(0,1fr)" in compact_css
     assert ".summary-content{max-width:1180px}" in compact_css
     assert ".summary-focus{margin-top:12px;display:flex" in compact_css
-    assert ".strategy-action{font-size:24px" in compact_css
+    assert ".strategy-action{font-size:36px" in compact_css
     assert ".page{width:min(1440px,calc(100%-34px))" in compact_css
     assert "@media(max-width:900px)" in compact_css
 
@@ -204,7 +204,7 @@ def test_today_summary_is_the_readable_primary_visual_focus(tmp_path):
     assert 'class="summary-focus-text">市场同时关注利率预期。</div>' in html
     assert 'class="card strategy-card"' in html
     assert 'id="today-strategy-title" class="strategy-title">今日策略</h2>' in html
-    assert ".summary{margin-top:18px;padding:20px22px16px" in compact_css
+    assert ".summary-grid{margin-top:18px" in compact_css
     assert ".summary-inner{display:grid;grid-template-columns:46pxminmax(0,1fr)" in compact_css
     assert ".summaryh2{margin:2px010px" in compact_css
     assert "font-size:19px;line-height:1.3;font-weight:700" in compact_css
@@ -212,7 +212,7 @@ def test_today_summary_is_the_readable_primary_visual_focus(tmp_path):
     assert ".summary-icon{width:44px;height:44px" in compact_css
     assert "font-size:22px" in compact_css
     assert ".summary-focus-label{flex:00auto" in compact_css
-    assert ".strategy-title{margin:0010px" in compact_css
+    assert ".strategy-title{margin:006px" in compact_css
     assert ".summary-src{margin-top:11px;text-align:right" in compact_css
     assert "@media(max-width:600px)" in compact_css
 
