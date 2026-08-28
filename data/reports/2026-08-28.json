@@ -1,6 +1,6 @@
 {
   "report_date": "2026-08-28",
-  "generated_at": "2026-08-28 09:01 CST",
+  "generated_at": "2026-08-28 10:59 CST",
   "market_date": "2026-08-27",
   "status": "ok",
   "status_label": "🟢 数据更新正常",
@@ -65,8 +65,8 @@
     },
     "dxy": {
       "market_date": "2026-08-27",
-      "close": 99.11799621582031,
-      "daily_return": -0.0005243718270158126,
+      "close": 99.15399932861328,
+      "daily_return": -0.0001613274238926321,
       "name": "美元指数",
       "ticker": "DX-Y.NYB",
       "valid": true
@@ -84,7 +84,7 @@
     "tech_relative": 0.0070669869700297205,
     "small_cap_relative": -0.0043956272647163175,
     "vix_daily_return": -0.04602234105914027,
-    "dxy_daily_return": -0.0005243718270158126,
+    "dxy_daily_return": -0.0001613274238926321,
     "us10y_bp_change": 0.7999897003173828,
     "signals": [
       {
@@ -239,7 +239,7 @@
       "ath": 7798.990234375,
       "ath_date": "2026-08-13",
       "last_market_date": "2026-08-27",
-      "last_updated_at": "2026-08-28T09:01:07.521634+08:00",
+      "last_updated_at": "2026-08-28T10:59:27.338218+08:00",
       "current_close": 7730.990234375,
       "current_drawdown": 0.008719077464705793,
       "pool": 140000,
@@ -295,7 +295,7 @@
       "ath": 30660.599609375,
       "ath_date": "2026-06-02",
       "last_market_date": "2026-08-27",
-      "last_updated_at": "2026-08-28T09:01:07.521634+08:00",
+      "last_updated_at": "2026-08-28T10:59:27.338218+08:00",
       "current_close": 29641.560546875,
       "current_drawdown": 0.03323611003968796,
       "pool": 60000,
@@ -346,32 +346,101 @@
   },
   "portfolio_action": "hold",
   "market_summary": {
-    "market": "8月27日美股指数收涨，标普500涨0.72%、纳斯达克100涨1.43%，科技/成长相对占优；但标普成份股仅约三成上涨、11个板块中仅科技上涨，呈现指数走强而参与度不足的窄幅上涨结构。",
-    "drivers": "市场同时关注Meta与29个州达成180亿美元和解，其中涉及儿童数据保留及平台监管的隐私与合规权衡。",
+    "market": "标普500上涨0.72%、纳斯达克100上涨1.43%，但上涨集中于科技板块，标普成分股中仅约30%上涨，市场广度偏弱。",
+    "drivers": "市场同时关注Anthropic与特朗普政府相关裁定及其新的AI硬件标准，以及Meta涉及儿童数据的180亿美元和解。",
     "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
     "degraded": false
   },
   "news": [
     {
       "rank": 1,
+      "candidate_id": "c1da0c6b5825e006",
+      "category": "政策 / 监管",
+      "title_zh": "法官裁定特朗普政府非法报复 Anthropic",
+      "summary_zh": "法官裁定特朗普政府对 Anthropic 的报复行为违法。该 AI 公司此前因五角大楼使用其 AI 的问题与政府发生争执。",
+      "focus": "后续法院程序与政府采购安排",
+      "tags": [
+        "Anthropic",
+        "政府合同",
+        "AI监管"
+      ],
+      "investment_relevance_score": 90,
+      "source": "BBC Business",
+      "url": "https://www.bbc.co.uk/news/articles/cm2q7z5mlrmo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-28T02:57:30+00:00",
+      "original_title": "Trump administration illegally retaliated against Anthropic, judge rules",
+      "selection_reason": "大型科技：法官裁定特朗普政府对Anthropic的报复违法；该公司正因军用AI使用问题与五角大楼对峙。",
+      "event_summary": "A judge ruled the Trump administration illegally retaliated against Anthropic.",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 2,
       "candidate_id": "979a8de0738849c0",
       "category": "政策 / 监管",
-      "title_zh": "Meta与29州达成180亿美元和解，涉及儿童数据保留",
-      "summary_zh": "Meta与美国29个州达成180亿美元和解。协议允许其保留部分13岁以下儿童数据，用于训练和测试年龄识别模型，明确了平台未成年人数据治理中的隐私与合规权衡。",
-      "focus": "和解具体条款、儿童数据使用边界及后续监管执行。",
+      "title_zh": "Meta与29州达成180亿美元和解，涉及儿童数据",
+      "summary_zh": "Meta与29个州达成180亿美元和解。协议涉及保留未满13岁儿童的数据，并允许将其用于年龄检测模型的训练和测试。",
+      "focus": "和解条款执行与儿童数据监管",
       "tags": [
         "Meta",
-        "未成年人数据",
         "隐私监管",
-        "州检方"
+        "儿童数据"
       ],
-      "investment_relevance_score": 85,
+      "investment_relevance_score": 86,
       "source": "TechCrunch",
       "url": "https://techcrunch.com/2026/08/27/buried-in-metas-18b-settlement-is-a-legal-pass-on-kids-data/",
       "published_at": "2026-08-27T20:04:26+00:00",
       "original_title": "Buried in Meta’s $18B settlement is a legal pass on kids’ data",
-      "selection_reason": "大型科技：Meta与29州达成180亿美元和解，并获得保留部分儿童数据用于年龄识别模型的安排。",
-      "event_summary": "Meta与29个州达成的和解涉及儿童数据保留及平台监管争议。",
+      "selection_reason": "大型科技：Meta与29州达成180亿美元和解，协议明确涉及儿童数据保留及AI年龄检测模型训练测试。",
+      "event_summary": "Meta's settlement with 29 states included provisions concerning children's data.",
+      "topic_group": "MEGA_CAP_TECH",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 3,
+      "candidate_id": "5956c380babd629b",
+      "category": "AI / 资本开支",
+      "title_zh": "Anthropic推出让AI代理控制实体设备的硬件标准",
+      "summary_zh": "Anthropic推出新的硬件标准，旨在通过标准化驱动接口，让设备与AI代理及其他设备通信，使AI能够控制实体世界。",
+      "focus": "标准采用情况与设备兼容范围",
+      "tags": [
+        "Anthropic",
+        "AI代理",
+        "硬件标准"
+      ],
+      "investment_relevance_score": 80,
+      "source": "Ars Technica",
+      "url": "https://arstechnica.com/ai/2026/08/anthropics-new-hardware-standard-lets-ai-agents-control-the-physical-world/",
+      "published_at": "2026-08-27T22:15:43+00:00",
+      "original_title": "Anthropic's new hardware standard lets AI agents control the physical world",
+      "selection_reason": "大型科技：Anthropic推出连接设备与AI代理的硬件标准，涉及AI平台向实体设备扩展。",
+      "event_summary": "Anthropic introduced a hardware standard for AI agents and devices.",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 4,
+      "candidate_id": "8344401f119635bf",
+      "category": "AI / 资本开支",
+      "title_zh": "Google因内存短缺收紧Android应用内存限制",
+      "summary_zh": "Google为Android应用设定新的内存使用上限。报道将变化与AI数据中心造成的硬件短缺联系起来，低价手机可能因此减少内存。",
+      "focus": "Android开发限制与内存供应变化",
+      "tags": [
+        "Google",
+        "Android",
+        "内存供应",
+        "AI算力"
+      ],
+      "investment_relevance_score": 74,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/27/ais-memory-crunch-is-coming-for-android-apps/",
+      "published_at": "2026-08-27T14:27:04+00:00",
+      "original_title": "AI’s memory crunch is coming for Android apps",
+      "selection_reason": "大型科技：Google因AI数据中心相关硬件短缺，为Android应用设定新的内存上限，改变平台开发约束。",
+      "event_summary": "Google set new memory-use limits for Android apps amid a RAM shortage.",
       "topic_group": "MEGA_CAP_TECH",
       "event_category": "other",
       "source_channel": null
