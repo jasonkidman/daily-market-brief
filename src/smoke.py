@@ -4,16 +4,24 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from pathlib import Path
+
+
+# Matches API-key-shaped tokens (e.g. "sk-abcDEF0123456789..."), not any
+# incidental "sk-" substring -- real news URLs/slugs (e.g. ".../risk-label/")
+# legitimately contain "sk-" as part of an ordinary word.
+_SECRET_KEY_PATTERN = re.compile(r"\bsk-[A-Za-z0-9]{16,}\b")
 
 
 REQUIRED_HTML = (
     "Daily Market Brief",
     "今日市场一句话",
-    "美国主要指数",
-    "回撤加仓预警",
     "今日重要新闻",
-    "数据仅用于信息与个人投资纪律辅助，不构成投资建议。",
+    "市场环境",
+    "市场广度",
+    "长期投资与风险管理",
+    "本报告仅供参考，不构成投资建议。",
 )
 
 
@@ -30,7 +38,7 @@ def validate_generated(base_dir: Path) -> None:
     missing = [text for text in REQUIRED_HTML if text not in html]
     if missing:
         raise SystemExit(f"Smoke check failed: missing HTML content {missing}.")
-    if "DEEPSEEK_API_KEY" in html or "sk-" in html:
+    if "DEEPSEEK_API_KEY" in html or _SECRET_KEY_PATTERN.search(html):
         raise SystemExit("Smoke check failed: possible secret material in HTML.")
     print(f"Smoke check passed: {reports[-1].name} and site/index.html")
 
