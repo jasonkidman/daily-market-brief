@@ -12,3 +12,4 @@ secrets.json
 .DS_Store
 work/
 .worktrees/
+data/news_snapshots/
