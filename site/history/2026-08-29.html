@@ -12,7 +12,7 @@
 <header class="topbar">
   <div>
     <h1 class="title">Daily Market Brief</h1>
-    <div class="meta">报告日期：2026-08-29　更新时间：2026-08-29 09:01 CST</div>
+    <div class="meta">报告日期：2026-08-29　更新时间：2026-08-29 12:05 CST</div>
   </div>
   <div class="top-right">
     <div class="datebox">
@@ -28,55 +28,22 @@
       </select>
       <span class="datebox-caret" aria-hidden="true">⌄</span>
     </div>
-    <div class="status status-ok">● 数据更新正常</div>
+    <div class="status status-critical">● 行情数据校验失败</div>
   </div>
 </header>
 
+<div class="alert critical"><strong>🔴 行情数据校验失败</strong> · 今日暂停回撤预警判断</div>
 
 <div class="hero">
   <div class="card market-summary">
     <div class="indices">
       <div class="index-card">
         <div class="index-head"><span>S&amp;P 500</span><span class="ticker">^GSPC</span></div>
-        <div class="index-value">7,711.76</div>
-        <div class="index-bottom">
-          <div><span class="day-change down sp500-day-change">▼ -0.2%</span> <span class="small">昨日</span></div>
-          <div class="ytd up">+12.7% <span class="small">YTD</span></div>
-        </div>
-        <div class="spark">
-          <svg viewBox="0 0 420 52" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="spark-sp500" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#15975a" stop-opacity="0.18"/>
-                <stop offset="55%" stop-color="#15975a" stop-opacity="0.08"/>
-                <stop offset="100%" stop-color="#15975a" stop-opacity="0"/>
-              </linearGradient>
-            </defs>
-            <path d="M0.0,36.41 L14.48,30.41 L28.97,31.34 L43.45,39.6 L57.93,39.27 L72.41,39.16 L86.9,37.74 L101.38,48.0 L115.86,36.93 L130.34,32.18 L144.83,22.09 L159.31,9.69 L173.79,10.87 L188.28,12.11 L202.76,7.77 L217.24,8.18 L231.72,10.45 L246.21,8.6 L260.69,4.0 L275.17,5.21 L289.66,8.91 L304.14,13.77 L318.62,12.29 L333.1,18.38 L347.59,15.36 L362.07,17.32 L376.55,15.09 L391.03,15.24 L405.52,10.2 L420.0,11.95 L420.0,52 L0.0,52 Z" fill="url(#spark-sp500)"/>
-            <path d="M0.0,36.41 L14.48,30.41 L28.97,31.34 L43.45,39.6 L57.93,39.27 L72.41,39.16 L86.9,37.74 L101.38,48.0 L115.86,36.93 L130.34,32.18 L144.83,22.09 L159.31,9.69 L173.79,10.87 L188.28,12.11 L202.76,7.77 L217.24,8.18 L231.72,10.45 L246.21,8.6 L260.69,4.0 L275.17,5.21 L289.66,8.91 L304.14,13.77 L318.62,12.29 L333.1,18.38 L347.59,15.36 L362.07,17.32 L376.55,15.09 L391.03,15.24 L405.52,10.2 L420.0,11.95" fill="none" stroke="#15975a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
+        <p class="unavailable">行情不可用</p>
       </div>
       <div class="index-card">
         <div class="index-head"><span>Nasdaq-100</span><span class="ticker">^NDX</span></div>
-        <div class="index-value">29,433.43</div>
-        <div class="index-bottom">
-          <div><span class="day-change down sp500-day-change">▼ -0.7%</span> <span class="small">昨日</span></div>
-          <div class="ytd up">+16.6% <span class="small">YTD</span></div>
-        </div>
-        <div class="spark">
-          <svg viewBox="0 0 420 52" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="spark-nasdaq100" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#15975a" stop-opacity="0.18"/>
-                <stop offset="55%" stop-color="#15975a" stop-opacity="0.08"/>
-                <stop offset="100%" stop-color="#15975a" stop-opacity="0"/>
-              </linearGradient>
-            </defs>
-            <path d="M0.0,26.52 L14.48,18.14 L28.97,20.53 L43.45,28.79 L57.93,33.76 L72.41,35.12 L86.9,39.32 L101.38,48.0 L115.86,34.09 L130.34,31.54 L144.83,23.89 L159.31,9.35 L173.79,13.08 L188.28,14.82 L202.76,9.51 L217.24,11.04 L231.72,12.5 L246.21,9.2 L260.69,4.0 L275.17,4.58 L289.66,5.36 L304.14,13.03 L318.62,14.02 L333.1,17.26 L347.59,15.8 L362.07,20.15 L376.55,17.32 L391.03,17.08 L405.52,10.74 L420.0,13.91 L420.0,52 L0.0,52 Z" fill="url(#spark-nasdaq100)"/>
-            <path d="M0.0,26.52 L14.48,18.14 L28.97,20.53 L43.45,28.79 L57.93,33.76 L72.41,35.12 L86.9,39.32 L101.38,48.0 L115.86,34.09 L130.34,31.54 L144.83,23.89 L159.31,9.35 L173.79,13.08 L188.28,14.82 L202.76,9.51 L217.24,11.04 L231.72,12.5 L246.21,9.2 L260.69,4.0 L275.17,4.58 L289.66,5.36 L304.14,13.03 L318.62,14.02 L333.1,17.26 L347.59,15.8 L362.07,20.15 L376.55,17.32 L391.03,17.08 L405.52,10.74 L420.0,13.91" fill="none" stroke="#15975a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
+        <p class="unavailable">行情不可用</p>
       </div>
     </div>
 
@@ -84,7 +51,7 @@
       <div class="summary-icon" aria-hidden="true">☼</div>
       <div>
         <div class="summary-title">今日市场一句话</div>
-        <div class="summary-copy">8月28日，美股主要指数收低，纳斯达克100跌0.70%、标普500跌0.25%；市场内部呈分化状态，科技板块跌1.55%，通信服务与非必需消费上涨，小盘股相对标普500落后1.14个百分点。</div>
+        <div class="summary-copy">标普500、纳斯达克100、道琼斯和罗素2000收盘数据无效，无法判断当日指数表现；VIX报14.43，日跌约0.55%，10年期美债收益率报4.72%，上升约4.8个基点，市场宽度数据暂不可用。</div>
       </div>
     </div>
   </div>
@@ -92,11 +59,11 @@
   <aside class="card strategy">
     <div class="strategy-title"><div class="target" aria-hidden="true">◎</div><span>今日策略</span></div>
     <div class="strategy-main">
-      <strong class="strategy-normal">正常定投</strong>
-      <div class="strategy-tag"><span class="dot"></span><span>未触发回撤加仓</span></div>
+      <strong class="strategy-critical">暂停额外操作</strong>
+      <div class="strategy-tag"><span class="dot"></span><span>行情数据校验失败，今日暂停回撤判断</span></div>
     </div>
     <div class="strategy-row"><span class="label">备用金状态</span><span class="value">保持不动</span></div>
-    <div class="strategy-row"><span class="label">当前风险状态</span><span class="value good">正常</span></div>
+    <div class="strategy-row"><span class="label">当前风险状态</span><span class="value critical">数据异常</span></div>
     <button type="button" class="strategy-link" id="drawdown-rules-open" aria-haspopup="dialog" aria-controls="drawdown-rules-drawer">查看回撤加仓规则　→</button>
   </aside>
 </div>
@@ -109,16 +76,30 @@
     <div class="news-item">
       <div class="rank">1</div>
       <div>
-        <div class="category">AI / 资本开支</div>
-        <div class="time">4小时前</div>
+        <div class="category">地缘政治</div>
+        <div class="time">1小时前</div>
       </div>
       <div>
-        <div class="news-title"><a href="https://techcrunch.com/2026/08/28/neocloud-lambda-secures-1b-in-debt-to-buy-more-chips/" target="_blank" rel="noopener noreferrer">Lambda获10亿美元债务融资采购英伟达芯片并租赁给微软</a></div>
-        <div class="news-desc">云计算服务商Lambda获得10亿美元私募债务融资，用于采购英伟达AI芯片并出租给微软。该融资直接对应AI算力扩张，体现高成本芯片采购对数据中心融资需求的拉动。</div>
+        <div class="news-title"><a href="https://www.bbc.co.uk/news/articles/cx2zlwe7qj1o?at_medium=RSS&amp;at_campaign=rss" target="_blank" rel="noopener noreferrer">美国达成协议控制委内瑞拉650亿桶石油资源</a></div>
+        <div class="news-desc">特朗普称美国已与委内瑞拉达成“历史性”协议，将控制该国约650亿桶石油资源。委内瑞拉临时总统表示协议有助于重振本国经济。</div>
       </div>
       <div class="impact">
         <div class="impact-label">市场影响：</div>
-<div class="chips"><span class="chip">AI算力</span><span class="chip">英伟达</span><span class="chip">微软</span><span class="chip">数据中心融资</span></div>      </div>
+<div class="chips"><span class="chip">委内瑞拉石油</span><span class="chip">美国能源政策</span><span class="chip">地缘政治</span></div>      </div>
+    </div>
+    <div class="news-item">
+      <div class="rank">2</div>
+      <div>
+        <div class="category">AI / 资本开支</div>
+        <div class="time">7小时前</div>
+      </div>
+      <div>
+        <div class="news-title"><a href="https://techcrunch.com/2026/08/28/neocloud-lambda-secures-1b-in-debt-to-buy-more-chips/" target="_blank" rel="noopener noreferrer">Lambda举债10亿美元采购英伟达芯片并租给微软</a></div>
+        <div class="news-desc">AI云服务商Lambda通过私人债务融资10亿美元，用于采购英伟达AI芯片并出租给微软。这显示AI算力扩张正借助大规模债务融资推进。</div>
+      </div>
+      <div class="impact">
+        <div class="impact-label">市场影响：</div>
+<div class="chips"><span class="chip">AI算力</span><span class="chip">英伟达芯片</span><span class="chip">微软</span><span class="chip">债务融资</span></div>      </div>
     </div>
   </div>
 </section>
@@ -138,150 +119,35 @@
     </div>
     <div class="card metric">
       <div class="metric-name">美元指数 (DXY)</div>
-      <div class="metric-value">99.68</div>
-      <div class="metric-change up">▲ +0.5%</div>
+      <div class="metric-value">—</div>
+      <div class="metric-change">数据暂不可用</div>
     </div>
     <div class="card metric">
       <div class="metric-name">黄金 (COMEX)</div>
-      <div class="metric-value">4,504.10</div>
-      <div class="metric-change down">▼ -2.3%</div>
+      <div class="metric-value">—</div>
+      <div class="metric-change">数据暂不可用</div>
     </div>
     <div class="card metric">
       <div class="metric-name">原油 (WTI)</div>
-      <div class="metric-value">83.44</div>
-      <div class="metric-change down">▼ -0.1%</div>
+      <div class="metric-value">—</div>
+      <div class="metric-change">数据暂不可用</div>
     </div>
   </div>
 </section>
 
 <section>
   <div class="section-head"><div class="section-title"><span class="bar"></span><span>市场广度</span></div></div>
-  <div class="card breadth">
-    <div>
-      <h4>美股上涨比例（按市值）</h4>
-      <div class="big-green">45.5%</div>
-      <div class="risk-note">上涨 <strong>229</strong>　 下跌 <strong>273</strong></div>
-      <div class="ratio" style="background:linear-gradient(90deg,#16a05d 0 45.5%,#e04a45 45.5% 100%)"></div>
-    </div>
-    <div>
-      <h4>板块表现（1日）</h4>
-      <div class="sector-row">
-        <span>通信服务</span>
-        <div class="sector-bar"><div class="sector-fill" style="width:47.3%"></div></div>
-        <span class="up">+1.4%</span>
-      </div>
-      <div class="sector-row">
-        <span>非必需消费</span>
-        <div class="sector-bar"><div class="sector-fill" style="width:38.3%"></div></div>
-        <span class="up">+1.1%</span>
-      </div>
-      <div class="sector-row">
-        <span>能源</span>
-        <div class="sector-bar"><div class="sector-fill" style="width:20.9%"></div></div>
-        <span class="up">+0.6%</span>
-      </div>
-      <div class="sector-row">
-        <span>必需消费</span>
-        <div class="sector-bar"><div class="sector-fill" style="width:14.5%"></div></div>
-        <span class="up">+0.4%</span>
-      </div>
-      <div class="sector-row">
-        <span>金融</span>
-        <div class="sector-bar"><div class="sector-fill" style="width:12.7%"></div></div>
-        <span class="up">+0.4%</span>
-      </div>
-      <div class="sector-row">
-        <span>材料</span>
-        <div class="sector-bar"><div class="sector-fill red" style="width:3.1%"></div></div>
-        <span class="down">-0.1%</span>
-      </div>
-      <div class="sector-row">
-        <span>医疗保健</span>
-        <div class="sector-bar"><div class="sector-fill red" style="width:8.2%"></div></div>
-        <span class="down">-0.2%</span>
-      </div>
-      <div class="sector-row">
-        <span>房地产</span>
-        <div class="sector-bar"><div class="sector-fill red" style="width:13.4%"></div></div>
-        <span class="down">-0.4%</span>
-      </div>
-      <div class="sector-row">
-        <span>工业</span>
-        <div class="sector-bar"><div class="sector-fill red" style="width:30.9%"></div></div>
-        <span class="down">-0.9%</span>
-      </div>
-      <div class="sector-row">
-        <span>公用事业</span>
-        <div class="sector-bar"><div class="sector-fill red" style="width:34.7%"></div></div>
-        <span class="down">-1.0%</span>
-      </div>
-      <div class="sector-row">
-        <span>科技</span>
-        <div class="sector-bar"><div class="sector-fill red" style="width:51.6%"></div></div>
-        <span class="down">-1.5%</span>
-      </div>
-    </div>
-    <div>
-      <h4>市场情绪</h4>
-      <div class="gauge"><div class="gauge-circle" style="background:conic-gradient(from 270deg at 50% 100%,#26a467 0deg 97.9deg,#e5eaee 97.9deg 180deg)"></div></div>
-      <div class="gauge-text"><strong>54</strong><span>中性</span></div>
-    </div>
-  </div>
+  <p class="empty">市场广度数据暂不可用</p>
 </section>
 
 <section>
   <div class="section-head"><div class="section-title"><span class="bar"></span><span>长期投资与风险管理</span></div></div>
-  <div class="risk-grid">
-    <div class="card risk-card">
-      <h4>当前回撤（相对最高点）</h4>
-      <div class="risk-pair">
-        <div><div class="risk-label">S&amp;P 500</div><div class="risk-value up">-1.1%</div></div>
-        <div><div class="risk-label">Nasdaq-100</div><div class="risk-value up">-4.0%</div></div>
-      </div>
-      <div class="risk-note">
-        距离下一档加仓：<br>
-还差 8.9%　｜　还差 11.0%      </div>
-    </div>
-    <div class="card risk-card">
-      <h4>下一档加仓参考</h4>
-      <div class="risk-pair">
-        <div>
-          <div class="risk-label">S&amp;P 500</div>
-          <div class="risk-value">10%~15%</div>
-          <div class="risk-note">回撤<br>使用备用金 20%</div>
-        </div>
-        <div>
-          <div class="risk-label">Nasdaq-100</div>
-          <div class="risk-value">15%~20%</div>
-          <div class="risk-note">回撤<br>使用备用金 20%</div>
-        </div>
-      </div>
-      <div class="risk-note" style="text-align:center;color:var(--blue);font-weight:700"><button type="button" class="strategy-link" style="padding:0;margin-top:0;border-top:0" id="drawdown-rules-open-2" aria-haspopup="dialog" aria-controls="drawdown-rules-drawer">查看完整规则 →</button></div>
-    </div>
-    <div class="card risk-card">
-      <h4>备用金使用情况</h4>
-      <div class="reserve">
-        <div class="donut" style="--reserve-deg:360.0deg" data-pct="100%"></div>
-        <div>
-          <p>可用金额</p><strong>¥200,000</strong>
-          <p style="margin-top:10px">总备用金</p><strong>¥200,000</strong>
-        </div>
-      </div>
-    </div>
-    <div class="card risk-card">
-      <h4>投资纪律提醒</h4>
-      <div class="checks">
-        <div class="check-row"><span>每月定投：</span><strong>¥10,000</strong><span class="check-ok">✓</span></div>
-        <div class="check-row"><span>回撤加仓：</span><strong>阶梯执行</strong><span class="check-ok">✓</span></div>
-        <div class="check-row"><span>长期持有：</span><strong>20年以上</strong><span class="check-ok">✓</span></div>
-      </div>
-    </div>
-  </div>
+  <div class="alert critical"><strong>🔴 行情数据校验失败</strong>：今日暂停回撤预警判断，现有档位状态未被修改。</div>
 </section>
 
 <footer>
   <span>数据来源：Market Breadth、Top News、彭博、TradingView、公开信息整理 ｜ 本报告仅供参考，不构成投资建议。</span>
-  <span>Daily Market Brief 由 AI 驱动生成 · Last generated: 2026-08-29 09:01 CST</span>
+  <span>Daily Market Brief 由 AI 驱动生成 · Last generated: 2026-08-29 12:05 CST</span>
 </footer>
 </div>
 
@@ -379,6 +245,75 @@
     if (!select.value) return;
     loading.hidden = false;
     window.requestAnimationFrame(() => { window.location.href = select.value; });
+  });
+
+  const VIEW_W = 420, VIEW_H = 52;
+  document.querySelectorAll('.spark[data-points]').forEach((container) => {
+    let points;
+    try {
+      points = JSON.parse(container.dataset.points);
+    } catch (err) {
+      return;
+    }
+    if (!Array.isArray(points) || points.length === 0) return;
+    const svg = container.querySelector('svg');
+    const hit = container.querySelector('.spark-hit');
+    const guide = container.querySelector('.spark-guide');
+    const marker = container.querySelector('.spark-marker');
+    const tooltip = container.querySelector('.spark-tooltip');
+    if (!svg || !hit || !guide || !marker || !tooltip) return;
+
+    const nearestPoint = (offsetX, width) => {
+      const ratio = Math.min(Math.max(offsetX / width, 0), 1);
+      const x = ratio * VIEW_W;
+      let best = points[0], bestDist = Infinity;
+      for (const point of points) {
+        const dist = Math.abs(point.x - x);
+        if (dist < bestDist) { best = point; bestDist = dist; }
+      }
+      return best;
+    };
+
+    const formatChange = (change) => {
+      if (change === null || change === undefined) return null;
+      const pct = (change * 100).toFixed(2);
+      const sign = change > 0 ? '+' : '';
+      const cls = change > 0 ? 'up' : change < 0 ? 'down' : 'flat';
+      return { text: `${sign}${pct}%`, cls };
+    };
+
+    const show = (point) => {
+      guide.setAttribute('x1', point.x);
+      guide.setAttribute('x2', point.x);
+      guide.hidden = false;
+      marker.setAttribute('cx', point.x);
+      marker.setAttribute('cy', point.y);
+      marker.hidden = false;
+
+      const change = formatChange(point.change);
+      tooltip.innerHTML = `<div class="spark-tooltip-date">${point.date}</div>` +
+        `<div class="spark-tooltip-close">${point.close.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>` +
+        (change ? `<div class="spark-tooltip-change ${change.cls}">${change.text}</div>` : '');
+      tooltip.hidden = false;
+
+      const pxRatio = container.clientWidth / VIEW_W;
+      let left = point.x * pxRatio;
+      const minLeft = 4, maxLeft = container.clientWidth - 4;
+      tooltip.style.left = `${Math.min(Math.max(left, minLeft), maxLeft)}px`;
+    };
+
+    const hideAll = () => {
+      guide.hidden = true;
+      marker.hidden = true;
+      tooltip.hidden = true;
+    };
+
+    container.addEventListener('mousemove', (event) => {
+      const rect = svg.getBoundingClientRect();
+      const offsetX = event.clientX - rect.left;
+      show(nearestPoint(offsetX, rect.width));
+    });
+    container.addEventListener('mouseleave', hideAll);
   });
 })();
 </script>

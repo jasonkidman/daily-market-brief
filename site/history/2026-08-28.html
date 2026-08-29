@@ -43,7 +43,7 @@
           <div><span class="day-change up sp500-day-change">▲ +0.5%</span> <span class="small">昨日</span></div>
           <div class="ytd up">+13.5% <span class="small">YTD</span></div>
         </div>
-        <div class="spark">
+        <div class="spark" data-spark>
           <svg viewBox="0 0 420 52" preserveAspectRatio="none">
             <defs>
               <linearGradient id="spark-sp500" x1="0" y1="0" x2="0" y2="1">
@@ -54,7 +54,11 @@
             </defs>
             <path d="M0.0,36.41 L14.48,30.41 L28.97,31.34 L43.45,39.6 L57.93,39.27 L72.41,39.16 L86.9,37.74 L101.38,48.0 L115.86,36.93 L130.34,32.18 L144.83,22.09 L159.31,9.69 L173.79,10.87 L188.28,12.11 L202.76,7.77 L217.24,8.18 L231.72,10.45 L246.21,8.6 L260.69,4.0 L275.17,5.21 L289.66,8.91 L304.14,13.77 L318.62,12.29 L333.1,18.38 L347.59,15.36 L362.07,17.32 L376.55,15.09 L391.03,15.24 L405.52,10.2 L420.0,6.69 L420.0,52 L0.0,52 Z" fill="url(#spark-sp500)"/>
             <path d="M0.0,36.41 L14.48,30.41 L28.97,31.34 L43.45,39.6 L57.93,39.27 L72.41,39.16 L86.9,37.74 L101.38,48.0 L115.86,36.93 L130.34,32.18 L144.83,22.09 L159.31,9.69 L173.79,10.87 L188.28,12.11 L202.76,7.77 L217.24,8.18 L231.72,10.45 L246.21,8.6 L260.69,4.0 L275.17,5.21 L289.66,8.91 L304.14,13.77 L318.62,12.29 L333.1,18.38 L347.59,15.36 L362.07,17.32 L376.55,15.09 L391.03,15.24 L405.52,10.2 L420.0,6.69" fill="none" stroke="#15975a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <line class="spark-guide" x1="0" y1="0" x2="0" y2="52" hidden />
+            <circle class="spark-marker" r="3.2" hidden />
+            <rect class="spark-hit" x="0" y="0" width="420" height="52" fill="transparent" />
           </svg>
+          <div class="spark-tooltip" hidden></div>
         </div>
       </div>
       <div class="index-card">
@@ -64,7 +68,7 @@
           <div><span class="day-change up sp500-day-change">▲ +0.3%</span> <span class="small">昨日</span></div>
           <div class="ytd up">+17.8% <span class="small">YTD</span></div>
         </div>
-        <div class="spark">
+        <div class="spark" data-spark>
           <svg viewBox="0 0 420 52" preserveAspectRatio="none">
             <defs>
               <linearGradient id="spark-nasdaq100" x1="0" y1="0" x2="0" y2="1">
@@ -75,7 +79,11 @@
             </defs>
             <path d="M0.0,26.52 L14.48,18.14 L28.97,20.53 L43.45,28.79 L57.93,33.76 L72.41,35.12 L86.9,39.32 L101.38,48.0 L115.86,34.09 L130.34,31.54 L144.83,23.89 L159.31,9.35 L173.79,13.08 L188.28,14.82 L202.76,9.51 L217.24,11.04 L231.72,12.5 L246.21,9.2 L260.69,4.0 L275.17,4.58 L289.66,5.36 L304.14,13.03 L318.62,14.02 L333.1,17.26 L347.59,15.8 L362.07,20.15 L376.55,17.32 L391.03,17.08 L405.52,10.74 L420.0,9.34 L420.0,52 L0.0,52 Z" fill="url(#spark-nasdaq100)"/>
             <path d="M0.0,26.52 L14.48,18.14 L28.97,20.53 L43.45,28.79 L57.93,33.76 L72.41,35.12 L86.9,39.32 L101.38,48.0 L115.86,34.09 L130.34,31.54 L144.83,23.89 L159.31,9.35 L173.79,13.08 L188.28,14.82 L202.76,9.51 L217.24,11.04 L231.72,12.5 L246.21,9.2 L260.69,4.0 L275.17,4.58 L289.66,5.36 L304.14,13.03 L318.62,14.02 L333.1,17.26 L347.59,15.8 L362.07,20.15 L376.55,17.32 L391.03,17.08 L405.52,10.74 L420.0,9.34" fill="none" stroke="#15975a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <line class="spark-guide" x1="0" y1="0" x2="0" y2="52" hidden />
+            <circle class="spark-marker" r="3.2" hidden />
+            <rect class="spark-hit" x="0" y="0" width="420" height="52" fill="transparent" />
           </svg>
+          <div class="spark-tooltip" hidden></div>
         </div>
       </div>
     </div>
@@ -407,6 +415,75 @@
     if (!select.value) return;
     loading.hidden = false;
     window.requestAnimationFrame(() => { window.location.href = select.value; });
+  });
+
+  const VIEW_W = 420, VIEW_H = 52;
+  document.querySelectorAll('.spark[data-points]').forEach((container) => {
+    let points;
+    try {
+      points = JSON.parse(container.dataset.points);
+    } catch (err) {
+      return;
+    }
+    if (!Array.isArray(points) || points.length === 0) return;
+    const svg = container.querySelector('svg');
+    const hit = container.querySelector('.spark-hit');
+    const guide = container.querySelector('.spark-guide');
+    const marker = container.querySelector('.spark-marker');
+    const tooltip = container.querySelector('.spark-tooltip');
+    if (!svg || !hit || !guide || !marker || !tooltip) return;
+
+    const nearestPoint = (offsetX, width) => {
+      const ratio = Math.min(Math.max(offsetX / width, 0), 1);
+      const x = ratio * VIEW_W;
+      let best = points[0], bestDist = Infinity;
+      for (const point of points) {
+        const dist = Math.abs(point.x - x);
+        if (dist < bestDist) { best = point; bestDist = dist; }
+      }
+      return best;
+    };
+
+    const formatChange = (change) => {
+      if (change === null || change === undefined) return null;
+      const pct = (change * 100).toFixed(2);
+      const sign = change > 0 ? '+' : '';
+      const cls = change > 0 ? 'up' : change < 0 ? 'down' : 'flat';
+      return { text: `${sign}${pct}%`, cls };
+    };
+
+    const show = (point) => {
+      guide.setAttribute('x1', point.x);
+      guide.setAttribute('x2', point.x);
+      guide.hidden = false;
+      marker.setAttribute('cx', point.x);
+      marker.setAttribute('cy', point.y);
+      marker.hidden = false;
+
+      const change = formatChange(point.change);
+      tooltip.innerHTML = `<div class="spark-tooltip-date">${point.date}</div>` +
+        `<div class="spark-tooltip-close">${point.close.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>` +
+        (change ? `<div class="spark-tooltip-change ${change.cls}">${change.text}</div>` : '');
+      tooltip.hidden = false;
+
+      const pxRatio = container.clientWidth / VIEW_W;
+      let left = point.x * pxRatio;
+      const minLeft = 4, maxLeft = container.clientWidth - 4;
+      tooltip.style.left = `${Math.min(Math.max(left, minLeft), maxLeft)}px`;
+    };
+
+    const hideAll = () => {
+      guide.hidden = true;
+      marker.hidden = true;
+      tooltip.hidden = true;
+    };
+
+    container.addEventListener('mousemove', (event) => {
+      const rect = svg.getBoundingClientRect();
+      const offsetX = event.clientX - rect.left;
+      show(nearestPoint(offsetX, rect.width));
+    });
+    container.addEventListener('mouseleave', hideAll);
   });
 })();
 </script>
