@@ -9,6 +9,7 @@ from src.market import (
     build_sparkline,
     calculate_context_snapshot,
     calculate_market_snapshot,
+    fetch_close_history,
     fetch_market,
     fetch_market_context,
     validate_close_rows,
@@ -195,3 +196,126 @@ def test_build_sparkline_uses_only_the_most_recent_points():
     assert result is not None
     coords = [part for part in result["line"].replace("M", "L").split("L") if part]
     assert len(coords) == 5
+
+
+# --- fetch_close_history NaN handling (regression for the 2026-08-29 all-core-invalid incident) ---
+#
+# Real incident: yfinance served the most recent trading day's row with
+# Close = NaN for S&P 500 / Nasdaq-100 / Dow / Russell 2000 / DXY / Gold / WTI
+# simultaneously for several hours (Yahoo backend backfill lag, not a real
+# market condition), while `value is None` never matches a pandas NaN, so the
+# NaN flowed straight into `_clean_rows` and failed the *entire* ticker.
+
+def _fake_close_frame(pairs):
+    """Build a minimal object mimicking yf.Ticker(...).history()'s return:
+    anything with a pandas-Series-shaped `frame["Close"]` supporting
+    `.items()` and an `.index` with `.max()` / per-row `.date()`."""
+    import pandas as pd
+
+    dates = pd.to_datetime([date for date, _ in pairs])
+    closes = [close for _, close in pairs]
+    return pd.DataFrame({"Close": closes}, index=dates)
+
+
+def _patch_yfinance(monkeypatch, frame):
+    import yfinance
+
+    class _FakeTicker:
+        def __init__(self, ticker):
+            self.ticker = ticker
+
+        def history(self, period="max", auto_adjust=False, actions=False):
+            return frame
+
+    monkeypatch.setattr(yfinance, "Ticker", _FakeTicker)
+
+
+def test_fetch_close_history_skips_nan_in_middle_row(monkeypatch):
+    _patch_yfinance(monkeypatch, _fake_close_frame([
+        ("2026-08-24", 100.0),
+        ("2026-08-25", float("nan")),
+        ("2026-08-26", 102.0),
+        ("2026-08-27", 103.0),
+    ]))
+
+    result = fetch_close_history("^GSPC")
+
+    assert [row["date"] for row in result] == ["2026-08-24", "2026-08-26", "2026-08-27"]
+    assert [row["close"] for row in result] == [100.0, 102.0, 103.0]
+
+
+def test_fetch_close_history_skips_inf_in_middle_row(monkeypatch):
+    _patch_yfinance(monkeypatch, _fake_close_frame([
+        ("2026-08-24", 100.0),
+        ("2026-08-25", float("inf")),
+        ("2026-08-26", 102.0),
+    ]))
+
+    result = fetch_close_history("^GSPC")
+
+    assert [row["date"] for row in result] == ["2026-08-24", "2026-08-26"]
+
+
+def test_fetch_close_history_fails_when_latest_row_is_nan(monkeypatch):
+    _patch_yfinance(monkeypatch, _fake_close_frame([
+        ("2026-08-24", 100.0),
+        ("2026-08-25", 101.0),
+        ("2026-08-26", float("nan")),
+    ]))
+
+    with pytest.raises(MarketDataError):
+        fetch_close_history("^GSPC")
+
+
+def test_fetch_close_history_does_not_fall_back_to_prior_day_when_latest_is_nan(monkeypatch):
+    """A NaN latest row must fail outright, not silently return the prior
+    valid day's close as if it were current."""
+    _patch_yfinance(monkeypatch, _fake_close_frame([
+        ("2026-08-25", 101.0),
+        ("2026-08-26", float("nan")),
+    ]))
+
+    with pytest.raises(MarketDataError, match="最新交易日"):
+        fetch_close_history("^GSPC")
+
+
+def test_fetch_close_history_leaves_fewer_than_two_rows_after_dropping_nan(monkeypatch):
+    """End-to-end: fetch_close_history drops a non-latest NaN row, leaving
+    only one valid row, and the existing >=2-rows gate in
+    validate_close_rows/calculate_market_snapshot must still catch it."""
+    _patch_yfinance(monkeypatch, _fake_close_frame([
+        ("2026-08-24", float("nan")),
+        ("2026-08-25", 101.0),
+    ]))
+
+    result = fetch_close_history("^GSPC")
+
+    assert result == [{"date": "2026-08-25", "close": 101.0}]
+    validation = validate_close_rows(result, NOW)
+    assert validation["valid"] is False
+    assert "至少需要两个有效" in validation["error"]
+    with pytest.raises(MarketDataError):
+        calculate_market_snapshot(result, NOW)
+
+
+def test_fetch_close_history_normal_data_is_unchanged(monkeypatch):
+    """No NaN present: behavior (dates, closes, order) must be identical to
+    before this change."""
+    _patch_yfinance(monkeypatch, _fake_close_frame([
+        ("2025-12-31", 100.0),
+        ("2026-08-10", 119.0),
+        ("2026-08-11", 120.0),
+    ]))
+
+    result = fetch_close_history("^GSPC")
+
+    assert result == [
+        {"date": "2025-12-31", "close": 100.0},
+        {"date": "2026-08-10", "close": 119.0},
+        {"date": "2026-08-11", "close": 120.0},
+    ]
+
+    snapshot = calculate_market_snapshot(result, NOW)
+    assert snapshot["close"] == 120.0
+    assert snapshot["ytd_return"] == pytest.approx(0.20)
+    assert snapshot["ath"] == 120.0

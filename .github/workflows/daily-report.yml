@@ -60,6 +60,18 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          core_valid=$(python3 -c "
+          import json
+          try:
+              report = json.load(open('data/reports/${{ steps.snapshot.outputs.date }}.json', encoding='utf-8'))
+              print('true' if report.get('core_market_valid') else 'false')
+          except FileNotFoundError:
+              print('false')
+          ")
+          if [ "$core_valid" != "true" ]; then
+            echo "[MARKET GUARD] core market invalid, skip persistent commit"
+            exit 0
+          fi
           git add data/reports state site
           if git diff --cached --quiet; then
             echo "No report or state changes to commit."

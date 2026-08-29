@@ -158,17 +158,30 @@ def fetch_close_history(ticker: str, period: str = "max") -> list[dict[str, Any]
     event) that `validate_close_rows` correctly rejects as a bad *current*
     close but that is irrelevant noise for a same-day snapshot. Fetching a
     bounded window avoids failing today's snapshot over years-old data.
+
+    yfinance/Yahoo also occasionally serves the most-recent trading day's row
+    with Close = NaN for a few hours before their backend backfills it (seen
+    simultaneously across unrelated tickers -- indices, currency index,
+    commodity futures -- while long-settled instruments like VIX/10Y stayed
+    fine, i.e. an upstream data-population lag rather than a real market
+    condition). A NaN/inf row elsewhere in history is dropped as noise; a
+    NaN/inf on the latest row fails outright rather than silently falling
+    back to the prior day's close under today's date.
     """
     import yfinance as yf
 
     frame = yf.Ticker(ticker).history(period=period, auto_adjust=False, actions=False)
     if frame is None or frame.empty or "Close" not in frame:
         raise MarketDataError(f"{ticker} 未返回有效历史 Close。")
+    latest_date = frame.index.max().date().isoformat()
     rows = []
     for index, value in frame["Close"].items():
-        if value is None:
+        row_date = index.date().isoformat()
+        if value is None or not math.isfinite(float(value)):
+            if row_date == latest_date:
+                raise MarketDataError(f"{ticker} 最新交易日 Close 缺失或非有限数值。")
             continue
-        rows.append({"date": index.date().isoformat(), "close": float(value)})
+        rows.append({"date": row_date, "close": float(value)})
     return rows
 
 
