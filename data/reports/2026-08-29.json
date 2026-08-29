@@ -1,71 +1,39 @@
 {
   "report_date": "2026-08-29",
-  "generated_at": "2026-08-29 09:01 CST",
-  "market_date": "2026-08-28",
-  "status": "ok",
-  "status_label": "🟢 数据更新正常",
-  "market_data_valid": true,
-  "core_market_valid": true,
-  "context_market_valid": true,
-  "drawdown_market_valid": true,
+  "generated_at": "2026-08-29 12:15 CST",
+  "market_date": null,
+  "status": "critical",
+  "status_label": "🔴 行情数据校验失败",
+  "market_data_valid": false,
+  "core_market_valid": false,
+  "context_market_valid": false,
+  "drawdown_market_valid": false,
   "market": {
     "sp500": {
-      "market_date": "2026-08-28",
-      "close": 7711.759765625,
-      "daily_return": -0.0024874522107780628,
-      "ytd_return": 0.12654441101818703,
-      "ath": 7798.990234375,
-      "ath_date": "2026-08-13",
-      "drawdown": 0.011184841386968403,
       "name": "S&P 500",
       "ticker": "^GSPC",
-      "valid": true,
-      "sparkline": {
-        "line": "M0.0,36.41 L14.48,30.41 L28.97,31.34 L43.45,39.6 L57.93,39.27 L72.41,39.16 L86.9,37.74 L101.38,48.0 L115.86,36.93 L130.34,32.18 L144.83,22.09 L159.31,9.69 L173.79,10.87 L188.28,12.11 L202.76,7.77 L217.24,8.18 L231.72,10.45 L246.21,8.6 L260.69,4.0 L275.17,5.21 L289.66,8.91 L304.14,13.77 L318.62,12.29 L333.1,18.38 L347.59,15.36 L362.07,17.32 L376.55,15.09 L391.03,15.24 L405.52,10.2 L420.0,11.95",
-        "area": "M0.0,36.41 L14.48,30.41 L28.97,31.34 L43.45,39.6 L57.93,39.27 L72.41,39.16 L86.9,37.74 L101.38,48.0 L115.86,36.93 L130.34,32.18 L144.83,22.09 L159.31,9.69 L173.79,10.87 L188.28,12.11 L202.76,7.77 L217.24,8.18 L231.72,10.45 L246.21,8.6 L260.69,4.0 L275.17,5.21 L289.66,8.91 L304.14,13.77 L318.62,12.29 L333.1,18.38 L347.59,15.36 L362.07,17.32 L376.55,15.09 L391.03,15.24 L405.52,10.2 L420.0,11.95 L420.0,52 L0.0,52 Z"
-      }
+      "valid": false,
+      "error": "Close 必须为大于零的有限数值。"
     },
     "nasdaq100": {
-      "market_date": "2026-08-28",
-      "close": 29433.427734375,
-      "daily_return": -0.0070216550228811014,
-      "ytd_return": 0.1656872492201571,
-      "ath": 30660.599609375,
-      "ath_date": "2026-06-02",
-      "drawdown": 0.04002439256356782,
       "name": "Nasdaq-100",
       "ticker": "^NDX",
-      "valid": true,
-      "sparkline": {
-        "line": "M0.0,26.52 L14.48,18.14 L28.97,20.53 L43.45,28.79 L57.93,33.76 L72.41,35.12 L86.9,39.32 L101.38,48.0 L115.86,34.09 L130.34,31.54 L144.83,23.89 L159.31,9.35 L173.79,13.08 L188.28,14.82 L202.76,9.51 L217.24,11.04 L231.72,12.5 L246.21,9.2 L260.69,4.0 L275.17,4.58 L289.66,5.36 L304.14,13.03 L318.62,14.02 L333.1,17.26 L347.59,15.8 L362.07,20.15 L376.55,17.32 L391.03,17.08 L405.52,10.74 L420.0,13.91",
-        "area": "M0.0,26.52 L14.48,18.14 L28.97,20.53 L43.45,28.79 L57.93,33.76 L72.41,35.12 L86.9,39.32 L101.38,48.0 L115.86,34.09 L130.34,31.54 L144.83,23.89 L159.31,9.35 L173.79,13.08 L188.28,14.82 L202.76,9.51 L217.24,11.04 L231.72,12.5 L246.21,9.2 L260.69,4.0 L275.17,4.58 L289.66,5.36 L304.14,13.03 L318.62,14.02 L333.1,17.26 L347.59,15.8 L362.07,20.15 L376.55,17.32 L391.03,17.08 L405.52,10.74 L420.0,13.91 L420.0,52 L0.0,52 Z"
-      }
+      "valid": false,
+      "error": "Close 必须为大于零的有限数值。"
     },
     "dow": {
-      "market_date": "2026-08-28",
-      "close": 53559.98828125,
-      "daily_return": -0.00017646487907740926,
-      "ytd_return": 0.1143637758872944,
-      "ath": 54349.12109375,
-      "ath_date": "2026-08-05",
-      "drawdown": 0.014519697772826468,
       "name": "Dow Jones",
       "ticker": "^DJI",
-      "valid": true,
-      "sparkline": {
-        "line": "M0.0,44.09 L14.48,37.93 L28.97,38.03 L43.45,46.12 L57.93,42.36 L72.41,38.16 L86.9,29.58 L101.38,48.0 L115.86,38.2 L130.34,33.77 L144.83,22.7 L159.31,8.2 L173.79,4.0 L188.28,11.41 L202.76,8.99 L217.24,9.96 L231.72,12.9 L246.21,13.24 L260.69,12.13 L275.17,13.85 L289.66,18.2 L304.14,20.06 L318.62,18.15 L333.1,29.39 L347.59,21.12 L362.07,18.88 L376.55,16.33 L391.03,18.14 L405.52,16.45 L420.0,16.6",
-        "area": "M0.0,44.09 L14.48,37.93 L28.97,38.03 L43.45,46.12 L57.93,42.36 L72.41,38.16 L86.9,29.58 L101.38,48.0 L115.86,38.2 L130.34,33.77 L144.83,22.7 L159.31,8.2 L173.79,4.0 L188.28,11.41 L202.76,8.99 L217.24,9.96 L231.72,12.9 L246.21,13.24 L260.69,12.13 L275.17,13.85 L289.66,18.2 L304.14,20.06 L318.62,18.15 L333.1,29.39 L347.59,21.12 L362.07,18.88 L376.55,16.33 L391.03,18.14 L405.52,16.45 L420.0,16.6 L420.0,52 L0.0,52 Z"
-      }
+      "valid": false,
+      "error": "Close 必须为大于零的有限数值。"
     }
   },
   "market_context": {
     "russell2000": {
-      "market_date": "2026-08-28",
-      "close": 2972.371826171875,
-      "daily_return": -0.013922868851907966,
       "name": "Russell 2000",
       "ticker": "^RUT",
-      "valid": true
+      "valid": false,
+      "error": "Close 必须为大于零的有限数值。"
     },
     "vix": {
       "market_date": "2026-08-28",
@@ -76,12 +44,10 @@
       "valid": true
     },
     "dxy": {
-      "market_date": "2026-08-28",
-      "close": 99.677001953125,
-      "daily_return": 0.005213778458271534,
       "name": "美元指数",
       "ticker": "DX-Y.NYB",
-      "valid": true
+      "valid": false,
+      "error": "Close 必须为大于零的有限数值。"
     },
     "us10y": {
       "market_date": "2026-08-28",
@@ -92,185 +58,68 @@
       "valid": true
     },
     "gold": {
-      "market_date": "2026-08-28",
-      "close": 4504.10009765625,
-      "daily_return": -0.022908235499487062,
       "name": "黄金 (COMEX)",
       "ticker": "GC=F",
-      "valid": true
+      "valid": false,
+      "error": "Close 必须为大于零的有限数值。"
     },
     "wti": {
-      "market_date": "2026-08-28",
-      "close": 83.44000244140625,
-      "daily_return": -0.0010774133749051895,
       "name": "原油 (WTI)",
       "ticker": "CL=F",
-      "valid": true
+      "valid": false,
+      "error": "Close 必须为大于零的有限数值。"
     }
   },
   "market_signals": {
-    "tech_relative": -0.004534202812103039,
-    "small_cap_relative": -0.011435416641129903,
+    "tech_relative": null,
+    "small_cap_relative": null,
     "vix_daily_return": -0.005513433662586498,
-    "dxy_daily_return": 0.005213778458271534,
+    "dxy_daily_return": null,
     "us10y_bp_change": 4.8000335693359375,
-    "signals": [
-      {
-        "key": "small_cap_relative",
-        "value": -0.011435416641129903,
-        "level": "strong",
-        "message": "Russell 2000 比 S&P 500 落后 1.14 个百分点，小盘相对落后"
-      },
-      {
-        "key": "dxy_daily_return",
-        "value": 0.005213778458271534,
-        "level": "significant",
-        "message": "美元明显走强"
-      }
-    ]
+    "signals": []
   },
   "market_breadth": {
-    "market_date": "2026-08-28",
+    "market_date": null,
     "stocks": {
-      "market_date": "2026-08-28",
-      "constituent_date": "2026-08-20",
-      "total_constituents": 505,
-      "valid_count": 503,
-      "invalid_count": 2,
-      "advancers": 229,
-      "decliners": 273,
-      "unchanged": 1,
-      "advance_ratio": 0.4552683896620278,
-      "decline_ratio": 0.5427435387673957,
-      "unchanged_ratio": 0.0019880715705765406,
-      "coverage_ratio": 0.996039603960396,
-      "status": "ok"
+      "market_date": null,
+      "constituent_date": null,
+      "total_constituents": 0,
+      "valid_count": 0,
+      "invalid_count": 0,
+      "advancers": 0,
+      "decliners": 0,
+      "unchanged": 0,
+      "advance_ratio": null,
+      "decline_ratio": null,
+      "unchanged_ratio": null,
+      "coverage_ratio": 0.0,
+      "status": "invalid"
     },
     "sectors": {
-      "market_date": "2026-08-28",
-      "items": [
-        {
-          "key": "communication_services",
-          "name": "通信服务",
-          "ticker": "XLC",
-          "valid": true,
-          "daily_return": 0.014181798310069604,
-          "direction": "up",
-          "bar_strength": 0.4727266103356535
-        },
-        {
-          "key": "consumer_discretionary",
-          "name": "非必需消费",
-          "ticker": "XLY",
-          "valid": true,
-          "daily_return": 0.011477406477203411,
-          "direction": "up",
-          "bar_strength": 0.3825802159067804
-        },
-        {
-          "key": "energy",
-          "name": "能源",
-          "ticker": "XLE",
-          "valid": true,
-          "daily_return": 0.006261027194032653,
-          "direction": "up",
-          "bar_strength": 0.20870090646775513
-        },
-        {
-          "key": "consumer_staples",
-          "name": "必需消费",
-          "ticker": "XLP",
-          "valid": true,
-          "daily_return": 0.004348790658493584,
-          "direction": "up",
-          "bar_strength": 0.1449596886164528
-        },
-        {
-          "key": "financials",
-          "name": "金融",
-          "ticker": "XLF",
-          "valid": true,
-          "daily_return": 0.003800922632101411,
-          "direction": "up",
-          "bar_strength": 0.12669742107004706
-        },
-        {
-          "key": "materials",
-          "name": "材料",
-          "ticker": "XLB",
-          "valid": true,
-          "daily_return": -0.0009393056075620576,
-          "direction": "down",
-          "bar_strength": 0.03131018691873526
-        },
-        {
-          "key": "health_care",
-          "name": "医疗保健",
-          "ticker": "XLV",
-          "valid": true,
-          "daily_return": -0.0024478270454785234,
-          "direction": "down",
-          "bar_strength": 0.08159423484928412
-        },
-        {
-          "key": "real_estate",
-          "name": "房地产",
-          "ticker": "XLRE",
-          "valid": true,
-          "daily_return": -0.004030459153398613,
-          "direction": "down",
-          "bar_strength": 0.13434863844662046
-        },
-        {
-          "key": "industrials",
-          "name": "工业",
-          "ticker": "XLI",
-          "valid": true,
-          "daily_return": -0.009284136654230668,
-          "direction": "down",
-          "bar_strength": 0.30947122180768893
-        },
-        {
-          "key": "utilities",
-          "name": "公用事业",
-          "ticker": "XLU",
-          "valid": true,
-          "daily_return": -0.010421509026379394,
-          "direction": "down",
-          "bar_strength": 0.3473836342126465
-        },
-        {
-          "key": "technology",
-          "name": "科技",
-          "ticker": "XLK",
-          "valid": true,
-          "daily_return": -0.015481672018960002,
-          "direction": "down",
-          "bar_strength": 0.5160557339653334
-        }
-      ],
-      "valid_count": 11,
-      "advancers": 5,
-      "decliners": 6,
+      "market_date": null,
+      "items": [],
+      "valid_count": 0,
+      "advancers": 0,
+      "decliners": 0,
       "unchanged": 0,
-      "advance_ratio": 0.45454545454545453
+      "advance_ratio": null
     },
     "health": {
-      "valid": true,
-      "score": 0.4549792156153985,
-      "level": "mixed",
-      "label": "市场分化",
+      "valid": false,
+      "score": null,
+      "level": "unavailable",
+      "label": "数据不足",
       "divergence": null,
-      "summary": "上涨与下跌分布较为均衡，市场内部存在明显分化。"
+      "summary": "市场宽度数据暂不可用。"
     }
   },
   "market_sentiment": {
     "vix_score": 77.8,
-    "breadth_score": 45.5,
-    "momentum_score": 67.7,
-    "risk_appetite_score": 0.0,
-    "market_sentiment_score": 54.4,
-    "market_sentiment_label": "中性"
+    "breadth_score": null,
+    "momentum_score": null,
+    "risk_appetite_score": null,
+    "market_sentiment_score": null,
+    "market_sentiment_label": null
   },
   "drawdown": {
     "sp500": {
@@ -398,8 +247,8 @@
   },
   "portfolio_action": "hold",
   "market_summary": {
-    "market": "8月28日，美股主要指数收低，纳斯达克100跌0.70%、标普500跌0.25%；市场内部呈分化状态，科技板块跌1.55%，通信服务与非必需消费上涨，小盘股相对标普500落后1.14个百分点。",
-    "drivers": "市场同时关注Lambda获得10亿美元债务融资采购英伟达AI芯片并出租给微软，以及美元明显走强。",
+    "market": "标普500、纳斯达克100、道琼斯和Russell 2000的收盘数据无效，无法判断当日指数表现；VIX为14.43，10年期美债收益率为4.72%，较前日上升4.8个基点。",
+    "drivers": "市场同时关注Lambda通过私募债务采购英伟达AI芯片并租赁给微软，以及特朗普宣布由美国控制委内瑞拉石油的协议；市场宽度数据暂不可用。",
     "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
     "degraded": false
   },
@@ -408,23 +257,46 @@
       "rank": 1,
       "candidate_id": "1bdef960944d20b7",
       "category": "AI / 资本开支",
-      "title_zh": "Lambda获10亿美元债务融资采购英伟达芯片并租赁给微软",
-      "summary_zh": "云计算服务商Lambda获得10亿美元私募债务融资，用于采购英伟达AI芯片并出租给微软。该融资直接对应AI算力扩张，体现高成本芯片采购对数据中心融资需求的拉动。",
-      "focus": "Lambda的芯片采购与部署节奏，以及微软对租赁AI算力的后续需求。",
+      "title_zh": "Lambda通过10亿美元私募债务购买英伟达芯片并租给微软",
+      "summary_zh": "AI云服务商Lambda筹集10亿美元私募债务，用于购买英伟达AI芯片并租赁给微软。该交易显示AI算力扩张正通过债务融资支持芯片采购与云基础设施建设。",
+      "focus": "Lambda债务融资规模、微软算力需求与英伟达芯片采购",
       "tags": [
         "AI算力",
-        "英伟达",
+        "英伟达芯片",
         "微软",
-        "数据中心融资"
+        "债务融资"
       ],
-      "investment_relevance_score": 78,
+      "investment_relevance_score": 83,
       "source": "TechCrunch",
       "url": "https://techcrunch.com/2026/08/28/neocloud-lambda-secures-1b-in-debt-to-buy-more-chips/",
       "published_at": "2026-08-28T20:24:11+00:00",
       "original_title": "Neocloud Lambda secures $1B in debt to buy more chips",
-      "selection_reason": "市场影响：10亿美元债务将直接用于采购英伟达AI芯片并向微软出租，涉及AI算力供给、芯片需求和数据中心融资。",
-      "event_summary": "Lambda secured $1 billion in debt to buy Nvidia AI chips for leasing to Microsoft.",
+      "selection_reason": "大型科技：微软获得Lambda芯片租赁供给，10亿美元债务直接支持英伟达芯片采购，涉及AI基础设施融资与算力扩张。",
+      "event_summary": "Lambda raised $1B in private debt to buy Nvidia AI chips for leasing to Microsoft.",
       "topic_group": "AI_CHIPS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 2,
+      "candidate_id": "b7867d1cc526d36b",
+      "category": "地缘政治",
+      "title_zh": "特朗普宣布美国控制委内瑞拉650亿桶石油的协议",
+      "summary_zh": "特朗普宣布一项由美国控制委内瑞拉650亿桶石油的协议。委内瑞拉临时总统称，该协议将帮助该国经济复苏。",
+      "focus": "协议执行安排与委内瑞拉石油供应变化",
+      "tags": [
+        "委内瑞拉石油",
+        "美国政策",
+        "能源"
+      ],
+      "investment_relevance_score": 82,
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/cx2zlwe7qj1o?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-29T02:42:27+00:00",
+      "original_title": "Trump hails 'historic' deal for US to control 65bn barrels of Venezuela's oil",
+      "selection_reason": "市场影响：美国对大规模委内瑞拉石油资源控制的已宣布协议，直接涉及美国能源政策与全球石油供应安排。",
+      "event_summary": "Trump announced a deal for US control of 65 billion barrels of Venezuelan oil.",
+      "topic_group": "ENERGY_COMMODITIES",
       "event_category": "other",
       "source_channel": null
     }
@@ -435,5 +307,14 @@
     "fallback_used": false,
     "reason": null
   },
-  "warnings": []
+  "warnings": [
+    "S&P 500 行情获取或校验失败：Close 必须为大于零的有限数值。",
+    "Nasdaq-100 行情获取或校验失败：Close 必须为大于零的有限数值。",
+    "Dow Jones 行情获取或校验失败：Close 必须为大于零的有限数值。",
+    "Russell 2000 行情获取或校验失败：Close 必须为大于零的有限数值。",
+    "美元指数 行情获取或校验失败：Close 必须为大于零的有限数值。",
+    "黄金 (COMEX) 行情获取或校验失败：Close 必须为大于零的有限数值。",
+    "原油 (WTI) 行情获取或校验失败：Close 必须为大于零的有限数值。",
+    "市场宽度数据暂不可用：S&P 500 缺少有效交易日"
+  ]
 }
