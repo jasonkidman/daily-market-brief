@@ -95,12 +95,16 @@ def calculate_context_snapshot(rows: Iterable[dict[str, Any]], now: datetime,
 
 
 def build_sparkline(history: Iterable[dict[str, Any]], points: int = 30,
-                     width: int = 420, height: int = 52) -> dict[str, str] | None:
+                     width: int = 420, height: int = 52) -> dict[str, Any] | None:
     """Build SVG path `d` strings for a sparkline from real historical closes.
 
     Uses the same row-cleaning rules as the rest of the market pipeline (sorted,
     de-duplicated, validated closes) so the sparkline never plots fabricated data.
     Returns None when fewer than 2 usable points are available.
+
+    Also returns a `points` list (one entry per plotted trading day, with its
+    x/y plot position, date, close, and day-over-day return) so callers can
+    drive hover interactions without re-deriving chart geometry client-side.
     """
     try:
         cleaned = _clean_rows(history)
@@ -129,7 +133,16 @@ def build_sparkline(history: Iterable[dict[str, Any]], points: int = 30,
     coords = [(_x(i), _y(close)) for i, close in enumerate(closes)]
     line = " ".join(f"{'M' if i == 0 else 'L'}{x},{y}" for i, (x, y) in enumerate(coords))
     area = f"{line} L{coords[-1][0]},{height} L{coords[0][0]},{height} Z"
-    return {"line": line, "area": area}
+    plotted_points = []
+    for i, (item, (x, y)) in enumerate(zip(recent, coords)):
+        change = (item["close"] / recent[i - 1]["close"] - 1) if i > 0 else None
+        plotted_points.append({
+            "x": x, "y": y,
+            "date": item["date"].isoformat(),
+            "close": round(item["close"], 4),
+            "change": round(change, 6) if change is not None else None,
+        })
+    return {"line": line, "area": area, "points": plotted_points}
 
 
 def fetch_close_history(ticker: str, period: str = "max") -> list[dict[str, Any]]:
