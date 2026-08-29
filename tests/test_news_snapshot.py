@@ -73,7 +73,7 @@ def test_replay_restores_same_stage_b_candidates_without_rss_or_stage_a(tmp_path
         calls["market_context"] = market_context
         return [], None
 
-    monkeypatch.setattr(main, "select_news", fake_select)
+    monkeypatch.setattr(main, "select_news_two_pass", fake_select)
 
     result = main.replay_stage_b_snapshot(path, api_key="test-key")
 
@@ -99,7 +99,7 @@ def test_snapshot_replay_preserves_old_report_schema(tmp_path, monkeypatch):
     report_path.write_text(json.dumps(report), encoding="utf-8")
     path = write_stage_b_snapshot(tmp_path, sample_snapshot())
 
-    monkeypatch.setattr(main, "select_news", lambda *args, **kwargs: ([], None))
+    monkeypatch.setattr(main, "select_news_two_pass", lambda *args, **kwargs: ([], None))
     main.replay_stage_b_snapshot(path, api_key="test-key")
 
     assert json.loads(report_path.read_text(encoding="utf-8")) == report
@@ -142,7 +142,7 @@ def test_production_pipeline_writes_snapshot_before_stage_b(tmp_path, monkeypatc
         assert load_stage_b_snapshot(path)["stage_b"]["candidates"] == candidates
         return [], None
 
-    monkeypatch.setattr(main, "select_news", fake_select)
+    monkeypatch.setattr(main, "select_news_two_pass", fake_select)
     main.generate_daily_report(base_dir=tmp_path, report_date="2026-08-12")
 
     snapshot = load_stage_b_snapshot(tmp_path / "data" / "news_snapshots" / "2026-08-12.json")

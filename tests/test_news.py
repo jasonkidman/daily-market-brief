@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 import os
+import threading
 import time
 from types import SimpleNamespace
 from zoneinfo import ZoneInfo
@@ -8,7 +9,7 @@ from zoneinfo import ZoneInfo
 import pytest
 import yaml
 
-from src.deepseek_client import NewsSelectionError, select_news, validate_selection
+from src.deepseek_client import NewsSelectionError, select_news, select_news_two_pass, validate_selection
 import src.deepseek_client as deepseek_client
 from src.news_dedupe import dedupe_candidates
 from src.news_events import build_event_representatives, cluster_news_events, event_selection_candidates
@@ -1295,3 +1296,231 @@ def test_stage_b_prompt_covers_recall_priority_scenarios_should_filter():
         "普通产品小更新、一般性营销活动、小型合作、人物花边等低重要度信息即使提到这些公司也必须排除",
     ):
         assert phrase in SYSTEM_PROMPT
+
+
+# --- Stage B two-pass sampling + borderline review ------------------------------------
+
+def _alternating_model(*, first_response, second_response):
+    """Return a call_model whose response depends only on which of the two worker
+    threads calls it (the first distinct thread to call gets `first_response`, the
+    second distinct thread gets `second_response`), not on call order across threads.
+    This lets tests give sample_A and sample_B different LLM outputs without depending
+    on which one select_news_two_pass happens to label 'A' vs 'B'.
+    """
+    lock = threading.Lock()
+    thread_roles: dict[int, str] = {}
+
+    def model(system_prompt, user_payload, api_key):
+        ident = threading.get_ident()
+        with lock:
+            if ident not in thread_roles:
+                thread_roles[ident] = "first" if not thread_roles else "second"
+            role = thread_roles[ident]
+        return first_response if role == "first" else second_response
+
+    return model
+
+
+def test_stage_b_two_pass_intersection_is_kept_without_review():
+    pool = stage_b_pool(["0", "1"])
+    resp = json.dumps(
+        {"selected": [stage_b_item("0", 1, 92), stage_b_item("1", 2, 85)], "reserve": []},
+        ensure_ascii=False,
+    )
+
+    def model(system_prompt, user_payload, api_key):
+        return resp
+
+    def review_model(system_prompt, user_payload, api_key):
+        raise AssertionError("borderline review must not run when there is no borderline candidate")
+
+    observability = {}
+    selected, warning = select_news_two_pass(
+        pool, "key", call_model=model, review_call_model=review_model,
+        sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert warning is None
+    assert sorted(item["candidate_id"] for item in selected) == ["0", "1"]
+    assert observability["stage_b_intersection_count"] == 2
+    assert observability["stage_b_borderline_count"] == 0
+    assert observability["stage_b_review_keep_count"] == 0
+    assert observability["two_pass_degraded"] is False
+
+
+def test_stage_b_two_pass_borderline_goes_to_review():
+    pool = stage_b_pool(["0", "1"])
+    resp_a = json.dumps({"selected": [stage_b_item("0", 1, 92)], "reserve": []}, ensure_ascii=False)
+    resp_b = json.dumps(
+        {"selected": [stage_b_item("0", 1, 92), stage_b_item("1", 2, 80)], "reserve": []},
+        ensure_ascii=False,
+    )
+    model = _alternating_model(first_response=resp_a, second_response=resp_b)
+    review_calls = []
+
+    def review_model(system_prompt, user_payload, api_key):
+        review_calls.append(json.loads(user_payload))
+        payload = json.loads(user_payload)
+        reviews = [{"candidate_id": c["candidate_id"], "keep": True, "reason": "确认新事实"}
+                   for c in payload["candidates"]]
+        return json.dumps({"reviews": reviews}, ensure_ascii=False)
+
+    observability = {}
+    selected, warning = select_news_two_pass(
+        pool, "key", call_model=model, review_call_model=review_model,
+        sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert warning is None
+    assert sorted(item["candidate_id"] for item in selected) == ["0", "1"]
+    assert len(review_calls) == 1
+    assert observability["stage_b_borderline_count"] == 1
+    assert observability["stage_b_review_keep_count"] == 1
+
+
+def test_stage_b_two_pass_review_can_reject_borderline():
+    pool = stage_b_pool(["0", "1"])
+    resp_a = json.dumps({"selected": [stage_b_item("0", 1, 92)], "reserve": []}, ensure_ascii=False)
+    resp_b = json.dumps(
+        {"selected": [stage_b_item("0", 1, 92), stage_b_item("1", 2, 80)], "reserve": []},
+        ensure_ascii=False,
+    )
+    model = _alternating_model(first_response=resp_a, second_response=resp_b)
+
+    def review_model(system_prompt, user_payload, api_key):
+        payload = json.loads(user_payload)
+        reviews = [{"candidate_id": c["candidate_id"], "keep": False, "reason": "缺乏新事实"}
+                   for c in payload["candidates"]]
+        return json.dumps({"reviews": reviews}, ensure_ascii=False)
+
+    observability = {}
+    selected, warning = select_news_two_pass(
+        pool, "key", call_model=model, review_call_model=review_model,
+        sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert warning is None
+    assert [item["candidate_id"] for item in selected] == ["0"]
+    assert observability["stage_b_review_keep_count"] == 0
+
+
+def test_stage_b_two_pass_review_batch_is_single_call():
+    pool = stage_b_pool([str(i) for i in range(5)])
+    resp_a = json.dumps({"selected": [stage_b_item("0", 1, 92)], "reserve": []}, ensure_ascii=False)
+    resp_b = json.dumps(
+        {"selected": [stage_b_item(str(i), i + 1, 90 - i) for i in range(5)], "reserve": []},
+        ensure_ascii=False,
+    )
+    model = _alternating_model(first_response=resp_a, second_response=resp_b)
+    review_calls = []
+
+    def review_model(system_prompt, user_payload, api_key):
+        review_calls.append(json.loads(user_payload))
+        payload = json.loads(user_payload)
+        reviews = [{"candidate_id": c["candidate_id"], "keep": True, "reason": "ok"}
+                   for c in payload["candidates"]]
+        return json.dumps({"reviews": reviews}, ensure_ascii=False)
+
+    observability = {}
+    selected, warning = select_news_two_pass(
+        pool, "key", call_model=model, review_call_model=review_model,
+        sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert warning is None
+    assert len(review_calls) == 1
+    assert len(review_calls[0]["candidates"]) == 4
+    assert observability["stage_b_borderline_count"] == 4
+    assert observability["stage_b_review_keep_count"] == 4
+    assert len(selected) == 5
+
+
+def test_stage_b_two_pass_sample_b_timeout_falls_back_to_sample_a():
+    pool = stage_b_pool(["0"])
+    lock = threading.Lock()
+    thread_roles: dict[int, str] = {}
+
+    def model(system_prompt, user_payload, api_key):
+        ident = threading.get_ident()
+        with lock:
+            if ident not in thread_roles:
+                thread_roles[ident] = "ok" if not thread_roles else "fail"
+            role = thread_roles[ident]
+        if role == "fail":
+            raise TimeoutError("simulated sample timeout")
+        return json.dumps({"selected": [stage_b_item("0", 1, 92)], "reserve": []}, ensure_ascii=False)
+
+    def review_model(system_prompt, user_payload, api_key):
+        raise AssertionError("review must not run when one sample fails and there is no borderline set")
+
+    observability = {}
+    selected, warning = select_news_two_pass(
+        pool, "key", call_model=model, review_call_model=review_model,
+        sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert warning is None
+    assert [item["candidate_id"] for item in selected] == ["0"]
+    assert observability["two_pass_degraded"] in ("sample_a_failed", "sample_b_failed")
+
+
+def test_stage_b_two_pass_review_failure_falls_back_to_intersection_only():
+    pool = stage_b_pool(["0", "1"])
+    resp_a = json.dumps({"selected": [stage_b_item("0", 1, 92)], "reserve": []}, ensure_ascii=False)
+    resp_b = json.dumps(
+        {"selected": [stage_b_item("0", 1, 92), stage_b_item("1", 2, 80)], "reserve": []},
+        ensure_ascii=False,
+    )
+    model = _alternating_model(first_response=resp_a, second_response=resp_b)
+
+    def review_model(system_prompt, user_payload, api_key):
+        raise TimeoutError("simulated review timeout")
+
+    observability = {}
+    selected, warning = select_news_two_pass(
+        pool, "key", call_model=model, review_call_model=review_model,
+        sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert warning is None
+    assert [item["candidate_id"] for item in selected] == ["0"]
+    assert observability["two_pass_degraded"] == "borderline_review_failed"
+
+
+def test_stage_b_two_pass_duplicate_recent_event_can_be_rejected_in_review():
+    pool = stage_b_pool(["0", "1"])
+    pool[1]["title"] = "Anthropic wins Pentagon supply-chain case"
+    recent = [{"event_summary": "Anthropic wins Pentagon supply-chain case"}]
+    resp_a = json.dumps({"selected": [stage_b_item("0", 1, 92)], "reserve": []}, ensure_ascii=False)
+    resp_b = json.dumps(
+        {"selected": [stage_b_item("0", 1, 92), stage_b_item("1", 2, 80)], "reserve": []},
+        ensure_ascii=False,
+    )
+    model = _alternating_model(first_response=resp_a, second_response=resp_b)
+    review_calls = []
+
+    def review_model(system_prompt, user_payload, api_key):
+        review_calls.append(user_payload)
+        payload = json.loads(user_payload)
+        recent_summaries = {item["event_summary"] for item in payload["recent_7_days_events"]}
+        reviews = []
+        for c in payload["candidates"]:
+            is_duplicate = c["event_summary"] in recent_summaries
+            reviews.append({
+                "candidate_id": c["candidate_id"],
+                "keep": not is_duplicate,
+                "reason": "与最近7天报道重复" if is_duplicate else "新事实",
+            })
+        return json.dumps({"reviews": reviews}, ensure_ascii=False)
+
+    observability = {}
+    selected, warning = select_news_two_pass(
+        pool, "key", recent_selected=recent, call_model=model, review_call_model=review_model,
+        sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert warning is None
+    assert [item["candidate_id"] for item in selected] == ["0"]
+    assert len(review_calls) == 1
+    assert observability["stage_b_borderline_count"] == 1
+    assert observability["stage_b_review_keep_count"] == 0

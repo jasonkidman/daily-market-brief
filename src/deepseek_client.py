@@ -5,12 +5,13 @@ from __future__ import annotations
 import json
 import inspect
 import time
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from typing import Any, Callable, Optional
 
 import httpx
 
-from .news_prompt import SYSTEM_PROMPT
+from .news_prompt import SYSTEM_PROMPT, BORDERLINE_REVIEW_PROMPT
 
 
 ALLOWED_CATEGORIES = {
@@ -44,7 +45,7 @@ DEEPSEEK_PRICE_CNY_PER_MILLION = {
     "deepseek-v4-flash": {"cache_hit": 0.02, "cache_miss": 1.0, "completion": 2.0},
     "deepseek-v4-pro": {"cache_hit": 0.025, "cache_miss": 3.0, "completion": 6.0},
 }
-OBSERVED_STAGES = ("Stage A", "Stage B", "Layer 2")
+OBSERVED_STAGES = ("Stage A", "Stage B", "Stage B (sample A)", "Stage B (sample B)", "Stage B Review", "Layer 2")
 
 
 class NewsSelectionError(ValueError):
@@ -337,9 +338,26 @@ def _validate_selection_items(payload: Any, candidates: list[dict]) -> dict[str,
             for field in normalized_fields:
                 issues.append({"candidate_id": candidate_id, "field": field, "action": "normalized"})
     validated.sort(key=lambda item: (-item["investment_relevance_score"], item["rank"]))
-    batch_validated = []
+    validated, cap_issues = _apply_topic_cap(validated)
+    issues.extend(cap_issues)
+    for rank, item in enumerate(validated, start=1):
+        item["rank"] = rank
+    return {
+        "raw_count": len(news),
+        "validated": validated,
+        "issues": issues,
+        "normalized_count": normalized_count,
+    }
+
+
+def _apply_topic_cap(validated_items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """Drop items beyond the per-topic_group cap (>4), unless the item scores >=85 and
+    its selection_reason explicitly claims the '主题上限例外'. Order-sensitive: call with
+    items already sorted by descending priority so the cap keeps the strongest ones."""
+    kept = []
+    issues = []
     topic_counts: dict[str, int] = {}
-    for item in validated:
+    for item in validated_items:
         topic_group = item["topic_group"]
         if topic_group:
             topic_counts[topic_group] = topic_counts.get(topic_group, 0) + 1
@@ -354,16 +372,8 @@ def _validate_selection_items(payload: Any, candidates: list[dict]) -> dict[str,
                 })
                 topic_counts[topic_group] -= 1
                 continue
-        batch_validated.append(item)
-    validated = batch_validated
-    for rank, item in enumerate(validated, start=1):
-        item["rank"] = rank
-    return {
-        "raw_count": len(news),
-        "validated": validated,
-        "issues": issues,
-        "normalized_count": normalized_count,
-    }
+        kept.append(item)
+    return kept, issues
 
 
 def _stage_b_contract(payload: Any) -> tuple[list[dict], list[dict]]:
@@ -518,6 +528,7 @@ def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict
                 call_model: Callable = call_deepseek, sleep_fn: Callable = time.sleep,
                 usage_tracker: DeepSeekUsageTracker | None = None,
                 observability: dict | None = None,
+                stage_label: str = "Stage B",
                 ) -> tuple[list[dict], Optional[str]]:
     if not candidates:
         return [], None
@@ -541,7 +552,7 @@ def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict
         try:
             raw = invoke_model(
                 call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=False, reasoning_effort=None,
-                stage="Stage B", attempt=attempt + 1, usage_tracker=usage_tracker,
+                stage=stage_label, attempt=attempt + 1, usage_tracker=usage_tracker,
             )
             _log_stage_b_raw_response(raw)
             contract_selected, contract_reserve = _stage_b_contract(raw)
@@ -588,7 +599,7 @@ def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict
             except Exception as exc:
                 print(f"[NEWS STAGE B] validate_selection: failed | reason={exc}")
                 if usage_tracker is not None:
-                    usage_tracker.record_validation_failure("Stage B", attempt + 1, exc)
+                    usage_tracker.record_validation_failure(stage_label, attempt + 1, exc)
                 raise
             print("[NEWS STAGE B] validate_selection: passed")
             print(f"[NEWS AI] selection succeeded in {time.monotonic() - started:.1f}s")
@@ -602,3 +613,204 @@ def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict
             if attempt < DEEPSEEK_MAX_ATTEMPTS - 1:
                 sleep_fn((5, 10)[attempt])
     return [], f"⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：{_error_kind(last_error)}: {last_error}"
+
+
+def _review_borderline(borderline_items: list[dict], recent_selected: list[dict] | None,
+                       market_context: dict | None, api_key: str, *,
+                       call_model: Callable = call_deepseek,
+                       usage_tracker: DeepSeekUsageTracker | None = None) -> dict[str, tuple[bool, str]]:
+    """One batched LLM call asking keep/drop for every borderline candidate. Does not
+    re-score, re-rank, or regenerate title/summary/selection_reason — those fields are
+    reused unchanged from whichever sample originally selected the candidate.
+
+    Returns {candidate_id: (keep, reason)} only for candidate_ids the model actually
+    answered about with a valid boolean `keep`; a candidate_id outside the input set is
+    ignored (illegal candidate_id), and one the model never mentions is simply absent
+    from the result. Callers must treat "absent" the same as "not kept" — a missing
+    verdict is not evidence the story belongs in the report.
+    """
+    review_candidates = [{
+        "candidate_id": item["candidate_id"],
+        "event_summary": item.get("event_summary", ""),
+        "title_zh": item.get("title_zh"),
+        "summary_zh": item.get("summary_zh"),
+        "topic_group": item.get("topic_group"),
+        "source": item.get("source"),
+        "original_title": item.get("original_title"),
+        "published_at": item.get("published_at"),
+    } for item in borderline_items]
+    valid_ids = {item["candidate_id"] for item in borderline_items}
+    payload = {"candidates": review_candidates, "recent_7_days_events": recent_selected or []}
+    if market_context:
+        payload.update(market_context)
+    user_payload = json.dumps(payload, ensure_ascii=False)
+    raw = invoke_model(
+        call_model, BORDERLINE_REVIEW_PROMPT, user_payload, api_key,
+        thinking_enabled=False, reasoning_effort=None,
+        stage="Stage B Review", attempt=1, usage_tracker=usage_tracker,
+    )
+    data = _parse_payload(raw)
+    reviews = data.get("reviews")
+    if not isinstance(reviews, list):
+        raise NewsSelectionError("reviews 必须是数组。")
+    result: dict[str, tuple[bool, str]] = {}
+    for entry in reviews:
+        if not isinstance(entry, dict):
+            continue
+        candidate_id = entry.get("candidate_id")
+        if candidate_id not in valid_ids:
+            continue
+        keep = entry.get("keep")
+        if not isinstance(keep, bool):
+            continue
+        reason = entry.get("reason") if isinstance(entry.get("reason"), str) else ""
+        result[candidate_id] = (keep, reason)
+    return result
+
+
+def select_news_two_pass(candidates: list[dict], api_key: str, recent_selected: list[dict] = None,
+                         market_context: dict = None,
+                         call_model: Callable = call_deepseek,
+                         review_call_model: Callable | None = None,
+                         sleep_fn: Callable = time.sleep,
+                         usage_tracker: DeepSeekUsageTracker | None = None,
+                         observability: dict | None = None,
+                         ) -> tuple[list[dict], Optional[str]]:
+    """Stage B with two independent samples over the identical input, to reduce how much
+    a single LLM sampling draw can swing the final news set.
+
+    sample_A and sample_B are two ordinary select_news() calls with identical arguments,
+    run concurrently — no prompt or parameter difference between them; any divergence
+    comes only from the model's own sampling variance. Candidates both samples selected
+    (the intersection) are kept outright. Candidates only one sample selected (the
+    symmetric difference, "borderline") go through one batched review call that answers
+    a single keep/drop question per candidate — it does not re-run full Stage B scoring.
+    The merged result is re-sorted and passed through the existing topic_group cap
+    (_apply_topic_cap) before ranks are reassigned, matching how a single-pass selection
+    is finalized.
+
+    Degrades to a single sample (or to one plain select_news call) rather than failing
+    the whole report if a sample, the review call, or the orchestration itself errors —
+    see the observability["two_pass_degraded"] reason recorded in each branch below.
+    """
+    if not candidates:
+        return [], None
+    if review_call_model is None:
+        review_call_model = call_model
+    if observability is not None:
+        observability.update({
+            "stage_b_sample_a_count": 0, "stage_b_sample_b_count": 0,
+            "stage_b_intersection_count": 0, "stage_b_borderline_count": 0,
+            "stage_b_review_keep_count": 0, "two_pass_degraded": False,
+        })
+
+    try:
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            future_a = executor.submit(
+                select_news, candidates, api_key, recent_selected, market_context,
+                call_model, sleep_fn, usage_tracker, None, "Stage B (sample A)",
+            )
+            future_b = executor.submit(
+                select_news, candidates, api_key, recent_selected, market_context,
+                call_model, sleep_fn, usage_tracker, None, "Stage B (sample B)",
+            )
+            sample_a, warning_a = future_a.result()
+            sample_b, warning_b = future_b.result()
+    except Exception as exc:
+        print(f"[NEWS STAGE B TWO-PASS] unexpected orchestration error, falling back to single pass | reason={exc}")
+        if observability is not None:
+            observability["two_pass_degraded"] = "unexpected_error"
+        return select_news(
+            candidates, api_key, recent_selected, market_context,
+            call_model, sleep_fn, usage_tracker, observability,
+        )
+
+    ok_a, ok_b = warning_a is None, warning_b is None
+    print(
+        f"[NEWS STAGE B TWO-PASS] sample_a_ok={ok_a} sample_a_count={len(sample_a)} "
+        f"sample_b_ok={ok_b} sample_b_count={len(sample_b)}"
+    )
+    if observability is not None:
+        observability["stage_b_sample_a_count"] = len(sample_a)
+        observability["stage_b_sample_b_count"] = len(sample_b)
+
+    if not ok_a and not ok_b:
+        print("[NEWS STAGE B TWO-PASS] both samples failed, preserving existing Stage B failure behavior")
+        if observability is not None:
+            observability["two_pass_degraded"] = "both_samples_failed"
+        return [], warning_a or warning_b
+
+    if ok_a and not ok_b:
+        print(f"[NEWS STAGE B TWO-PASS] sample_b failed after its own retries, degrading to sample_a only | reason={warning_b}")
+        if observability is not None:
+            observability["two_pass_degraded"] = "sample_b_failed"
+            observability["raw_count"] = len(sample_a)
+            observability["validated_count"] = len(sample_a)
+            observability["stage_b_final_count"] = len(sample_a)
+        return sample_a, None
+
+    if ok_b and not ok_a:
+        print(f"[NEWS STAGE B TWO-PASS] sample_a failed after its own retries, degrading to sample_b only | reason={warning_a}")
+        if observability is not None:
+            observability["two_pass_degraded"] = "sample_a_failed"
+            observability["raw_count"] = len(sample_b)
+            observability["validated_count"] = len(sample_b)
+            observability["stage_b_final_count"] = len(sample_b)
+        return sample_b, None
+
+    ids_a = {item["candidate_id"] for item in sample_a}
+    ids_b = {item["candidate_id"] for item in sample_b}
+    intersection_ids = ids_a & ids_b
+    borderline_ids = ids_a ^ ids_b
+    intersection_items = [item for item in sample_a if item["candidate_id"] in intersection_ids]
+    borderline_items = (
+        [item for item in sample_a if item["candidate_id"] in borderline_ids]
+        + [item for item in sample_b if item["candidate_id"] in borderline_ids]
+    )
+    print(
+        f"[NEWS STAGE B TWO-PASS] intersection_count={len(intersection_items)} "
+        f"borderline_count={len(borderline_items)} borderline_ids={sorted(borderline_ids)}"
+    )
+    if observability is not None:
+        observability["stage_b_intersection_count"] = len(intersection_items)
+        observability["stage_b_borderline_count"] = len(borderline_items)
+
+    kept_borderline: list[dict] = []
+    if borderline_items:
+        try:
+            review_result = _review_borderline(
+                borderline_items, recent_selected, market_context, api_key,
+                call_model=review_call_model, usage_tracker=usage_tracker,
+            )
+        except Exception as exc:
+            print(f"[NEWS STAGE B TWO-PASS] borderline review failed, dropping all borderline | reason={exc}")
+            review_result = {}
+            if observability is not None:
+                observability["two_pass_degraded"] = "borderline_review_failed"
+        for item in borderline_items:
+            decision = review_result.get(item["candidate_id"])
+            if decision is None:
+                print(f"[NEWS STAGE B TWO-PASS TRACE] candidate_id={item['candidate_id']} | review=missing | action=drop")
+                continue
+            keep, reason = decision
+            print(f"[NEWS STAGE B TWO-PASS TRACE] candidate_id={item['candidate_id']} | review_keep={keep} | reason={reason}")
+            if keep:
+                kept_borderline.append(item)
+
+    if observability is not None:
+        observability["stage_b_review_keep_count"] = len(kept_borderline)
+
+    merged = intersection_items + kept_borderline
+    merged.sort(key=lambda item: (-item["investment_relevance_score"], item["candidate_id"]))
+    merged, cap_issues = _apply_topic_cap(merged)
+    for issue in cap_issues:
+        print(f"[NEWS STAGE B TWO-PASS] dropped on merge by topic cap | candidate_id={issue['candidate_id']}")
+    for rank, item in enumerate(merged, start=1):
+        item["rank"] = rank
+
+    print(f"[NEWS STAGE B TWO-PASS] final_count={len(merged)}")
+    if observability is not None:
+        observability["raw_count"] = len(sample_a) + len(sample_b)
+        observability["validated_count"] = len(merged)
+        observability["stage_b_final_count"] = len(merged)
+    return merged, None

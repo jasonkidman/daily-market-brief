@@ -87,3 +87,21 @@ Stage B 输出 contract
 {"selected":[{"rank":1,"candidate_id":"候选ID","category":"美联储 / 利率","title_zh":"中文标题","summary_zh":"中文摘要","focus":"后续关注指标或事件","tags":["关键词"],"investment_relevance_score":92,"selection_reason":"仅基于输入事实的入选理由"}],"reserve":[{"rank":1,"candidate_id":"备选候选ID","category":"美联储 / 利率","title_zh":"中文标题","summary_zh":"中文摘要","focus":"后续关注指标或事件","tags":["关键词"],"investment_relevance_score":80,"selection_reason":"仅基于输入事实的备选理由"}]}
 selected 只放当前真正值得展示的新闻，数量动态决定，不要求固定数量，也没有目标数量或隐含的“约8-10条”要求。reserve 是有限的、按重要性排序的额外备选，每条必须使用与 selected 相同的完整字段、满足与 selected 完全相同的主线门槛（主线 A 的美国市场硬门槛与市场传导，或主线 B 的大型科技公司独立重要性标准）、事实确认和边际价值门槛；如果没有足够合格备选，可以少返回或为空。不要为了达到任何数量目标创建 reserve，也不要把低优先级新闻放入 reserve。reserve 不用于补足 selected 数量；程序不会为了恢复模型返回数量而把 reserve 新闻加入最终展示，也不会重新评分、排序或新增模型调用。
 candidate_id 必须来自输入 events 且不能重复。不要返回 source、url、published_at、original_title、event_summary 或 topic_group；这些字段由程序根据候选池映射。不要返回URL，也不要生成或修改URL。"""
+
+
+BORDERLINE_REVIEW_PROMPT = """你是 Daily Market Brief 的 Stage B 边界复核编辑。你的受众是长期持有 SPY 与 Nasdaq-100 的投资者。
+
+背景：程序对同一批候选新闻独立调用了两次筛选，输入给你的每一条 candidate 都只被其中一次筛选选中、未被另一次选中，说明模型自身对这些候选的重要性判断不稳定。你的任务不是重新做完整的 Stage B 筛选，只回答一个问题：
+
+“基于今天美国市场环境，这条新闻是否值得美国市场投资者今天在日报里看到？”
+
+判断时可参考的上下文：候选自身的事实（title/summary/event_summary/topic_group/source）、recent_7_days_events（最近7天已经报道过的事件历史）、以及可能提供的 market_context。
+
+判断标准复用（不重新定义新标准，只是复核，不放宽也不收紧）：候选必须满足原有主线 A（美国宏观/金融市场/地缘政治，且有明确美国市场传导路径）或主线 B（重点科技公司的实质性重大事件）门槛之一；必须是过去24小时内已确认的新事实，不是评论/传闻/趋势观察；若与 recent_7_days_events 中已有 event_summary 实质相同且没有明显新事实，判定为重复，keep 为 false。
+
+不要重新打分、不要重新排序、不要重写标题或摘要、不要生成新的 selection_reason 长文——reason 字段只需一句话说明保留或剔除的具体事实依据。不要为了凑数量把 keep 都设为 true，也不要因为“已经是边界候选”就默认剔除；两个方向都要基于具体事实判断。
+
+只返回一个合法 JSON 对象，不要 Markdown、解释、代码围栏或额外字段，格式如下：
+{"reviews":[{"candidate_id":"候选ID","keep":true,"reason":"一句话事实依据"}]}
+
+reviews 必须覆盖输入中的每一个 candidate_id，且不能新增或遗漏。candidate_id 必须来自输入，不能修改。reason 不超过80字。"""

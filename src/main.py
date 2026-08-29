@@ -11,7 +11,7 @@ from zoneinfo import ZoneInfo
 
 import yaml
 
-from .deepseek_client import DeepSeekUsageTracker, select_news, validate_selection
+from .deepseek_client import DeepSeekUsageTracker, select_news, select_news_two_pass, validate_selection
 from .drawdown import summarize_index_state, update_drawdown_state
 from .market import (
     build_sparkline,
@@ -93,10 +93,10 @@ def _write_json(path: Path, payload) -> None:
 
 
 def replay_stage_b_snapshot(snapshot_path: Path, api_key: str) -> list[dict]:
-    """Replay only Stage B from a persisted production input snapshot."""
+    """Replay Stage B (two-pass) from a persisted production input snapshot."""
     snapshot = load_stage_b_snapshot(snapshot_path)
     candidates = snapshot["stage_b"]["candidates"]
-    selected, warning = select_news(
+    selected, warning = select_news_two_pass(
         candidates,
         api_key,
         recent_selected=snapshot["stage_b"].get("recent_7_days_events", []),
@@ -271,8 +271,13 @@ def _log_news_pipeline(rss_raw_count: int, within_24h_count: int, deduplicated_c
         for key in (
             "stage_b_selected_count", "stage_b_reserve_count", "stage_b_selected_valid_count",
             "stage_b_backfilled_count", "stage_b_final_count", "stage_b_target_count",
+            "stage_b_sample_a_count", "stage_b_sample_b_count", "stage_b_intersection_count",
+            "stage_b_borderline_count", "stage_b_review_keep_count",
         ):
-            print(f"{key}: {stage_b_observability.get(key, 0)}")
+            if key in stage_b_observability:
+                print(f"{key}: {stage_b_observability.get(key, 0)}")
+        if "two_pass_degraded" in stage_b_observability:
+            print(f"two_pass_degraded: {stage_b_observability['two_pass_degraded']}")
     print("[EVENT HISTORY]")
     print(f"Recent events checked: {len(recent_events)}")
     print("[TOPIC DISTRIBUTION]")
@@ -477,7 +482,7 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
             }
             # Snapshot persistence is fail-fast: a report without a replayable Stage B input is incomplete.
             write_stage_b_snapshot(base_dir, snapshot)
-            news, ai_warning = select_news(
+            news, ai_warning = select_news_two_pass(
                 selection_candidates, api_key, recent_events, market_context=ai_market_context,
                 usage_tracker=usage_tracker, observability=stage_b_observability,
             )
