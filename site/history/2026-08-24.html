@@ -18,13 +18,13 @@
     <div class="datebox">
       <span class="datebox-icon" aria-hidden="true">▣</span>
       <select class="report-select" aria-label="选择日报日期">
-        <option value="../index.html">今日 · 2026-08-29</option>
+        <option value="../index.html">今日 · 2026-08-30</option>
+        <option value="2026-08-29.html">2026-08-29</option>
         <option value="2026-08-28.html">2026-08-28</option>
         <option value="2026-08-27.html">2026-08-27</option>
         <option value="2026-08-26.html">2026-08-26</option>
         <option value="2026-08-25.html">2026-08-25</option>
         <option value="2026-08-24.html" selected>2026-08-24</option>
-        <option value="2026-08-23.html">2026-08-23</option>
       </select>
       <span class="datebox-caret" aria-hidden="true">⌄</span>
     </div>
@@ -383,6 +383,75 @@
     if (!select.value) return;
     loading.hidden = false;
     window.requestAnimationFrame(() => { window.location.href = select.value; });
+  });
+
+  const VIEW_W = 420, VIEW_H = 52;
+  document.querySelectorAll('.spark[data-points]').forEach((container) => {
+    let points;
+    try {
+      points = JSON.parse(container.dataset.points);
+    } catch (err) {
+      return;
+    }
+    if (!Array.isArray(points) || points.length === 0) return;
+    const svg = container.querySelector('svg');
+    const hit = container.querySelector('.spark-hit');
+    const guide = container.querySelector('.spark-guide');
+    const marker = container.querySelector('.spark-marker');
+    const tooltip = container.querySelector('.spark-tooltip');
+    if (!svg || !hit || !guide || !marker || !tooltip) return;
+
+    const nearestPoint = (offsetX, width) => {
+      const ratio = Math.min(Math.max(offsetX / width, 0), 1);
+      const x = ratio * VIEW_W;
+      let best = points[0], bestDist = Infinity;
+      for (const point of points) {
+        const dist = Math.abs(point.x - x);
+        if (dist < bestDist) { best = point; bestDist = dist; }
+      }
+      return best;
+    };
+
+    const formatChange = (change) => {
+      if (change === null || change === undefined) return null;
+      const pct = (change * 100).toFixed(2);
+      const sign = change > 0 ? '+' : '';
+      const cls = change > 0 ? 'up' : change < 0 ? 'down' : 'flat';
+      return { text: `${sign}${pct}%`, cls };
+    };
+
+    const show = (point) => {
+      guide.setAttribute('x1', point.x);
+      guide.setAttribute('x2', point.x);
+      guide.hidden = false;
+      marker.setAttribute('cx', point.x);
+      marker.setAttribute('cy', point.y);
+      marker.hidden = false;
+
+      const change = formatChange(point.change);
+      tooltip.innerHTML = `<div class="spark-tooltip-date">${point.date}</div>` +
+        `<div class="spark-tooltip-close">${point.close.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>` +
+        (change ? `<div class="spark-tooltip-change ${change.cls}">${change.text}</div>` : '');
+      tooltip.hidden = false;
+
+      const pxRatio = container.clientWidth / VIEW_W;
+      let left = point.x * pxRatio;
+      const minLeft = 4, maxLeft = container.clientWidth - 4;
+      tooltip.style.left = `${Math.min(Math.max(left, minLeft), maxLeft)}px`;
+    };
+
+    const hideAll = () => {
+      guide.hidden = true;
+      marker.hidden = true;
+      tooltip.hidden = true;
+    };
+
+    container.addEventListener('mousemove', (event) => {
+      const rect = svg.getBoundingClientRect();
+      const offsetX = event.clientX - rect.left;
+      show(nearestPoint(offsetX, rect.width));
+    });
+    container.addEventListener('mouseleave', hideAll);
   });
 })();
 </script>
