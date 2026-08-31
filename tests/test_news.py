@@ -658,9 +658,39 @@ def test_news_source_config_keeps_disabled_sources_and_adds_macro_feeds():
     assert {name for name, source in by_name.items() if source.get("enabled", True)} == {
         "BBC News", "BBC Business", "Federal Reserve - Monetary Policy", "TechCrunch",
         "Ars Technica", "The Guardian Business", "SEC Press Releases", "The Verge",
+        "Bloomberg Markets", "Bloomberg Economics", "Bloomberg Technology",
+        "CNBC Top News", "NASA", "NASASpaceflight",
     }
     assert by_name["Federal Reserve - Monetary Policy"]["category_hint"] == "市场 / 宏观"
     assert by_name["SEC Press Releases"]["category_hint"] == "市场 / 宏观"
+
+
+def test_news_source_config_gives_financial_macro_sources_top_priority():
+    """The 2026-08-31 minimal-high-quality-supplement phase adds Bloomberg + CNBC to
+    fix the upstream financial_markets/macro_policy candidate shortage identified in
+    that day's production audit (0-1 accepted candidates from the official Fed/SEC
+    feeds alone). Markets/macro-focused feeds get P0 so they aren't crowded out of the
+    Stage A 50-candidate cap by high-volume general-news sources.
+
+    NASA and NASASpaceflight were promoted from P1 to P0 after a first real-network
+    validation run showed the new P0 Bloomberg+CNBC volume alone (62 raw/deduped
+    candidates) filled the Stage A cap and squeezed both SpaceX-specialist sources
+    out entirely (0 of their real raw candidates survived to Stage B) -- see
+    experiments/news_selection_eval/2026-08-31-phase1-nasa-priority-cap-comparison.md
+    for the controlled same-pool comparison showing the promotion only displaces
+    non-US noise (Chinese/foreign equities, routine diplomacy), not financial/macro
+    candidates. Bloomberg's tech vertical stays P1 since
+    this phase is about validating Bloomberg+CNBC's financial/macro fix and NASA's
+    SpaceX coverage first, not maximizing general tech-candidate volume."""
+    config_path = __import__("pathlib").Path(__file__).parents[1] / "config" / "news_sources.yaml"
+    sources = yaml.safe_load(config_path.read_text(encoding="utf-8"))["sources"]
+    by_name = {source["name"]: source for source in sources}
+
+    for name in ("Bloomberg Markets", "Bloomberg Economics", "CNBC Top News", "NASA", "NASASpaceflight"):
+        assert by_name[name]["priority"] == "P0"
+        assert by_name[name]["enabled"] is True
+    assert by_name["Bloomberg Technology"]["priority"] == "P1"
+    assert by_name["Bloomberg Technology"]["enabled"] is True
 
 
 def test_category_hint_is_preserved_without_forcing_selection():
@@ -1027,7 +1057,7 @@ def test_investment_priority_prompt_has_selection_contract():
         "美国资产定价的重要程度",
         "investment_relevance_score",
         "importance*0.35 + us_relevance*0.30 + novelty*0.20 + persistence*0.15",
-        "不得用50-69分新闻填补数量",
+        "不因为分数不够高（例如50-69分）而额外淘汰或收紧门槛",
         "普通产品更新",
         "普通公司融资",
         "不要返回URL",
@@ -1096,10 +1126,7 @@ def test_stage_b_prompt_has_us_market_hard_gate_and_no_padding_rules():
         "Ordinary Series A/B/C/D financing",
         "AI-related news is not automatically important.",
         "event → market / macro / industry variable → U.S. asset prices or major listed companies",
-        'If this macro/financial-markets/geopolitics story were removed, would the investor materially lose understanding of today\'s U.S. market, macro, or geopolitical environment?',
-        'If this big-tech story were removed, would the investor materially lose understanding of that company\'s business, financial, product, strategic, or regulatory trajectory?',
         "Before returning JSON, ensure selected rank and investment_relevance_score are in non-increasing order; reorder items instead of dropping a qualifying story.",
-        "No story with a score below 70 may be selected.",
         "A local fusion demonstration project",
         "$200M autonomous-driving startup round",
         "UK household energy-price forecast without global spillover",
@@ -1110,6 +1137,8 @@ def test_stage_b_prompt_has_us_market_hard_gate_and_no_padding_rules():
 
     assert "50-69分只能在高质量事件不足时补充" not in SYSTEM_PROMPT
     assert "select approximately 8-10 stories" not in SYSTEM_PROMPT
+    assert "No story with a score below 70 may be selected." not in SYSTEM_PROMPT
+    assert "70分及以上通常是高优先级" not in SYSTEM_PROMPT
 
 
 def test_stage_b_prompt_matches_validated_demo_selection_contract():
@@ -1191,14 +1220,31 @@ def test_stage_b_prompt_has_dual_track_and_big_tech_independent_standard():
         assert phrase in SYSTEM_PROMPT
 
 
-def test_stage_b_prompt_scopes_marginal_value_test_by_track():
+def test_stage_b_prompt_removes_overly_strict_marginal_value_rescreen():
+    """The old blanket marginal-value re-screen ("would removing this story lose the
+    investor's understanding of today's environment?") was over-filtering candidates
+    that already cleared their track's gate -- on a real production snapshot it cut a
+    40-candidate pool down to 2 selected. It must be gone, replaced by an explicit
+    instruction not to re-tighten already-qualifying candidates, especially big tech,
+    AI/semiconductor, SpaceX, and macro-policy news."""
     from src.news_prompt import SYSTEM_PROMPT
 
-    for phrase in (
+    removed_phrases = (
+        "If this macro/financial-markets/geopolitics story were removed, would the investor materially lose "
+        "understanding of today's U.S. market, macro, or geopolitical environment?",
+        "If this big-tech story were removed, would the investor materially lose understanding of that "
+        "company's business, financial, product, strategic, or regulatory trajectory?",
         "必须按主线分别应用测试标准，不得用统一的\"市场环境\"标准覆盖主线 B",
         "如果删除该新闻不会明显损失投资者对该公司业务、财务、产品、战略或监管环境的理解，应删除",
-        "这一测试不要求证明其对美股大盘、利率、汇率或其他宏观变量的影响",
-        "不得借边际价值复筛之名，重新对主线 B 新闻施加主线 A 的美国市场传导硬门槛",
+    )
+    for phrase in removed_phrases:
+        assert phrase not in SYSTEM_PROMPT
+
+    for phrase in (
+        "不再执行统一的边际价值二次复筛",
+        "对当日大盘或指数影响不够直接",
+        "尤其是大型科技公司、AI/半导体、SpaceX 与宏观政策新闻，应当保留而不是优先删除",
+        "边界候选优先保留，不要优先删除",
     ):
         assert phrase in SYSTEM_PROMPT
 
@@ -1539,3 +1585,153 @@ def test_stage_b_two_pass_duplicate_recent_event_can_be_rejected_in_review():
     assert len(review_calls) == 1
     assert observability["stage_b_borderline_count"] == 1
     assert observability["stage_b_review_keep_count"] == 0
+
+
+# --- Recall-priority rework: retain-in-scope, weaken over-aggressive re-screening ------
+#
+# These guard the 2026-08-31 rework that moved Stage B from "high-bar curation" to
+# "retain anything in the user's four watch categories with normal news value, then
+# denoise from user feedback." A real production snapshot (data/news_snapshots/2026-08-28.json,
+# 40 Stage B candidates) selected only 2 stories under the old prompt; see
+# experiments/news_selection_eval/2026-08-31-replay-before.json /
+# 2026-08-31-replay-after.json for the before/after replay this rework is based on.
+
+def test_stage_b_prompt_retains_important_big_tech_news_without_market_proof():
+    """A confirmed, substantive big-tech event (earnings, core AI/chip/cloud business
+    change, major litigation, capex, M&A, leadership change, antitrust) must be
+    retainable under track B without proving same-day index/stock impact."""
+    from src.news_prompt import SYSTEM_PROMPT
+
+    for phrase in (
+        "主线 B（大型科技公司重要动态）",
+        "大型科技公司独立重要性标准（主线 B）",
+        "不需要证明其对美股大盘、利率、汇率或其他宏观变量存在明确影响",
+        "财报或业绩指引",
+        "并购、投资或资产出售",
+        "重大诉讼或和解",
+        "监管调查或反垄断",
+    ):
+        assert phrase in SYSTEM_PROMPT
+    # the old blanket marginal-value re-screen that could still strip a qualifying
+    # big-tech story must be gone
+    assert (
+        "如果删除该新闻不会明显损失投资者对该公司业务、财务、产品、战略或监管环境的理解，应删除"
+        not in SYSTEM_PROMPT
+    )
+
+
+def test_stage_b_prompt_retains_important_spacex_news_as_a_fixed_watch_target():
+    """SpaceX must be a fixed track-B watch target the prompt names explicitly --
+    selection must not depend on the model deciding for itself whether SpaceX counts
+    as a large tech company -- and its specific focus areas must all be listed."""
+    from src.news_prompt import SYSTEM_PROMPT
+
+    assert "SpaceX 固定关注" in SYSTEM_PROMPT
+    assert "不依赖模型自行判断 SpaceX 是否属于大型科技公司" in SYSTEM_PROMPT
+    for focus_area in (
+        "融资与估值",
+        "IPO / 上市相关进展",
+        "Starlink 业务动态",
+        "Starship / Falcon 等重大火箭发射",
+        "NASA、美国政府或军方合同",
+        "卫星与商业航天业务",
+        "重大监管审批",
+        "重大技术突破",
+        "重大事故或任务失败",
+    ):
+        assert focus_area in SYSTEM_PROMPT
+    assert "无需证明其对美股大盘、利率、汇率或其他上市公司存在明确传导" in SYSTEM_PROMPT
+
+
+def test_stage_b_prompt_retains_macro_policy_news_without_same_day_price_proof():
+    """macro_policy / financial_markets candidates only need to be in-scope, factually
+    confirmed, and non-duplicate -- they must not need to additionally prove a concrete,
+    verifiable same-day price move, which is a materially higher bar than 'normal news
+    value'. Only the geopolitics sub-track keeps the strict market-impact gate."""
+    from src.news_prompt import SYSTEM_PROMPT
+
+    assert "主线 A 内部的从严顺序" in SYSTEM_PROMPT
+    assert "只有 geopolitics 子类适用最严格的门槛" in SYSTEM_PROMPT
+    assert (
+        "macro_policy 与 financial_markets 子类，以及不涉及重点科技公司的 high_tech 产业格局事件，"
+        "只需满足关注范围内的事实确认、非重复、具备正常新闻价值即可入选，不需要额外证明其已经产生"
+        "具体、可验证的当日价格影响"
+    ) in SYSTEM_PROMPT
+    assert "不因为分数不够高（例如50-69分）而额外淘汰或收紧门槛" in SYSTEM_PROMPT
+
+
+def test_stage_b_prompt_still_filters_ordinary_geopolitics_news():
+    """Routine diplomacy, ordinary military activity, low-level conflict, and generic
+    international news must remain excluded by default -- the geopolitics bar stays
+    high even though macro/financial-markets and big-tech news are now retained more
+    liberally."""
+    from src.news_prompt import SYSTEM_PROMPT
+
+    assert "重大地缘政治标准（仅适用于主线 A 中的 geopolitics 子类）" in SYSTEM_PROMPT
+    assert "普通外交表态、一般军事动态、低级别冲突、泛国际新闻不得大量收录" in SYSTEM_PROMPT
+    assert "泛地缘政治：一般外交冲突、军事行动、国家间政治对抗、普通制裁或外交表态" in SYSTEM_PROMPT
+    assert "台海、俄乌、中东等事件的常规进展" in SYSTEM_PROMPT
+
+
+def test_stage_b_prompt_retains_severe_geopolitics_news():
+    """Severe, market-relevant geopolitical events (war escalation, direct U.S. military
+    involvement, major sanctions, energy/shipping disruption, Strait of Hormuz-type
+    shipping risk, severe U.S.-China friction, a major Taiwan Strait escalation, major
+    export controls/tech blockade) must remain retainable."""
+    from src.news_prompt import SYSTEM_PROMPT
+
+    for phrase in (
+        "战争明显升级",
+        "美国直接军事介入",
+        "重大制裁",
+        "能源供应或运输中断",
+        "霍尔木兹海峡等重要航运风险",
+        "严重中美摩擦",
+        "台海重大升级",
+        "重大出口管制、科技封锁",
+    ):
+        assert phrase in SYSTEM_PROMPT
+
+
+def test_stage_b_prompt_still_requires_big_tech_news_to_match_one_of_the_11_types():
+    """Weakening the blanket marginal-value re-screen must not open the door to trivial
+    big-tech items (price changes, minor feature launches, routine developer-policy
+    tweaks) that don't map to any of the 11 qualifying event types -- a real replay of
+    data/news_snapshots/2026-08-28.json initially let an Apple TV price hike, a YouTube
+    creator-commission feature, and an Android memory-usage developer guideline through
+    once the old re-screen was removed. The prompt must still name and reject that
+    class of story explicitly."""
+    from src.news_prompt import SYSTEM_PROMPT
+
+    assert "放宽边际价值复筛不等于放宽这条独立重要性标准" in SYSTEM_PROMPT
+    for phrase in (
+        "单纯的订阅或产品价格调整",
+        "创作者/商家变现功能上线",
+        "面向开发者的常规使用规范或指引更新",
+        "常规平台功能开关或规则调整",
+    ):
+        assert phrase in SYSTEM_PROMPT
+    assert "selection_reason 必须明确写出其对应上述 11 类中的哪一类" in SYSTEM_PROMPT
+
+
+def test_stage_b_does_not_truncate_to_a_fixed_count_when_many_candidates_qualify():
+    """Stage B must not force-trim a large, genuinely-qualifying selection down to some
+    implicit target count. Twelve valid items spread across distinct topic_groups (so
+    the per-topic cap of 4 never triggers) must all survive select_news() unchanged."""
+    topic_groups = ["US_MARKET_MACRO", "AI_CHIPS", "MEGA_CAP_TECH"]
+    ids = [str(i) for i in range(12)]
+    pool = [
+        {**candidate(cid, f"Title {cid}", f"https://x/{cid}"), "topic_group": topic_groups[i % 3]}
+        for i, cid in enumerate(ids)
+    ]
+    items = [stage_b_item(cid, rank=i + 1, score=100 - i) for i, cid in enumerate(ids)]
+    resp = json.dumps({"selected": items, "reserve": []}, ensure_ascii=False)
+
+    def model(system_prompt, user_payload, api_key):
+        return resp
+
+    selected, warning = select_news(pool, "key", call_model=model, sleep_fn=lambda _: None)
+
+    assert warning is None
+    assert len(selected) == 12
+    assert sorted(item["candidate_id"] for item in selected) == sorted(ids)

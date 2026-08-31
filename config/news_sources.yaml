@@ -16,6 +16,30 @@ sources:
     priority: "P0"
     category_hint: "市场 / 宏观"
     url: "https://www.federalreserve.gov/feeds/press_monetary.xml"
+  - name: "Bloomberg Markets"
+    enabled: true
+    priority: "P0"
+    url: "https://feeds.bloomberg.com/markets/news.rss"
+  - name: "Bloomberg Economics"
+    enabled: true
+    priority: "P0"
+    url: "https://feeds.bloomberg.com/economics/news.rss"
+  - name: "Bloomberg Technology"
+    enabled: true
+    priority: "P1"
+    url: "https://feeds.bloomberg.com/technology/news.rss"
+  - name: "CNBC Top News"
+    enabled: true
+    priority: "P0"
+    url: "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+  - name: "NASA"
+    enabled: true
+    priority: "P0"
+    url: "https://www.nasa.gov/feed/"
+  - name: "NASASpaceflight"
+    enabled: true
+    priority: "P0"
+    url: "https://www.nasaspaceflight.com/feed/"
   - name: "TechCrunch"
     enabled: true
     priority: "P0"

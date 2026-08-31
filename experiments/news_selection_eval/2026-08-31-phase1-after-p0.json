@@ -1,0 +1,969 @@
+{
+  "run_at": "2026-08-31T13:56:13.384240+08:00",
+  "counts": {
+    "rss_raw": 105,
+    "within_24h": 101,
+    "deduplicated": 100,
+    "stage_a_pre_cap": 100,
+    "stage_a_actual_input": 50,
+    "stage_a_events": 37,
+    "stage_b_input": 37,
+    "stage_b_final": 4
+  },
+  "by_source": {
+    "raw": {
+      "CNBC Top News": 22,
+      "BBC News": 13,
+      "Bloomberg Economics": 11,
+      "Bloomberg Markets": 20,
+      "NASA": 5,
+      "TechCrunch": 6,
+      "Bloomberg Technology": 10,
+      "NASASpaceflight": 1,
+      "BBC Business": 5,
+      "Ars Technica": 3,
+      "The Verge": 7,
+      "The Guardian Business": 2
+    },
+    "within_24h": {
+      "CNBC Top News": 22,
+      "BBC News": 11,
+      "Bloomberg Economics": 10,
+      "Bloomberg Markets": 20,
+      "NASA": 5,
+      "TechCrunch": 6,
+      "Bloomberg Technology": 10,
+      "NASASpaceflight": 1,
+      "BBC Business": 4,
+      "Ars Technica": 3,
+      "The Verge": 7,
+      "The Guardian Business": 2
+    },
+    "deduped": {
+      "CNBC Top News": 22,
+      "BBC News": 11,
+      "Bloomberg Economics": 10,
+      "Bloomberg Markets": 20,
+      "NASA": 5,
+      "TechCrunch": 6,
+      "Bloomberg Technology": 10,
+      "NASASpaceflight": 1,
+      "BBC Business": 3,
+      "Ars Technica": 3,
+      "The Verge": 7,
+      "The Guardian Business": 2
+    },
+    "stage_b_input": {
+      "CNBC Top News": 7,
+      "Bloomberg Economics": 6,
+      "Bloomberg Markets": 5,
+      "TechCrunch": 6,
+      "NASA": 2,
+      "BBC News": 6,
+      "Bloomberg Technology": 1,
+      "NASASpaceflight": 1,
+      "The Verge": 1,
+      "BBC Business": 2
+    }
+  },
+  "stage_a_events": [
+    {
+      "event_id": "event_001",
+      "candidate_ids": [
+        "9d39f6a2231b9312"
+      ],
+      "event_summary": "Jio Platforms received regulatory approval for an IPO.",
+      "topic_group": "MEGA_CAP_TECH",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_002",
+      "candidate_ids": [
+        "c15d2353acda8bd0",
+        "8b175856017d22ef"
+      ],
+      "event_summary": "The US-Canada trade war is affecting both countries and critical metals markets.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_003",
+      "candidate_ids": [
+        "5bbc60b89022ec10",
+        "08e9ab15c626a885",
+        "5dd58665b70140a5"
+      ],
+      "event_summary": "G20 officials are meeting amid disputes over debt, trade, wars and AI.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_004",
+      "candidate_ids": [
+        "158ba8043103485e",
+        "2c087447acb231df",
+        "0aef569b693fc71a",
+        "a19358a3f25bddea",
+        "01da8a1126d37086"
+      ],
+      "event_summary": "Warsh's Jackson Hole speech raised expectations of a Fed rate hike.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_005",
+      "candidate_ids": [
+        "9ba638f4c8fd66eb"
+      ],
+      "event_summary": "Bessent said he expects the Bank of Japan to act on monetary policy.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_006",
+      "candidate_ids": [
+        "96a57f951d8ea6de"
+      ],
+      "event_summary": "Musk said a SpaceX foundry could accelerate gas turbine deployment.",
+      "topic_group": "ENERGY_COMMODITIES",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_007",
+      "candidate_ids": [
+        "3d9f59c719d9a8d0",
+        "db77549ac75262ed",
+        "48e8bbf4a5f7f0b5"
+      ],
+      "event_summary": "NASA launched the Nancy Grace Roman Space Telescope.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_008",
+      "candidate_ids": [
+        "fb129f3fd93d6a58"
+      ],
+      "event_summary": "Longsys seeks up to $801 million in a Hong Kong listing.",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_009",
+      "candidate_ids": [
+        "593938f7cbb8d928"
+      ],
+      "event_summary": "Analysts say Japan's GPIF may raise its domestic bond allocation.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_010",
+      "candidate_ids": [
+        "ca0af5fc7b65eab1"
+      ],
+      "event_summary": "Markets are watching upcoming Broadcom and Palo Alto earnings and US jobs data.",
+      "topic_group": "CORPORATE_EARNINGS",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_011",
+      "candidate_ids": [
+        "5fd16a9b377989f1"
+      ],
+      "event_summary": "Russia said it helped repel an attempted coup in Niger.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_012",
+      "candidate_ids": [
+        "1973de84a293f23d"
+      ],
+      "event_summary": "Retailers reported tariff refunds differently in quarterly earnings.",
+      "topic_group": "CORPORATE_EARNINGS",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_013",
+      "candidate_ids": [
+        "1176abc1c179db04"
+      ],
+      "event_summary": "Google Maps changed Lake Ontario's US label to Lake America.",
+      "topic_group": "MEGA_CAP_TECH",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_014",
+      "candidate_ids": [
+        "0bee83a3826ecbdc",
+        "b02f234897e52497"
+      ],
+      "event_summary": "The US and Iran exchanged strikes after weeks of relative calm.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_015",
+      "candidate_ids": [
+        "d7df30fe5e8573b5"
+      ],
+      "event_summary": "NASA's SLS program has four vehicles in production.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_016",
+      "candidate_ids": [
+        "6bfed2ab471f8cf4"
+      ],
+      "event_summary": "Texas Governor Abbott froze state spending on Flock cameras.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_017",
+      "candidate_ids": [
+        "11b8606a8d3036b1"
+      ],
+      "event_summary": "The US is increasing barriers to foreign-made drones and robots.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_018",
+      "candidate_ids": [
+        "924ebda1d96f2ce8"
+      ],
+      "event_summary": "Financial favoritism among families can cause long-term resentment.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_019",
+      "candidate_ids": [
+        "33e8759221638aae",
+        "04824713cfd10d65"
+      ],
+      "event_summary": "South American producers fear competition from the EU-Mercosur trade deal.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_020",
+      "candidate_ids": [
+        "8c0ca5cb5229b79a"
+      ],
+      "event_summary": "A ferry capsized off northern Cyprus, killing eight people and leaving 18 missing.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_021",
+      "candidate_ids": [
+        "b86c054dcba9fc47"
+      ],
+      "event_summary": "Grindr is pursuing an expansion into AI, healthcare and matchmaking services.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_022",
+      "candidate_ids": [
+        "9f0cacaaf8df77fa"
+      ],
+      "event_summary": "A school uniform swap initiative has expanded to more than 200 schools.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_023",
+      "candidate_ids": [
+        "73c1983bd2721bf1",
+        "8c929fcb1af2f36b",
+        "1e24eb296528e760"
+      ],
+      "event_summary": "NASA completed and activated Deep Space Station 23 at Goldstone.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_024",
+      "candidate_ids": [
+        "4768120bb08d9cc1"
+      ],
+      "event_summary": "Flash flooding in the Grand Canyon left 15 hikers feared missing.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_025",
+      "candidate_ids": [
+        "c03b5fd352fb6fdc"
+      ],
+      "event_summary": "Liux introduced its Big sustainable electric microcar.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_026",
+      "candidate_ids": [
+        "9fba9ea0ae73e7e9"
+      ],
+      "event_summary": "Japanese firms continue hiring foreign workers amid labor shortages and tighter rules.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_027",
+      "candidate_ids": [
+        "c5f6694e7bdbb23b"
+      ],
+      "event_summary": "Heavy rain hindered flood relief efforts in Nepal.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_028",
+      "candidate_ids": [
+        "17edf128f79d9feb"
+      ],
+      "event_summary": "TechCrunch reported on the human cost of robotaxis.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_029",
+      "candidate_ids": [
+        "bd8b5d15269cba9d"
+      ],
+      "event_summary": "Trump threatened to destroy Iran's Kharg Island oil hub.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_030",
+      "candidate_ids": [
+        "94f975fe60b3d278"
+      ],
+      "event_summary": "Caterpillar is applying its mining automation experience to AI deployment.",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_031",
+      "candidate_ids": [
+        "b7b4dbc4205fb787"
+      ],
+      "event_summary": "HDFC Bank shares rose after its CEO said he would not seek reappointment.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_032",
+      "candidate_ids": [
+        "8ff73785fb22a754"
+      ],
+      "event_summary": "South Korea's president appointed a new finance minister in a cabinet reshuffle.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_033",
+      "candidate_ids": [
+        "daf3d567c0452ce7"
+      ],
+      "event_summary": "A shooting at a Swiss rave killed one woman and injured five people.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_034",
+      "candidate_ids": [
+        "6cc66f7c66d04036"
+      ],
+      "event_summary": "France's borrowing costs rose amid debt concerns and political gridlock.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_035",
+      "candidate_ids": [
+        "ff83bc38971dba1e"
+      ],
+      "event_summary": "Chinese coking coal headed for a record monthly gain amid supply disruptions.",
+      "topic_group": "ENERGY_COMMODITIES",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_036",
+      "candidate_ids": [
+        "426a7ca0eefbf975"
+      ],
+      "event_summary": "Japan's factory output rose for a fourth straight month.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other"
+    },
+    {
+      "event_id": "event_037",
+      "candidate_ids": [
+        "2583153698ff3aa5"
+      ],
+      "event_summary": "A Zambian opposition leader was charged with treason.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other"
+    }
+  ],
+  "stage_b_input_candidates": [
+    {
+      "candidate_id": "9d39f6a2231b9312",
+      "source": "CNBC Top News",
+      "title": "Meta- and Google-backed Indian telecom operator Jio Platforms gets regulatory nod for IPO",
+      "summary": "India's largest digital and telecom operator, Jio Platforms, got a regulatory nod for an IPO, but the National Stock Exchange, another mega issue, is still awaiting regulatory clearance.",
+      "published_at": "2026-08-31T02:35:53+00:00",
+      "url": "https://www.cnbc.com/2026/08/31/jio-ipo-nse-india-shares-meta-google.html",
+      "priority": "P0",
+      "event_summary": "Jio Platforms received regulatory approval for an IPO.",
+      "topic_group": "MEGA_CAP_TECH",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "c15d2353acda8bd0",
+      "source": "CNBC Top News",
+      "title": "What new tariff walls in U.S.-Canada trade war mean for the economy's critical metals",
+      "summary": "When the U.S.-Canada trade war erupted, the market repriced metals and materials stocks and ETFs, but longer-term investors should be wary.",
+      "published_at": "2026-08-30T13:00:01+00:00",
+      "url": "https://www.cnbc.com/2026/08/30/us-canada-trade-war-tariffs-steel-aluminum-metals-economy.html",
+      "priority": "P0",
+      "event_summary": "The US-Canada trade war is affecting both countries and critical metals markets.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "5dd58665b70140a5",
+      "source": "Bloomberg Economics",
+      "title": "Bessent to Push G20 to Rethink China Trade Terms, Reuters Says",
+      "summary": "US Treasury Secretary Scott Bessent said he plans to ask Group of 20 members to review their terms of trade with China, Reuters reported, underscoring lingering tensions before the leaders of the world’s two biggest economies meet.",
+      "published_at": "2026-08-31T04:51:48+00:00",
+      "url": "https://www.bloomberg.com/news/articles/2026-08-31/bessent-to-push-g20-to-rethink-china-trade-terms-reuters-says",
+      "priority": "P0",
+      "event_summary": "G20 officials are meeting amid disputes over debt, trade, wars and AI.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "158ba8043103485e",
+      "source": "Bloomberg Markets",
+      "title": "Inflation Control Good for US Growth: L&G Strategist",
+      "summary": "L&G Asia Head of Investment Strategy Ben Bennett describes Fed Chair Kevin Warsh's latest Jackson Hole speech as \"pragmatic,\" noting that controlling inflation will benefit US economic expansion. He speaks as analysts project the central bank may be poised to raise interest rates. (Source: Bloomberg)",
+      "published_at": "2026-08-31T04:50:35+00:00",
+      "url": "https://www.bloomberg.com/news/videos/2026-08-31/inflation-control-good-for-us-growth-l-g-strategist-video",
+      "priority": "P0",
+      "event_summary": "Warsh's Jackson Hole speech raised expectations of a Fed rate hike.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "9ba638f4c8fd66eb",
+      "source": "Bloomberg Economics",
+      "title": "Bessent Expects BOJ to ‘Do the Right Thing’ on Policy",
+      "summary": "US Treasury Secretary Scott Bessent said he expects Bank of Japan Governor Kazuo Ueda “to do the right thing” on monetary policy, Reuters reported, the latest comments from the Treasury secretary to fuel expectations of an early rate move.",
+      "published_at": "2026-08-31T00:55:17+00:00",
+      "url": "https://www.bloomberg.com/news/articles/2026-08-31/bessent-expects-boj-to-do-the-right-thing-on-monetary-policy",
+      "priority": "P0",
+      "event_summary": "Bessent said he expects the Bank of Japan to act on monetary policy.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "96a57f951d8ea6de",
+      "source": "TechCrunch",
+      "title": "Musk’s faster path to more gas turbines comes with pollution problem",
+      "summary": "Elon Musk says a secretive new SpaceX foundry will let him cast his own turbine blades and get gas power online 18 months faster than anyone else — but it's a bet on a fuel source that's already triggering lawsuits and health studies everywhere his (and others') turbines have gone in.",
+      "published_at": "2026-08-30T16:54:25+00:00",
+      "url": "https://techcrunch.com/2026/08/30/musks-faster-path-to-more-gas-turbines-comes-with-pollution-problem/",
+      "priority": "P0",
+      "event_summary": "Musk said a SpaceX foundry could accelerate gas turbine deployment.",
+      "topic_group": "ENERGY_COMMODITIES",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "db77549ac75262ed",
+      "source": "NASA",
+      "title": "APOD: 2026 August 31 – Launch of the Roman Space Telescope",
+      "summary": "APOD Science APOD APOD: 2026 August 31 –… Today’s APOD Archive Submissions Index Search Calendar RSS Education About Discuss APOD Astronomy Picture of the Day Discover the cosmos! Each day a different image or photograph of our fascinating universe is featured, along with a brief explanation written by a professional astronomer. To view this […]",
+      "published_at": "2026-08-31T04:05:00+00:00",
+      "url": "https://science.nasa.gov/image-article/apod-2026-august-31-launch-of-the-roman-space-telescope/",
+      "priority": "P0",
+      "event_summary": "NASA launched the Nancy Grace Roman Space Telescope.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "fb129f3fd93d6a58",
+      "source": "Bloomberg Markets",
+      "title": "Chinese Chipmaker Longsys Seeks $800 Million in HK Listing",
+      "summary": "Shenzhen Longsys Electronics Co. is seeking to raise as much as HK$6.28 billion ($801 million) in a Hong Kong listing, extending the wave of Chinese companies along the artificial intelligence supply chain coming to the market after its onshore shares have gained about 50% this year.",
+      "published_at": "2026-08-31T02:58:03+00:00",
+      "url": "https://www.bloomberg.com/news/articles/2026-08-31/chinese-chipmaker-longsys-seeks-800-million-in-hk-listing",
+      "priority": "P0",
+      "event_summary": "Longsys seeks up to $801 million in a Hong Kong listing.",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "593938f7cbb8d928",
+      "source": "Bloomberg Markets",
+      "title": "GPIF Would Be Justified in Buying More Japan Bonds, Analysts Say",
+      "summary": "Japanese bond yields have climbed so sharply that analysts say Government Pension Investment Fund may be justified in eventually raising its domestic debt allocation target from 25% to seek higher returns.",
+      "published_at": "2026-08-31T02:15:00+00:00",
+      "url": "https://www.bloomberg.com/news/articles/2026-08-31/gpif-would-be-justified-in-buying-more-japan-bonds-say-analysts",
+      "priority": "P0",
+      "event_summary": "Analysts say Japan's GPIF may raise its domestic bond allocation.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "ca0af5fc7b65eab1",
+      "source": "CNBC Top News",
+      "title": "Here are the 3 big things we're watching in the stock market in the week ahead",
+      "summary": "Broadcom and Palo Alto Networks report. Plus, it's jobs week.",
+      "published_at": "2026-08-30T14:54:49+00:00",
+      "url": "https://www.cnbc.com/2026/08/30/here-are-the-3-big-things-were-watching-in-the-stock-market-in-the-week-ahead.html",
+      "priority": "P0",
+      "event_summary": "Markets are watching upcoming Broadcom and Palo Alto earnings and US jobs data.",
+      "topic_group": "CORPORATE_EARNINGS",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "5fd16a9b377989f1",
+      "source": "BBC News",
+      "title": "Russia says it helped to repel Niger attempted coup",
+      "summary": "Soldiers tried to attack a key military base early on Saturday morning, authorities say, but were thwarted.",
+      "published_at": "2026-08-30T16:33:17+00:00",
+      "url": "https://www.bbc.co.uk/news/articles/c5ye8egg596o?at_medium=RSS&at_campaign=rss",
+      "priority": "P0",
+      "event_summary": "Russia said it helped repel an attempted coup in Niger.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "1973de84a293f23d",
+      "source": "CNBC Top News",
+      "title": "The 'choose your own adventure' earnings: Why retailers are handling tariff refunds so differently",
+      "summary": "Retailers have diverged on how they've reported tariff refunds in their earnings this quarter, with some choosing to lower prices and others boosting margins.",
+      "published_at": "2026-08-30T12:00:02+00:00",
+      "url": "https://www.cnbc.com/2026/08/30/trump-tariff-refunds-walmart-home-depot-target.html",
+      "priority": "P0",
+      "event_summary": "Retailers reported tariff refunds differently in quarterly earnings.",
+      "topic_group": "CORPORATE_EARNINGS",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "1176abc1c179db04",
+      "source": "Bloomberg Technology",
+      "title": "Google Maps Changes Lake Ontario Label to Lake America in US",
+      "summary": "Google Maps relabeled Lake Ontario as “Lake America” for users in the US, Alphabet Inc. announced, after President Donald Trump said he would rename the lake amid a trade spat with Canada.",
+      "published_at": "2026-08-30T14:24:39+00:00",
+      "url": "https://www.bloomberg.com/news/articles/2026-08-30/google-maps-changes-lake-ontario-label-to-lake-america-in-us",
+      "priority": "P1",
+      "event_summary": "Google Maps changed Lake Ontario's US label to Lake America.",
+      "topic_group": "MEGA_CAP_TECH",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "0bee83a3826ecbdc",
+      "source": "Bloomberg Markets",
+      "title": "US Strikes Iranian Rocket Launchers",
+      "summary": "The US military on Sunday said it had struck Iranian rocket launchers that were preparing to send mines into the Strait of Hormuz, following weeks of relative calm. Bloomberg's Wendy Benjaminson has the latest. (Source: Bloomberg)",
+      "published_at": "2026-08-31T01:25:57+00:00",
+      "url": "https://www.bloomberg.com/news/videos/2026-08-31/us-strikes-iranian-rocket-launchers-video",
+      "priority": "P0",
+      "event_summary": "The US and Iran exchanged strikes after weeks of relative calm.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "d7df30fe5e8573b5",
+      "source": "NASASpaceflight",
+      "title": "SLS picks up the pace, four vehicles in production",
+      "summary": "The NASA and contractor workforce continues to make progress ahead of next year’s Artemis III… The post SLS picks up the pace, four vehicles in production appeared first on NASASpaceFlight.com .",
+      "published_at": "2026-08-31T00:11:01+00:00",
+      "url": "https://www.nasaspaceflight.com/2026/08/sls-pace-four-vehicles-production/",
+      "priority": "P0",
+      "event_summary": "NASA's SLS program has four vehicles in production.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "6bfed2ab471f8cf4",
+      "source": "The Verge",
+      "title": "Texas Governor Abbott blocks funding for more Flock cameras",
+      "summary": "As backlash grows over Flock's AI surveillance cameras, Texas Governor Greg Abbott has frozen state spending on them. The move came just ahead of the publication of a Texas Tribune investigation that revealed the state spent over $30 million on Flock cameras. That money was primarily raised by tacking a $1 fee onto insurance policies, […]",
+      "published_at": "2026-08-30T15:35:10+00:00",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/986541/texas-governor-abbott-flock-cameras",
+      "priority": "P2",
+      "event_summary": "Texas Governor Abbott froze state spending on Flock cameras.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "11b8606a8d3036b1",
+      "source": "TechCrunch",
+      "title": "The U.S. is building barriers around drones and robots, but China has scale to get around them",
+      "summary": "The U.S. is shutting out more foreign-made drones and robots. China’s scale means the global competition may simply move elsewhere.",
+      "published_at": "2026-08-31T02:34:00+00:00",
+      "url": "https://techcrunch.com/2026/08/30/the-u-s-is-building-barriers-around-drones-and-robots-china-still-has-scale/",
+      "priority": "P0",
+      "event_summary": "The US is increasing barriers to foreign-made drones and robots.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "924ebda1d96f2ce8",
+      "source": "BBC Business",
+      "title": "'My parents won't lend me £10k but helped my brother': When families play financial favourites",
+      "summary": "So-called financial favouritism can cause jealousy and resentment long into adulthood. Here is how experts say you can avoid it",
+      "published_at": "2026-08-30T23:22:24+00:00",
+      "url": "https://www.bbc.co.uk/news/articles/cx279dml00ro?at_medium=RSS&at_campaign=rss",
+      "priority": "P0",
+      "event_summary": "Financial favoritism among families can cause long-term resentment.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "33e8759221638aae",
+      "source": "Bloomberg Economics",
+      "title": "Productores del Mercosur temen competencia de Europa",
+      "summary": "El Mercosur celebró el acceso al mercado europeo. Ahora algunos productores de Brasil, Argentina, Uruguay y Paraguay temen el impacto de una mayor competencia de bienes de la UE.",
+      "published_at": "2026-08-31T05:00:02+00:00",
+      "url": "https://www.bloomberg.com/news/articles/2026-08-31/productores-del-mercosur-temen-competencia-de-europa-mtgrrsf6",
+      "priority": "P0",
+      "event_summary": "South American producers fear competition from the EU-Mercosur trade deal.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "8c0ca5cb5229b79a",
+      "source": "BBC News",
+      "title": "Eight killed and 18 missing after ferry capsizes off northern Cyprus",
+      "summary": "A search and rescue operation is under way after a ferry carrying nearly 270 people turns over after leaving port.",
+      "published_at": "2026-08-31T03:56:15+00:00",
+      "url": "https://www.bbc.co.uk/news/articles/c770jyd4l7lo?at_medium=RSS&at_campaign=rss",
+      "priority": "P0",
+      "event_summary": "A ferry capsized off northern Cyprus, killing eight people and leaving 18 missing.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "b86c054dcba9fc47",
+      "source": "TechCrunch",
+      "title": "Grindr wants to be the everything app for gay men; investors are still deciding whether it can pull it off",
+      "summary": "George Arison is done letting Wall Street's \"Grindr discount\" go unchallenged — in a wide-ranging Q&A, the CEO walks us through how AI, a controversial $350-plus EDGE tier, and a bet on healthcare and long-distance matchmaking are turning Grindr into the \"gayborhood in your pocket\" he's been promising since 2022.",
+      "published_at": "2026-08-31T02:18:57+00:00",
+      "url": "https://techcrunch.com/2026/08/30/grindr-wants-to-be-the-everything-app-for-gay-men-investors-are-still-deciding-whether-it-can-pull-it-off/",
+      "priority": "P0",
+      "event_summary": "Grindr is pursuing an expansion into AI, healthcare and matchmaking services.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "9f0cacaaf8df77fa",
+      "source": "BBC Business",
+      "title": "School uniform swap shop 'saves money and tackles second hand clothes stigma'",
+      "summary": "A free initiative which started with one school four years ago now has more than 200 involved.",
+      "published_at": "2026-08-30T17:16:18+00:00",
+      "url": "https://www.bbc.co.uk/news/articles/crr452d45nyo?at_medium=RSS&at_campaign=rss",
+      "priority": "P0",
+      "event_summary": "A school uniform swap initiative has expanded to more than 200 schools.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "8c929fcb1af2f36b",
+      "source": "NASA",
+      "title": "NASA Deep Space Network’s New Goldstone Antenna Goes Online",
+      "summary": "Description Long shadows are cast by the recently completed Deep Space Station 23 at the Deep Space Network’s Goldstone complex near Barstow, California, in August 2026. A 34-meter (114-foot) multifrequency beam-waveguide antenna, DSS-23 will boost the DSN’s capacity and enhance NASA’s deep space communications capabilities for decades to come. NASA leadership and personnel as well […]",
+      "published_at": "2026-08-30T14:53:08+00:00",
+      "url": "https://science.nasa.gov/photojournal/nasa-deep-space-networks-new-goldstone-antenna-goes-online/",
+      "priority": "P0",
+      "event_summary": "NASA completed and activated Deep Space Station 23 at Goldstone.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "4768120bb08d9cc1",
+      "source": "BBC News",
+      "title": "15 hikers feared missing after 'terrifying' flash flooding hits Grand Canyon",
+      "summary": "\"It was a beautiful day - and then people were screaming,\" one hiker who was airlifted to safety tells the BBC.",
+      "published_at": "2026-08-30T23:52:27+00:00",
+      "url": "https://www.bbc.co.uk/news/articles/clylkjyez1do?at_medium=RSS&at_campaign=rss",
+      "priority": "P0",
+      "event_summary": "Flash flooding in the Grand Canyon left 15 hikers feared missing.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "c03b5fd352fb6fdc",
+      "source": "TechCrunch",
+      "title": "Liux’s Big microcar bets on sustainability to take on Chinese rivals",
+      "summary": "The Liux Big microcar is made in Spain. The startup thinks it can compete in a crowded market with its tiny electric car built around sustainability.",
+      "published_at": "2026-08-30T18:33:44+00:00",
+      "url": "https://techcrunch.com/2026/08/30/liuxs-big-microcar-bets-on-sustainability-to-take-on-chinese-rivals/",
+      "priority": "P0",
+      "event_summary": "Liux introduced its Big sustainable electric microcar.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "9fba9ea0ae73e7e9",
+      "source": "Bloomberg Economics",
+      "title": "Japan’s Firms Hire Foreigners Even as Takaichi Tightens Rules",
+      "summary": "A severe labor shortage remains the main reason Japanese companies hire foreign workers, a government survey showed Monday, highlighting the economy’s reliance on overseas labor even as Prime Minister Sanae Takaichi seeks to tighten rules for non-Japanese residents.",
+      "published_at": "2026-08-31T05:00:00+00:00",
+      "url": "https://www.bloomberg.com/news/articles/2026-08-31/japan-s-firms-hire-foreigners-even-as-takaichi-tightens-rules",
+      "priority": "P0",
+      "event_summary": "Japanese firms continue hiring foreign workers amid labor shortages and tighter rules.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "c5f6694e7bdbb23b",
+      "source": "BBC News",
+      "title": "Nepal flood relief vehicles trapped as heavy rain turns roads to mud",
+      "summary": "Heavy rain has hampered relief efforts in Nepal where thousands remain missing after flash floods hit its border with Tibet.",
+      "published_at": "2026-08-30T20:40:02+00:00",
+      "url": "https://www.bbc.co.uk/news/videos/c5ydwy004v0o?at_medium=RSS&at_campaign=rss",
+      "priority": "P0",
+      "event_summary": "Heavy rain hindered flood relief efforts in Nepal.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "17edf128f79d9feb",
+      "source": "TechCrunch",
+      "title": "TechCrunch Mobility: The hidden human cost of robotaxis",
+      "summary": "Welcome back to TechCrunch Mobility, your hub for the future of transportation and now, more than ever, the role AI is playing in it.",
+      "published_at": "2026-08-30T16:03:00+00:00",
+      "url": "https://techcrunch.com/2026/08/30/techcrunch-mobility-the-hidden-human-cost-of-robotaxis/",
+      "priority": "P0",
+      "event_summary": "TechCrunch reported on the human cost of robotaxis.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "bd8b5d15269cba9d",
+      "source": "CNBC Top News",
+      "title": "Trump threatens to blow up Iran's Kharg Island oil hub as hostilities escalate once again",
+      "summary": "The last major U.S. strikes on Iran were carried out in late July.",
+      "published_at": "2026-08-31T05:49:48+00:00",
+      "url": "https://www.cnbc.com/2026/08/30/us-iran-strikes-strait-hormuz.html",
+      "priority": "P0",
+      "event_summary": "Trump threatened to destroy Iran's Kharg Island oil hub.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "94f975fe60b3d278",
+      "source": "TechCrunch",
+      "title": "Caterpillar is bringing to AI deployment what it learned from automating mining",
+      "summary": "Caterpillar has spent decades putting autonomous machines to work at remote mining sites. It's now bringing that experience to AI deployment.",
+      "published_at": "2026-08-30T15:00:00+00:00",
+      "url": "https://techcrunch.com/2026/08/30/caterpillar-is-bringing-to-ai-deployment-what-it-learned-from-automating-mining/",
+      "priority": "P0",
+      "event_summary": "Caterpillar is applying its mining automation experience to AI deployment.",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "b7b4dbc4205fb787",
+      "source": "CNBC Top News",
+      "title": "India’s largest private lender HDFC Bank sees shares rise after CEO announces surprise exit",
+      "summary": "Shares of HDFC Bank were up even as the company's chief executive officer made a surprise announcement to not seek reappointment.",
+      "published_at": "2026-08-31T05:27:03+00:00",
+      "url": "https://www.cnbc.com/2026/08/31/hdfc-largest-bank-india-ceo-exit.html",
+      "priority": "P0",
+      "event_summary": "HDFC Bank shares rose after its CEO said he would not seek reappointment.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "8ff73785fb22a754",
+      "source": "Bloomberg Economics",
+      "title": "South Korea’s Lee Picks New Finance Chief in Surprise Reshuffle",
+      "summary": "South Korean President Lee Jae Myung tapped a career technocrat as his new finance minister, in a surprise cabinet reshuffle over the weekend in a move apparently aimed at putting a brake on falling support ratings.",
+      "published_at": "2026-08-31T01:34:47+00:00",
+      "url": "https://www.bloomberg.com/news/articles/2026-08-31/south-korea-s-lee-picks-new-finance-chief-in-surprise-reshuffle",
+      "priority": "P0",
+      "event_summary": "South Korea's president appointed a new finance minister in a cabinet reshuffle.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "daf3d567c0452ce7",
+      "source": "BBC News",
+      "title": "Manhunt after shooting at Swiss rave kills woman, 22, and injures five",
+      "summary": "Five others in their twenties were injured after shots were fired at a techno event near Zurich.",
+      "published_at": "2026-08-30T17:49:31+00:00",
+      "url": "https://www.bbc.co.uk/news/articles/c9qr750je1go?at_medium=RSS&at_campaign=rss",
+      "priority": "P0",
+      "event_summary": "A shooting at a Swiss rave killed one woman and injured five people.",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "6cc66f7c66d04036",
+      "source": "CNBC Top News",
+      "title": "France is becoming the ‘poster child’ of sovereign debt problems as government borrowing costs hit near 2008 highs",
+      "summary": "France's debt burden and political gridlock are pushing borrowing costs toward levels not seen since 2008.",
+      "published_at": "2026-08-31T05:08:47+00:00",
+      "url": "https://www.cnbc.com/2026/08/31/france-debt-bond-yields-budget.html",
+      "priority": "P0",
+      "event_summary": "France's borrowing costs rose amid debt concerns and political gridlock.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "ff83bc38971dba1e",
+      "source": "Bloomberg Markets",
+      "title": "China Coking Coal Heads for Record Monthly Gain on Supply Crunch",
+      "summary": "Chinese coking coal prices were heading for the biggest monthly gain on record, as supply of the steelmaking raw material tightens on the back of output disruptions and tougher safety checks.",
+      "published_at": "2026-08-31T04:54:05+00:00",
+      "url": "https://www.bloomberg.com/news/articles/2026-08-31/china-coking-coal-heads-for-record-monthly-gain-on-supply-crunch",
+      "priority": "P0",
+      "event_summary": "Chinese coking coal headed for a record monthly gain amid supply disruptions.",
+      "topic_group": "ENERGY_COMMODITIES",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "426a7ca0eefbf975",
+      "source": "Bloomberg Economics",
+      "title": "Japan’s Factory Output Edges Up Despite Mideast Headwinds",
+      "summary": "Japan’s industrial production eked out gains for a fourth straight month as manufacturers stayed resilient in the face of headwinds from the Middle East conflict.",
+      "published_at": "2026-08-30T23:59:23+00:00",
+      "url": "https://www.bloomberg.com/news/articles/2026-08-30/japan-factory-output-edges-up-for-fourth-month-despite-mideast",
+      "priority": "P0",
+      "event_summary": "Japan's factory output rose for a fourth straight month.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other"
+    },
+    {
+      "candidate_id": "2583153698ff3aa5",
+      "source": "BBC News",
+      "title": "Zambian opposition leader charged with treason",
+      "summary": "Mundubile had previously gone into hiding at a United Nations building in Zambia's capital.",
+      "published_at": "2026-08-30T17:06:15+00:00",
+      "url": "https://www.bbc.co.uk/news/articles/c20lwqpx70qo?at_medium=RSS&at_campaign=rss",
+      "priority": "P0",
+      "event_summary": "A Zambian opposition leader was charged with treason.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other"
+    }
+  ],
+  "selected": [
+    {
+      "rank": 1,
+      "candidate_id": "0bee83a3826ecbdc",
+      "category": "地缘政治",
+      "title_zh": "美军打击伊朗拟在霍尔木兹布雷的火箭发射器",
+      "summary_zh": "美国军方称，已打击准备向霍尔木兹海峡布设水雷的伊朗火箭发射器。事件发生在数周相对平静后，涉及关键能源航道的直接军事行动。",
+      "focus": "霍尔木兹海峡航运与能源供应是否受扰，以及后续美伊军事行动。",
+      "tags": [
+        "霍尔木兹",
+        "伊朗",
+        "航运",
+        "能源"
+      ],
+      "investment_relevance_score": 91,
+      "source": "Bloomberg Markets",
+      "url": "https://www.bloomberg.com/news/videos/2026-08-31/us-strikes-iranian-rocket-launchers-video",
+      "published_at": "2026-08-31T01:25:57+00:00",
+      "original_title": "US Strikes Iranian Rocket Launchers",
+      "selection_reason": "市场影响：美军已对涉及霍尔木兹海峡布雷准备的目标实施打击，直接关联原油运输通道。",
+      "event_summary": "The US and Iran exchanged strikes after weeks of relative calm.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 2,
+      "candidate_id": "6cc66f7c66d04036",
+      "category": "金融市场",
+      "title_zh": "法国借款成本因债务与政治僵局升至近2008年高位",
+      "summary_zh": "法国债务负担和政治僵局推高政府融资成本，借款利率接近2008年以来高位。该进展反映欧元区主要经济体的主权债务融资压力上升。",
+      "focus": "法国国债收益率、财政与政治进展，以及欧元区主权债市场的利差变化。",
+      "tags": [
+        "法国国债",
+        "主权债务",
+        "欧元区"
+      ],
+      "investment_relevance_score": 76,
+      "source": "CNBC Top News",
+      "url": "https://www.cnbc.com/2026/08/31/france-debt-bond-yields-budget.html",
+      "published_at": "2026-08-31T05:08:47+00:00",
+      "original_title": "France is becoming the ‘poster child’ of sovereign debt problems as government borrowing costs hit near 2008 highs",
+      "selection_reason": "美国金融市场：法国政府借款成本升至近2008年高位，构成主要经济体主权债融资条件变化。",
+      "event_summary": "France's borrowing costs rose amid debt concerns and political gridlock.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 3,
+      "candidate_id": "5dd58665b70140a5",
+      "category": "政策 / 监管",
+      "title_zh": "贝森特拟在G20推动重新审视对华贸易条款",
+      "summary_zh": "据路透报道，美国财长贝森特表示，计划要求二十国集团成员重新审视其与中国的贸易条款。这是在中美两国领导人会晤前释放的贸易政策信号。",
+      "focus": "G20会议表态、美国后续贸易措施及中美领导人会晤结果。",
+      "tags": [
+        "中美贸易",
+        "G20",
+        "贝森特"
+      ],
+      "investment_relevance_score": 68,
+      "source": "Bloomberg Economics",
+      "url": "https://www.bloomberg.com/news/articles/2026-08-31/bessent-to-push-g20-to-rethink-china-trade-terms-reuters-says",
+      "published_at": "2026-08-31T04:51:48+00:00",
+      "original_title": "Bessent to Push G20 to Rethink China Trade Terms, Reuters Says",
+      "selection_reason": "美国宏观：美国财长称将推动G20重新审视对华贸易条款，属于已公开的美国贸易政策立场变化。",
+      "event_summary": "G20 officials are meeting amid disputes over debt, trade, wars and AI.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 4,
+      "candidate_id": "96a57f951d8ea6de",
+      "category": "AI / 资本开支",
+      "title_zh": "马斯克称SpaceX铸造厂可加快燃气轮机部署",
+      "summary_zh": "马斯克称，一座新的SpaceX铸造厂将使其自行铸造涡轮叶片，并将燃气发电项目上线时间较其他方案提前约18个月。报道同时指出该路径面临污染争议。",
+      "focus": "铸造厂建设与投产进展、燃气轮机部署规模及相关监管或诉讼发展。",
+      "tags": [
+        "SpaceX",
+        "燃气轮机",
+        "制造能力"
+      ],
+      "investment_relevance_score": 63,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/30/musks-faster-path-to-more-gas-turbines-comes-with-pollution-problem/",
+      "published_at": "2026-08-30T16:54:25+00:00",
+      "original_title": "Musk’s faster path to more gas turbines comes with pollution problem",
+      "selection_reason": "大型科技：SpaceX核心制造能力的实质变化，涉及自建铸造能力与燃气轮机部署计划。",
+      "event_summary": "Musk said a SpaceX foundry could accelerate gas turbine deployment.",
+      "topic_group": "ENERGY_COMMODITIES",
+      "event_category": "other",
+      "source_channel": null
+    }
+  ],
+  "observability": {
+    "stage_b_sample_a_count": 4,
+    "stage_b_sample_b_count": 3,
+    "stage_b_intersection_count": 3,
+    "stage_b_borderline_count": 1,
+    "stage_b_review_keep_count": 1,
+    "two_pass_degraded": false,
+    "raw_count": 7,
+    "validated_count": 4,
+    "stage_b_final_count": 4
+  }
+}

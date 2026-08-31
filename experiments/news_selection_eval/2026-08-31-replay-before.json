@@ -1,0 +1,61 @@
+{
+  "selected": [
+    {
+      "rank": 1,
+      "candidate_id": "0c24a3ca3dcbcabd",
+      "category": "政策 / 监管",
+      "title_zh": "法院裁定将Anthropic列为供应链风险违法",
+      "summary_zh": "联邦法官裁定特朗普政府将Anthropic列为供应链风险的做法违法。该裁决为Anthropic对抗相关政府行动带来首次法院胜利，另一宗五角大楼诉讼仍在华盛顿继续。",
+      "focus": "后续五角大楼诉讼及美国政府AI供应商政策",
+      "tags": [
+        "Anthropic",
+        "AI监管",
+        "五角大楼"
+      ],
+      "investment_relevance_score": 90,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/28/anthropic-gets-its-first-court-win-over-the-pentagons-supply-chain-risk-label/",
+      "published_at": "2026-08-28T12:46:12+00:00",
+      "original_title": "Anthropic gets its first court win over the Pentagon’s supply chain risk label",
+      "selection_reason": "美国市场：联邦法院裁定政府对Anthropic的供应链风险认定违法，直接改变美国政府AI采购与监管的法律环境。",
+      "event_summary": "法院裁定特朗普政府将Anthropic列为供应链风险并采取相关行动违法",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 2,
+      "candidate_id": "d6ecc957ec260db8",
+      "category": "政策 / 监管",
+      "title_zh": "Meta因儿童安全诉讼和解限制年轻用户",
+      "summary_zh": "Meta宣布因一宗规模180亿美元的儿童安全诉讼和解，对旗下应用实施新的年轻用户限制。该行动将影响平台产品设计、用户运营及相关监管应对。",
+      "focus": "限制措施实施情况及儿童安全监管进展",
+      "tags": [
+        "Meta",
+        "儿童安全",
+        "诉讼和解"
+      ],
+      "investment_relevance_score": 84,
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/cx2zn9zj361o?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-28T09:32:14+00:00",
+      "original_title": "'Not far enough' - US parents and teens on Meta's new limits for young users",
+      "selection_reason": "大型科技：Meta达成180亿美元儿童安全诉讼和解并调整年轻用户使用规则，实质影响平台运营与监管轨迹。",
+      "event_summary": "Meta宣布因儿童安全诉讼和解而限制年轻用户使用其应用",
+      "topic_group": "MEGA_CAP_TECH",
+      "event_category": "other",
+      "source_channel": null
+    }
+  ],
+  "observability": {
+    "stage_b_sample_a_count": 2,
+    "stage_b_sample_b_count": 2,
+    "stage_b_intersection_count": 2,
+    "stage_b_borderline_count": 0,
+    "stage_b_review_keep_count": 0,
+    "two_pass_degraded": false,
+    "raw_count": 4,
+    "validated_count": 2,
+    "stage_b_final_count": 2
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "selected": [
+    {
+      "rank": 1,
+      "candidate_id": "0c24a3ca3dcbcabd",
+      "category": "政策 / 监管",
+      "title_zh": "法院裁定政府将Anthropic列为供应链风险违法",
+      "summary_zh": "美国联邦法官裁定，特朗普政府将Anthropic列为供应链风险的做法违法。该裁决为Anthropic与五角大楼的相关诉讼带来首个法院胜利。",
+      "focus": "后续诉讼进展及五角大楼采购限制是否调整",
+      "tags": [
+        "Anthropic",
+        "五角大楼",
+        "联邦法院",
+        "AI监管"
+      ],
+      "investment_relevance_score": 87,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/28/anthropic-gets-its-first-court-win-over-the-pentagons-supply-chain-risk-label/",
+      "published_at": "2026-08-28T12:46:12+00:00",
+      "original_title": "Anthropic gets its first court win over the Pentagon’s supply chain risk label",
+      "selection_reason": "大型科技：Anthropic重大诉讼/监管程序；联邦法官裁定供应链风险认定违法，直接影响其政府业务与监管环境",
+      "event_summary": "法院裁定特朗普政府将Anthropic列为供应链风险并采取相关行动违法",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 2,
+      "candidate_id": "d6ecc957ec260db8",
+      "category": "政策 / 监管",
+      "title_zh": "Meta因儿童安全诉讼和解限制年轻用户使用应用",
+      "summary_zh": "Meta宣布在一项180亿美元儿童安全诉讼和解安排下，限制年轻用户使用旗下应用。该措施将影响平台运营与未成年人产品策略。",
+      "focus": "和解条款落地、用户覆盖范围及监管后续行动",
+      "tags": [
+        "Meta",
+        "儿童安全",
+        "诉讼和解",
+        "平台监管"
+      ],
+      "investment_relevance_score": 80,
+      "source": "BBC News",
+      "url": "https://www.bbc.co.uk/news/articles/cx2zn9zj361o?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-08-28T09:32:14+00:00",
+      "original_title": "'Not far enough' - US parents and teens on Meta's new limits for young users",
+      "selection_reason": "大型科技：Meta重大诉讼或和解；180亿美元儿童安全和解及年轻用户限制将实质改变平台运营规则",
+      "event_summary": "Meta宣布因儿童安全诉讼和解而限制年轻用户使用其应用",
+      "topic_group": "MEGA_CAP_TECH",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 3,
+      "candidate_id": "5956c380babd629b",
+      "category": "AI / 资本开支",
+      "title_zh": "Anthropic推出让AI代理控制实体设备的硬件标准",
+      "summary_zh": "Anthropic推出新的硬件标准，通过标准化驱动接口，让AI代理能够与实体设备及其他系统通信并进行控制。",
+      "focus": "标准采用情况、兼容设备数量及AI代理商业化进展",
+      "tags": [
+        "Anthropic",
+        "AI代理",
+        "硬件标准",
+        "实体设备"
+      ],
+      "investment_relevance_score": 72,
+      "source": "Ars Technica",
+      "url": "https://arstechnica.com/ai/2026/08/anthropics-new-hardware-standard-lets-ai-agents-control-the-physical-world/",
+      "published_at": "2026-08-27T22:15:43+00:00",
+      "original_title": "Anthropic's new hardware standard lets AI agents control the physical world",
+      "selection_reason": "大型科技：重大产品或平台发布；Anthropic推出实体设备AI代理硬件标准，涉及AI与硬件控制接口的竞争格局",
+      "event_summary": "Anthropic推出旨在让AI代理控制实体设备的硬件标准",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other",
+      "source_channel": null
+    }
+  ],
+  "observability": {
+    "stage_b_sample_a_count": 3,
+    "stage_b_sample_b_count": 3,
+    "stage_b_intersection_count": 3,
+    "stage_b_borderline_count": 0,
+    "stage_b_review_keep_count": 0,
+    "two_pass_degraded": false,
+    "raw_count": 6,
+    "validated_count": 3,
+    "stage_b_final_count": 3
+  }
+}
