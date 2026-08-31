@@ -1301,22 +1301,31 @@ def test_stage_b_prompt_covers_recall_priority_scenarios_should_filter():
 # --- Stage B two-pass sampling + borderline review ------------------------------------
 
 def _alternating_model(*, first_response, second_response):
-    """Return a call_model whose response depends only on which of the two worker
-    threads calls it (the first distinct thread to call gets `first_response`, the
-    second distinct thread gets `second_response`), not on call order across threads.
-    This lets tests give sample_A and sample_B different LLM outputs without depending
-    on which one select_news_two_pass happens to label 'A' vs 'B'.
+    """Return a call_model whose response depends only on call order (a lock-protected
+    counter: the 1st call across both threads gets `first_response`, the 2nd gets
+    `second_response`), not on which physical OS thread happens to make each call.
+
+    Earlier this assigned roles by `threading.get_ident()` -- the first distinct thread
+    seen got `first_response`, the second got `second_response`. That is flaky:
+    ThreadPoolExecutor(max_workers=2) does not guarantee two concurrently-submitted,
+    near-instant (mocked, no real I/O) tasks land on two distinct threads -- if the
+    first task finishes before the second is dequeued, the pool can reuse the same
+    now-idle thread for both, so `thread_roles` only ever sees one thread and both
+    calls get `first_response`. That was root-caused live: it broke the daily
+    production workflow on 2026-08-30 and 2026-08-31 (CI's "Run tests" step failed on
+    this exact assertion, `assert len(review_calls) == 1` seeing 0, which blocked the
+    report commit both days). A call-ordinal counter has no such race: exactly one of
+    the two calls is "the 1st" and one is "the 2nd" regardless of threading.
     """
     lock = threading.Lock()
-    thread_roles: dict[int, str] = {}
+    call_count = 0
 
     def model(system_prompt, user_payload, api_key):
-        ident = threading.get_ident()
+        nonlocal call_count
         with lock:
-            if ident not in thread_roles:
-                thread_roles[ident] = "first" if not thread_roles else "second"
-            role = thread_roles[ident]
-        return first_response if role == "first" else second_response
+            call_count += 1
+            call_number = call_count
+        return first_response if call_number == 1 else second_response
 
     return model
 
@@ -1436,17 +1445,23 @@ def test_stage_b_two_pass_review_batch_is_single_call():
 
 
 def test_stage_b_two_pass_sample_b_timeout_falls_back_to_sample_a():
+    """Simulates one sample timing out on every attempt while the other succeeds
+    immediately, using a call-ordinal counter rather than thread identity (see
+    _alternating_model's docstring for why thread-identity-based role assignment is
+    flaky here). Exactly one call across both concurrent select_news invocations can
+    ever be "the 1st" -- it succeeds and that sample returns without retrying. Every
+    other call, including the failing sample's own internal retry, is "the 2nd+" and
+    fails, exhausting that sample's attempts regardless of thread scheduling."""
     pool = stage_b_pool(["0"])
     lock = threading.Lock()
-    thread_roles: dict[int, str] = {}
+    call_count = 0
 
     def model(system_prompt, user_payload, api_key):
-        ident = threading.get_ident()
+        nonlocal call_count
         with lock:
-            if ident not in thread_roles:
-                thread_roles[ident] = "ok" if not thread_roles else "fail"
-            role = thread_roles[ident]
-        if role == "fail":
+            call_count += 1
+            call_number = call_count
+        if call_number != 1:
             raise TimeoutError("simulated sample timeout")
         return json.dumps({"selected": [stage_b_item("0", 1, 92)], "reserve": []}, ensure_ascii=False)
 
