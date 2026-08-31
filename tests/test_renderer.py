@@ -27,6 +27,7 @@ def report(date):
                 "ath": 8000, "ath_date": "2026-07-31", "next_threshold": 0.10,
                 "distance_to_next": 0.04, "pool": 140000, "executed_amount": 0,
                 "pending_amount": 0, "remaining_amount": 140000,
+                "already_invested": 0, "suggested_amount": 0,
                 "pending_tiers": [], "executed_tiers": [],
                 "tiers": {
                     "tier_1": {"threshold": 0.10, "allocation": 0.20, "amount": 28000, "status": "not_triggered"},
@@ -38,6 +39,7 @@ def report(date):
                 "ath": 30000, "ath_date": "2026-07-31", "next_threshold": 0.20,
                 "distance_to_next": 0.03, "pool": 60000, "executed_amount": 0,
                 "pending_amount": 12000, "remaining_amount": 48000,
+                "already_invested": 0, "suggested_amount": 12000,
                 "pending_tiers": [{"id": "tier_1", "label": "第一档", "amount": 12000, "allocation": 0.20, "threshold": 0.15}],
                 "executed_tiers": [],
                 "tiers": {
@@ -245,10 +247,14 @@ def test_strategy_card_shows_hold_state_and_drawdown_rules_drawer(tmp_path):
         "market": "标普500上涨0.72%。", "drivers": "市场关注利率预期。",
         "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
     }
-    payload["drawdown"]["sp500"].update({"status": "normal", "pending_amount": 0, "pending_tiers": [], "executed_amount": 0})
+    payload["drawdown"]["sp500"].update({
+        "status": "normal", "pending_amount": 0, "pending_tiers": [], "executed_amount": 0,
+        "already_invested": 0, "suggested_amount": 0,
+    })
     payload["drawdown"]["nasdaq100"].update({
         "status": "normal", "pending_amount": 0, "pending_tiers": [], "executed_amount": 0,
         "next_threshold": 0.15, "distance_to_next": 0.02,
+        "already_invested": 0, "suggested_amount": 0,
     })
     (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
     site = tmp_path / "site"
@@ -258,13 +264,32 @@ def test_strategy_card_shows_hold_state_and_drawdown_rules_drawer(tmp_path):
     html = (site / "index.html").read_text(encoding="utf-8")
     assert '<strong class="strategy-normal">正常定投</strong>' in html
     assert '<span>未触发回撤加仓</span>' in html
-    assert '<span class="label">备用金状态</span><span class="value">保持不动</span>' in html
+    assert '<span class="label">备用金状态</span><span class="value">备用金剩余 ¥188,000</span>' in html
     assert '<span class="label">当前风险状态</span><span class="value good">正常</span>' in html
     assert 'id="drawdown-rules-open"' in html
     assert 'id="drawdown-rules-drawer"' in html
     assert "回撤加仓规则" in html
     assert "回撤 10%~15%" in html and "使用备用金 20%" in html
     assert "距离第一档还有" in html
+
+
+def test_reserve_card_shows_remaining_used_and_initial_total(tmp_path):
+    """2026-08-31 reserve restructure: the card must show the current usable amount
+    (192,500) as the primary figure, with used (7,500) and the original 200,000 pool
+    as secondary/muted context -- not a total that was hand-edited down to 192,500."""
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["reserve"] = {"total": 200000, "remaining": 192500, "used": 7500, "ratio": 0.9625}
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    site = tmp_path / "site"
+
+    render(reports, site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    assert "<p>可用金额</p><strong>¥192,500</strong>" in html
+    assert "<p" in html and "总备用金</p><strong>¥200,000</strong>" in html
+    assert "已使用 ¥7,500 · 初始 ¥200,000" in html
 
 
 def test_strategy_card_shows_pending_tier_allocation_and_amount(tmp_path):
@@ -288,6 +313,33 @@ def test_strategy_card_shows_pending_tier_allocation_and_amount(tmp_path):
     assert "当前已进入第一档" in html
     assert "建议使用备用金比例" in html and "20%" in html
     assert "建议投入金额" in html and "¥12,000" in html
+
+
+def test_pending_tier_shows_suggested_amount_net_of_historical_investment(tmp_path):
+    """When part of a triggered tier's target was already deployed historically
+    (executions ledger), the strategy card and drawer must show the net suggested
+    amount (tier target minus already invested), not the full raw tier amount --
+    this is the exact 2026-08 Nasdaq-100 scenario (tier_1=12,000, 7,500 already spent,
+    4,500 left to suggest)."""
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["market_summary"] = {
+        "market": "标普500下跌。", "drivers": "市场关注利率预期。",
+        "action": "已触发回撤加仓条件，等待人工确认。",
+    }
+    payload["drawdown"]["nasdaq100"].update({"already_invested": 7500, "suggested_amount": 4500})
+    payload["reserve"] = {"total": 200000, "remaining": 192500, "used": 7500, "ratio": 0.9625}
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    site = tmp_path / "site"
+
+    render(reports, site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    assert '<span class="label">备用金状态</span><span class="value">待执行 ¥4,500</span>' in html
+    assert "建议投入金额" in html and "¥4,500" in html
+    assert "¥12,000" not in html.split("建议投入金额")[1].split("</div>")[0]
+    assert "<span>剩余备用金</span><strong>¥52,500</strong>" in html
 
 
 def test_strategy_card_pauses_when_market_data_invalid(tmp_path):

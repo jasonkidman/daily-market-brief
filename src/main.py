@@ -12,7 +12,7 @@ from zoneinfo import ZoneInfo
 import yaml
 
 from .deepseek_client import DeepSeekUsageTracker, select_news, select_news_two_pass, validate_selection
-from .drawdown import summarize_index_state, update_drawdown_state
+from .drawdown import compute_suggested_topup, reserve_used_total, summarize_index_state, update_drawdown_state
 from .market import (
     build_sparkline,
     calculate_context_snapshot,
@@ -496,9 +496,18 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
             warnings.append(ai_warning)
             news_degraded = True
 
+    total_reserve = drawdown_rules.get("total_reserve", 0)
+    executions = updated_state.get("executions", [])
+    reserve_used = reserve_used_total(executions)
+    remaining_reserve = max(total_reserve - reserve_used, 0)
     drawdown_summary = {
         key: summarize_index_state(value) for key, value in updated_state.get("indices", {}).items()
     }
+    for key, summary in drawdown_summary.items():
+        summary["already_invested"] = sum(
+            int(item.get("amount", 0)) for item in executions if item.get("index") == key
+        )
+        summary["suggested_amount"] = compute_suggested_topup(summary, executions, key, remaining_reserve)
     portfolio_action = derive_portfolio_action(drawdown_summary)
     market_summary = generate_market_summary(
         snapshots,
@@ -518,10 +527,6 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
     else:
         status, status_label = "ok", "🟢 数据更新正常"
     valid_market_dates = [item["market_date"] for item in snapshots.values() if item.get("valid")]
-    total_reserve = drawdown_rules.get("total_reserve", 0)
-    remaining_reserve = sum(
-        value.get("remaining_amount", 0) for value in drawdown_summary.values()
-    )
     discipline_config = drawdown_rules.get("discipline", {})
     market_sentiment = calculate_market_sentiment(
         context_snapshots, snapshots, histories, market_breadth.get("health", {})
@@ -545,7 +550,7 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         "reserve": {
             "total": total_reserve,
             "remaining": remaining_reserve,
-            "used": max(total_reserve - remaining_reserve, 0),
+            "used": reserve_used,
             "ratio": (remaining_reserve / total_reserve) if total_reserve else None,
         },
         "discipline": {

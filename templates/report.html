@@ -39,6 +39,7 @@
 
 {% if report.market_summary %}
 {% set dd = report.drawdown or {} %}
+{% set reserve_global = report.get('reserve', {}) %}
 {% set market_valid = report.get('market_data_valid', true) %}
 {% set risk = namespace(level='normal') %}
 {% set pending = namespace(items=[], amount=0) %}
@@ -46,7 +47,7 @@
 {% for key in ['sp500', 'nasdaq100'] %}{% if key in dd %}{% set idx = dd[key] %}
   {% if idx.get('status') == 'pending' %}{% set risk.level = 'pending' %}
   {% elif idx.get('status') == 'near' and risk.level == 'normal' %}{% set risk.level = 'near' %}{% endif %}
-  {% set pending.amount = pending.amount + (idx.get('pending_amount') or 0) %}
+  {% set pending.amount = pending.amount + (idx.get('suggested_amount') or 0) %}
   {% set executed.amount = executed.amount + (idx.get('executed_amount') or 0) %}
   {% if idx.get('executed_amount') %}{% set executed.any = true %}{% endif %}
   {% if idx.get('pending_tiers') %}{% set pending.items = pending.items + [{'index': idx.get('name'), 'tier': idx['pending_tiers'][0]}] %}{% endif %}
@@ -63,8 +64,10 @@
 {% else %}
   {% set action_main, action_sub = '正常定投', '未触发回撤加仓' %}
 {% endif %}
-{% if not market_valid or (pending.amount == 0 and executed.amount == 0) %}
-  {% set reserve_label = '保持不动' %}
+{% if not market_valid %}
+  {% set reserve_label = '数据异常，暂停' %}
+{% elif pending.amount == 0 and executed.amount == 0 %}
+  {% set reserve_label = '备用金剩余 ' ~ (reserve_global.get('remaining')|money) %}
 {% elif pending.amount > 0 %}
   {% set reserve_label = '待执行 ' ~ (pending.amount|money) %}
 {% else %}
@@ -303,6 +306,7 @@
           <p style="margin-top:10px">总备用金</p><strong>{{ reserve.get('total')|money }}</strong>
         </div>
       </div>
+      <div class="small" style="margin-top:8px">已使用 {{ reserve.get('used')|money }} · 初始 {{ reserve.get('total')|money }}</div>
     </div>
     <div class="card risk-card">
       <h4>投资纪律提醒</h4>
@@ -343,16 +347,16 @@
         <div class="drawer-status-title">当前已进入{{ tier.get('label') or '加仓档位' }}</div>
         <div class="drawer-status-line"><span>当前指数回撤幅度</span><strong>{{ item.current_drawdown|percent }}</strong></div>
         {% if tier.get('allocation') is not none %}<div class="drawer-status-line"><span>建议使用备用金比例</span><strong>{{ (tier.allocation * 100)|round|int }}%</strong></div>{% endif %}
-        <div class="drawer-status-line"><span>建议投入金额</span><strong>{{ tier.amount|money }}</strong></div>
+        <div class="drawer-status-line"><span>建议投入金额</span><strong>{{ item.get('suggested_amount', tier.amount)|money }}</strong></div>
         {% if item.next_threshold is not none %}<div class="drawer-status-line"><span>距离下一档还差</span><strong>{{ (item.distance_to_next * 100)|round(1) }}%</strong></div>{% endif %}
-        <div class="drawer-status-line"><span>剩余备用金</span><strong>{{ item.remaining_amount|money }}</strong></div>
+        <div class="drawer-status-line"><span>剩余备用金</span><strong>{{ (item.pool - item.get('already_invested', 0))|money }}</strong></div>
         {% else %}
         <div class="drawer-status-title">当前状态：{% if item.next_threshold is none %}已用完全部档位{% else %}未触发{% endif %}</div>
         <div class="drawer-status-line"><span>当前指数回撤幅度</span><strong>{{ item.current_drawdown|percent }}</strong></div>
         {% if item.next_threshold is not none %}
         <div class="drawer-status-line"><span>{{ '距离第一档还有' if not item.get('executed_tiers') else '距离下一档还有' }}</span><strong>{{ (item.distance_to_next * 100)|round(1) }}%</strong></div>
         {% endif %}
-        <div class="drawer-status-line"><span>剩余备用金</span><strong>{{ item.remaining_amount|money }}</strong></div>
+        <div class="drawer-status-line"><span>剩余备用金</span><strong>{{ (item.pool - item.get('already_invested', 0))|money }}</strong></div>
         {% endif %}
       </div>
       {% if item.get('tiers') %}{% set tier_list = item.tiers.values()|list %}

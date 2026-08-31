@@ -125,6 +125,36 @@ def summarize_index_state(state: dict[str, Any], current_close: Optional[float] 
     }
 
 
+def reserve_used_total(executions: list[dict[str, Any]]) -> int:
+    """Total reserve money actually deployed so far, from the single source of truth:
+    the `executions` ledger. This covers both formal tier confirmations (appended by
+    `confirm_drawdown.confirm_tier`) and any manually backfilled historical deployment
+    (an executions entry with `tier: None`, e.g. money spent before this state machine
+    existed) -- there is deliberately no second, separately-maintained "used" number."""
+    return sum(int(item.get("amount", 0)) for item in executions)
+
+
+def compute_suggested_topup(index_summary: dict[str, Any], executions: list[dict[str, Any]],
+                            index_key: str, reserve_remaining: int) -> int:
+    """Suggested new deployment for one index right now.
+
+    cumulative_target is what the drawdown tiers reached so far call for in total
+    (pending + executed tier amounts, still computed from the original 200,000-pool
+    tier plan -- unaffected by how much of the reserve remains). already_invested is
+    this index's own share of the executions ledger, which already includes any
+    manually backfilled historical deployment. The gap between the two is what's left
+    to invest for this index's current tier progress; it is never suggested twice
+    (repeated report runs re-read the same persisted executions ledger and get the
+    same gap), never negative, and never more than what the reserve actually has left.
+    """
+    cumulative_target = int(index_summary.get("pending_amount", 0)) + int(index_summary.get("executed_amount", 0))
+    already_invested = sum(
+        int(item.get("amount", 0)) for item in executions if item.get("index") == index_key
+    )
+    suggested = cumulative_target - already_invested
+    return max(0, min(suggested, max(0, int(reserve_remaining))))
+
+
 def update_drawdown_state(state: dict[str, Any], histories: dict[str, list],
                           market_validity: dict[str, bool], rules: dict[str, Any],
                           snapshots: dict[str, Any], now: datetime

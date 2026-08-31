@@ -4,7 +4,14 @@ from zoneinfo import ZoneInfo
 
 import pytest
 
-from src.drawdown import create_index_state, summarize_index_state, update_drawdown_state, update_index_state
+from src.drawdown import (
+    compute_suggested_topup,
+    create_index_state,
+    reserve_used_total,
+    summarize_index_state,
+    update_drawdown_state,
+    update_index_state,
+)
 
 
 NOW = datetime(2026, 8, 12, 10, 0, tzinfo=ZoneInfo("Asia/Shanghai"))
@@ -172,3 +179,63 @@ def test_pending_summary_keeps_original_tier_label_after_earlier_execution():
     summary = summarize_index_state(state, 84)
     assert summary["pending_tiers"][0]["id"] == "tier_2"
     assert summary["pending_tiers"][0]["label"] == "第二档"
+
+
+# --- reserve_used_total / compute_suggested_topup (2026-08 reserve restructure) ---
+
+def test_reserve_used_total_sums_executions_across_indices():
+    executions = [
+        {"index": "nasdaq100", "amount": 7500, "tier": None},
+        {"index": "sp500", "amount": 28000, "tier": "tier_1"},
+    ]
+    assert reserve_used_total(executions) == 35500
+
+
+def test_reserve_used_total_empty_is_zero():
+    assert reserve_used_total([]) == 0
+
+
+def test_suggested_topup_subtracts_historical_investment_for_that_index():
+    """The real 2026-08-29 scenario: Nasdaq-100 has $7,500 already deployed via a
+    manually backfilled executions entry (pre-dating the tier system), before any
+    tier has actually triggered under the current 200,000-pool plan."""
+    summary = {"pending_amount": 0, "executed_amount": 0}
+    executions = [{"index": "nasdaq100", "amount": 7500, "tier": None}]
+    assert compute_suggested_topup(summary, executions, "nasdaq100", reserve_remaining=192500) == 0
+
+
+def test_suggested_topup_nets_against_cumulative_tier_target_once_triggered():
+    """Once nasdaq100 tier_1 (12,000) triggers, the suggestion must be the gap to
+    the 7,500 already spent -- not the full tier amount again."""
+    summary = {"pending_amount": 12000, "executed_amount": 0}
+    executions = [{"index": "nasdaq100", "amount": 7500, "tier": None}]
+    assert compute_suggested_topup(summary, executions, "nasdaq100", reserve_remaining=192500) == 4500
+
+
+def test_suggested_topup_never_negative():
+    summary = {"pending_amount": 0, "executed_amount": 0}
+    executions = [{"index": "nasdaq100", "amount": 50000, "tier": None}]
+    assert compute_suggested_topup(summary, executions, "nasdaq100", reserve_remaining=150000) == 0
+
+
+def test_suggested_topup_capped_by_reserve_remaining():
+    summary = {"pending_amount": 42000, "executed_amount": 0}
+    executions = []
+    assert compute_suggested_topup(summary, executions, "sp500", reserve_remaining=1000) == 1000
+
+
+def test_suggested_topup_ignores_other_indices_executions():
+    summary = {"pending_amount": 28000, "executed_amount": 0}
+    executions = [{"index": "nasdaq100", "amount": 7500, "tier": None}]
+    assert compute_suggested_topup(summary, executions, "sp500", reserve_remaining=192500) == 28000
+
+
+def test_suggested_topup_is_deterministic_across_repeated_calls():
+    """Repeated report generation re-reads the same persisted executions ledger and
+    must get the same suggested amount every time -- the $7,500 backfill must never
+    be counted twice just because the daily report runs again."""
+    summary = {"pending_amount": 12000, "executed_amount": 0}
+    executions = [{"index": "nasdaq100", "amount": 7500, "tier": None}]
+    first = compute_suggested_topup(summary, executions, "nasdaq100", reserve_remaining=192500)
+    second = compute_suggested_topup(summary, executions, "nasdaq100", reserve_remaining=192500)
+    assert first == second == 4500

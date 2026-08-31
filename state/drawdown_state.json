@@ -96,6 +96,15 @@
       }
     }
   },
-  "executions": [],
+  "executions": [
+    {
+      "executed_at": "2026-08-31T00:00:00+08:00",
+      "amount": 7500,
+      "index": "nasdaq100",
+      "tier": null,
+      "cycle_id": null,
+      "note": "网站上线前手动通过GPT触发的Nasdaq回撤加仓规则，此处为历史记录补录，非当前tier系统的正式确认；金额与档位不对应现有tier plan。"
+    }
+  ],
   "updated_at": "2026-08-31T10:42:11.177695+08:00"
 }

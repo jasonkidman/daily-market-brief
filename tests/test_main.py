@@ -79,6 +79,45 @@ def test_offline_fixture_runs_complete_pipeline(tmp_path):
     assert result == report_path
 
 
+def test_reserve_reflects_persisted_executions_and_is_idempotent_across_runs(tmp_path):
+    """End-to-end regression for the 2026-08-31 reserve restructure: a historical
+    $7,500 Nasdaq-100 deployment, backfilled as an executions-ledger entry (predating
+    the tier system), must show up as reserve.used/remaining without being hand-set
+    in multiple places, and must not get double counted when the daily report is
+    regenerated on top of the same persisted state (no new executions entry added)."""
+    state_dir = tmp_path / "state"
+    state_dir.mkdir(parents=True)
+    seed_state = {
+        "version": 1,
+        "indices": {},
+        "executions": [{
+            "executed_at": "2026-06-01T00:00:00+08:00", "amount": 7500,
+            "index": "nasdaq100", "tier": None, "cycle_id": None,
+        }],
+    }
+    state_path = state_dir / "drawdown_state.json"
+    state_path.write_text(json.dumps(seed_state), encoding="utf-8")
+
+    report_path = tmp_path / "data" / "reports" / "2026-08-12.json"
+    generate_daily_report(base_dir=tmp_path, offline_fixture=True, report_date="2026-08-12")
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    assert report["reserve"]["total"] == 200000
+    assert report["reserve"]["used"] == 7500
+    assert report["reserve"]["remaining"] == 192500
+    assert report["drawdown"]["nasdaq100"]["already_invested"] == 7500
+    assert report["drawdown"]["nasdaq100"]["suggested_amount"] == 0
+
+    # Regenerate on top of the same persisted state (simulating the next scheduled
+    # run) without adding a second executions entry.
+    generate_daily_report(base_dir=tmp_path, offline_fixture=True, report_date="2026-08-12")
+    report_again = json.loads(report_path.read_text(encoding="utf-8"))
+    assert report_again["reserve"]["used"] == 7500
+    assert report_again["reserve"]["remaining"] == 192500
+
+    persisted_state = json.loads(state_path.read_text(encoding="utf-8"))
+    assert persisted_state["executions"] == seed_state["executions"]
+
+
 def test_drawdown_validity_ignores_dow_and_context_failures():
     core = {key: {"valid": True} for key in ("sp500", "nasdaq100", "dow")}
     context = {key: {"valid": True} for key in ("russell2000", "vix", "dxy", "us10y")}
