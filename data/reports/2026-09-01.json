@@ -1,0 +1,1180 @@
+{
+  "report_date": "2026-09-01",
+  "generated_at": "2026-09-01 09:01 CST",
+  "market_date": "2026-08-31",
+  "status": "ok",
+  "status_label": "🟢 数据更新正常",
+  "market_data_valid": true,
+  "core_market_valid": true,
+  "context_market_valid": true,
+  "drawdown_market_valid": true,
+  "market": {
+    "sp500": {
+      "market_date": "2026-08-31",
+      "close": 7686.14013671875,
+      "daily_return": -0.0033221508040809367,
+      "ytd_return": 0.12280186059729026,
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "drawdown": 0.01446983446124206,
+      "name": "S&P 500",
+      "ticker": "^GSPC",
+      "valid": true,
+      "sparkline": {
+        "line": "M0.0,30.41 L14.48,31.34 L28.97,39.6 L43.45,39.27 L57.93,39.16 L72.41,37.74 L86.9,48.0 L101.38,36.93 L115.86,32.18 L130.34,22.09 L144.83,9.69 L159.31,10.87 L173.79,12.11 L188.28,7.77 L202.76,8.18 L217.24,10.45 L231.72,8.6 L246.21,4.0 L260.69,5.21 L275.17,8.91 L289.66,13.77 L304.14,12.29 L318.62,18.38 L333.1,15.36 L347.59,17.32 L362.07,15.09 L376.55,15.24 L391.03,10.2 L405.52,11.95 L420.0,14.28",
+        "area": "M0.0,30.41 L14.48,31.34 L28.97,39.6 L43.45,39.27 L57.93,39.16 L72.41,37.74 L86.9,48.0 L101.38,36.93 L115.86,32.18 L130.34,22.09 L144.83,9.69 L159.31,10.87 L173.79,12.11 L188.28,7.77 L202.76,8.18 L217.24,10.45 L231.72,8.6 L246.21,4.0 L260.69,5.21 L275.17,8.91 L289.66,13.77 L304.14,12.29 L318.62,18.38 L333.1,15.36 L347.59,17.32 L362.07,15.09 L376.55,15.24 L391.03,10.2 L405.52,11.95 L420.0,14.28 L420.0,52 L0.0,52 Z",
+        "points": [
+          {
+            "x": 0.0,
+            "y": 30.41,
+            "date": "2026-07-21",
+            "close": 7509.2002,
+            "change": null
+          },
+          {
+            "x": 14.48,
+            "y": 31.34,
+            "date": "2026-07-22",
+            "close": 7498.96,
+            "change": -0.001364
+          },
+          {
+            "x": 28.97,
+            "y": 39.6,
+            "date": "2026-07-23",
+            "close": 7408.2998,
+            "change": -0.01209
+          },
+          {
+            "x": 43.45,
+            "y": 39.27,
+            "date": "2026-07-24",
+            "close": 7411.98,
+            "change": 0.000497
+          },
+          {
+            "x": 57.93,
+            "y": 39.16,
+            "date": "2026-07-27",
+            "close": 7413.1802,
+            "change": 0.000162
+          },
+          {
+            "x": 72.41,
+            "y": 37.74,
+            "date": "2026-07-28",
+            "close": 7428.7798,
+            "change": 0.002104
+          },
+          {
+            "x": 86.9,
+            "y": 48.0,
+            "date": "2026-07-29",
+            "close": 7316.1499,
+            "change": -0.015161
+          },
+          {
+            "x": 101.38,
+            "y": 36.93,
+            "date": "2026-07-30",
+            "close": 7437.6299,
+            "change": 0.016604
+          },
+          {
+            "x": 115.86,
+            "y": 32.18,
+            "date": "2026-07-31",
+            "close": 7489.7202,
+            "change": 0.007004
+          },
+          {
+            "x": 130.34,
+            "y": 22.09,
+            "date": "2026-08-03",
+            "close": 7600.5,
+            "change": 0.014791
+          },
+          {
+            "x": 144.83,
+            "y": 9.69,
+            "date": "2026-08-04",
+            "close": 7736.52,
+            "change": 0.017896
+          },
+          {
+            "x": 159.31,
+            "y": 10.87,
+            "date": "2026-08-05",
+            "close": 7723.5498,
+            "change": -0.001676
+          },
+          {
+            "x": 173.79,
+            "y": 12.11,
+            "date": "2026-08-06",
+            "close": 7709.96,
+            "change": -0.00176
+          },
+          {
+            "x": 188.28,
+            "y": 7.77,
+            "date": "2026-08-07",
+            "close": 7757.6401,
+            "change": 0.006184
+          },
+          {
+            "x": 202.76,
+            "y": 8.18,
+            "date": "2026-08-10",
+            "close": 7753.1099,
+            "change": -0.000584
+          },
+          {
+            "x": 217.24,
+            "y": 10.45,
+            "date": "2026-08-11",
+            "close": 7728.2002,
+            "change": -0.003213
+          },
+          {
+            "x": 231.72,
+            "y": 8.6,
+            "date": "2026-08-12",
+            "close": 7748.5,
+            "change": 0.002627
+          },
+          {
+            "x": 246.21,
+            "y": 4.0,
+            "date": "2026-08-13",
+            "close": 7798.9902,
+            "change": 0.006516
+          },
+          {
+            "x": 260.69,
+            "y": 5.21,
+            "date": "2026-08-14",
+            "close": 7785.7598,
+            "change": -0.001696
+          },
+          {
+            "x": 275.17,
+            "y": 8.91,
+            "date": "2026-08-17",
+            "close": 7745.0601,
+            "change": -0.005227
+          },
+          {
+            "x": 289.66,
+            "y": 13.77,
+            "date": "2026-08-18",
+            "close": 7691.7598,
+            "change": -0.006882
+          },
+          {
+            "x": 304.14,
+            "y": 12.29,
+            "date": "2026-08-19",
+            "close": 7707.98,
+            "change": 0.002109
+          },
+          {
+            "x": 318.62,
+            "y": 18.38,
+            "date": "2026-08-20",
+            "close": 7641.1602,
+            "change": -0.008669
+          },
+          {
+            "x": 333.1,
+            "y": 15.36,
+            "date": "2026-08-21",
+            "close": 7674.3701,
+            "change": 0.004346
+          },
+          {
+            "x": 347.59,
+            "y": 17.32,
+            "date": "2026-08-24",
+            "close": 7652.8599,
+            "change": -0.002803
+          },
+          {
+            "x": 362.07,
+            "y": 15.09,
+            "date": "2026-08-25",
+            "close": 7677.2798,
+            "change": 0.003191
+          },
+          {
+            "x": 376.55,
+            "y": 15.24,
+            "date": "2026-08-26",
+            "close": 7675.7002,
+            "change": -0.000206
+          },
+          {
+            "x": 391.03,
+            "y": 10.2,
+            "date": "2026-08-27",
+            "close": 7730.9902,
+            "change": 0.007203
+          },
+          {
+            "x": 405.52,
+            "y": 11.95,
+            "date": "2026-08-28",
+            "close": 7711.7598,
+            "change": -0.002487
+          },
+          {
+            "x": 420.0,
+            "y": 14.28,
+            "date": "2026-08-31",
+            "close": 7686.1401,
+            "change": -0.003322
+          }
+        ]
+      }
+    },
+    "nasdaq100": {
+      "market_date": "2026-08-31",
+      "close": 29456.97265625,
+      "daily_return": 0.0007998717444741565,
+      "ytd_return": 0.16661972692751958,
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "drawdown": 0.03925647144738065,
+      "name": "Nasdaq-100",
+      "ticker": "^NDX",
+      "valid": true,
+      "sparkline": {
+        "line": "M0.0,18.14 L14.48,20.53 L28.97,28.79 L43.45,33.76 L57.93,35.12 L72.41,39.32 L86.9,48.0 L101.38,34.09 L115.86,31.54 L130.34,23.89 L144.83,9.35 L159.31,13.08 L173.79,14.82 L188.28,9.51 L202.76,11.04 L217.24,12.5 L231.72,9.2 L246.21,4.0 L260.69,4.58 L275.17,5.36 L289.66,13.03 L304.14,14.02 L318.62,17.26 L333.1,15.8 L347.59,20.15 L362.07,17.32 L376.55,17.08 L391.03,10.74 L405.52,13.9 L420.0,13.55",
+        "area": "M0.0,18.14 L14.48,20.53 L28.97,28.79 L43.45,33.76 L57.93,35.12 L72.41,39.32 L86.9,48.0 L101.38,34.09 L115.86,31.54 L130.34,23.89 L144.83,9.35 L159.31,13.08 L173.79,14.82 L188.28,9.51 L202.76,11.04 L217.24,12.5 L231.72,9.2 L246.21,4.0 L260.69,4.58 L275.17,5.36 L289.66,13.03 L304.14,14.02 L318.62,17.26 L333.1,15.8 L347.59,20.15 L362.07,17.32 L376.55,17.08 L391.03,10.74 L405.52,13.9 L420.0,13.55 L420.0,52 L0.0,52 Z",
+        "points": [
+          {
+            "x": 0.0,
+            "y": 18.14,
+            "date": "2026-07-21",
+            "close": 29155.1797,
+            "change": null
+          },
+          {
+            "x": 14.48,
+            "y": 20.53,
+            "date": "2026-07-22",
+            "close": 28998.0996,
+            "change": -0.005388
+          },
+          {
+            "x": 28.97,
+            "y": 28.79,
+            "date": "2026-07-23",
+            "close": 28454.8105,
+            "change": -0.018735
+          },
+          {
+            "x": 43.45,
+            "y": 33.76,
+            "date": "2026-07-24",
+            "close": 28128.3398,
+            "change": -0.011473
+          },
+          {
+            "x": 57.93,
+            "y": 35.12,
+            "date": "2026-07-27",
+            "close": 28039.2109,
+            "change": -0.003169
+          },
+          {
+            "x": 72.41,
+            "y": 39.32,
+            "date": "2026-07-28",
+            "close": 27763.1309,
+            "change": -0.009846
+          },
+          {
+            "x": 86.9,
+            "y": 48.0,
+            "date": "2026-07-29",
+            "close": 27192.3105,
+            "change": -0.02056
+          },
+          {
+            "x": 101.38,
+            "y": 34.09,
+            "date": "2026-07-30",
+            "close": 28106.3496,
+            "change": 0.033614
+          },
+          {
+            "x": 115.86,
+            "y": 31.54,
+            "date": "2026-07-31",
+            "close": 28274.1992,
+            "change": 0.005972
+          },
+          {
+            "x": 130.34,
+            "y": 23.89,
+            "date": "2026-08-03",
+            "close": 28776.8008,
+            "change": 0.017776
+          },
+          {
+            "x": 144.83,
+            "y": 9.35,
+            "date": "2026-08-04",
+            "close": 29733.1602,
+            "change": 0.033234
+          },
+          {
+            "x": 159.31,
+            "y": 13.08,
+            "date": "2026-08-05",
+            "close": 29487.7891,
+            "change": -0.008252
+          },
+          {
+            "x": 173.79,
+            "y": 14.82,
+            "date": "2026-08-06",
+            "close": 29373.3301,
+            "change": -0.003882
+          },
+          {
+            "x": 188.28,
+            "y": 9.51,
+            "date": "2026-08-07",
+            "close": 29722.3008,
+            "change": 0.011881
+          },
+          {
+            "x": 202.76,
+            "y": 11.04,
+            "date": "2026-08-10",
+            "close": 29621.8008,
+            "change": -0.003381
+          },
+          {
+            "x": 217.24,
+            "y": 12.5,
+            "date": "2026-08-11",
+            "close": 29525.4805,
+            "change": -0.003252
+          },
+          {
+            "x": 231.72,
+            "y": 9.2,
+            "date": "2026-08-12",
+            "close": 29742.5996,
+            "change": 0.007354
+          },
+          {
+            "x": 246.21,
+            "y": 4.0,
+            "date": "2026-08-13",
+            "close": 30084.5,
+            "change": 0.011495
+          },
+          {
+            "x": 260.69,
+            "y": 4.58,
+            "date": "2026-08-14",
+            "close": 30046.1406,
+            "change": -0.001275
+          },
+          {
+            "x": 275.17,
+            "y": 5.36,
+            "date": "2026-08-17",
+            "close": 29995.3809,
+            "change": -0.001689
+          },
+          {
+            "x": 289.66,
+            "y": 13.03,
+            "date": "2026-08-18",
+            "close": 29490.9609,
+            "change": -0.016817
+          },
+          {
+            "x": 304.14,
+            "y": 14.02,
+            "date": "2026-08-19",
+            "close": 29426.0195,
+            "change": -0.002202
+          },
+          {
+            "x": 318.62,
+            "y": 17.26,
+            "date": "2026-08-20",
+            "close": 29213.1602,
+            "change": -0.007234
+          },
+          {
+            "x": 333.1,
+            "y": 15.8,
+            "date": "2026-08-21",
+            "close": 29308.8594,
+            "change": 0.003276
+          },
+          {
+            "x": 347.59,
+            "y": 20.15,
+            "date": "2026-08-24",
+            "close": 29023.1797,
+            "change": -0.009747
+          },
+          {
+            "x": 362.07,
+            "y": 17.32,
+            "date": "2026-08-25",
+            "close": 29209.2305,
+            "change": 0.00641
+          },
+          {
+            "x": 376.55,
+            "y": 17.08,
+            "date": "2026-08-26",
+            "close": 29224.5195,
+            "change": 0.000523
+          },
+          {
+            "x": 391.03,
+            "y": 10.74,
+            "date": "2026-08-27",
+            "close": 29641.5605,
+            "change": 0.01427
+          },
+          {
+            "x": 405.52,
+            "y": 13.9,
+            "date": "2026-08-28",
+            "close": 29433.4297,
+            "change": -0.007022
+          },
+          {
+            "x": 420.0,
+            "y": 13.55,
+            "date": "2026-08-31",
+            "close": 29456.9727,
+            "change": 0.0008
+          }
+        ]
+      }
+    },
+    "dow": {
+      "market_date": "2026-08-31",
+      "close": 53185.8984375,
+      "daily_return": -0.00698450197161371,
+      "ytd_return": 0.10658049989751461,
+      "ath": 54349.12109375,
+      "ath_date": "2026-08-05",
+      "drawdown": 0.021402786886718705,
+      "name": "Dow Jones",
+      "ticker": "^DJI",
+      "valid": true,
+      "sparkline": {
+        "line": "M0.0,37.93 L14.48,38.03 L28.97,46.12 L43.45,42.36 L57.93,38.16 L72.41,29.58 L86.9,48.0 L101.38,38.2 L115.86,33.77 L130.34,22.7 L144.83,8.2 L159.31,4.0 L173.79,11.41 L188.28,8.99 L202.76,9.96 L217.24,12.9 L231.72,13.24 L246.21,12.13 L260.69,13.85 L275.17,18.2 L289.66,20.06 L304.14,18.15 L318.62,29.39 L333.1,21.12 L347.59,18.88 L362.07,16.33 L376.55,18.14 L391.03,16.45 L405.52,16.6 L420.0,22.58",
+        "area": "M0.0,37.93 L14.48,38.03 L28.97,46.12 L43.45,42.36 L57.93,38.16 L72.41,29.58 L86.9,48.0 L101.38,38.2 L115.86,33.77 L130.34,22.7 L144.83,8.2 L159.31,4.0 L173.79,11.41 L188.28,8.99 L202.76,9.96 L217.24,12.9 L231.72,13.24 L246.21,12.13 L260.69,13.85 L275.17,18.2 L289.66,20.06 L304.14,18.15 L318.62,29.39 L333.1,21.12 L347.59,18.88 L362.07,16.33 L376.55,18.14 L391.03,16.45 L405.52,16.6 L420.0,22.58 L420.0,52 L0.0,52 Z",
+        "points": [
+          {
+            "x": 0.0,
+            "y": 37.93,
+            "date": "2026-07-21",
+            "close": 52224.6406,
+            "change": null
+          },
+          {
+            "x": 14.48,
+            "y": 38.03,
+            "date": "2026-07-22",
+            "close": 52218.5781,
+            "change": -0.000116
+          },
+          {
+            "x": 28.97,
+            "y": 46.12,
+            "date": "2026-07-23",
+            "close": 51711.6484,
+            "change": -0.009708
+          },
+          {
+            "x": 43.45,
+            "y": 42.36,
+            "date": "2026-07-24",
+            "close": 51947.25,
+            "change": 0.004556
+          },
+          {
+            "x": 57.93,
+            "y": 38.16,
+            "date": "2026-07-27",
+            "close": 52210.0781,
+            "change": 0.00506
+          },
+          {
+            "x": 72.41,
+            "y": 29.58,
+            "date": "2026-07-28",
+            "close": 52747.3203,
+            "change": 0.01029
+          },
+          {
+            "x": 86.9,
+            "y": 48.0,
+            "date": "2026-07-29",
+            "close": 51594.1406,
+            "change": -0.021862
+          },
+          {
+            "x": 101.38,
+            "y": 38.2,
+            "date": "2026-07-30",
+            "close": 52208.0586,
+            "change": 0.011899
+          },
+          {
+            "x": 115.86,
+            "y": 33.77,
+            "date": "2026-07-31",
+            "close": 52485.0312,
+            "change": 0.005305
+          },
+          {
+            "x": 130.34,
+            "y": 22.7,
+            "date": "2026-08-03",
+            "close": 53178.4102,
+            "change": 0.013211
+          },
+          {
+            "x": 144.83,
+            "y": 8.2,
+            "date": "2026-08-04",
+            "close": 54085.8789,
+            "change": 0.017065
+          },
+          {
+            "x": 159.31,
+            "y": 4.0,
+            "date": "2026-08-05",
+            "close": 54349.1211,
+            "change": 0.004867
+          },
+          {
+            "x": 173.79,
+            "y": 11.41,
+            "date": "2026-08-06",
+            "close": 53885.1016,
+            "change": -0.008538
+          },
+          {
+            "x": 188.28,
+            "y": 8.99,
+            "date": "2026-08-07",
+            "close": 54036.9297,
+            "change": 0.002818
+          },
+          {
+            "x": 202.76,
+            "y": 9.96,
+            "date": "2026-08-10",
+            "close": 53975.9805,
+            "change": -0.001128
+          },
+          {
+            "x": 217.24,
+            "y": 12.9,
+            "date": "2026-08-11",
+            "close": 53791.8516,
+            "change": -0.003411
+          },
+          {
+            "x": 231.72,
+            "y": 13.24,
+            "date": "2026-08-12",
+            "close": 53770.2695,
+            "change": -0.000401
+          },
+          {
+            "x": 246.21,
+            "y": 12.13,
+            "date": "2026-08-13",
+            "close": 53839.9883,
+            "change": 0.001297
+          },
+          {
+            "x": 260.69,
+            "y": 13.85,
+            "date": "2026-08-14",
+            "close": 53732.4102,
+            "change": -0.001998
+          },
+          {
+            "x": 275.17,
+            "y": 18.2,
+            "date": "2026-08-17",
+            "close": 53459.7812,
+            "change": -0.005074
+          },
+          {
+            "x": 289.66,
+            "y": 20.06,
+            "date": "2026-08-18",
+            "close": 53343.3984,
+            "change": -0.002177
+          },
+          {
+            "x": 304.14,
+            "y": 18.15,
+            "date": "2026-08-19",
+            "close": 53463.0508,
+            "change": 0.002243
+          },
+          {
+            "x": 318.62,
+            "y": 29.39,
+            "date": "2026-08-20",
+            "close": 52759.2109,
+            "change": -0.013165
+          },
+          {
+            "x": 333.1,
+            "y": 21.12,
+            "date": "2026-08-21",
+            "close": 53277.0117,
+            "change": 0.009814
+          },
+          {
+            "x": 347.59,
+            "y": 18.88,
+            "date": "2026-08-24",
+            "close": 53417.1602,
+            "change": 0.002631
+          },
+          {
+            "x": 362.07,
+            "y": 16.33,
+            "date": "2026-08-25",
+            "close": 53577.3984,
+            "change": 0.003
+          },
+          {
+            "x": 376.55,
+            "y": 18.14,
+            "date": "2026-08-26",
+            "close": 53463.8789,
+            "change": -0.002119
+          },
+          {
+            "x": 391.03,
+            "y": 16.45,
+            "date": "2026-08-27",
+            "close": 53569.4414,
+            "change": 0.001974
+          },
+          {
+            "x": 405.52,
+            "y": 16.6,
+            "date": "2026-08-28",
+            "close": 53559.9883,
+            "change": -0.000176
+          },
+          {
+            "x": 420.0,
+            "y": 22.58,
+            "date": "2026-08-31",
+            "close": 53185.8984,
+            "change": -0.006985
+          }
+        ]
+      }
+    }
+  },
+  "market_context": {
+    "russell2000": {
+      "market_date": "2026-08-31",
+      "close": 2956.451904296875,
+      "daily_return": -0.005355393932464536,
+      "name": "Russell 2000",
+      "ticker": "^RUT",
+      "valid": true
+    },
+    "vix": {
+      "market_date": "2026-08-31",
+      "close": 14.920000076293945,
+      "daily_return": 0.03395701737736001,
+      "name": "VIX",
+      "ticker": "^VIX",
+      "valid": true
+    },
+    "dxy": {
+      "market_date": "2026-08-31",
+      "close": 99.39099884033203,
+      "daily_return": -0.0030992790107161605,
+      "name": "美元指数",
+      "ticker": "DX-Y.NYB",
+      "valid": true
+    },
+    "us10y": {
+      "market_date": "2026-08-31",
+      "close": 4.758000373840332,
+      "yield_change_bp": 3.800058364868164,
+      "name": "10Y 美债",
+      "ticker": "^TNX",
+      "valid": true
+    },
+    "gold": {
+      "market_date": "2026-08-31",
+      "close": 4506.89990234375,
+      "daily_return": 0.0064312552331229345,
+      "name": "黄金 (COMEX)",
+      "ticker": "GC=F",
+      "valid": true
+    },
+    "wti": {
+      "market_date": "2026-08-31",
+      "close": 86.69000244140625,
+      "daily_return": 0.03944845150280307,
+      "name": "原油 (WTI)",
+      "ticker": "CL=F",
+      "valid": true
+    }
+  },
+  "market_signals": {
+    "tech_relative": 0.004122022548555093,
+    "small_cap_relative": -0.0020332431283835994,
+    "vix_daily_return": 0.03395701737736001,
+    "dxy_daily_return": -0.0030992790107161605,
+    "us10y_bp_change": 3.800058364868164,
+    "signals": []
+  },
+  "market_breadth": {
+    "market_date": "2026-08-31",
+    "stocks": {
+      "market_date": "2026-08-31",
+      "constituent_date": "2026-08-27",
+      "total_constituents": 505,
+      "valid_count": 503,
+      "invalid_count": 2,
+      "advancers": 136,
+      "decliners": 362,
+      "unchanged": 5,
+      "advance_ratio": 0.27037773359840955,
+      "decline_ratio": 0.7196819085487077,
+      "unchanged_ratio": 0.009940357852882704,
+      "coverage_ratio": 0.996039603960396,
+      "status": "ok"
+    },
+    "sectors": {
+      "market_date": "2026-08-31",
+      "items": [
+        {
+          "key": "energy",
+          "name": "能源",
+          "ticker": "XLE",
+          "valid": true,
+          "daily_return": 0.02042116740690547,
+          "direction": "up",
+          "bar_strength": 0.6807055802301825
+        },
+        {
+          "key": "technology",
+          "name": "科技",
+          "ticker": "XLK",
+          "valid": true,
+          "daily_return": 0.004362095686057943,
+          "direction": "up",
+          "bar_strength": 0.14540318953526477
+        },
+        {
+          "key": "health_care",
+          "name": "医疗保健",
+          "ticker": "XLV",
+          "valid": true,
+          "daily_return": -0.0036224022126135624,
+          "direction": "down",
+          "bar_strength": 0.12074674042045208
+        },
+        {
+          "key": "consumer_discretionary",
+          "name": "非必需消费",
+          "ticker": "XLY",
+          "valid": true,
+          "daily_return": -0.005289674527982902,
+          "direction": "down",
+          "bar_strength": 0.17632248426609673
+        },
+        {
+          "key": "consumer_staples",
+          "name": "必需消费",
+          "ticker": "XLP",
+          "valid": true,
+          "daily_return": -0.005500217765873949,
+          "direction": "down",
+          "bar_strength": 0.18334059219579832
+        },
+        {
+          "key": "financials",
+          "name": "金融",
+          "ticker": "XLF",
+          "valid": true,
+          "daily_return": -0.006712554214991062,
+          "direction": "down",
+          "bar_strength": 0.22375180716636875
+        },
+        {
+          "key": "real_estate",
+          "name": "房地产",
+          "ticker": "XLRE",
+          "valid": true,
+          "daily_return": -0.008318321395966555,
+          "direction": "down",
+          "bar_strength": 0.27727737986555184
+        },
+        {
+          "key": "materials",
+          "name": "材料",
+          "ticker": "XLB",
+          "valid": true,
+          "daily_return": -0.00921402173100605,
+          "direction": "down",
+          "bar_strength": 0.3071340577002017
+        },
+        {
+          "key": "industrials",
+          "name": "工业",
+          "ticker": "XLI",
+          "valid": true,
+          "daily_return": -0.01134692623778677,
+          "direction": "down",
+          "bar_strength": 0.37823087459289234
+        },
+        {
+          "key": "utilities",
+          "name": "公用事业",
+          "ticker": "XLU",
+          "valid": true,
+          "daily_return": -0.011701380888286095,
+          "direction": "down",
+          "bar_strength": 0.3900460296095365
+        },
+        {
+          "key": "communication_services",
+          "name": "通信服务",
+          "ticker": "XLC",
+          "valid": true,
+          "daily_return": -0.013541010781693896,
+          "direction": "down",
+          "bar_strength": 0.4513670260564632
+        }
+      ],
+      "valid_count": 11,
+      "advancers": 2,
+      "decliners": 9,
+      "unchanged": 0,
+      "advance_ratio": 0.18181818181818182
+    },
+    "health": {
+      "valid": true,
+      "score": 0.23495391288631845,
+      "level": "very_weak",
+      "label": "广泛走弱",
+      "divergence": null,
+      "summary": "多数股票与板块共同走弱，市场宽度明显恶化。"
+    }
+  },
+  "market_sentiment": {
+    "vix_score": 75.4,
+    "breadth_score": 23.5,
+    "momentum_score": 58.7,
+    "risk_appetite_score": 39.8,
+    "market_sentiment_score": 51.1,
+    "market_sentiment_label": "中性"
+  },
+  "drawdown": {
+    "sp500": {
+      "index": "sp500",
+      "name": "S&P 500",
+      "cycle_id": "sp500-2026-08-13-77989902",
+      "started_at": "2026-08-14T10:42:09.022326+08:00",
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "last_market_date": "2026-08-31",
+      "last_updated_at": "2026-09-01T09:01:25.346581+08:00",
+      "current_close": 7686.14013671875,
+      "current_drawdown": 0.01446983446124206,
+      "pool": 140000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.1,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.15,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.25,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 140000,
+      "next_threshold": 0.1,
+      "distance_to_next": 0.08553016553875795,
+      "status": "normal",
+      "status_label": "🟢 未触发",
+      "already_invested": 0,
+      "suggested_amount": 0
+    },
+    "nasdaq100": {
+      "index": "nasdaq100",
+      "name": "Nasdaq-100",
+      "cycle_id": "nasdaq100-2026-06-02-306605996",
+      "started_at": "2026-08-12T10:00:00+08:00",
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "last_market_date": "2026-08-31",
+      "last_updated_at": "2026-09-01T09:01:25.346581+08:00",
+      "current_close": 29456.97265625,
+      "current_drawdown": 0.03925647144738065,
+      "pool": 60000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.15,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.3,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.4,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 60000,
+      "next_threshold": 0.15,
+      "distance_to_next": 0.11074352855261935,
+      "status": "normal",
+      "status_label": "🟢 未触发",
+      "already_invested": 7500,
+      "suggested_amount": 0
+    }
+  },
+  "reserve": {
+    "total": 200000,
+    "remaining": 192500,
+    "used": 7500,
+    "ratio": 0.9625
+  },
+  "discipline": {
+    "monthly_dca": 10000,
+    "holding_years_min": 20
+  },
+  "portfolio_action": "hold",
+  "market_summary": {
+    "market": "标普500下跌0.33%，纳斯达克100上涨0.08%，道指下跌0.70%；市场宽度明显恶化，仅136只股票上涨、362只下跌，11个板块中仅能源和科技上涨。",
+    "drivers": "市场同时关注美联储主席沃什将9月政策会议视为关键时点、苹果完成首席执行官交接，以及亚马逊面临的监管与诉讼风险。",
+    "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
+    "degraded": false
+  },
+  "news": [
+    {
+      "rank": 1,
+      "candidate_id": "1e9ea6e93c11cbc9",
+      "category": "政策 / 监管",
+      "title_zh": "SEC与CFTC第四次推迟对冲基金额外披露要求",
+      "summary_zh": "美国监管机构第四次推迟对冲基金额外披露规则。该要求原本旨在帮助监管部门掌握市场动荡期间大型基金的金融头寸。",
+      "focus": "新的实施时间表及监管机构对系统性风险监测的安排",
+      "tags": [
+        "对冲基金",
+        "SEC",
+        "金融监管"
+      ],
+      "investment_relevance_score": 89,
+      "source": "Bloomberg Markets",
+      "url": "https://www.bloomberg.com/news/articles/2026-08-31/hedge-fund-disclosure-deadline-delayed-again-by-sec-cftc",
+      "published_at": "2026-08-31T21:44:42+00:00",
+      "original_title": "Hedge Fund Disclosure Deadline Delayed Again by SEC, CFTC",
+      "selection_reason": "美国金融市场：SEC与CFTC确认第四次推迟对冲基金头寸披露要求，属于金融监管制度状态变化，涉及市场风险监测。",
+      "event_summary": "美国监管机构第四次推迟对冲基金额外披露要求。",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 2,
+      "candidate_id": "de499bbdb0f7ec32",
+      "category": "美联储 / 利率",
+      "title_zh": "美联储主席沃什将9月会议视为关键时点",
+      "summary_zh": "美联储主席沃什将9月政策会议描述为关键节点，市场将据此评估未来利率路径及通胀判断。",
+      "focus": "9月FOMC会议及沃什对通胀和利率条件的进一步表态",
+      "tags": [
+        "美联储",
+        "利率路径",
+        "通胀"
+      ],
+      "investment_relevance_score": 86,
+      "source": "Bloomberg Economics",
+      "url": "https://www.bloomberg.com/news/newsletters/2026-08-31/warsh-takes-a-page-from-aerospace-pioneers-to-find-the-right-stuff",
+      "published_at": "2026-08-31T11:12:14+00:00",
+      "original_title": "Warsh Takes a Page From Aerospace Pioneers to Find the Right Stuff",
+      "selection_reason": "美国宏观：美联储主席就9月政策会议释放明确时间节点信号，直接涉及利率路径和通胀判断。",
+      "event_summary": "美联储主席沃什将9月政策会议视为关键时点。",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 3,
+      "candidate_id": "37bb4358d20020db",
+      "category": "半导体",
+      "title_zh": "韩国出口在AI芯片需求推动下加速增长",
+      "summary_zh": "韩国8月出口延续强劲增长，人工智能需求推动芯片出货和整体经济表现，也令韩国央行暂缺乏转向宽松的理由。",
+      "focus": "后续芯片出口、AI订单和韩国央行利率决定",
+      "tags": [
+        "AI芯片",
+        "韩国出口",
+        "芯片需求"
+      ],
+      "investment_relevance_score": 83,
+      "source": "Bloomberg Economics",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-01/south-korea-s-exports-gather-pace-as-chip-boom-powers-ahead",
+      "published_at": "2026-09-01T00:00:13+00:00",
+      "original_title": "South Korea’s Exports Gather Pace as Chip Boom Powers Ahead",
+      "selection_reason": "市场影响：韩国确认芯片出口受AI需求推动增长，为全球半导体需求和相关上市公司景气提供新数据。",
+      "event_summary": "韩国8月出口在人工智能需求带动下加速增长。",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 4,
+      "candidate_id": "16b2463c3572878e",
+      "category": "政策 / 监管",
+      "title_zh": "FTC与22州起诉亚马逊涉嫌操纵广告定价",
+      "summary_zh": "美国联邦贸易委员会及22个州对亚马逊提起诉讼，指控其秘密向企业收取更高广告费用，案件将增加其监管与诉讼风险。",
+      "focus": "FTC诉讼进程、亚马逊广告业务影响及潜在救济措施",
+      "tags": [
+        "亚马逊",
+        "FTC",
+        "反垄断"
+      ],
+      "investment_relevance_score": 82,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/08/31/ftc-accuses-amazon-of-running-a-secret-ad-surcharge-scheme-in-new-lawsuit/",
+      "published_at": "2026-08-31T20:20:25+00:00",
+      "original_title": "FTC accuses Amazon of running a ‘secret ad surcharge scheme’ in new lawsuit",
+      "selection_reason": "大型科技：亚马逊面临FTC及22州新诉讼，属于监管调查或反垄断程序，直接涉及其广告核心业务。",
+      "event_summary": "美国联邦贸易委员会和22个州起诉亚马逊涉嫌操纵广告定价。",
+      "topic_group": "MEGA_CAP_TECH",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 5,
+      "candidate_id": "f438cd2eac49d445",
+      "category": "政策 / 监管",
+      "title_zh": "约翰·特努斯正式接任苹果首席执行官",
+      "summary_zh": "苹果完成首席执行官交接，约翰·特努斯于9月1日接替蒂姆·库克。公司随后将进入年度秋季产品发布周期。",
+      "focus": "新管理层战略、秋季产品发布及资本配置安排",
+      "tags": [
+        "苹果",
+        "CEO变动",
+        "公司战略"
+      ],
+      "investment_relevance_score": 78,
+      "source": "Bloomberg Markets",
+      "url": "https://www.bloomberg.com/news/videos/2026-08-31/apple-s-ternus-takes-the-ceo-reins-video",
+      "published_at": "2026-08-31T22:10:47+00:00",
+      "original_title": "Apple’s Ternus Takes the CEO Reins",
+      "selection_reason": "大型科技：苹果确认CEO重大变动，属于CEO或核心高管重大变动，直接影响公司战略执行与产品周期。",
+      "event_summary": "蒂姆·库克卸任苹果首席执行官，约翰·特努斯接任。",
+      "topic_group": "MEGA_CAP_TECH",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 6,
+      "candidate_id": "c12ac5c91cbb81ef",
+      "category": "政策 / 监管",
+      "title_zh": "NASA罗曼太空望远镜搭载SpaceX猎鹰重型升空",
+      "summary_zh": "NASA的南希·格蕾丝·罗曼太空望远镜已搭载SpaceX猎鹰重型火箭从佛罗里达发射升空，进入后续太空观测任务阶段。",
+      "focus": "罗曼望远镜部署进度及SpaceX后续重大任务",
+      "tags": [
+        "SpaceX",
+        "猎鹰重型",
+        "NASA"
+      ],
+      "investment_relevance_score": 72,
+      "source": "NASA",
+      "url": "https://www.nasa.gov/image-article/nasas-nancy-grace-roman-space-telescope-launches/",
+      "published_at": "2026-08-31T14:10:31+00:00",
+      "original_title": "NASA’s Nancy Grace Roman Space Telescope Launches",
+      "selection_reason": "大型科技：SpaceX完成猎鹰重型重大商业航天发射，属于SpaceX重大火箭发射，事实已由NASA确认。",
+      "event_summary": "美国宇航局南希·格蕾丝·罗曼太空望远镜发射升空。",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other",
+      "source_channel": null
+    }
+  ],
+  "news_degraded": false,
+  "news_source_diagnostics": [],
+  "event_clustering_diagnostics": {
+    "fallback_used": false,
+    "reason": null
+  },
+  "warnings": []
+}
