@@ -438,6 +438,7 @@
   </div>
 </aside>
 
+
 <div class="archive-loading" id="archive-loading" role="status" aria-live="polite" hidden><div class="archive-loading-card"><span class="archive-spinner" aria-hidden="true"></span><strong>正在加载日报…</strong></div></div>
 <script>
 (() => {
@@ -461,6 +462,58 @@
   drawerCloseBtn?.addEventListener('click', closeDrawer);
   drawerBackdrop?.addEventListener('click', closeDrawer);
   document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeDrawer(); });
+
+  const newsPoolDrawer = document.getElementById('news-pool-drawer');
+  const newsPoolBackdrop = document.getElementById('news-pool-backdrop');
+  const newsPoolOpenBtn = document.getElementById('news-pool-open');
+  const newsPoolCloseBtn = document.getElementById('news-pool-close');
+  const openNewsPool = () => {
+    if (!newsPoolDrawer) return;
+    newsPoolDrawer.classList.add('open');
+    newsPoolBackdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+  const closeNewsPool = () => {
+    if (!newsPoolDrawer) return;
+    newsPoolDrawer.classList.remove('open');
+    newsPoolBackdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+  newsPoolOpenBtn?.addEventListener('click', openNewsPool);
+  newsPoolCloseBtn?.addEventListener('click', closeNewsPool);
+  newsPoolBackdrop?.addEventListener('click', closeNewsPool);
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeNewsPool(); });
+
+  const statusFilterBtns = document.querySelectorAll('.pool-filter');
+  const categorySelect = document.getElementById('news-pool-category-select');
+  const newsPoolEmpty = document.getElementById('news-pool-empty');
+  let currentStatusFilter = 'all';
+  const applyNewsPoolFilters = () => {
+    const category = categorySelect ? categorySelect.value : 'all';
+    let anyGroupVisible = false;
+    document.querySelectorAll('.news-pool-group').forEach((group) => {
+      const categoryMatch = category === 'all' || category === group.dataset.category;
+      let anyItemVisible = false;
+      group.querySelectorAll('.news-pool-item').forEach((item) => {
+        const statusMatch = currentStatusFilter === 'all'
+          || item.dataset.selected === (currentStatusFilter === 'selected' ? 'true' : 'false');
+        const visible = categoryMatch && statusMatch;
+        item.hidden = !visible;
+        if (visible) anyItemVisible = true;
+      });
+      group.hidden = !anyItemVisible;
+      if (anyItemVisible) anyGroupVisible = true;
+    });
+    if (newsPoolEmpty) newsPoolEmpty.hidden = anyGroupVisible;
+  };
+  statusFilterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      currentStatusFilter = btn.dataset.statusFilter;
+      statusFilterBtns.forEach((other) => other.classList.toggle('active', other === btn));
+      applyNewsPoolFilters();
+    });
+  });
+  categorySelect?.addEventListener('change', applyNewsPoolFilters);
 
   const select = document.querySelector('.report-select');
   const loading = document.getElementById('archive-loading');
