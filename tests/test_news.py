@@ -1653,9 +1653,9 @@ def test_stage_b_prompt_retains_macro_policy_news_without_same_day_price_proof()
     assert "主线 A 内部的从严顺序" in SYSTEM_PROMPT
     assert "只有 geopolitics 子类适用最严格的门槛" in SYSTEM_PROMPT
     assert (
-        "macro_policy 与 financial_markets 子类，以及不涉及重点科技公司的 high_tech 产业格局事件，"
-        "只需满足关注范围内的事实确认、非重复、具备正常新闻价值即可入选，不需要额外证明其已经产生"
-        "具体、可验证的当日价格影响"
+        "以上 macro_policy、financial_markets 子类，以及不涉及重点科技公司且满足前述结构性门槛的 "
+        "high_tech 事件，只需满足各自门槛内的事实确认、非重复、具备正常新闻价值即可入选，不需要额外"
+        "证明其已经产生具体、可验证的当日价格影响"
     ) in SYSTEM_PROMPT
     assert "不因为分数不够高（例如50-69分）而额外淘汰或收紧门槛" in SYSTEM_PROMPT
 
@@ -1735,3 +1735,183 @@ def test_stage_b_does_not_truncate_to_a_fixed_count_when_many_candidates_qualify
     assert warning is None
     assert len(selected) == 12
     assert sorted(item["candidate_id"] for item in selected) == sorted(ids)
+
+
+# --- 2026-09-01 rework: foreign local macro noise, AI/chip keyword bleed, big-tech
+# category -------------------------------------------------------------------------
+#
+# These guard three fixes: (1) single-country foreign local macro/industry news must
+# not enter mainline A merely by citing AI/chip/semiconductor demand as a growth
+# driver, (2) that exclusion is a general rule (any single foreign country/region), not
+# a hardcoded Korea rule, and (3) a new "大型科技" category exists end-to-end (prompt,
+# validator, and stays consistent between SYSTEM_PROMPT and BORDERLINE_REVIEW_PROMPT).
+
+def test_allowed_categories_now_include_big_tech_as_a_tenth_value():
+    """Schema-level guard: the validator's whitelist must have grown from 9 to 10
+    values and include exactly '大型科技', in sync with the prompt's own list."""
+    assert deepseek_client.ALLOWED_CATEGORIES == {
+        "美联储 / 利率", "就业 / 通胀", "美国经济", "美债 / 美元", "金融市场",
+        "大型科技", "AI / 资本开支", "半导体", "地缘政治", "政策 / 监管",
+    }
+
+
+def test_validate_selection_accepts_big_tech_category_for_amazon_ftc_and_apple_ceo_style_events():
+    """Case 2 / Case 3 (schema level): a big-tech company event (e.g. an FTC action
+    against a named tech company, or a CEO change at one) must be able to carry
+    category='大型科技' through validation without being rejected as illegal."""
+    pool = [
+        candidate("ftc-action", "Regulator brings a major action against a tech company", "https://x/ftc-action"),
+        candidate("ceo-change", "Tech company announces a major CEO transition", "https://x/ceo-change"),
+    ]
+    items = [
+        enriched_selection("ftc-action", rank=1, category="大型科技"),
+        enriched_selection("ceo-change", rank=2, category="大型科技"),
+    ]
+    selected = validate_selection({"news": items}, pool)
+    assert [item["category"] for item in selected] == ["大型科技", "大型科技"]
+
+
+def test_system_prompt_lists_ten_categories_including_big_tech():
+    from src.news_prompt import SYSTEM_PROMPT
+
+    assert (
+        '允许的十个 category 值只能是："美联储 / 利率"、"就业 / 通胀"、"美国经济"、"美债 / 美元"、'
+        '"金融市场"、"大型科技"、"AI / 资本开支"、"半导体"、"地缘政治"、"政策 / 监管"。'
+    ) in SYSTEM_PROMPT
+    assert "允许的九个 category" not in SYSTEM_PROMPT
+
+
+def test_system_prompt_classifies_big_tech_company_events_as_big_tech_not_by_trigger_institution():
+    """Case 2 / Case 3 (prompt level): a big-tech company's earnings, CEO change,
+    litigation, antitrust, or capex event must be told to use '大型科技' as the primary
+    category, and the prompt must explicitly say an FTC/DOJ/SEC trigger does not by
+    itself force '政策 / 监管'."""
+    from src.news_prompt import SYSTEM_PROMPT
+
+    assert "Category 应依据事件的核心投资主体和事件性质分类，而不是依据标题中出现的机构关键词" in SYSTEM_PROMPT
+    assert "主分类优先使用\"大型科技\"" in SYSTEM_PROMPT
+    assert "FTC 起诉 / 调查 Amazon、Apple CEO 重大变动均应归入\"大型科技\"" in SYSTEM_PROMPT
+    assert "不得仅因为出现监管机构名称就自动归入\"政策 / 监管\"" in SYSTEM_PROMPT
+
+
+def test_system_prompt_reserves_policy_regulatory_category_for_industry_wide_rules():
+    """Case 4: an SEC/FTC rule that reshapes an entire industry (not one named
+    company) must still land in '政策 / 监管', proving the new big-tech category
+    doesn't swallow every regulator-triggered story."""
+    from src.news_prompt import SYSTEM_PROMPT
+
+    assert (
+        "\"政策 / 监管\"主要用于美国政府政策、行业性监管制度变化、金融市场制度变化，"
+        "以及会影响多个公司或整个行业的监管规则，而不是针对单一重点科技公司的重大公司事件"
+    ) in SYSTEM_PROMPT
+
+
+def test_system_prompt_excludes_foreign_local_macro_even_with_ai_chip_keywords():
+    """Case 1: a single foreign country's local macro/export/industry data must not
+    enter macro_policy or high_tech merely by citing AI/chip/semiconductor demand as
+    the driver. The rule must be stated generically (any single country/region), not
+    hardcoded to one nation."""
+    from src.news_prompt import SYSTEM_PROMPT
+
+    assert (
+        "非美国单一国家或地区的 GDP、通胀、就业、出口、工业、消费、产业增长等本地宏观数据，"
+        "默认不属于用户关注范围，即使标题或摘要涉及 AI / 芯片 / 半导体 / 数据中心 / 新能源，"
+        "也不能仅凭这些关键词自动进入 high_tech 或被视为满足 macro_policy 门槛"
+    ) in SYSTEM_PROMPT
+    assert "普通国家产业数据、出口增长、地方项目或\"某产业需求旺盛\"等一般性数据，不得仅因为包含 AI / 芯片 / 半导体标签入选" in SYSTEM_PROMPT
+    assert "非美国单一国家的本地宏观、出口或产业增长数据，不得仅因为涉及 AI、芯片或半导体而判定为 global_tech_structural" in SYSTEM_PROMPT
+    # no country is singled out by name in the exclusion rule itself
+    assert "韩国" not in SYSTEM_PROMPT
+
+
+def test_system_prompt_still_allows_genuine_global_tech_structural_events_from_abroad():
+    """Case 5: the tightened foreign-macro rule must not become a blanket "exclude
+    everything overseas" filter -- a confirmed event abroad with a clear, major global
+    spillover into U.S. rates/USD/energy/trade/listed-company earnings/critical tech
+    supply chains must still be admissible via global_tech_structural, and already-named
+    examples (SpaceX/OpenAI capex-scale infrastructure) must remain retained."""
+    from src.news_prompt import SYSTEM_PROMPT
+
+    assert (
+        "只有输入事实能够说明其已经形成明确、重大的全球外溢，并可能实质影响美国利率、美元、"
+        "全球能源价格、全球贸易、美国上市公司盈利、美国关键科技供应链或美国主要行业板块中至少一项时，"
+        "才考虑纳入"
+    ) in SYSTEM_PROMPT
+    assert (
+        "不涉及重点科技公司的 high_tech 事件，必须属于足以改变全球 AI / 半导体 / 云计算 / 数据中心"
+        "等关键产业供需、竞争格局、资本开支、供应链、基础设施或商业化模式的重大结构性事件"
+    ) in SYSTEM_PROMPT
+    # pre-existing carve-outs for confirmed mega-scale infrastructure must be untouched
+    assert "A SpaceX-scale capital expenditure or infrastructure event" in SYSTEM_PROMPT
+    assert "Confirmed major OpenAI product or infrastructure events and $100B-class SpaceX infrastructure events" in SYSTEM_PROMPT
+
+
+def test_borderline_review_prompt_matches_system_prompt_on_foreign_macro_and_big_tech_scope():
+    """The two prompts run over the same events and must not diverge in scope: the
+    review prompt must independently state the same foreign-local-macro default
+    exclusion (including the AI/chip-keyword carve-out) and the same big-tech
+    independent-importance carve-out as SYSTEM_PROMPT."""
+    from src.news_prompt import BORDERLINE_REVIEW_PROMPT
+
+    assert (
+        "非美国单一国家或地区的 GDP、通胀、就业、出口、工业、消费、产业增长等本地宏观新闻默认 "
+        "keep 为 false，即使标题或摘要出现 AI、芯片或半导体关键词，也不构成保留理由"
+    ) in BORDERLINE_REVIEW_PROMPT
+    assert (
+        "主线 B（重点科技公司，含 SpaceX，的实质性重大事件）继续按照现有「大型科技公司独立重要性标准」"
+        "判断，不要求证明其对当日大盘或指数存在明确影响"
+    ) in BORDERLINE_REVIEW_PROMPT
+    assert "韩国" not in BORDERLINE_REVIEW_PROMPT
+
+
+def test_borderline_review_prompt_limits_prefer_keep_to_scope_not_geography():
+    """The 'prefer keep=true on borderline candidates' policy must be explicitly
+    scoped to items already inside the four watch categories -- it must not be usable
+    to re-admit foreign local macro noise or weak AI/chip-keyword stories."""
+    from src.news_prompt import BORDERLINE_REVIEW_PROMPT
+
+    assert (
+        "\"优先保留\"只适用于已经属于用户明确关注范围、但重要性存在边界判断的事件；"
+        "不得用于放宽地域范围，也不得把海外本地宏观、普通产业数据或仅因标题包含 AI / 芯片的弱新闻重新纳入"
+    ) in BORDERLINE_REVIEW_PROMPT
+
+
+def test_stage_b_two_pass_borderline_review_can_drop_foreign_local_macro_with_ai_keyword():
+    """Case 6, pipeline level: a candidate selected by only one of the two SYSTEM_PROMPT
+    samples (borderline) whose facts are 'a single foreign country's local export data,
+    with AI-chip demand cited as the growth driver' (a synthetic stand-in, not a real
+    headline) must end up dropped when the borderline reviewer applies the new rule,
+    exactly like any other correctly-rejected borderline item -- it must not be
+    force-kept just because it reached the review stage."""
+    pool = stage_b_pool(["0", "1"])
+    pool[1]["title"] = "Country X trade data: exports rise, AI chip demand cited as driver"
+    pool[1]["topic_group"] = "FOREIGN_LOCAL_MACRO"
+    resp_a = json.dumps({"selected": [stage_b_item("0", 1, 92)], "reserve": []}, ensure_ascii=False)
+    resp_b = json.dumps(
+        {"selected": [stage_b_item("0", 1, 92), stage_b_item("1", 2, 80)], "reserve": []},
+        ensure_ascii=False,
+    )
+    model = _alternating_model(first_response=resp_a, second_response=resp_b)
+
+    def review_model(system_prompt, user_payload, api_key):
+        payload = json.loads(user_payload)
+        reviews = []
+        for c in payload["candidates"]:
+            is_foreign_local_macro = c.get("topic_group") == "FOREIGN_LOCAL_MACRO"
+            reviews.append({
+                "candidate_id": c["candidate_id"],
+                "keep": not is_foreign_local_macro,
+                "reason": "非美国单一国家本地宏观/出口数据，AI芯片需求仅为驱动因素，无重大全球外溢" if is_foreign_local_macro else "确认新事实",
+            })
+        return json.dumps({"reviews": reviews}, ensure_ascii=False)
+
+    observability = {}
+    selected, warning = select_news_two_pass(
+        pool, "key", call_model=model, review_call_model=review_model,
+        sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert warning is None
+    assert [item["candidate_id"] for item in selected] == ["0"]
+    assert observability["stage_b_borderline_count"] == 1
+    assert observability["stage_b_review_keep_count"] == 0
