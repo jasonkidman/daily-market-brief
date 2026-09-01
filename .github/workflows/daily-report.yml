@@ -9,6 +9,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: investment-report-state
@@ -17,6 +19,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -57,6 +62,7 @@ jobs:
           if-no-files-found: error
 
       - name: Commit durable report and state changes
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -68,6 +74,7 @@ jobs:
           except FileNotFoundError:
               print('false')
           ")
+          echo "core_valid=$core_valid" >> "$GITHUB_OUTPUT"
           if [ "$core_valid" != "true" ]; then
             echo "[MARKET GUARD] core market invalid, skip persistent commit"
             exit 0
@@ -80,3 +87,18 @@ jobs:
             git pull --rebase
             git push
           fi
+
+      - name: Setup GitHub Pages
+        if: steps.commit.outputs.core_valid == 'true'
+        uses: actions/configure-pages@v5
+
+      - name: Upload site/ as Pages artifact
+        if: steps.commit.outputs.core_valid == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./site
+
+      - name: Deploy to GitHub Pages
+        if: steps.commit.outputs.core_valid == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v4
