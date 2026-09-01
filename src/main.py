@@ -33,6 +33,8 @@ from .news_events import (
     stage_a_input_counts,
     validate_event_clusters,
 )
+from .news_candidate_translation import translate_candidates
+from .news_candidates import build_news_candidates
 from .news_snapshot import load_stage_b_snapshot, write_stage_b_snapshot
 from .report import load_reports, retain_latest_reports, write_report
 from .renderer import render_site
@@ -334,7 +336,8 @@ def _offline_news():
          "focus": "中东局势 · 油价", "tags": ["地缘政治", "油价", "通胀"],
          "investment_relevance_score": 78, "selection_reason": "演示用独立地缘事件，验证主题分散保留。"},
     ]}
-    return validate_selection(payload, selection_candidates)
+    news = validate_selection(payload, selection_candidates)
+    return news, build_news_candidates(selection_candidates, news)
 
 
 def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
@@ -409,8 +412,9 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
     stage_b_observability = {"raw_count": 0, "validated_count": 0}
     news_source_diagnostics = []
     event_clustering_diagnostics = {"fallback_used": False, "reason": None}
+    news_candidates = []
     if offline_fixture:
-        news = _offline_news()
+        news, news_candidates = _offline_news()
     else:
         candidates, rss_warnings = fetch_candidates(news_sources, now)
         rss_candidate_count = len(candidates)
@@ -486,6 +490,15 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
                 selection_candidates, api_key, recent_events, market_context=ai_market_context,
                 usage_tracker=usage_tracker, observability=stage_b_observability,
             )
+            selected_candidate_ids = {item["candidate_id"] for item in news}
+            untranslated_candidates = [
+                candidate for candidate in selection_candidates
+                if candidate["candidate_id"] not in selected_candidate_ids
+            ]
+            candidate_translations = translate_candidates(
+                untranslated_candidates, api_key, usage_tracker=usage_tracker,
+            )
+            news_candidates = build_news_candidates(selection_candidates, news, candidate_translations)
         _log_news_pipeline(
             rss_candidate_count, window_candidate_count, len(candidates), stage_a_pre_cap_count,
             stage_a_actual_input_count, event_representatives, selection_candidates,
@@ -560,6 +573,7 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         "portfolio_action": portfolio_action,
         "market_summary": market_summary,
         "news": news,
+        "news_candidates": news_candidates,
         "news_degraded": news_degraded,
         "news_source_diagnostics": news_source_diagnostics,
         "event_clustering_diagnostics": event_clustering_diagnostics,

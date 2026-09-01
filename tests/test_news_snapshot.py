@@ -143,6 +143,7 @@ def test_production_pipeline_writes_snapshot_before_stage_b(tmp_path, monkeypatc
         return [], None
 
     monkeypatch.setattr(main, "select_news_two_pass", fake_select)
+    monkeypatch.setattr(main, "translate_candidates", lambda candidates, api_key, **kwargs: {})
     main.generate_daily_report(base_dir=tmp_path, report_date="2026-08-12")
 
     snapshot = load_stage_b_snapshot(tmp_path / "data" / "news_snapshots" / "2026-08-12.json")

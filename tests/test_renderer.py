@@ -707,3 +707,82 @@ def test_v5_visual_contract_is_the_rendered_dom_and_css_baseline(tmp_path):
     assert ".section-title{display:flex;align-items:center;gap:10px;font-size:20px" in compact_css
     assert "@media(max-width:1100px)" in compact_css
     assert "@media(max-width:760px)" in compact_css
+
+
+def candidate_item(candidate_id, category, selected, title="候选中文标题", source="Fixture"):
+    return {
+        "candidate_id": candidate_id, "title": f"Original {title}", "title_zh": title, "source": source,
+        "published_at": "2026-08-12T09:00:00+00:00", "summary": "Original summary", "summary_zh": "候选中文摘要",
+        "url": f"https://example.com/{candidate_id}", "category": category, "selected": selected,
+    }
+
+
+def test_news_pool_button_and_drawer_render_when_candidates_present(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["generated_at"] = "2026-08-12 12:00 CST"
+    payload["news_candidates"] = [
+        candidate_item("c1", "宏观 / 利率", True, title="已入选新闻"),
+        candidate_item("c2", "AI / 科技", False, title="未入选新闻"),
+    ]
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    site = tmp_path / "site"
+
+    render(reports, site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    assert "更多新闻 · 2" in html
+    assert 'id="news-pool-drawer"' in html
+    assert "今日新闻候选池" in html
+    assert "2026-08-12 · 共 2 条" in html
+    assert "全部 <span>2</span>" in html
+    assert "已入选 <span>1</span>" in html
+    assert "未入选 <span>1</span>" in html
+    assert "已入选新闻" in html and "未入选新闻" in html
+    assert html.count('class="pool-badge pool-badge-selected"') == 1
+    assert html.count('class="pool-badge">未入选<') == 1
+    assert 'href="https://example.com/c1" target="_blank" rel="noopener noreferrer"' in html
+    # Grouped by category, in the fixed display order.
+    assert html.index("宏观 / 利率") < html.index("AI / 科技")
+    # Chinese only by default -- the raw English fields are kept in the data but not rendered.
+    assert "Original 已入选新闻" not in html
+    assert "Original 未入选新闻" not in html
+    # Drawer rows reuse the exact homepage news-item classes (pixel-identical typography).
+    assert 'class="news-item news-pool-item"' in html
+    assert '<div class="news-title"><a href="https://example.com/c1"' in html
+    assert '<div class="news-desc">候选中文摘要</div>' in html
+
+
+def test_news_pool_button_and_drawer_absent_when_no_candidates(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    site = tmp_path / "site"
+
+    render(reports, site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    assert "更多新闻" not in html
+    assert 'id="news-pool-drawer"' not in html
+    assert 'id="news-pool-open"' not in html
+
+
+def test_history_page_shows_that_days_own_candidate_pool(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    today = report("2026-08-12")
+    today["news_candidates"] = [candidate_item("today-1", "大型科技", True, title="今天的候选")]
+    (reports / "2026-08-12.json").write_text(json.dumps(today), encoding="utf-8")
+    yesterday = report("2026-08-11")
+    yesterday["news_candidates"] = [candidate_item("yesterday-1", "其他", False, title="昨天的候选")]
+    (reports / "2026-08-11.json").write_text(json.dumps(yesterday), encoding="utf-8")
+    site = tmp_path / "site"
+
+    render(reports, site)
+
+    history_html = (site / "history" / "2026-08-11.html").read_text(encoding="utf-8")
+    assert "2026-08-11 · 共 1 条" in history_html
+    assert "昨天的候选" in history_html
+    assert "今天的候选" not in history_html

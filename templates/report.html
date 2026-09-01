@@ -154,6 +154,12 @@
 <section>
   <div class="section-head">
     <div class="section-title"><span class="bar"></span><span>今日重要新闻</span><span class="small">（按重要性排序）</span></div>
+    {% if report.news_candidates %}
+    <button type="button" class="news-pool-open" id="news-pool-open" aria-haspopup="dialog" aria-controls="news-pool-drawer">
+      <span>更多新闻 · {{ report.news_candidates|length }}</span>
+      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </button>
+    {% endif %}
   </div>
   <div class="card news-card">
     {% if report.news_degraded %}
@@ -376,6 +382,62 @@
 </aside>
 {% endif %}
 
+{% if report.news_candidates %}
+{% set total_candidates = report.news_candidates|length %}
+{% set selected_candidates = report.news_candidates|selectattr('selected')|list|length %}
+{% set unselected_candidates = total_candidates - selected_candidates %}
+<div class="drawer-backdrop" id="news-pool-backdrop"></div>
+<aside class="drawer drawer-wide" id="news-pool-drawer" role="dialog" aria-modal="true" aria-labelledby="news-pool-title">
+  <div class="drawer-header">
+    <div>
+      <h2 id="news-pool-title">今日新闻候选池</h2>
+      <div class="news-pool-subtitle">{{ report.report_date }} · 共 {{ total_candidates }} 条</div>
+    </div>
+    <button type="button" class="drawer-close" id="news-pool-close" aria-label="关闭">✕</button>
+  </div>
+  <div class="news-pool-toolbar">
+    <div class="news-pool-status-filters" role="group" aria-label="按入选状态筛选">
+      <button type="button" class="pool-filter active" data-status-filter="all">全部 <span>{{ total_candidates }}</span></button>
+      <button type="button" class="pool-filter" data-status-filter="selected">已入选 <span>{{ selected_candidates }}</span></button>
+      <button type="button" class="pool-filter" data-status-filter="unselected">未入选 <span>{{ unselected_candidates }}</span></button>
+    </div>
+    <select class="news-pool-category-select" id="news-pool-category-select" aria-label="按分类筛选">
+      <option value="all">全部分类</option>
+      {% for cat in category_order %}
+      <option value="{{ cat }}">{{ cat }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="drawer-body news-pool-body">
+    {% for cat in category_order %}
+    {% set items = report.news_candidates|selectattr('category', 'equalto', cat)|list %}
+    {% if items %}
+    <div class="news-pool-group" data-category="{{ cat }}">
+      <div class="news-pool-group-title"><span>{{ cat }}</span><span class="news-pool-group-count">{{ items|length }}</span></div>
+      {% for item in items %}
+      {% set relative = item.published_at|relative_time(report.generated_at) %}
+      <div class="news-item news-pool-item" data-selected="{{ 'true' if item.selected else 'false' }}">
+        <div>
+          <div class="category">{{ item.category }}</div>
+          <div class="time">{{ item.source }}{% if item.published_at %} · {{ relative or item.published_at[:10] }}{% endif %}</div>
+        </div>
+        <div>
+          <div class="news-title"><a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.title_zh }}</a></div>
+          <div class="news-desc">{{ item.summary_zh }}</div>
+        </div>
+        <div class="impact">
+          <span class="pool-badge{% if item.selected %} pool-badge-selected{% endif %}">{{ '已入选' if item.selected else '未入选' }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endfor %}
+    <p class="news-pool-empty" id="news-pool-empty" hidden>没有符合条件的候选新闻。</p>
+  </div>
+</aside>
+{% endif %}
+
 <div class="archive-loading" id="archive-loading" role="status" aria-live="polite" hidden><div class="archive-loading-card"><span class="archive-spinner" aria-hidden="true"></span><strong>正在加载日报…</strong></div></div>
 <script>
 (() => {
@@ -399,6 +461,58 @@
   drawerCloseBtn?.addEventListener('click', closeDrawer);
   drawerBackdrop?.addEventListener('click', closeDrawer);
   document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeDrawer(); });
+
+  const newsPoolDrawer = document.getElementById('news-pool-drawer');
+  const newsPoolBackdrop = document.getElementById('news-pool-backdrop');
+  const newsPoolOpenBtn = document.getElementById('news-pool-open');
+  const newsPoolCloseBtn = document.getElementById('news-pool-close');
+  const openNewsPool = () => {
+    if (!newsPoolDrawer) return;
+    newsPoolDrawer.classList.add('open');
+    newsPoolBackdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+  const closeNewsPool = () => {
+    if (!newsPoolDrawer) return;
+    newsPoolDrawer.classList.remove('open');
+    newsPoolBackdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+  newsPoolOpenBtn?.addEventListener('click', openNewsPool);
+  newsPoolCloseBtn?.addEventListener('click', closeNewsPool);
+  newsPoolBackdrop?.addEventListener('click', closeNewsPool);
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeNewsPool(); });
+
+  const statusFilterBtns = document.querySelectorAll('.pool-filter');
+  const categorySelect = document.getElementById('news-pool-category-select');
+  const newsPoolEmpty = document.getElementById('news-pool-empty');
+  let currentStatusFilter = 'all';
+  const applyNewsPoolFilters = () => {
+    const category = categorySelect ? categorySelect.value : 'all';
+    let anyGroupVisible = false;
+    document.querySelectorAll('.news-pool-group').forEach((group) => {
+      const categoryMatch = category === 'all' || category === group.dataset.category;
+      let anyItemVisible = false;
+      group.querySelectorAll('.news-pool-item').forEach((item) => {
+        const statusMatch = currentStatusFilter === 'all'
+          || item.dataset.selected === (currentStatusFilter === 'selected' ? 'true' : 'false');
+        const visible = categoryMatch && statusMatch;
+        item.hidden = !visible;
+        if (visible) anyItemVisible = true;
+      });
+      group.hidden = !anyItemVisible;
+      if (anyItemVisible) anyGroupVisible = true;
+    });
+    if (newsPoolEmpty) newsPoolEmpty.hidden = anyGroupVisible;
+  };
+  statusFilterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      currentStatusFilter = btn.dataset.statusFilter;
+      statusFilterBtns.forEach((other) => other.classList.toggle('active', other === btn));
+      applyNewsPoolFilters();
+    });
+  });
+  categorySelect?.addEventListener('change', applyNewsPoolFilters);
 
   const select = document.querySelector('.report-select');
   const loading = document.getElementById('archive-loading');

@@ -10,6 +10,8 @@ from zoneinfo import ZoneInfo
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from .news_candidates import CATEGORY_ORDER
+
 
 SHANGHAI = ZoneInfo("Asia/Shanghai")
 
@@ -80,11 +82,17 @@ def render_site(reports_dir: Path, template_path: Path, style_path: Path, site_d
     nav = [{"date": item["report_date"]} for item in reports[:7]]
     latest = reports[0]
     (site_dir / "index.html").write_text(
-        template.render(report=latest, nav=nav, is_index=True, asset_prefix="", current_date=latest["report_date"]),
+        template.render(
+            report=latest, nav=nav, is_index=True, asset_prefix="", current_date=latest["report_date"],
+            category_order=CATEGORY_ORDER,
+        ),
         encoding="utf-8",
     )
     for report in reports:
         (history_dir / f"{report['report_date']}.html").write_text(
-            template.render(report=report, nav=nav, is_index=False, asset_prefix="../", current_date=report["report_date"]),
+            template.render(
+                report=report, nav=nav, is_index=False, asset_prefix="../", current_date=report["report_date"],
+                category_order=CATEGORY_ORDER,
+            ),
             encoding="utf-8",
         )
