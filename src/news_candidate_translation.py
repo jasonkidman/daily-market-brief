@@ -36,12 +36,25 @@ def _parse_payload(payload: Any) -> dict:
         raise NewsCandidateTranslationError("翻译输出无法解析为 JSON。") from exc
 
 
+def _clip(text: str, limit: int) -> str:
+    """Clip to `limit` chars rather than discard -- a truncated Chinese translation
+    is still far more useful in the review drawer than falling all the way back to
+    a long English original just because the model ran a little over budget."""
+    if len(text) <= limit:
+        return text
+    return text[:limit - 1].rstrip() + "…"
+
+
 def validate_translations(payload: Any, candidates: list[dict]) -> dict[str, dict]:
     """Return {candidate_id: {"title_zh":..., "summary_zh":...}} for well-formed entries.
 
     Unlike Stage A/B's strict contracts, a malformed or missing entry is simply
     dropped rather than failing the whole batch -- callers fall back to the
     candidate's original English title/summary for anything not present here.
+    Present-but-overlong text is clipped rather than dropped: some source articles
+    (e.g. long Bloomberg summaries) are well over the length budget even after a
+    faithful translation, and losing the whole entry to English over that is worse
+    for review than a clipped Chinese translation.
     """
     data = _parse_payload(payload)
     translations = data.get("translations")
@@ -59,9 +72,10 @@ def validate_translations(payload: Any, candidates: list[dict]) -> dict[str, dic
             continue
         if not title_zh or not summary_zh:
             continue
-        if len(title_zh) > TITLE_ZH_LIMIT or len(summary_zh) > SUMMARY_ZH_LIMIT:
-            continue
-        result[candidate_id] = {"title_zh": title_zh, "summary_zh": summary_zh}
+        result[candidate_id] = {
+            "title_zh": _clip(title_zh, TITLE_ZH_LIMIT),
+            "summary_zh": _clip(summary_zh, SUMMARY_ZH_LIMIT),
+        }
     return result
 
 

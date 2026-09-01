@@ -20,11 +20,19 @@ def test_validate_translations_keeps_only_known_well_formed_entries():
     assert result == {"a": {"title_zh": "标题A", "summary_zh": "摘要A"}}
 
 
-def test_validate_translations_enforces_length_limits():
+def test_validate_translations_clips_overlong_text_instead_of_dropping_the_entry():
+    """A long source summary (e.g. a lengthy Bloomberg writeup) can produce a
+    faithful translation that runs over budget; losing the whole entry back to
+    raw English is worse for review than a clipped Chinese translation."""
     candidates = [candidate("a")]
-    payload = {"translations": [{"candidate_id": "a", "title_zh": "x" * 71, "summary_zh": "摘要"}]}
+    payload = {"translations": [{"candidate_id": "a", "title_zh": "x" * 71, "summary_zh": "摘" * 200}]}
 
-    assert validate_translations(payload, candidates) == {}
+    result = validate_translations(payload, candidates)
+
+    assert result["a"]["title_zh"] == "x" * 69 + "…"
+    assert len(result["a"]["title_zh"]) == 70
+    assert result["a"]["summary_zh"] == "摘" * 179 + "…"
+    assert len(result["a"]["summary_zh"]) == 180
 
 
 def test_validate_translations_drops_duplicate_candidate_ids():
