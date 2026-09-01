@@ -22,11 +22,16 @@ body{
 .title{margin:0;font-family:Georgia,"Times New Roman",serif;font-size:42px;line-height:1;letter-spacing:-1px}
 .meta{margin-top:10px;color:var(--muted);font-size:13px}
 .top-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
-.datebox{min-width:205px;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:14px;font-weight:700;box-shadow:var(--shadow);display:flex;align-items:center;gap:8px;color:var(--text)}
-.datebox-icon,.datebox-caret{color:var(--muted);font-size:12px;line-height:1}
-.datebox select{flex:1 1 auto;border:0;background:transparent;padding:0;margin:0;font:inherit;color:inherit;appearance:none;-webkit-appearance:none;cursor:pointer}
-.datebox select:focus-visible{outline:2px solid rgba(47,111,179,.35);outline-offset:2px}
-.status{font-size:13px;font-weight:700;color:var(--green)}
+.datebox{min-width:205px;height:64px;padding:0 24px;border:1px solid #dce4eb;border-radius:16px;background:#fff;font-size:14px;font-weight:700;box-shadow:0 2px 8px rgba(20,44,68,.04);display:flex;align-items:center;color:var(--text);transition:border-color 180ms ease,box-shadow 180ms ease}
+.datebox:hover{border-color:#c7d3de;box-shadow:0 4px 12px rgba(20,44,68,.06)}
+.datebox-icon{flex:none;width:20px;height:20px;color:#70879a;margin-right:13px}
+.datebox select{flex:1 1 auto;min-width:0;border:0;background:transparent;padding:0;margin:0;font:inherit;color:inherit;appearance:none;-webkit-appearance:none;cursor:pointer}
+.datebox select:focus-visible{outline:2px solid rgba(47,111,179,.35);outline-offset:2px;border-radius:4px}
+.datebox-caret{flex:none;width:18px;height:18px;color:#7c8d9e;margin-left:8px;transition:transform 180ms ease,color 180ms ease}
+.datebox:hover .datebox-caret{color:#5c6f82}
+.datebox select:focus ~ .datebox-caret{transform:rotate(180deg)}
+.status{font-size:12px;font-weight:700;color:#2f8f63;display:inline-flex;align-items:center;gap:6px}
+.status-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
 .status-partial{color:var(--amber)}
 .status-critical{color:var(--red)}
 

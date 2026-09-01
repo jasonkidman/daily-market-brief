@@ -437,7 +437,7 @@ def test_status_label_does_not_double_up_bullet_glyph(tmp_path):
     render(reports, site)
 
     html = (site / "index.html").read_text(encoding="utf-8")
-    assert '<div class="status status-partial">● 部分数据源异常</div>' in html
+    assert '<div class="status status-partial"><span class="status-dot" aria-hidden="true"></span>部分数据源异常</div>' in html
     assert "🟠" not in html
 
 

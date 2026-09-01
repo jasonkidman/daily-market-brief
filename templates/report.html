@@ -16,7 +16,7 @@
   </div>
   <div class="top-right">
     <div class="datebox">
-      <span class="datebox-icon" aria-hidden="true">▣</span>
+      <svg class="datebox-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
       <select class="report-select" aria-label="选择日报日期">
         {% for item in nav %}
         {% if is_index %}{% set target = 'index.html' if loop.first else 'history/' ~ item.date ~ '.html' %}
@@ -24,10 +24,10 @@
         <option value="{{ target }}"{% if item.date == current_date %} selected{% endif %}>{% if loop.first %}今日 · {{ item.date }}{% else %}{{ item.date }}{% endif %}</option>
         {% endfor %}
       </select>
-      <span class="datebox-caret" aria-hidden="true">⌄</span>
+      <svg class="datebox-caret" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
     </div>
     {% set status_text = report.status_label.split(' ', 1)[-1] if report.status_label and ' ' in report.status_label else (report.status_label or '') %}
-    <div class="status status-{{ report.status }}">● {{ status_text }}</div>
+    <div class="status status-{{ report.status }}"><span class="status-dot" aria-hidden="true"></span>{{ status_text }}</div>
   </div>
 </header>
 
