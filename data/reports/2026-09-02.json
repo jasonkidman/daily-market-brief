@@ -1,6 +1,6 @@
 {
   "report_date": "2026-09-02",
-  "generated_at": "2026-09-02 09:00 CST",
+  "generated_at": "2026-09-02 13:16 CST",
   "market_date": "2026-09-01",
   "status": "ok",
   "status_label": "🟢 数据更新正常",
@@ -21,211 +21,211 @@
       "ticker": "^GSPC",
       "valid": true,
       "sparkline": {
-        "line": "M0.0,31.34 L14.48,39.6 L28.97,39.27 L43.45,39.16 L57.93,37.74 L72.41,48.0 L86.9,36.93 L101.38,32.18 L115.86,22.09 L130.34,9.69 L144.83,10.87 L159.31,12.11 L173.79,7.77 L188.28,8.18 L202.76,10.45 L217.24,8.6 L231.72,4.0 L246.21,5.21 L260.69,8.91 L275.17,13.77 L289.66,12.29 L304.14,18.38 L318.62,15.36 L333.1,17.32 L347.59,15.09 L362.07,15.24 L376.55,10.2 L391.03,11.95 L405.52,14.28 L420.0,19.27",
-        "area": "M0.0,31.34 L14.48,39.6 L28.97,39.27 L43.45,39.16 L57.93,37.74 L72.41,48.0 L86.9,36.93 L101.38,32.18 L115.86,22.09 L130.34,9.69 L144.83,10.87 L159.31,12.11 L173.79,7.77 L188.28,8.18 L202.76,10.45 L217.24,8.6 L231.72,4.0 L246.21,5.21 L260.69,8.91 L275.17,13.77 L289.66,12.29 L304.14,18.38 L318.62,15.36 L333.1,17.32 L347.59,15.09 L362.07,15.24 L376.55,10.2 L391.03,11.95 L405.52,14.28 L420.0,19.27 L420.0,52 L0.0,52 Z",
+        "line": "M0.0,30.41 L14.48,31.34 L28.97,39.6 L43.45,39.27 L57.93,39.16 L72.41,37.74 L86.9,48.0 L101.38,36.93 L115.86,32.18 L130.34,22.09 L144.83,9.69 L159.31,10.87 L173.79,12.11 L188.28,7.77 L202.76,8.18 L217.24,10.45 L231.72,8.6 L246.21,4.0 L260.69,5.21 L275.17,8.91 L289.66,13.77 L304.14,12.29 L318.62,18.38 L333.1,15.36 L347.59,17.32 L362.07,15.09 L376.55,15.24 L391.03,10.2 L405.52,14.28 L420.0,19.27",
+        "area": "M0.0,30.41 L14.48,31.34 L28.97,39.6 L43.45,39.27 L57.93,39.16 L72.41,37.74 L86.9,48.0 L101.38,36.93 L115.86,32.18 L130.34,22.09 L144.83,9.69 L159.31,10.87 L173.79,12.11 L188.28,7.77 L202.76,8.18 L217.24,10.45 L231.72,8.6 L246.21,4.0 L260.69,5.21 L275.17,8.91 L289.66,13.77 L304.14,12.29 L318.62,18.38 L333.1,15.36 L347.59,17.32 L362.07,15.09 L376.55,15.24 L391.03,10.2 L405.52,14.28 L420.0,19.27 L420.0,52 L0.0,52 Z",
         "points": [
           {
             "x": 0.0,
-            "y": 31.34,
-            "date": "2026-07-22",
-            "close": 7498.96,
+            "y": 30.41,
+            "date": "2026-07-21",
+            "close": 7509.2002,
             "change": null
           },
           {
             "x": 14.48,
+            "y": 31.34,
+            "date": "2026-07-22",
+            "close": 7498.96,
+            "change": -0.001364
+          },
+          {
+            "x": 28.97,
             "y": 39.6,
             "date": "2026-07-23",
             "close": 7408.2998,
             "change": -0.01209
           },
           {
-            "x": 28.97,
+            "x": 43.45,
             "y": 39.27,
             "date": "2026-07-24",
             "close": 7411.98,
             "change": 0.000497
           },
           {
-            "x": 43.45,
+            "x": 57.93,
             "y": 39.16,
             "date": "2026-07-27",
             "close": 7413.1802,
             "change": 0.000162
           },
           {
-            "x": 57.93,
+            "x": 72.41,
             "y": 37.74,
             "date": "2026-07-28",
             "close": 7428.7798,
             "change": 0.002104
           },
           {
-            "x": 72.41,
+            "x": 86.9,
             "y": 48.0,
             "date": "2026-07-29",
             "close": 7316.1499,
             "change": -0.015161
           },
           {
-            "x": 86.9,
+            "x": 101.38,
             "y": 36.93,
             "date": "2026-07-30",
             "close": 7437.6299,
             "change": 0.016604
           },
           {
-            "x": 101.38,
+            "x": 115.86,
             "y": 32.18,
             "date": "2026-07-31",
             "close": 7489.7202,
             "change": 0.007004
           },
           {
-            "x": 115.86,
+            "x": 130.34,
             "y": 22.09,
             "date": "2026-08-03",
             "close": 7600.5,
             "change": 0.014791
           },
           {
-            "x": 130.34,
+            "x": 144.83,
             "y": 9.69,
             "date": "2026-08-04",
             "close": 7736.52,
             "change": 0.017896
           },
           {
-            "x": 144.83,
+            "x": 159.31,
             "y": 10.87,
             "date": "2026-08-05",
             "close": 7723.5498,
             "change": -0.001676
           },
           {
-            "x": 159.31,
+            "x": 173.79,
             "y": 12.11,
             "date": "2026-08-06",
             "close": 7709.96,
             "change": -0.00176
           },
           {
-            "x": 173.79,
+            "x": 188.28,
             "y": 7.77,
             "date": "2026-08-07",
             "close": 7757.6401,
             "change": 0.006184
           },
           {
-            "x": 188.28,
+            "x": 202.76,
             "y": 8.18,
             "date": "2026-08-10",
             "close": 7753.1099,
             "change": -0.000584
           },
           {
-            "x": 202.76,
+            "x": 217.24,
             "y": 10.45,
             "date": "2026-08-11",
             "close": 7728.2002,
             "change": -0.003213
           },
           {
-            "x": 217.24,
+            "x": 231.72,
             "y": 8.6,
             "date": "2026-08-12",
             "close": 7748.5,
             "change": 0.002627
           },
           {
-            "x": 231.72,
+            "x": 246.21,
             "y": 4.0,
             "date": "2026-08-13",
             "close": 7798.9902,
             "change": 0.006516
           },
           {
-            "x": 246.21,
+            "x": 260.69,
             "y": 5.21,
             "date": "2026-08-14",
             "close": 7785.7598,
             "change": -0.001696
           },
           {
-            "x": 260.69,
+            "x": 275.17,
             "y": 8.91,
             "date": "2026-08-17",
             "close": 7745.0601,
             "change": -0.005227
           },
           {
-            "x": 275.17,
+            "x": 289.66,
             "y": 13.77,
             "date": "2026-08-18",
             "close": 7691.7598,
             "change": -0.006882
           },
           {
-            "x": 289.66,
+            "x": 304.14,
             "y": 12.29,
             "date": "2026-08-19",
             "close": 7707.98,
             "change": 0.002109
           },
           {
-            "x": 304.14,
+            "x": 318.62,
             "y": 18.38,
             "date": "2026-08-20",
             "close": 7641.1602,
             "change": -0.008669
           },
           {
-            "x": 318.62,
+            "x": 333.1,
             "y": 15.36,
             "date": "2026-08-21",
             "close": 7674.3701,
             "change": 0.004346
           },
           {
-            "x": 333.1,
+            "x": 347.59,
             "y": 17.32,
             "date": "2026-08-24",
             "close": 7652.8599,
             "change": -0.002803
           },
           {
-            "x": 347.59,
+            "x": 362.07,
             "y": 15.09,
             "date": "2026-08-25",
             "close": 7677.2798,
             "change": 0.003191
           },
           {
-            "x": 362.07,
+            "x": 376.55,
             "y": 15.24,
             "date": "2026-08-26",
             "close": 7675.7002,
             "change": -0.000206
           },
           {
-            "x": 376.55,
+            "x": 391.03,
             "y": 10.2,
             "date": "2026-08-27",
             "close": 7730.9902,
             "change": 0.007203
           },
           {
-            "x": 391.03,
-            "y": 11.95,
-            "date": "2026-08-28",
-            "close": 7711.7598,
-            "change": -0.002487
-          },
-          {
             "x": 405.52,
             "y": 14.28,
             "date": "2026-08-31",
             "close": 7686.1401,
-            "change": -0.003322
+            "change": -0.005801
           },
           {
             "x": 420.0,
@@ -249,211 +249,211 @@
       "ticker": "^NDX",
       "valid": true,
       "sparkline": {
-        "line": "M0.0,20.53 L14.48,28.79 L28.97,33.76 L43.45,35.12 L57.93,39.32 L72.41,48.0 L86.9,34.09 L101.38,31.54 L115.86,23.89 L130.34,9.35 L144.83,13.08 L159.31,14.82 L173.79,9.51 L188.28,11.04 L202.76,12.5 L217.24,9.2 L231.72,4.0 L246.21,4.58 L260.69,5.36 L275.17,13.03 L289.66,14.02 L304.14,17.26 L318.62,15.8 L333.1,20.15 L347.59,17.32 L362.07,17.08 L376.55,10.74 L391.03,13.9 L405.52,13.55 L420.0,19.32",
-        "area": "M0.0,20.53 L14.48,28.79 L28.97,33.76 L43.45,35.12 L57.93,39.32 L72.41,48.0 L86.9,34.09 L101.38,31.54 L115.86,23.89 L130.34,9.35 L144.83,13.08 L159.31,14.82 L173.79,9.51 L188.28,11.04 L202.76,12.5 L217.24,9.2 L231.72,4.0 L246.21,4.58 L260.69,5.36 L275.17,13.03 L289.66,14.02 L304.14,17.26 L318.62,15.8 L333.1,20.15 L347.59,17.32 L362.07,17.08 L376.55,10.74 L391.03,13.9 L405.52,13.55 L420.0,19.32 L420.0,52 L0.0,52 Z",
+        "line": "M0.0,18.14 L14.48,20.53 L28.97,28.79 L43.45,33.76 L57.93,35.12 L72.41,39.32 L86.9,48.0 L101.38,34.09 L115.86,31.54 L130.34,23.89 L144.83,9.35 L159.31,13.08 L173.79,14.82 L188.28,9.51 L202.76,11.04 L217.24,12.5 L231.72,9.2 L246.21,4.0 L260.69,4.58 L275.17,5.36 L289.66,13.03 L304.14,14.02 L318.62,17.26 L333.1,15.8 L347.59,20.15 L362.07,17.32 L376.55,17.08 L391.03,10.74 L405.52,13.55 L420.0,19.32",
+        "area": "M0.0,18.14 L14.48,20.53 L28.97,28.79 L43.45,33.76 L57.93,35.12 L72.41,39.32 L86.9,48.0 L101.38,34.09 L115.86,31.54 L130.34,23.89 L144.83,9.35 L159.31,13.08 L173.79,14.82 L188.28,9.51 L202.76,11.04 L217.24,12.5 L231.72,9.2 L246.21,4.0 L260.69,4.58 L275.17,5.36 L289.66,13.03 L304.14,14.02 L318.62,17.26 L333.1,15.8 L347.59,20.15 L362.07,17.32 L376.55,17.08 L391.03,10.74 L405.52,13.55 L420.0,19.32 L420.0,52 L0.0,52 Z",
         "points": [
           {
             "x": 0.0,
-            "y": 20.53,
-            "date": "2026-07-22",
-            "close": 28998.0996,
+            "y": 18.14,
+            "date": "2026-07-21",
+            "close": 29155.1797,
             "change": null
           },
           {
             "x": 14.48,
+            "y": 20.53,
+            "date": "2026-07-22",
+            "close": 28998.0996,
+            "change": -0.005388
+          },
+          {
+            "x": 28.97,
             "y": 28.79,
             "date": "2026-07-23",
             "close": 28454.8105,
             "change": -0.018735
           },
           {
-            "x": 28.97,
+            "x": 43.45,
             "y": 33.76,
             "date": "2026-07-24",
             "close": 28128.3398,
             "change": -0.011473
           },
           {
-            "x": 43.45,
+            "x": 57.93,
             "y": 35.12,
             "date": "2026-07-27",
             "close": 28039.2109,
             "change": -0.003169
           },
           {
-            "x": 57.93,
+            "x": 72.41,
             "y": 39.32,
             "date": "2026-07-28",
             "close": 27763.1309,
             "change": -0.009846
           },
           {
-            "x": 72.41,
+            "x": 86.9,
             "y": 48.0,
             "date": "2026-07-29",
             "close": 27192.3105,
             "change": -0.02056
           },
           {
-            "x": 86.9,
+            "x": 101.38,
             "y": 34.09,
             "date": "2026-07-30",
             "close": 28106.3496,
             "change": 0.033614
           },
           {
-            "x": 101.38,
+            "x": 115.86,
             "y": 31.54,
             "date": "2026-07-31",
             "close": 28274.1992,
             "change": 0.005972
           },
           {
-            "x": 115.86,
+            "x": 130.34,
             "y": 23.89,
             "date": "2026-08-03",
             "close": 28776.8008,
             "change": 0.017776
           },
           {
-            "x": 130.34,
+            "x": 144.83,
             "y": 9.35,
             "date": "2026-08-04",
             "close": 29733.1602,
             "change": 0.033234
           },
           {
-            "x": 144.83,
+            "x": 159.31,
             "y": 13.08,
             "date": "2026-08-05",
             "close": 29487.7891,
             "change": -0.008252
           },
           {
-            "x": 159.31,
+            "x": 173.79,
             "y": 14.82,
             "date": "2026-08-06",
             "close": 29373.3301,
             "change": -0.003882
           },
           {
-            "x": 173.79,
+            "x": 188.28,
             "y": 9.51,
             "date": "2026-08-07",
             "close": 29722.3008,
             "change": 0.011881
           },
           {
-            "x": 188.28,
+            "x": 202.76,
             "y": 11.04,
             "date": "2026-08-10",
             "close": 29621.8008,
             "change": -0.003381
           },
           {
-            "x": 202.76,
+            "x": 217.24,
             "y": 12.5,
             "date": "2026-08-11",
             "close": 29525.4805,
             "change": -0.003252
           },
           {
-            "x": 217.24,
+            "x": 231.72,
             "y": 9.2,
             "date": "2026-08-12",
             "close": 29742.5996,
             "change": 0.007354
           },
           {
-            "x": 231.72,
+            "x": 246.21,
             "y": 4.0,
             "date": "2026-08-13",
             "close": 30084.5,
             "change": 0.011495
           },
           {
-            "x": 246.21,
+            "x": 260.69,
             "y": 4.58,
             "date": "2026-08-14",
             "close": 30046.1406,
             "change": -0.001275
           },
           {
-            "x": 260.69,
+            "x": 275.17,
             "y": 5.36,
             "date": "2026-08-17",
             "close": 29995.3809,
             "change": -0.001689
           },
           {
-            "x": 275.17,
+            "x": 289.66,
             "y": 13.03,
             "date": "2026-08-18",
             "close": 29490.9609,
             "change": -0.016817
           },
           {
-            "x": 289.66,
+            "x": 304.14,
             "y": 14.02,
             "date": "2026-08-19",
             "close": 29426.0195,
             "change": -0.002202
           },
           {
-            "x": 304.14,
+            "x": 318.62,
             "y": 17.26,
             "date": "2026-08-20",
             "close": 29213.1602,
             "change": -0.007234
           },
           {
-            "x": 318.62,
+            "x": 333.1,
             "y": 15.8,
             "date": "2026-08-21",
             "close": 29308.8594,
             "change": 0.003276
           },
           {
-            "x": 333.1,
+            "x": 347.59,
             "y": 20.15,
             "date": "2026-08-24",
             "close": 29023.1797,
             "change": -0.009747
           },
           {
-            "x": 347.59,
+            "x": 362.07,
             "y": 17.32,
             "date": "2026-08-25",
             "close": 29209.2305,
             "change": 0.00641
           },
           {
-            "x": 362.07,
+            "x": 376.55,
             "y": 17.08,
             "date": "2026-08-26",
             "close": 29224.5195,
             "change": 0.000523
           },
           {
-            "x": 376.55,
+            "x": 391.03,
             "y": 10.74,
             "date": "2026-08-27",
             "close": 29641.5605,
             "change": 0.01427
           },
           {
-            "x": 391.03,
-            "y": 13.9,
-            "date": "2026-08-28",
-            "close": 29433.4297,
-            "change": -0.007022
-          },
-          {
             "x": 405.52,
             "y": 13.55,
             "date": "2026-08-31",
             "close": 29456.9707,
-            "change": 0.0008
+            "change": -0.006227
           },
           {
             "x": 420.0,
@@ -477,211 +477,211 @@
       "ticker": "^DJI",
       "valid": true,
       "sparkline": {
-        "line": "M0.0,38.03 L14.48,46.12 L28.97,42.36 L43.45,38.16 L57.93,29.58 L72.41,48.0 L86.9,38.2 L101.38,33.77 L115.86,22.7 L130.34,8.2 L144.83,4.0 L159.31,11.41 L173.79,8.99 L188.28,9.96 L202.76,12.9 L217.24,13.24 L231.72,12.13 L246.21,13.85 L260.69,18.2 L275.17,20.06 L289.66,18.15 L304.14,29.39 L318.62,21.12 L333.1,18.88 L347.59,16.33 L362.07,18.14 L376.55,16.45 L391.03,16.6 L405.52,22.58 L420.0,29.27",
-        "area": "M0.0,38.03 L14.48,46.12 L28.97,42.36 L43.45,38.16 L57.93,29.58 L72.41,48.0 L86.9,38.2 L101.38,33.77 L115.86,22.7 L130.34,8.2 L144.83,4.0 L159.31,11.41 L173.79,8.99 L188.28,9.96 L202.76,12.9 L217.24,13.24 L231.72,12.13 L246.21,13.85 L260.69,18.2 L275.17,20.06 L289.66,18.15 L304.14,29.39 L318.62,21.12 L333.1,18.88 L347.59,16.33 L362.07,18.14 L376.55,16.45 L391.03,16.6 L405.52,22.58 L420.0,29.27 L420.0,52 L0.0,52 Z",
+        "line": "M0.0,37.93 L14.48,38.03 L28.97,46.12 L43.45,42.36 L57.93,38.16 L72.41,29.58 L86.9,48.0 L101.38,38.2 L115.86,33.77 L130.34,22.7 L144.83,8.2 L159.31,4.0 L173.79,11.41 L188.28,8.99 L202.76,9.96 L217.24,12.9 L231.72,13.24 L246.21,12.13 L260.69,13.85 L275.17,18.2 L289.66,20.06 L304.14,18.15 L318.62,29.39 L333.1,21.12 L347.59,18.88 L362.07,16.33 L376.55,18.14 L391.03,16.45 L405.52,22.58 L420.0,29.27",
+        "area": "M0.0,37.93 L14.48,38.03 L28.97,46.12 L43.45,42.36 L57.93,38.16 L72.41,29.58 L86.9,48.0 L101.38,38.2 L115.86,33.77 L130.34,22.7 L144.83,8.2 L159.31,4.0 L173.79,11.41 L188.28,8.99 L202.76,9.96 L217.24,12.9 L231.72,13.24 L246.21,12.13 L260.69,13.85 L275.17,18.2 L289.66,20.06 L304.14,18.15 L318.62,29.39 L333.1,21.12 L347.59,18.88 L362.07,16.33 L376.55,18.14 L391.03,16.45 L405.52,22.58 L420.0,29.27 L420.0,52 L0.0,52 Z",
         "points": [
           {
             "x": 0.0,
-            "y": 38.03,
-            "date": "2026-07-22",
-            "close": 52218.5781,
+            "y": 37.93,
+            "date": "2026-07-21",
+            "close": 52224.6406,
             "change": null
           },
           {
             "x": 14.48,
+            "y": 38.03,
+            "date": "2026-07-22",
+            "close": 52218.5781,
+            "change": -0.000116
+          },
+          {
+            "x": 28.97,
             "y": 46.12,
             "date": "2026-07-23",
             "close": 51711.6484,
             "change": -0.009708
           },
           {
-            "x": 28.97,
+            "x": 43.45,
             "y": 42.36,
             "date": "2026-07-24",
             "close": 51947.25,
             "change": 0.004556
           },
           {
-            "x": 43.45,
+            "x": 57.93,
             "y": 38.16,
             "date": "2026-07-27",
             "close": 52210.0781,
             "change": 0.00506
           },
           {
-            "x": 57.93,
+            "x": 72.41,
             "y": 29.58,
             "date": "2026-07-28",
             "close": 52747.3203,
             "change": 0.01029
           },
           {
-            "x": 72.41,
+            "x": 86.9,
             "y": 48.0,
             "date": "2026-07-29",
             "close": 51594.1406,
             "change": -0.021862
           },
           {
-            "x": 86.9,
+            "x": 101.38,
             "y": 38.2,
             "date": "2026-07-30",
             "close": 52208.0586,
             "change": 0.011899
           },
           {
-            "x": 101.38,
+            "x": 115.86,
             "y": 33.77,
             "date": "2026-07-31",
             "close": 52485.0312,
             "change": 0.005305
           },
           {
-            "x": 115.86,
+            "x": 130.34,
             "y": 22.7,
             "date": "2026-08-03",
             "close": 53178.4102,
             "change": 0.013211
           },
           {
-            "x": 130.34,
+            "x": 144.83,
             "y": 8.2,
             "date": "2026-08-04",
             "close": 54085.8789,
             "change": 0.017065
           },
           {
-            "x": 144.83,
+            "x": 159.31,
             "y": 4.0,
             "date": "2026-08-05",
             "close": 54349.1211,
             "change": 0.004867
           },
           {
-            "x": 159.31,
+            "x": 173.79,
             "y": 11.41,
             "date": "2026-08-06",
             "close": 53885.1016,
             "change": -0.008538
           },
           {
-            "x": 173.79,
+            "x": 188.28,
             "y": 8.99,
             "date": "2026-08-07",
             "close": 54036.9297,
             "change": 0.002818
           },
           {
-            "x": 188.28,
+            "x": 202.76,
             "y": 9.96,
             "date": "2026-08-10",
             "close": 53975.9805,
             "change": -0.001128
           },
           {
-            "x": 202.76,
+            "x": 217.24,
             "y": 12.9,
             "date": "2026-08-11",
             "close": 53791.8516,
             "change": -0.003411
           },
           {
-            "x": 217.24,
+            "x": 231.72,
             "y": 13.24,
             "date": "2026-08-12",
             "close": 53770.2695,
             "change": -0.000401
           },
           {
-            "x": 231.72,
+            "x": 246.21,
             "y": 12.13,
             "date": "2026-08-13",
             "close": 53839.9883,
             "change": 0.001297
           },
           {
-            "x": 246.21,
+            "x": 260.69,
             "y": 13.85,
             "date": "2026-08-14",
             "close": 53732.4102,
             "change": -0.001998
           },
           {
-            "x": 260.69,
+            "x": 275.17,
             "y": 18.2,
             "date": "2026-08-17",
             "close": 53459.7812,
             "change": -0.005074
           },
           {
-            "x": 275.17,
+            "x": 289.66,
             "y": 20.06,
             "date": "2026-08-18",
             "close": 53343.3984,
             "change": -0.002177
           },
           {
-            "x": 289.66,
+            "x": 304.14,
             "y": 18.15,
             "date": "2026-08-19",
             "close": 53463.0508,
             "change": 0.002243
           },
           {
-            "x": 304.14,
+            "x": 318.62,
             "y": 29.39,
             "date": "2026-08-20",
             "close": 52759.2109,
             "change": -0.013165
           },
           {
-            "x": 318.62,
+            "x": 333.1,
             "y": 21.12,
             "date": "2026-08-21",
             "close": 53277.0117,
             "change": 0.009814
           },
           {
-            "x": 333.1,
+            "x": 347.59,
             "y": 18.88,
             "date": "2026-08-24",
             "close": 53417.1602,
             "change": 0.002631
           },
           {
-            "x": 347.59,
+            "x": 362.07,
             "y": 16.33,
             "date": "2026-08-25",
             "close": 53577.3984,
             "change": 0.003
           },
           {
-            "x": 362.07,
+            "x": 376.55,
             "y": 18.14,
             "date": "2026-08-26",
             "close": 53463.8789,
             "change": -0.002119
           },
           {
-            "x": 376.55,
+            "x": 391.03,
             "y": 16.45,
             "date": "2026-08-27",
             "close": 53569.4414,
             "change": 0.001974
           },
           {
-            "x": 391.03,
-            "y": 16.6,
-            "date": "2026-08-28",
-            "close": 53559.9883,
-            "change": -0.000176
-          },
-          {
             "x": 405.52,
             "y": 22.58,
             "date": "2026-08-31",
             "close": 53185.8984,
-            "change": -0.006985
+            "change": -0.00716
           },
           {
             "x": 420.0,
@@ -697,8 +697,8 @@
   "market_context": {
     "russell2000": {
       "market_date": "2026-09-01",
-      "close": 2920.13232421875,
-      "daily_return": -0.012284201509560333,
+      "close": 2920.1298828125,
+      "daily_return": -0.01228502729937253,
       "name": "Russell 2000",
       "ticker": "^RUT",
       "valid": true
@@ -712,9 +712,9 @@
       "valid": true
     },
     "dxy": {
-      "market_date": "2026-09-01",
-      "close": 99.7229995727539,
-      "daily_return": 0.0029467893661756506,
+      "market_date": "2026-09-02",
+      "close": 99.80699920654297,
+      "daily_return": 0.0013745464042793643,
       "name": "美元指数",
       "ticker": "DX-Y.NYB",
       "valid": true
@@ -728,17 +728,17 @@
       "valid": true
     },
     "gold": {
-      "market_date": "2026-09-01",
-      "close": 4368.5,
-      "daily_return": -0.01412743929873328,
+      "market_date": "2026-09-02",
+      "close": 4351.0,
+      "daily_return": 0.000689972401104022,
       "name": "黄金 (COMEX)",
       "ticker": "GC=F",
       "valid": true
     },
     "wti": {
-      "market_date": "2026-09-01",
-      "close": 91.72000122070312,
-      "daily_return": 0.06949625625014733,
+      "market_date": "2026-09-02",
+      "close": 90.73999786376953,
+      "daily_return": 0.0057636514745145195,
       "name": "原油 (WTI)",
       "ticker": "CL=F",
       "valid": true
@@ -746,9 +746,9 @@
   },
   "market_signals": {
     "tech_relative": -0.005778892674575542,
-    "small_cap_relative": -0.005171408754998552,
+    "small_cap_relative": -0.00517223454481075,
     "vix_daily_return": 0.09517426736144263,
-    "dxy_daily_return": 0.0029467893661756506,
+    "dxy_daily_return": 0.0013745464042793643,
     "us10y_bp_change": 3.8000106811523438,
     "signals": [
       {
@@ -759,7 +759,7 @@
       },
       {
         "key": "small_cap_relative",
-        "value": -0.005171408754998552,
+        "value": -0.00517223454481075,
         "level": "significant",
         "message": "Russell 2000 比 S&P 500 落后 0.52 个百分点，小盘相对落后"
       }
@@ -771,15 +771,15 @@
       "market_date": "2026-09-01",
       "constituent_date": "2026-08-27",
       "total_constituents": 505,
-      "valid_count": 503,
-      "invalid_count": 2,
-      "advancers": 158,
+      "valid_count": 502,
+      "invalid_count": 3,
+      "advancers": 157,
       "decliners": 342,
       "unchanged": 3,
-      "advance_ratio": 0.31411530815109345,
-      "decline_ratio": 0.679920477137177,
-      "unchanged_ratio": 0.005964214711729622,
-      "coverage_ratio": 0.996039603960396,
+      "advance_ratio": 0.31274900398406374,
+      "decline_ratio": 0.6812749003984063,
+      "unchanged_ratio": 0.00597609561752988,
+      "coverage_ratio": 0.994059405940594,
       "status": "ok"
     },
     "sectors": {
@@ -893,7 +893,7 @@
     },
     "health": {
       "valid": true,
-      "score": 0.3339237303452015,
+      "score": 0.3331039478449837,
       "level": "weak",
       "label": "市场偏弱",
       "divergence": null,
@@ -902,10 +902,10 @@
   },
   "market_sentiment": {
     "vix_score": 68.3,
-    "breadth_score": 33.4,
-    "momentum_score": 41.1,
+    "breadth_score": 33.3,
+    "momentum_score": 53.6,
     "risk_appetite_score": 24.1,
-    "market_sentiment_score": 45.8,
+    "market_sentiment_score": 48.2,
     "market_sentiment_label": "中性"
   },
   "drawdown": {
@@ -917,7 +917,7 @@
       "ath": 7798.990234375,
       "ath_date": "2026-08-13",
       "last_market_date": "2026-09-01",
-      "last_updated_at": "2026-09-02T09:00:54.120991+08:00",
+      "last_updated_at": "2026-09-02T13:16:26.954007+08:00",
       "current_close": 7631.47021484375,
       "current_drawdown": 0.021479706282088284,
       "pool": 140000,
@@ -975,7 +975,7 @@
       "ath": 30660.599609375,
       "ath_date": "2026-06-02",
       "last_market_date": "2026-09-01",
-      "last_updated_at": "2026-09-02T09:00:54.120991+08:00",
+      "last_updated_at": "2026-09-02T13:16:26.954007+08:00",
       "current_close": 29077.220703125,
       "current_drawdown": 0.0516421376758025,
       "pool": 60000,
@@ -1038,8 +1038,8 @@
   },
   "portfolio_action": "hold",
   "market_summary": {
-    "market": "9月1日美股主要指数集体下跌，标普500跌0.71%，纳斯达克100跌1.29%；市场宽度偏弱，多数股票和板块走低，科技与小盘股相对落后，VIX上升9.52%。",
-    "drivers": "市场同时关注伊朗媒体所称对美国目标的报复性袭击，以及美联储官员Barr关于通胀不降温则支持加息的表态；苹果进入John Ternus时代及戴尔上调财年2027年展望也值得留意。",
+    "market": "美股普遍回落，标普500跌0.71%、纳斯达克100跌1.29%，科技成长与小盘相对承压。市场宽度偏弱，502只有效成分股中342只下跌、157只上涨，能源、公用事业和医疗保健逆势走高。",
+    "drivers": "市场同时关注中东局势出现新的升级，以及美联储理事Barr关于若通胀未降温则可能需要加息的表态。",
     "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
     "degraded": false
   },
@@ -1048,22 +1048,21 @@
       "rank": 1,
       "candidate_id": "8c18e9f1c69940e3",
       "category": "地缘政治",
-      "title_zh": "伊朗媒体称已开始对美国目标发动报复性袭击",
-      "summary_zh": "伊朗通讯社称，在美国袭击造成婚礼现场四人死亡后，伊朗已开始对美国目标发动导弹和无人机报复性袭击。",
-      "focus": "袭击是否获独立确认，以及是否波及能源与航运设施",
+      "title_zh": "伊朗袭击中东美军基地，美伊冲突进一步升级",
+      "summary_zh": "伊朗在美国袭击报道后攻击中东美军基地。事件涉及美国直接军事行动与反击，较此前美伊交火出现新的升级事实。",
+      "focus": "后续关注美伊军事行动、霍尔木兹海峡与油价变化",
       "tags": [
         "美伊冲突",
-        "导弹袭击",
-        "无人机",
-        "中东能源"
+        "军事升级",
+        "原油"
       ],
-      "investment_relevance_score": 91,
+      "investment_relevance_score": 95,
       "source": "BBC News",
       "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "published_at": "2026-09-02T00:13:26+00:00",
-      "original_title": "Iran retaliates after US strikes kills four at wedding party, state media reports",
-      "selection_reason": "重大地缘政治：伊朗媒体称已对美国目标发动导弹和无人机袭击，涉及美国直接军事冲突升级。",
-      "event_summary": "伊朗媒体称伊朗已开始对美国目标发动导弹和无人机报复性袭击。",
+      "published_at": "2026-09-02T05:12:07+00:00",
+      "original_title": "Iran attacks US bases in Middle East after reports US strike killed five at wedding party",
+      "selection_reason": "美国市场：伊朗袭击美军基地属于美国直接军事介入后的重大升级，能源与航运风险传导明确。",
+      "event_summary": "Iran attacked US bases in the Middle East after reports of a US strike.",
       "topic_group": "GEOPOLITICS",
       "event_category": "other",
       "source_channel": null
@@ -1072,21 +1071,21 @@
       "rank": 2,
       "candidate_id": "9c59989aab4c1850",
       "category": "美联储 / 利率",
-      "title_zh": "美联储Barr：若通胀不降温，应准备加息",
-      "summary_zh": "美联储理事Michael Barr表示，若通胀未能降温，央行应准备加息，并警告价格压力可能在通胀长期高于目标后固化。",
-      "focus": "后续通胀数据与其他美联储官员对加息条件的表态",
+      "title_zh": "美联储Barr称通胀不降温或需加息",
+      "summary_zh": "美联储理事Michael Barr表示，若通胀未能降温，央行应准备提高利率，并警告价格压力存在固化风险。",
+      "focus": "后续关注通胀数据与其他美联储官员利率表态",
       "tags": [
         "美联储",
         "通胀",
-        "加息预期"
+        "利率"
       ],
       "investment_relevance_score": 88,
       "source": "Bloomberg Economics",
       "url": "https://www.bloomberg.com/news/articles/2026-09-01/fed-s-barr-says-higher-rates-needed-if-inflation-doesn-t-cool",
       "published_at": "2026-09-01T13:05:00+00:00",
       "original_title": "Fed’s Barr Says Higher Rates Needed If Inflation Doesn’t Cool",
-      "selection_reason": "美国宏观：美联储理事明确提出通胀不降温时应准备加息，直接涉及利率路径条件。",
-      "event_summary": "美联储官员Barr表示若通胀不降温将支持加息。",
+      "selection_reason": "美国宏观：美联储理事公开提出必要时加息，直接改变利率路径与通胀预期信号。",
+      "event_summary": "Fed Governor Michael Barr said rates may need to rise if inflation does not ease.",
       "topic_group": "US_MARKET_MACRO",
       "event_category": "other",
       "source_channel": null
@@ -1095,22 +1094,21 @@
       "rank": 3,
       "candidate_id": "4f8149f0b02d7acd",
       "category": "大型科技",
-      "title_zh": "John Ternus正式接任苹果CEO，面临AI与成本压力",
-      "summary_zh": "John Ternus开始担任苹果CEO。公司正面临AI能力挑战和内存价格上涨，管理层交接发生在关键业务压力加大的阶段。",
-      "focus": "新管理层的AI战略、产品发布与成本管理安排",
+      "title_zh": "John Ternus正式接任苹果CEO并预告下周发布会",
+      "summary_zh": "John Ternus开始担任苹果CEO，正值公司面临AI挑战与内存成本上升压力；他同时预告苹果下周将举行重大产品发布。",
+      "focus": "关注新CEO战略表态及下周产品发布内容",
       "tags": [
         "苹果",
         "CEO变动",
-        "AI战略",
-        "内存价格"
+        "AI战略"
       ],
-      "investment_relevance_score": 83,
+      "investment_relevance_score": 85,
       "source": "CNBC Top News",
       "url": "https://www.cnbc.com/2026/09/01/apple-enters-ternus-era-as-ai-challenges-and-memory-crunch-intensify.html",
       "published_at": "2026-09-01T16:27:54+00:00",
       "original_title": "Apple enters John Ternus era as AI challenges and memory crunch intensify",
-      "selection_reason": "大型科技：Apple CEO重大变动，John Ternus已正式开启任期，且公司面临AI与内存成本挑战。",
-      "event_summary": "John Ternus出任苹果CEO，面临AI挑战和内存价格上涨。",
+      "selection_reason": "大型科技：Apple CEO重大变动，且伴随AI战略与核心产品发布节点，直接影响公司管理与竞争格局。",
+      "event_summary": "John Ternus began as Apple CEO and flagged a major launch next week.",
       "topic_group": "MEGA_CAP_TECH",
       "event_category": "other",
       "source_channel": null
@@ -1119,22 +1117,21 @@
       "rank": 4,
       "candidate_id": "3beece1d8e979768",
       "category": "AI / 资本开支",
-      "title_zh": "戴尔因AI服务器需求强劲上调FY2027展望",
-      "summary_zh": "戴尔上调财年2027年展望，预计AI服务器收入将增长至原先预期的三倍，较六个月前“翻倍”的预测明显提高。",
-      "focus": "AI服务器订单、收入兑现及数据中心资本开支趋势",
+      "title_zh": "戴尔上调财年2027指引，AI服务器收入预计翻三倍",
+      "summary_zh": "戴尔因AI服务器需求强劲上调财年2027展望，预计相关收入将增长至原先预测的三倍，显示数据中心资本开支预期进一步增强。",
+      "focus": "关注AI服务器订单、收入兑现与数据中心资本开支",
       "tags": [
         "戴尔",
         "AI服务器",
-        "数据中心",
-        "资本开支"
+        "数据中心"
       ],
-      "investment_relevance_score": 81,
+      "investment_relevance_score": 83,
       "source": "CNBC Top News",
       "url": "https://www.cnbc.com/2026/09/01/dell-q2-earnings-report-2027.html",
       "published_at": "2026-09-01T21:40:18+00:00",
       "original_title": "Dell surges 9% after lifting fiscal 2027 forecast on AI server strength",
-      "selection_reason": "大型科技：Dell发布上调业绩指引，AI服务器收入预期大幅提高，属于财报或业绩指引及核心业务实质变化。",
-      "event_summary": "戴尔因AI服务器需求强劲上调财年2027年展望。",
+      "selection_reason": "大型科技：Dell财报与业绩指引，AI服务器收入预期大幅上调，涉及算力供应与数据中心资本开支。",
+      "event_summary": "Dell lifted its fiscal 2027 forecast on AI server strength.",
       "topic_group": "CORPORATE_EARNINGS",
       "event_category": "other",
       "source_channel": null
@@ -1143,68 +1140,68 @@
       "rank": 5,
       "candidate_id": "d84418c3b6b15c97",
       "category": "美国经济",
-      "title_zh": "美国制造业连续第八个月扩张，但订单和就业放缓",
-      "summary_zh": "美国制造业活动8月连续第八个月扩张，但新订单和就业增速放缓，显示工厂需求出现降温迹象。",
-      "focus": "后续美国制造业订单、就业及官方经济数据",
+      "title_zh": "美国制造业连续第八个月扩张，但订单与就业放缓",
+      "summary_zh": "美国制造业活动8月连续第八个月扩张，整体仍接近四年高位，但新订单和就业增速放缓，显示工厂需求出现降温迹象。",
+      "focus": "关注后续就业、订单及制造业活动数据",
       "tags": [
         "美国制造业",
-        "新订单",
+        "经济数据",
         "就业"
       ],
-      "investment_relevance_score": 78,
+      "investment_relevance_score": 79,
       "source": "Bloomberg Economics",
       "url": "https://www.bloomberg.com/news/articles/2026-09-01/us-manufacturing-gauge-eases-but-holds-close-to-four-year-high",
       "published_at": "2026-09-01T14:00:00+00:00",
       "original_title": "US Factory Gauge Eases But Holds Close to Four-Year High",
-      "selection_reason": "美国宏观：最新制造业调查同时反映扩张与订单、就业放缓，直接提供经济增长和就业的新信息。",
-      "event_summary": "美国制造业活动连续第八个月扩张，但新订单和就业增速放缓。",
+      "selection_reason": "美国宏观：最新制造业调查同时提供扩张与就业、订单放缓事实，影响增长与就业预期。",
+      "event_summary": "US manufacturing expanded for an eighth straight month in August.",
       "topic_group": "US_MARKET_MACRO",
       "event_category": "other",
       "source_channel": null
     },
     {
       "rank": 6,
-      "candidate_id": "9e56238bab625870",
+      "candidate_id": "cc96fe50bb0c16d5",
       "category": "大型科技",
-      "title_zh": "Google推出提示词驱动的AI创意工具Google Pics",
-      "summary_zh": "Google推出Google Pics，以提示词替代传统设计流程，进入由Canva和Adobe主导的创意软件市场，强化其AI产品布局。",
-      "focus": "产品采用率、商业化模式及对Canva和Adobe竞争格局的影响",
+      "title_zh": "Palo Alto Networks季度业绩超预期并继续并购",
+      "summary_zh": "Palo Alto Networks季度业绩超过市场预期，公司表示AI需求正在推动安全检测与响应工具需求，并继续推进并购布局。",
+      "focus": "关注并购进展、AI安全需求与下一季度指引",
       "tags": [
-        "Google",
-        "生成式AI",
-        "创意软件"
+        "网络安全",
+        "AI需求",
+        "并购"
       ],
-      "investment_relevance_score": 72,
-      "source": "TechCrunch",
-      "url": "https://techcrunch.com/2026/09/01/googles-answer-to-canva-is-an-ai-tool-where-you-prompt-instead-of-design/",
-      "published_at": "2026-09-01T17:35:37+00:00",
-      "original_title": "Google’s answer to Canva is an AI tool where you prompt instead of design",
-      "selection_reason": "大型科技：Google推出新的AI创意平台，属于重大产品或平台发布，直接扩展其核心AI业务。",
-      "event_summary": "Google推出以提示词驱动的AI创意工具Google Pics。",
-      "topic_group": "MEGA_CAP_TECH",
+      "investment_relevance_score": 74,
+      "source": "CNBC Top News",
+      "url": "https://www.cnbc.com/2026/09/01/palo-alto-networks-panw-q4-2026-earnings.html",
+      "published_at": "2026-09-01T21:41:15+00:00",
+      "original_title": "Palo Alto Networks beats quarterly estimates on AI demand, continues acquisition spree",
+      "selection_reason": "大型科技：Palo Alto Networks财报超预期并持续并购，属于核心业务变化与并购投资两类重大公司事件。",
+      "event_summary": "Palo Alto Networks beat quarterly estimates as AI boosted demand.",
+      "topic_group": "CORPORATE_EARNINGS",
       "event_category": "other",
       "source_channel": null
     },
     {
       "rank": 7,
-      "candidate_id": "2215c01979151189",
-      "category": "政策 / 监管",
-      "title_zh": "贝森特称中国因贸易顺差争议阻止G20联合公报",
-      "summary_zh": "美国财长贝森特表示，中国因巨额贸易顺差争议阻止G20财长和央行官员会议发布联合公报。",
-      "focus": "美国对华贸易政策及后续G20经济政策协调",
+      "candidate_id": "9e56238bab625870",
+      "category": "大型科技",
+      "title_zh": "Google推出AI创意工具Google Pics，进军Canva与Adobe市场",
+      "summary_zh": "Google推出AI优先的创意工具Google Pics，用户可通过文字提示完成设计，进一步进入由Canva和Adobe主导的创意软件市场。",
+      "focus": "关注产品功能扩展、用户采用与创意软件竞争格局",
       "tags": [
-        "G20",
-        "中美贸易",
-        "贸易顺差"
+        "Google",
+        "生成式AI",
+        "创意软件"
       ],
-      "investment_relevance_score": 65,
-      "source": "Bloomberg Economics",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-01/bessent-says-china-prevented-g20-communique-over-imbalance-spat",
-      "published_at": "2026-09-01T23:37:22+00:00",
-      "original_title": "Bessent Says China Prevented G20 Communique Over Imbalance Spat",
-      "selection_reason": "美国宏观：美国财长披露G20因对华贸易顺差争议未发布联合公报，涉及美国贸易政策环境。",
-      "event_summary": "贝森特称中国因贸易顺差争议阻止G20发布联合公报。",
-      "topic_group": "GEOPOLITICS",
+      "investment_relevance_score": 68,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/09/01/googles-answer-to-canva-is-an-ai-tool-where-you-prompt-instead-of-design/",
+      "published_at": "2026-09-01T17:35:37+00:00",
+      "original_title": "Google’s answer to Canva is an AI tool where you prompt instead of design",
+      "selection_reason": "大型科技：Google重大产品或平台发布，AI创意工具进入成熟设计软件市场并扩大平台竞争。",
+      "event_summary": "Google introduced an AI-first creative tool called Google Pics.",
+      "topic_group": "MEGA_CAP_TECH",
       "event_category": "other",
       "source_channel": null
     }
@@ -1213,11 +1210,11 @@
     {
       "candidate_id": "9e56238bab625870",
       "title": "Google’s answer to Canva is an AI tool where you prompt instead of design",
-      "title_zh": "Google推出提示词驱动的AI创意工具Google Pics",
+      "title_zh": "Google推出AI创意工具Google Pics，进军Canva与Adobe市场",
       "source": "TechCrunch",
       "published_at": "2026-09-01T17:35:37+00:00",
       "summary": "With Google Pics, Google is pushing deeper into the creative software market dominated by Canva and Adobe, but with a distinctly AI-first approach.",
-      "summary_zh": "Google推出Google Pics，以提示词替代传统设计流程，进入由Canva和Adobe主导的创意软件市场，强化其AI产品布局。",
+      "summary_zh": "Google推出AI优先的创意工具Google Pics，用户可通过文字提示完成设计，进一步进入由Canva和Adobe主导的创意软件市场。",
       "url": "https://techcrunch.com/2026/09/01/googles-answer-to-canva-is-an-ai-tool-where-you-prompt-instead-of-design/",
       "category": "大型科技",
       "selected": true
@@ -1225,11 +1222,11 @@
     {
       "candidate_id": "4f8149f0b02d7acd",
       "title": "Apple enters John Ternus era as AI challenges and memory crunch intensify",
-      "title_zh": "John Ternus正式接任苹果CEO，面临AI与成本压力",
+      "title_zh": "John Ternus正式接任苹果CEO并预告下周发布会",
       "source": "CNBC Top News",
       "published_at": "2026-09-01T16:27:54+00:00",
       "summary": "John Ternus' first day as Apple CEO comes at a critical juncture for the iPhone maker, with memory prices soaring and AI challenges looming.",
-      "summary_zh": "John Ternus开始担任苹果CEO。公司正面临AI能力挑战和内存价格上涨，管理层交接发生在关键业务压力加大的阶段。",
+      "summary_zh": "John Ternus开始担任苹果CEO，正值公司面临AI挑战与内存成本上升压力；他同时预告苹果下周将举行重大产品发布。",
       "url": "https://www.cnbc.com/2026/09/01/apple-enters-ternus-era-as-ai-challenges-and-memory-crunch-intensify.html",
       "category": "大型科技",
       "selected": true
@@ -1241,104 +1238,68 @@
       "source": "TechCrunch",
       "published_at": "2026-09-01T16:49:12+00:00",
       "summary": "Waymo argued that fully autonomous vehicles aren't possible without using a mix of sensors and warned that pure end-to-end AI systems aren't safe enough.",
-      "summary_zh": "Waymo称，完全自动驾驶汽车必须使用多种传感器，并警告纯端到端AI系统尚不够安全。",
+      "summary_zh": "Waymo表示，完全自动驾驶汽车若不采用多种传感器组合便无法实现，并警告纯端到端AI系统不够安全。",
       "url": "https://techcrunch.com/2026/09/01/waymo-goes-on-offense-ahead-of-teslas-cybercab-launch/",
       "category": "大型科技",
       "selected": false
     },
     {
-      "candidate_id": "040d65ef96a50ec3",
-      "title": "Why High Yields on Government Bonds Are Causing Alarm",
-      "title_zh": "政府债券高收益率为何引发担忧",
+      "candidate_id": "be6760c1022f3c08",
+      "title": "Where Bond Yields Are Heading as Energy Prices Rise",
+      "title_zh": "能源价格上涨之际，债券收益率将走向何方",
       "source": "Bloomberg Markets",
-      "published_at": "2026-09-01T23:39:37+00:00",
-      "summary": "Government borrowing costs have been surging around the world as investors demand more compensation to entice them to hold longer-maturity debt. A Bloomberg gauge tracking government debt across the G7 countries now yields its highest on average since September 2000. Michael MacKenzie reports. (Source: Bloomberg)",
-      "summary_zh": "投资者要求更高回报以持有长期债券，全球政府借贷成本正攀升。追踪G7政府债券的彭博指标平均收益率已升至2000年9月以来最高。",
-      "url": "https://www.bloomberg.com/news/videos/2026-09-01/why-high-yields-on-government-bonds-are-causing-alarm-video",
+      "published_at": "2026-09-02T04:56:25+00:00",
+      "summary": "Highlights from Bloomberg TV as contributors shed light on how rising energy prices are driving bond yields higher across markets and traders reposition in anticipation of further challenges. Meanwhile, the yield on 30-year US government bonds have climbed back to levels seen just before Treasury Secretary Scott Bessent expanded a buyback program to contain long-term borrowing costs. (Source: Bloomberg)",
+      "summary_zh": "彭博电视嘉宾讨论能源价格上涨如何推动各市场债券收益率走高，以及交易员如何为更多挑战调整仓位。美国30年期国债收益率已回升至财政部长斯科特·贝森特扩大回购计划以抑制长期借贷成本前的水平。",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-02/where-bond-yields-are-heading-as-energy-prices-rise",
       "category": "宏观 / 利率",
       "selected": false
     },
     {
-      "candidate_id": "d2b643043f65be8b",
-      "title": "Saudi Arabia Sells $3.25 Billion of Debt as Hormuz Tensions Rise",
-      "title_zh": "霍尔木兹紧张局势升级之际，沙特发行32.5亿美元债券",
-      "source": "Bloomberg Markets",
-      "published_at": "2026-09-01T10:52:10+00:00",
-      "summary": "Saudi Arabia sold $3.25 billion of dollar bonds Tuesday, with the deal’s healthy demand a positive sign amid economic strains caused by the US-Iran war.",
-      "summary_zh": "沙特周二发行32.5亿美元美元债券。在美伊战争引发经济压力之际，此次交易需求强劲，被视为积极信号。",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-01/saudi-arabia-returns-to-markets-with-dollar-bond-offering",
-      "category": "能源 / 大宗商品",
-      "selected": false
-    },
-    {
-      "candidate_id": "365586e7f66aa157",
-      "title": "BOJ’s Ueda to Decide on Rate With Upside Price Risks in Mind",
-      "title_zh": "日本央行植田称将关注通胀上行风险后决定利率",
+      "candidate_id": "6973d61b33331981",
+      "title": "RBNZ Delivers Back-to-Back Rate Hikes to Curb Inflation",
+      "title_zh": "新西兰联储连续第二次加息以遏制通胀",
       "source": "Bloomberg Economics",
-      "published_at": "2026-09-02T00:15:29+00:00",
-      "summary": "Bank of Japan Governor Kazuo Ueda said the bank’s board would decide on policy with upside price risks in mind, a comment that may further fuel market speculation over a potential interest rate hike at a meeting later this month.",
-      "summary_zh": "日本央行行长植田和男表示，政策委员会将把物价上行风险纳入考量后决定政策，这可能进一步加剧市场对本月晚些时候加息的猜测。",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-02/boj-s-ueda-to-decide-on-policy-with-upside-price-risks-in-mind",
+      "published_at": "2026-09-02T02:05:22+00:00",
+      "summary": "New Zealand’s central bank raised its key interest rate for a second straight meeting, aiming to shift to less stimulatory settings in an effort to head off inflationary pressures.",
+      "summary_zh": "新西兰央行连续第二次会议上调关键利率，旨在转向刺激性较弱的政策立场，以防范通胀压力。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-02/new-zealand-delivers-back-to-back-rate-hikes-to-curb-inflation",
       "category": "宏观 / 利率",
       "selected": false
     },
     {
       "candidate_id": "ee5506c9a1a62eca",
       "title": "Launch Site and Facility Progress ahead of East Coast Starship debut",
-      "title_zh": "东海岸星舰首飞前，发射场和设施建设取得进展",
+      "title_zh": "东海岸星舰首飞前发射场与设施进展",
       "source": "NASASpaceflight",
       "published_at": "2026-09-01T18:15:54+00:00",
       "summary": "As SpaceX prepares to launch Starship Flight 14 in the coming weeks, work in Florida… The post Launch Site and Facility Progress ahead of East Coast Starship debut appeared first on NASASpaceFlight.com .",
-      "summary_zh": "SpaceX准备在未来数周发射星舰第14次飞行任务之际，佛罗里达州的相关工作正在推进。",
+      "summary_zh": "SpaceX准备在未来几周发射星舰第14次飞行任务之际，佛罗里达州的相关工作正在推进。",
       "url": "https://www.nasaspaceflight.com/2026/09/launch-site-facility-progress-east-coast-starship/",
       "category": "大型科技",
       "selected": false
     },
     {
-      "candidate_id": "2215c01979151189",
-      "title": "Bessent Says China Prevented G20 Communique Over Imbalance Spat",
-      "title_zh": "贝森特称中国因贸易顺差争议阻止G20联合公报",
+      "candidate_id": "f5bdb3ddb1aa9297",
+      "title": "BOJ Board Hawk Calls for Nimble Hikes to Prevent Price Risks",
+      "title_zh": "日本央行鹰派委员呼吁灵活加息防范价格风险",
       "source": "Bloomberg Economics",
-      "published_at": "2026-09-01T23:37:22+00:00",
-      "summary": "Treasury Secretary Scott Bessent said that China prevented the Group of 20 from issuing a joint communique after a gathering of finance and central bank chiefs this week, due to a dispute over its giant trade surplus.",
-      "summary_zh": "美国财长贝森特表示，中国因巨额贸易顺差争议阻止G20财长和央行官员会议发布联合公报。",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-01/bessent-says-china-prevented-g20-communique-over-imbalance-spat",
-      "category": "地缘政治与风险事件",
-      "selected": true
-    },
-    {
-      "candidate_id": "6dcec84a91a4c4c7",
-      "title": "China Bond Sales Set to Accelerate, Putting Focus on PBOC",
-      "title_zh": "中国债券发行料加速，市场关注央行",
-      "source": "Bloomberg Markets",
-      "published_at": "2026-09-02T00:40:38+00:00",
-      "summary": "China’s government bond sales are expected to pick up after a lull as authorities seek to boost a sluggish economy, with increased issuance likely to prompt the central bank to inject more liquidity.",
-      "summary_zh": "为提振疲弱经济，中国政府债券发行在短暂停滞后预计将加快。发债增加可能促使央行投放更多流动性。",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-02/china-bond-sales-set-to-accelerate-putting-focus-on-pboc",
+      "published_at": "2026-09-02T01:49:58+00:00",
+      "summary": "Bank of Japan Board Member Hajime Takata, one of the bank’s most hawkish members, reiterated his call for nimble interest rate hikes to prevent upward price deviations, adding to growing speculation over a near-term policy move.",
+      "summary_zh": "日本央行最鹰派的委员之一高田创重申，应灵活上调利率以防止物价上行偏离，进一步加剧了市场对近期政策行动的猜测。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-02/boj-board-hawk-calls-for-nimble-hikes-to-prevent-price-risks",
       "category": "宏观 / 利率",
       "selected": false
     },
     {
-      "candidate_id": "66750c36c9d54c16",
-      "title": "Hugging Face's new duck robot is selling fast. A Chinese chip powers it",
-      "title_zh": "Hugging Face新款鸭子机器人热销，搭载中国芯片",
-      "source": "CNBC Top News",
-      "published_at": "2026-09-02T00:11:14+00:00",
-      "summary": "The colorful \"Microduck\" robot from HuggingFace's French subsidiary Pollen Robotics has sold more than 10,000 units since launching on Thursday.",
-      "summary_zh": "Hugging Face旗下法国子公司Pollen Robotics推出的彩色“Microduck”机器人自周四发布以来已售出逾1万台。",
-      "url": "https://www.cnbc.com/2026/09/01/hugging-faces-new-duck-robot-is-selling-fast-a-chinese-chip-powers-it.html",
-      "category": "AI / 科技",
-      "selected": false
-    },
-    {
-      "candidate_id": "a7a74bc7b146dc7e",
-      "title": "S. Korea’s Inflation Picks Up on One-Off Phone Bill Effect",
-      "title_zh": "韩国通胀受一次性手机账单影响加速",
+      "candidate_id": "ffbf5e4d1b6bd826",
+      "title": "Australia’s Faster Economic Growth Bolsters Rate-Hike Case",
+      "title_zh": "澳大利亚经济加速增长强化加息理由",
       "source": "Bloomberg Economics",
-      "published_at": "2026-09-01T23:00:29+00:00",
-      "summary": "South Korea’s inflation topped 3% for the third time this year while an acceleration in core price gains to the fastest pace in more than three years bolstered the central bank’s case for maintaining its tightening bias.",
-      "summary_zh": "韩国通胀率今年第三次超过3%，核心价格涨幅升至逾三年最快，强化了央行维持紧缩倾向的理由。",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-01/south-korea-s-inflation-accelerates-on-one-off-phone-bill-effect",
+      "published_at": "2026-09-02T01:32:42+00:00",
+      "summary": "Australia’s economic growth unexpectedly accelerated last quarter, providing further ammunition for the Reserve Bank to raise interest rates again to rein in stubbornly strong inflation.",
+      "summary_zh": "澳大利亚上季度经济增长意外加快，为澳洲联储再次加息以抑制顽固高通胀提供更多依据。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-02/australian-economy-surprisingly-quickens-boosting-rba-hike-case",
       "category": "宏观 / 利率",
       "selected": false
     },
@@ -1355,141 +1316,201 @@
       "selected": false
     },
     {
+      "candidate_id": "b7f388e10d8202a0",
+      "title": "Copper’s Rally Stalls as Worries About Global Economy Resurface",
+      "title_zh": "全球经济忧虑重现，铜价涨势停滞",
+      "source": "Bloomberg Markets",
+      "published_at": "2026-09-02T02:54:17+00:00",
+      "summary": "Copper fell for a second day, dropping with other metals, as resurgent oil prices fanned concerns about prospects for the world economy.",
+      "summary_zh": "铜价连续第二天下跌，并带动其他金属走低；油价再度上涨加剧了对全球经济前景的担忧。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-02/copper-s-rally-stalls-as-worries-about-global-economy-resurface",
+      "category": "能源 / 大宗商品",
+      "selected": false
+    },
+    {
+      "candidate_id": "66750c36c9d54c16",
+      "title": "Hugging Face's new duck robot is selling fast. A Chinese chip powers it",
+      "title_zh": "Hugging Face新款小鸭机器人热销，采用中国芯片",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-02T00:11:14+00:00",
+      "summary": "The colorful \"Microduck\" robot from HuggingFace's French subsidiary Pollen Robotics has sold more than 10,000 units since launching on Thursday.",
+      "summary_zh": "Hugging Face旗下法国子公司Pollen Robotics推出的彩色“Microduck”机器人自周四发布以来已售出逾1万台。",
+      "url": "https://www.cnbc.com/2026/09/01/hugging-faces-new-duck-robot-is-selling-fast-a-chinese-chip-powers-it.html",
+      "category": "AI / 科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "2215c01979151189",
+      "title": "Bessent Says China Prevented G20 Communique Over Imbalance Spat",
+      "title_zh": "贝森特称中国因失衡争端阻止G20发布联合公报",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-01T23:37:22+00:00",
+      "summary": "Treasury Secretary Scott Bessent said China prevented the Group of 20 from issuing a joint communique after a gathering of finance and central bank chiefs this week due to a dispute over its giant trade surplus.",
+      "summary_zh": "美国财政部长斯科特·贝森特表示，由于围绕中国巨额贸易顺差的争端，中国阻止二十国集团财长和央行行长会议发布联合公报。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-01/bessent-says-china-prevented-g20-communique-over-imbalance-spat",
+      "category": "地缘政治与风险事件",
+      "selected": false
+    },
+    {
       "candidate_id": "a7ffd5ff318654f5",
       "title": "AfterQuery reportedly becomes Y Combinator’s fastest-ever unicorn, now valued at $3.2B",
-      "title_zh": "AfterQuery据报成为Y Combinator最快独角兽，估值32亿美元",
+      "title_zh": "报道称AfterQuery成Y Combinator最快独角兽，估值32亿美元",
       "source": "TechCrunch",
       "published_at": "2026-09-01T22:08:24+00:00",
       "summary": "AI model-training startup AfterQuery has reportedly raised a round that valued it at $3.2 billion, just five months after announcing its $30 million Series A at a $300 million valuation in April.",
-      "summary_zh": "据报，AI模型训练初创公司AfterQuery完成一轮融资，估值达32亿美元；该公司5个月前宣布以3亿美元估值完成3000万美元A轮融资。",
+      "summary_zh": "据报道，AI模型训练初创公司AfterQuery完成新一轮融资，估值达32亿美元。该公司5个月前宣布以3亿美元估值完成3000万美元A轮融资。",
       "url": "https://techcrunch.com/2026/09/01/afterquery-reportedly-becomes-y-combinators-fastest-ever-unicorn-now-valued-at-3-2b/",
       "category": "AI / 科技",
       "selected": false
     },
     {
+      "candidate_id": "6dcec84a91a4c4c7",
+      "title": "China Bond Sales Set to Accelerate, Putting Focus on PBOC",
+      "title_zh": "中国债券发行料加速，市场聚焦央行",
+      "source": "Bloomberg Markets",
+      "published_at": "2026-09-02T00:40:38+00:00",
+      "summary": "China’s government bond sales are expected to pick up after a lull as authorities seek to boost a sluggish economy, with increased issuance likely to prompt the central bank to inject more liquidity.",
+      "summary_zh": "为提振低迷经济，中国政府债券发行在短暂停滞后预计将加快。发行增加可能促使央行注入更多流动性。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-02/china-bond-sales-set-to-accelerate-putting-focus-on-pboc",
+      "category": "宏观 / 利率",
+      "selected": false
+    },
+    {
+      "candidate_id": "a7a74bc7b146dc7e",
+      "title": "S. Korea’s Inflation Picks Up on One-Off Phone Bill Effect",
+      "title_zh": "一次性手机账单影响推动韩国通胀回升",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-01T23:00:29+00:00",
+      "summary": "South Korea’s inflation topped 3% for the third time this year while an acceleration in core price gains to the fastest pace in more than three years bolstered the central bank’s case for maintaining its tightening bias.",
+      "summary_zh": "韩国通胀率今年第三次超过3%，核心价格涨幅加快至逾三年最快水平，强化了央行维持紧缩倾向的理由。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-01/south-korea-s-inflation-accelerates-on-one-off-phone-bill-effect",
+      "category": "宏观 / 利率",
+      "selected": false
+    },
+    {
       "candidate_id": "cc96fe50bb0c16d5",
       "title": "Palo Alto Networks beats quarterly estimates on AI demand, continues acquisition spree",
-      "title_zh": "Palo Alto Networks受AI需求推动业绩超预期，继续收购",
+      "title_zh": "Palo Alto Networks季度业绩超预期并继续并购",
       "source": "CNBC Top News",
       "published_at": "2026-09-01T21:41:15+00:00",
       "summary": "Palo Alto Networks' stock has nearly doubled this year as AI boosts demand for security detection and response tools",
-      "summary_zh": "在AI推动安全检测与响应工具需求的背景下，Palo Alto Networks股价今年已接近翻倍。",
+      "summary_zh": "Palo Alto Networks季度业绩超过市场预期，公司表示AI需求正在推动安全检测与响应工具需求，并继续推进并购布局。",
       "url": "https://www.cnbc.com/2026/09/01/palo-alto-networks-panw-q4-2026-earnings.html",
-      "category": "其他",
-      "selected": false
-    },
-    {
-      "candidate_id": "5c378dfb946f722e",
-      "title": "John Ternus hypes ‘huge launch next week’ in first memo as Apple CEO",
-      "title_zh": "苹果CEO特纳斯首次备忘录预告下周“重大发布”",
-      "source": "TechCrunch",
-      "published_at": "2026-09-01T19:45:28+00:00",
-      "summary": "Apple is hosting its iPhone release event next week, which is rumored to feature the first-ever foldable iPhone.",
-      "summary_zh": "苹果将于下周举办iPhone发布活动，据传可能推出首款折叠屏iPhone。",
-      "url": "https://techcrunch.com/2026/09/01/john-ternus-hypes-huge-launch-next-week-in-first-memo-as-apple-ceo/",
       "category": "大型科技",
-      "selected": false
-    },
-    {
-      "candidate_id": "d84418c3b6b15c97",
-      "title": "US Factory Gauge Eases But Holds Close to Four-Year High",
-      "title_zh": "美国制造业连续第八个月扩张，但订单和就业放缓",
-      "source": "Bloomberg Economics",
-      "published_at": "2026-09-01T14:00:00+00:00",
-      "summary": "US manufacturing activity expanded for an eighth straight month in August, though a moderation in new order and employment growth signaled some cooling in factory demand.",
-      "summary_zh": "美国制造业活动8月连续第八个月扩张，但新订单和就业增速放缓，显示工厂需求出现降温迹象。",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-01/us-manufacturing-gauge-eases-but-holds-close-to-four-year-high",
-      "category": "宏观 / 利率",
       "selected": true
     },
     {
-      "candidate_id": "a6fc3c926d6c7484",
-      "title": "Seraphim Launches New ETF to Target Pure-Play Space Investors",
-      "title_zh": "Seraphim推出新ETF，面向纯太空产业投资者",
-      "source": "Bloomberg Markets",
-      "published_at": "2026-09-01T23:01:00+00:00",
-      "summary": "Investors are being offered a new way to bet on space via a fund that focuses exclusively on a sector thrust into the limelight by the IPO of Elon Musk’s SpaceX.",
-      "summary_zh": "一只专注于太空产业的新基金为投资者提供了押注该领域的新方式；SpaceX的IPO使该行业受到关注。",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-01/seraphim-launches-new-etf-to-target-pure-play-space-investors",
-      "category": "大型科技",
+      "candidate_id": "3beece1d8e979768",
+      "title": "Dell surges 9% after lifting fiscal 2027 forecast on AI server strength",
+      "title_zh": "戴尔上调财年2027指引，AI服务器收入预计翻三倍",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-01T21:40:18+00:00",
+      "summary": "Dell sees AI server revenue tripling in fiscal 2027. Six months ago, it was looking for the number to double.",
+      "summary_zh": "戴尔因AI服务器需求强劲上调财年2027展望，预计相关收入将增长至原先预测的三倍，显示数据中心资本开支预期进一步增强。",
+      "url": "https://www.cnbc.com/2026/09/01/dell-q2-earnings-report-2027.html",
+      "category": "AI / 科技",
+      "selected": true
+    },
+    {
+      "candidate_id": "9372bc9a4ede2812",
+      "title": "Bessent Suggests Backing for BOJ Action in Meeting With Ueda",
+      "title_zh": "贝森特与植田会面后暗示支持日本央行行动",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-01T16:51:42+00:00",
+      "summary": "Treasury Secretary Scott Bessent, who’s repeatedly signaled that Japan needs higher interest rates to bolster the yen, suggested he’s supporting such a move after a meeting with Bank of Japan Governor Kazuo Ueda.",
+      "summary_zh": "多次表示日本需要提高利率以支撑日元的美国财政部长斯科特·贝森特，在与日本央行行长植田和男会面后暗示支持这一行动。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-01/bessent-suggests-backing-for-boj-action-in-meeting-with-ueda",
+      "category": "宏观 / 利率",
       "selected": false
     },
     {
       "candidate_id": "ccf0d64704834dd9",
       "title": "Amazon Alexa can now alert you when something new might tempt you to shop",
-      "title_zh": "亚马逊Alexa现可提醒可能诱发购物的新动态",
+      "title_zh": "亚马逊Alexa现可提醒可能诱使你购物的新动态",
       "source": "TechCrunch",
       "published_at": "2026-09-01T15:51:55+00:00",
       "summary": "Amazon is adding a new Alexa-powered feature called “Update Me When” that can send personalized alerts about product launches, tours, books, shows, and other events that could trigger a purchase.",
-      "summary_zh": "亚马逊新增由Alexa驱动的“Update Me When”功能，可就产品发布、巡演、书籍、演出及其他可能促成购买的事件发送个性化提醒。",
+      "summary_zh": "亚马逊新增由Alexa驱动的“Update Me When”功能，可针对产品发布、巡演、图书、节目及其他可能引发购买的活动发送个性化提醒。",
       "url": "https://techcrunch.com/2026/09/01/amazon-alexa-can-now-alert-you-when-something-new-might-tempt-you-to-shop/",
+      "category": "大型科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "0426e4b3b9347f4f",
+      "title": "AIR raises $50M to help companies vet the skills and add-ons AI agents use",
+      "title_zh": "AIR融资5000万美元，帮助企业审查AI代理技能与插件",
+      "source": "TechCrunch",
+      "published_at": "2026-09-01T15:45:51+00:00",
+      "summary": "AIR's platform can discover agents running at a company, continuously vets any skills and add-ons they use, and blocks any unwanted behavior.",
+      "summary_zh": "AIR的平台可发现企业内部运行的代理，持续审查其使用的技能和插件，并阻止不受欢迎的行为。",
+      "url": "https://techcrunch.com/2026/09/01/air-raises-50m-to-help-companies-vet-the-skills-and-add-ons-ai-agents-use/",
+      "category": "AI / 科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "d84418c3b6b15c97",
+      "title": "US Factory Gauge Eases But Holds Close to Four-Year High",
+      "title_zh": "美国制造业连续第八个月扩张，但订单与就业放缓",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-01T14:00:00+00:00",
+      "summary": "US manufacturing activity expanded for an eighth straight month in August, though a moderation in new order and employment growth signaled some cooling in factory demand.",
+      "summary_zh": "美国制造业活动8月连续第八个月扩张，整体仍接近四年高位，但新订单和就业增速放缓，显示工厂需求出现降温迹象。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-01/us-manufacturing-gauge-eases-but-holds-close-to-four-year-high",
+      "category": "宏观 / 利率",
+      "selected": true
+    },
+    {
+      "candidate_id": "23c0792f16de7847",
+      "title": "Prediction market traders think job creation rebounded in August",
+      "title_zh": "预测市场交易员认为8月就业增长回升",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-01T18:57:14+00:00",
+      "summary": "Traders see 50-50 odds that the U.S. economy added more than 50,000 jobs last month.",
+      "summary_zh": "交易员认为，美国经济上月新增就业人数超过5万人的概率为五五开。",
+      "url": "https://www.cnbc.com/2026/09/01/prediction-market-traders-think-job-creation-rebounded-in-august.html",
+      "category": "宏观 / 利率",
+      "selected": false
+    },
+    {
+      "candidate_id": "59309243dcf783f0",
+      "title": "Microsoft 365 outage drags on, but things are improving",
+      "title_zh": "Microsoft 365故障持续，但情况正在改善",
+      "source": "TechCrunch",
+      "published_at": "2026-09-01T15:23:15+00:00",
+      "summary": "Microsoft 365 and Outlook are still seeing service degradations on Tuesday, the company's status page indicates.",
+      "summary_zh": "微软状态页面显示，Microsoft 365和Outlook周二仍出现服务降级，但情况正在好转。",
+      "url": "https://techcrunch.com/2026/09/01/microsoft-365-outage-drags-on-but-things-are-improving/",
       "category": "大型科技",
       "selected": false
     },
     {
       "candidate_id": "0c93ebfa1cd69fc5",
       "title": "ECB’s September Hike Won’t Be Enough, Simkus Tells Econostream",
-      "title_zh": "欧洲央行9月加息仍不足以遏制通胀，辛库斯称",
+      "title_zh": "西姆库斯称欧洲央行9月加息仍不足够",
       "source": "Bloomberg Economics",
       "published_at": "2026-09-01T13:41:32+00:00",
       "summary": "An increase in interest rates next week by the European Central Bank won’t be sufficient to get inflation back to target, according to Governing Council member Gediminas Simkus.",
-      "summary_zh": "欧洲央行管理委员会成员格迪米纳斯·辛库斯表示，下周加息不足以使通胀回到目标水平。",
+      "summary_zh": "欧洲央行管理委员会成员盖迪米纳斯·西姆库斯表示，欧洲央行下周上调利率不足以使通胀回到目标水平。",
       "url": "https://www.bloomberg.com/news/articles/2026-09-01/ecb-s-september-hike-won-t-be-enough-simkus-tells-econostream",
       "category": "宏观 / 利率",
       "selected": false
     },
     {
-      "candidate_id": "23c0792f16de7847",
-      "title": "Prediction market traders think job creation rebounded in August",
-      "title_zh": "预测市场交易员认为8月就业增长反弹",
-      "source": "CNBC Top News",
-      "published_at": "2026-09-01T18:57:14+00:00",
-      "summary": "Traders see 50-50 odds that the U.S. economy added more than 50,000 jobs last month.",
-      "summary_zh": "交易员认为，美国经济上月新增就业超过5万个的概率为五五开。",
-      "url": "https://www.cnbc.com/2026/09/01/prediction-market-traders-think-job-creation-rebounded-in-august.html",
-      "category": "宏观 / 利率",
-      "selected": false
-    },
-    {
-      "candidate_id": "0426e4b3b9347f4f",
-      "title": "AIR raises $50M to help companies vet the skills and add-ons AI agents use",
-      "title_zh": "AIR融资5000万美元，帮助企业审查AI代理技能和附加组件",
-      "source": "TechCrunch",
-      "published_at": "2026-09-01T15:45:51+00:00",
-      "summary": "AIR's platform can discover agents running at a company, continuously vets any skills and add-ons they use, and blocks any unwanted behavior.",
-      "summary_zh": "AIR的平台可发现企业内部运行的代理，持续审查其使用的技能和附加组件，并阻止不受欢迎的行为。",
-      "url": "https://techcrunch.com/2026/09/01/air-raises-50m-to-help-companies-vet-the-skills-and-add-ons-ai-agents-use/",
-      "category": "AI / 科技",
-      "selected": false
-    },
-    {
-      "candidate_id": "2d15bc2f8a0de2c8",
-      "title": "ECB’s Nagel Says Slowdown in Underlying Inflation Is Good News",
-      "title_zh": "欧洲央行纳格尔称潜在通胀放缓是好消息",
-      "source": "Bloomberg Economics",
-      "published_at": "2026-09-01T13:24:15+00:00",
-      "summary": "Slower underlying inflation in the euro zone in August is a positive development, according to European Central Bank Governing Council member Joachim Nagel.",
-      "summary_zh": "欧洲央行管理委员会成员约阿希姆·纳格尔称，欧元区8月潜在通胀放缓是积极进展。",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-01/ecb-s-nagel-says-slowdown-in-underlying-inflation-is-good-news",
-      "category": "宏观 / 利率",
-      "selected": false
-    },
-    {
-      "candidate_id": "3beece1d8e979768",
-      "title": "Dell surges 9% after lifting fiscal 2027 forecast on AI server strength",
-      "title_zh": "戴尔因AI服务器需求强劲上调FY2027展望",
-      "source": "CNBC Top News",
-      "published_at": "2026-09-01T21:40:18+00:00",
-      "summary": "Dell sees AI server revenue tripling in fiscal 2027. Six months ago, it was looking for the number to double.",
-      "summary_zh": "戴尔上调财年2027年展望，预计AI服务器收入将增长至原先预期的三倍，较六个月前“翻倍”的预测明显提高。",
-      "url": "https://www.cnbc.com/2026/09/01/dell-q2-earnings-report-2027.html",
-      "category": "AI / 科技",
+      "candidate_id": "8c18e9f1c69940e3",
+      "title": "Iran attacks US bases in Middle East after reports US strike killed five at wedding party",
+      "title_zh": "伊朗袭击中东美军基地，美伊冲突进一步升级",
+      "source": "BBC News",
+      "published_at": "2026-09-02T05:12:07+00:00",
+      "summary": "The Iranian Red Crescent says a child was among those killed when shrapnel from a US strike hit a home. The US military says it is aware of the reports and it never targets civilians.",
+      "summary_zh": "伊朗在美国袭击报道后攻击中东美军基地。事件涉及美国直接军事行动与反击，较此前美伊交火出现新的升级事实。",
+      "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
+      "category": "地缘政治与风险事件",
       "selected": true
     },
     {
       "candidate_id": "064bcebf002241bf",
       "title": "Softbank's SB Energy files for IPO, says it's 'substantially dependent' on OpenAI",
-      "title_zh": "软银SB Energy申请IPO，称业务“实质上依赖”OpenAI",
+      "title_zh": "软银SB Energy申请IPO，称其“在很大程度上依赖OpenAI”",
       "source": "CNBC Top News",
       "published_at": "2026-09-01T16:40:27+00:00",
       "summary": "SB Energy hasn't generated any revenue from its data center business, and none of its data centers are operational yet.",
@@ -1499,15 +1520,51 @@
       "selected": false
     },
     {
-      "candidate_id": "59309243dcf783f0",
-      "title": "Microsoft 365 outage drags on, but things are improving",
-      "title_zh": "微软365服务中断持续，但情况正在改善",
-      "source": "TechCrunch",
-      "published_at": "2026-09-01T15:23:15+00:00",
-      "summary": "Microsoft 365 and Outlook are still seeing service degradations on Tuesday, the company's status page indicates.",
-      "summary_zh": "微软状态页面显示，Microsoft 365和Outlook周二仍出现服务降级，但情况正在改善。",
-      "url": "https://techcrunch.com/2026/09/01/microsoft-365-outage-drags-on-but-things-are-improving/",
-      "category": "大型科技",
+      "candidate_id": "e5f5ddddde8c2921",
+      "title": "Used cars under $20,000 tend to sell quickly — but there are trade-offs for buyers",
+      "title_zh": "2万美元以下二手车通常销售很快，但买家需权衡取舍",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-01T15:49:08+00:00",
+      "summary": "The share of used cars listed at under $20,000 has dropped from pre-pandemic levels against a backdrop of high inflation.",
+      "summary_zh": "在高通胀背景下，挂牌价格低于2万美元的二手车占比较疫情前水平下降。",
+      "url": "https://www.cnbc.com/2026/09/01/used-cars-under-20000-sell-quickly-tradeoffs.html",
+      "category": "宏观 / 利率",
+      "selected": false
+    },
+    {
+      "candidate_id": "9c59989aab4c1850",
+      "title": "Fed’s Barr Says Higher Rates Needed If Inflation Doesn’t Cool",
+      "title_zh": "美联储Barr称通胀不降温或需加息",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-01T13:05:00+00:00",
+      "summary": "Federal Reserve Governor Michael Barr said the central bank should be prepared to raise interest rates if inflation fails to subside, warning price pressures are at risk of becoming entrenched after being above target for more than five years.",
+      "summary_zh": "美联储理事Michael Barr表示，若通胀未能降温，央行应准备提高利率，并警告价格压力存在固化风险。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-01/fed-s-barr-says-higher-rates-needed-if-inflation-doesn-t-cool",
+      "category": "宏观 / 利率",
+      "selected": true
+    },
+    {
+      "candidate_id": "2d15bc2f8a0de2c8",
+      "title": "ECB’s Nagel Says Slowdown in Underlying Inflation Is Good News",
+      "title_zh": "欧洲央行纳格尔称潜在通胀放缓是好消息",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-01T13:24:15+00:00",
+      "summary": "Slower underlying inflation in the euro zone in August is a positive development, according to European Central Bank Governing Council member Joachim Nagel.",
+      "summary_zh": "欧洲央行管理委员会成员约阿希姆·纳格尔表示，欧元区8月潜在通胀放缓是积极进展。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-01/ecb-s-nagel-says-slowdown-in-underlying-inflation-is-good-news",
+      "category": "宏观 / 利率",
+      "selected": false
+    },
+    {
+      "candidate_id": "24793fc07d08723f",
+      "title": "Trump says U.S. growth could hit 20%. It’s happened only once since WWII",
+      "title_zh": "特朗普称美国增长或达20%，二战后仅发生过一次",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-01T13:22:11+00:00",
+      "summary": "Trump argued rapid growth should not prompt Fed rate hikes, even as inflation remains above the central bank’s 2% target.",
+      "summary_zh": "特朗普认为，即便通胀仍高于美联储2%的目标，快速增长也不应促使美联储加息。",
+      "url": "https://www.cnbc.com/2026/08/31/trump-us-gdp-growth-20-percent-economy.html",
+      "category": "宏观 / 利率",
       "selected": false
     },
     {
@@ -1523,61 +1580,13 @@
       "selected": false
     },
     {
-      "candidate_id": "8c18e9f1c69940e3",
-      "title": "Iran retaliates after US strikes kills four at wedding party, state media reports",
-      "title_zh": "伊朗媒体称已开始对美国目标发动报复性袭击",
-      "source": "BBC News",
-      "published_at": "2026-09-02T00:13:26+00:00",
-      "summary": "Iranian news agencies said retaliatory missile and drone attacks on US targets had begun.",
-      "summary_zh": "伊朗通讯社称，在美国袭击造成婚礼现场四人死亡后，伊朗已开始对美国目标发动导弹和无人机报复性袭击。",
-      "url": "https://www.bbc.co.uk/news/articles/cj06q4ynpmjo?at_medium=RSS&at_campaign=rss",
-      "category": "地缘政治与风险事件",
-      "selected": true
-    },
-    {
-      "candidate_id": "e5f5ddddde8c2921",
-      "title": "Used cars under $20,000 tend to sell quickly — but there are trade-offs for buyers",
-      "title_zh": "2万美元以下二手车通常售出很快，但买家需权衡取舍",
-      "source": "CNBC Top News",
-      "published_at": "2026-09-01T15:49:08+00:00",
-      "summary": "The share of used cars listed at under $20,000 has dropped from pre-pandemic levels against a backdrop of high inflation.",
-      "summary_zh": "在高通胀背景下，标价低于2万美元的二手车占比已低于疫情前水平。",
-      "url": "https://www.cnbc.com/2026/09/01/used-cars-under-20000-sell-quickly-tradeoffs.html",
-      "category": "宏观 / 利率",
-      "selected": false
-    },
-    {
-      "candidate_id": "9c59989aab4c1850",
-      "title": "Fed’s Barr Says Higher Rates Needed If Inflation Doesn’t Cool",
-      "title_zh": "美联储Barr：若通胀不降温，应准备加息",
-      "source": "Bloomberg Economics",
-      "published_at": "2026-09-01T13:05:00+00:00",
-      "summary": "Federal Reserve Governor Michael Barr said the central bank should be prepared to raise interest rates if inflation fails to subside, warning price pressures are at risk of becoming entrenched after being above target for more than five years.",
-      "summary_zh": "美联储理事Michael Barr表示，若通胀未能降温，央行应准备加息，并警告价格压力可能在通胀长期高于目标后固化。",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-01/fed-s-barr-says-higher-rates-needed-if-inflation-doesn-t-cool",
-      "category": "宏观 / 利率",
-      "selected": true
-    },
-    {
-      "candidate_id": "24793fc07d08723f",
-      "title": "Trump says U.S. growth could hit 20%. It’s happened only once since WWII",
-      "title_zh": "特朗普称美国增长率或达20%，二战后仅出现过一次",
-      "source": "CNBC Top News",
-      "published_at": "2026-09-01T13:22:11+00:00",
-      "summary": "Trump argued rapid growth should not prompt Fed rate hikes, even as inflation remains above the central bank’s 2% target.",
-      "summary_zh": "特朗普称，即使通胀仍高于美联储2%的目标，快速增长也不应促使美联储加息。",
-      "url": "https://www.cnbc.com/2026/08/31/trump-us-gdp-growth-20-percent-economy.html",
-      "category": "宏观 / 利率",
-      "selected": false
-    },
-    {
       "candidate_id": "678eaf7be6d75618",
       "title": "Brazil Economy Loses Steam as High Rates Bite Before Vote",
-      "title_zh": "巴西经济在大选前受高利率拖累而失速",
+      "title_zh": "高利率抑制增长，巴西经济在选举前失去动能",
       "source": "Bloomberg Economics",
       "published_at": "2026-09-01T12:20:19+00:00",
       "summary": "Brazil’s economy saw a modest expansion in the second quarter after a stronger start to the year as high interest rates dragged on growth ahead of the presidential election.",
-      "summary_zh": "在年初表现较强后，巴西经济第二季度温和扩张；高利率在总统选举前拖累增长。",
+      "summary_zh": "巴西经济第二季度温和扩张；年初增长较强后，高利率在总统选举前拖累了经济增长。",
       "url": "https://www.bloomberg.com/news/articles/2026-09-01/brazil-economy-loses-steam-as-high-rates-bite-before-election",
       "category": "宏观 / 利率",
       "selected": false
@@ -1585,11 +1594,11 @@
     {
       "candidate_id": "921482d95b5220d0",
       "title": "Why did Modi urge Putin to end Ukraine war - and will he listen?",
-      "title_zh": "莫迪为何敦促普京结束乌克兰战争，他会听从吗？",
+      "title_zh": "莫迪为何敦促普京结束乌克兰战争，他会听吗？",
       "source": "BBC News",
       "published_at": "2026-09-01T11:55:51+00:00",
       "summary": "BBC correspondents in Delhi and Moscow look at why the Indian PM made a very public peace plea to his Russian ally.",
-      "summary_zh": "BBC驻德里和莫斯科记者探讨，印度总理为何公开呼吁其俄罗斯盟友实现和平。",
+      "summary_zh": "BBC驻德里和莫斯科记者分析，印度总理为何公开呼吁其俄罗斯盟友实现和平。",
       "url": "https://www.bbc.co.uk/news/articles/cx2zy3wdqqeo?at_medium=RSS&at_campaign=rss",
       "category": "地缘政治与风险事件",
       "selected": false
@@ -1597,25 +1606,37 @@
     {
       "candidate_id": "5a66c59ca1074452",
       "title": "AI could cause global economic downturn, Andrew Bailey warns G20",
-      "title_zh": "安德鲁·贝利警告AI可能导致全球经济衰退",
+      "title_zh": "安德鲁·贝利在G20警告，AI或导致全球经济衰退",
       "source": "BBC Business",
       "published_at": "2026-09-01T10:18:47+00:00",
       "summary": "The governor of the Bank of England warned of AI's “volatility” caused by energy shocks from the US-Iran war.",
-      "summary_zh": "英格兰银行行长在G20警告称，美伊战争引发的能源冲击可能造成AI的“波动性”。",
+      "summary_zh": "英国央行行长警告称，美伊战争引发的能源冲击可能造成AI的“波动性”。",
       "url": "https://www.bbc.co.uk/news/articles/c99dym3prl1o?at_medium=RSS&at_campaign=rss",
-      "category": "宏观 / 利率",
+      "category": "其他",
       "selected": false
     },
     {
-      "candidate_id": "e1e38a2b282b229f",
-      "title": "'I've never been to Afghanistan': Six million deportees forced to start over under the Taliban",
-      "title_zh": "“我从未去过阿富汗”：600万被驱逐者在塔利班治下被迫重新开始",
-      "source": "BBC News",
-      "published_at": "2026-09-01T05:00:34+00:00",
-      "summary": "As of August, the number forced to return this year from Pakistan and Iran had reached another million.",
-      "summary_zh": "截至8月，今年从巴基斯坦和伊朗被迫返回的人数又达到100万。",
-      "url": "https://www.bbc.co.uk/news/articles/c2e074nn8eko?at_medium=RSS&at_campaign=rss",
-      "category": "地缘政治与风险事件",
+      "candidate_id": "f46704991557dafd",
+      "title": "Trumpf CTO on Business Strategy, Chip Industry",
+      "title_zh": "通快CTO谈商业战略与芯片行业",
+      "source": "Bloomberg Technology",
+      "published_at": "2026-09-02T04:38:21+00:00",
+      "summary": "Berthold Schmidt, Chief Technology Officer at German industrial laser maker Trumpf, discusses the company's business strategy and the outlook for the semiconductor industry. He speaks with Stephen Engle from the sidelines of SEMICON Taiwan in Taipei. (Source: Bloomberg)",
+      "summary_zh": "德国工业激光制造商通快首席技术官贝托尔德·施密特在台北SEMICON Taiwan期间谈论公司商业战略及半导体行业前景。",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-02/trumpf-cto-on-business-strategy-chip-industry-video",
+      "category": "AI / 科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "d2ec9243b92a955f",
+      "title": "SEMI CEO on Memory Prices, Semiconductor Supercycle",
+      "title_zh": "SEMI CEO谈存储器价格与半导体超级周期",
+      "source": "Bloomberg Technology",
+      "published_at": "2026-09-02T04:34:07+00:00",
+      "summary": "Ajit Manocha, President and CEO of semiconductor industry association SEMI, discusses the outlook for memory chip prices and the ongoing supercycle in the semiconductor market. He speaks with Stephen Engle on the sidelines of SEMICON Taiwan in Taipei. (Source: Bloomberg)",
+      "summary_zh": "半导体行业协会SEMI总裁兼CEO阿吉特·马诺查在台北SEMICON Taiwan期间谈论存储芯片价格前景及半导体市场持续的超级周期。",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-02/semi-ceo-on-memory-prices-semiconductor-supercycle-video",
+      "category": "AI / 科技",
       "selected": false
     },
     {
