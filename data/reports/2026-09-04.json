@@ -1,0 +1,1862 @@
+{
+  "report_date": "2026-09-04",
+  "generated_at": "2026-09-04 09:00 CST",
+  "market_date": "2026-09-03",
+  "status": "partial",
+  "status_label": "🟠 部分数据源异常",
+  "market_data_valid": true,
+  "core_market_valid": true,
+  "context_market_valid": true,
+  "drawdown_market_valid": true,
+  "market": {
+    "sp500": {
+      "market_date": "2026-09-03",
+      "close": 7747.7099609375,
+      "daily_return": 0.01057963924661287,
+      "ytd_return": 0.13179606470491567,
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "drawdown": 0.006575245242836147,
+      "name": "S&P 500",
+      "ticker": "^GSPC",
+      "valid": true,
+      "sparkline": {
+        "line": "M0.0,39.27 L14.48,39.16 L28.97,37.74 L43.45,48.0 L57.93,36.93 L72.41,32.18 L86.9,22.09 L101.38,9.69 L115.86,10.87 L130.34,12.11 L144.83,7.77 L159.31,8.18 L173.79,10.45 L188.28,8.6 L202.76,4.0 L217.24,5.21 L231.72,8.91 L246.21,13.77 L260.69,12.29 L275.17,18.38 L289.66,15.36 L304.14,17.32 L318.62,15.09 L333.1,15.24 L347.59,10.2 L362.07,11.95 L376.55,14.28 L391.03,19.27 L405.52,16.06 L420.0,8.67",
+        "area": "M0.0,39.27 L14.48,39.16 L28.97,37.74 L43.45,48.0 L57.93,36.93 L72.41,32.18 L86.9,22.09 L101.38,9.69 L115.86,10.87 L130.34,12.11 L144.83,7.77 L159.31,8.18 L173.79,10.45 L188.28,8.6 L202.76,4.0 L217.24,5.21 L231.72,8.91 L246.21,13.77 L260.69,12.29 L275.17,18.38 L289.66,15.36 L304.14,17.32 L318.62,15.09 L333.1,15.24 L347.59,10.2 L362.07,11.95 L376.55,14.28 L391.03,19.27 L405.52,16.06 L420.0,8.67 L420.0,52 L0.0,52 Z",
+        "points": [
+          {
+            "x": 0.0,
+            "y": 39.27,
+            "date": "2026-07-24",
+            "close": 7411.98,
+            "change": null
+          },
+          {
+            "x": 14.48,
+            "y": 39.16,
+            "date": "2026-07-27",
+            "close": 7413.1802,
+            "change": 0.000162
+          },
+          {
+            "x": 28.97,
+            "y": 37.74,
+            "date": "2026-07-28",
+            "close": 7428.7798,
+            "change": 0.002104
+          },
+          {
+            "x": 43.45,
+            "y": 48.0,
+            "date": "2026-07-29",
+            "close": 7316.1499,
+            "change": -0.015161
+          },
+          {
+            "x": 57.93,
+            "y": 36.93,
+            "date": "2026-07-30",
+            "close": 7437.6299,
+            "change": 0.016604
+          },
+          {
+            "x": 72.41,
+            "y": 32.18,
+            "date": "2026-07-31",
+            "close": 7489.7202,
+            "change": 0.007004
+          },
+          {
+            "x": 86.9,
+            "y": 22.09,
+            "date": "2026-08-03",
+            "close": 7600.5,
+            "change": 0.014791
+          },
+          {
+            "x": 101.38,
+            "y": 9.69,
+            "date": "2026-08-04",
+            "close": 7736.52,
+            "change": 0.017896
+          },
+          {
+            "x": 115.86,
+            "y": 10.87,
+            "date": "2026-08-05",
+            "close": 7723.5498,
+            "change": -0.001676
+          },
+          {
+            "x": 130.34,
+            "y": 12.11,
+            "date": "2026-08-06",
+            "close": 7709.96,
+            "change": -0.00176
+          },
+          {
+            "x": 144.83,
+            "y": 7.77,
+            "date": "2026-08-07",
+            "close": 7757.6401,
+            "change": 0.006184
+          },
+          {
+            "x": 159.31,
+            "y": 8.18,
+            "date": "2026-08-10",
+            "close": 7753.1099,
+            "change": -0.000584
+          },
+          {
+            "x": 173.79,
+            "y": 10.45,
+            "date": "2026-08-11",
+            "close": 7728.2002,
+            "change": -0.003213
+          },
+          {
+            "x": 188.28,
+            "y": 8.6,
+            "date": "2026-08-12",
+            "close": 7748.5,
+            "change": 0.002627
+          },
+          {
+            "x": 202.76,
+            "y": 4.0,
+            "date": "2026-08-13",
+            "close": 7798.9902,
+            "change": 0.006516
+          },
+          {
+            "x": 217.24,
+            "y": 5.21,
+            "date": "2026-08-14",
+            "close": 7785.7598,
+            "change": -0.001696
+          },
+          {
+            "x": 231.72,
+            "y": 8.91,
+            "date": "2026-08-17",
+            "close": 7745.0601,
+            "change": -0.005227
+          },
+          {
+            "x": 246.21,
+            "y": 13.77,
+            "date": "2026-08-18",
+            "close": 7691.7598,
+            "change": -0.006882
+          },
+          {
+            "x": 260.69,
+            "y": 12.29,
+            "date": "2026-08-19",
+            "close": 7707.98,
+            "change": 0.002109
+          },
+          {
+            "x": 275.17,
+            "y": 18.38,
+            "date": "2026-08-20",
+            "close": 7641.1602,
+            "change": -0.008669
+          },
+          {
+            "x": 289.66,
+            "y": 15.36,
+            "date": "2026-08-21",
+            "close": 7674.3701,
+            "change": 0.004346
+          },
+          {
+            "x": 304.14,
+            "y": 17.32,
+            "date": "2026-08-24",
+            "close": 7652.8599,
+            "change": -0.002803
+          },
+          {
+            "x": 318.62,
+            "y": 15.09,
+            "date": "2026-08-25",
+            "close": 7677.2798,
+            "change": 0.003191
+          },
+          {
+            "x": 333.1,
+            "y": 15.24,
+            "date": "2026-08-26",
+            "close": 7675.7002,
+            "change": -0.000206
+          },
+          {
+            "x": 347.59,
+            "y": 10.2,
+            "date": "2026-08-27",
+            "close": 7730.9902,
+            "change": 0.007203
+          },
+          {
+            "x": 362.07,
+            "y": 11.95,
+            "date": "2026-08-28",
+            "close": 7711.7598,
+            "change": -0.002487
+          },
+          {
+            "x": 376.55,
+            "y": 14.28,
+            "date": "2026-08-31",
+            "close": 7686.1401,
+            "change": -0.003322
+          },
+          {
+            "x": 391.03,
+            "y": 19.27,
+            "date": "2026-09-01",
+            "close": 7631.4702,
+            "change": -0.007113
+          },
+          {
+            "x": 405.52,
+            "y": 16.06,
+            "date": "2026-09-02",
+            "close": 7666.6001,
+            "change": 0.004603
+          },
+          {
+            "x": 420.0,
+            "y": 8.67,
+            "date": "2026-09-03",
+            "close": 7747.71,
+            "change": 0.01058
+          }
+        ]
+      }
+    },
+    "nasdaq100": {
+      "market_date": "2026-09-03",
+      "close": 29482.3203125,
+      "daily_return": 0.011631829082890066,
+      "ytd_return": 0.16762360048091263,
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "drawdown": 0.038429753882397,
+      "name": "Nasdaq-100",
+      "ticker": "^NDX",
+      "valid": true,
+      "sparkline": {
+        "line": "M0.0,33.76 L14.48,35.12 L28.97,39.32 L43.45,48.0 L57.93,34.09 L72.41,31.54 L86.9,23.89 L101.38,9.35 L115.86,13.08 L130.34,14.82 L144.83,9.51 L159.31,11.04 L173.79,12.5 L188.28,9.2 L202.76,4.0 L217.24,4.58 L231.72,5.36 L246.21,13.03 L260.69,14.02 L275.17,17.26 L289.66,15.8 L304.14,20.15 L318.62,17.32 L333.1,17.08 L347.59,10.74 L362.07,13.9 L376.55,13.55 L391.03,19.32 L405.52,18.32 L420.0,13.16",
+        "area": "M0.0,33.76 L14.48,35.12 L28.97,39.32 L43.45,48.0 L57.93,34.09 L72.41,31.54 L86.9,23.89 L101.38,9.35 L115.86,13.08 L130.34,14.82 L144.83,9.51 L159.31,11.04 L173.79,12.5 L188.28,9.2 L202.76,4.0 L217.24,4.58 L231.72,5.36 L246.21,13.03 L260.69,14.02 L275.17,17.26 L289.66,15.8 L304.14,20.15 L318.62,17.32 L333.1,17.08 L347.59,10.74 L362.07,13.9 L376.55,13.55 L391.03,19.32 L405.52,18.32 L420.0,13.16 L420.0,52 L0.0,52 Z",
+        "points": [
+          {
+            "x": 0.0,
+            "y": 33.76,
+            "date": "2026-07-24",
+            "close": 28128.3398,
+            "change": null
+          },
+          {
+            "x": 14.48,
+            "y": 35.12,
+            "date": "2026-07-27",
+            "close": 28039.2109,
+            "change": -0.003169
+          },
+          {
+            "x": 28.97,
+            "y": 39.32,
+            "date": "2026-07-28",
+            "close": 27763.1309,
+            "change": -0.009846
+          },
+          {
+            "x": 43.45,
+            "y": 48.0,
+            "date": "2026-07-29",
+            "close": 27192.3105,
+            "change": -0.02056
+          },
+          {
+            "x": 57.93,
+            "y": 34.09,
+            "date": "2026-07-30",
+            "close": 28106.3496,
+            "change": 0.033614
+          },
+          {
+            "x": 72.41,
+            "y": 31.54,
+            "date": "2026-07-31",
+            "close": 28274.1992,
+            "change": 0.005972
+          },
+          {
+            "x": 86.9,
+            "y": 23.89,
+            "date": "2026-08-03",
+            "close": 28776.8008,
+            "change": 0.017776
+          },
+          {
+            "x": 101.38,
+            "y": 9.35,
+            "date": "2026-08-04",
+            "close": 29733.1602,
+            "change": 0.033234
+          },
+          {
+            "x": 115.86,
+            "y": 13.08,
+            "date": "2026-08-05",
+            "close": 29487.7891,
+            "change": -0.008252
+          },
+          {
+            "x": 130.34,
+            "y": 14.82,
+            "date": "2026-08-06",
+            "close": 29373.3301,
+            "change": -0.003882
+          },
+          {
+            "x": 144.83,
+            "y": 9.51,
+            "date": "2026-08-07",
+            "close": 29722.3008,
+            "change": 0.011881
+          },
+          {
+            "x": 159.31,
+            "y": 11.04,
+            "date": "2026-08-10",
+            "close": 29621.8008,
+            "change": -0.003381
+          },
+          {
+            "x": 173.79,
+            "y": 12.5,
+            "date": "2026-08-11",
+            "close": 29525.4805,
+            "change": -0.003252
+          },
+          {
+            "x": 188.28,
+            "y": 9.2,
+            "date": "2026-08-12",
+            "close": 29742.5996,
+            "change": 0.007354
+          },
+          {
+            "x": 202.76,
+            "y": 4.0,
+            "date": "2026-08-13",
+            "close": 30084.5,
+            "change": 0.011495
+          },
+          {
+            "x": 217.24,
+            "y": 4.58,
+            "date": "2026-08-14",
+            "close": 30046.1406,
+            "change": -0.001275
+          },
+          {
+            "x": 231.72,
+            "y": 5.36,
+            "date": "2026-08-17",
+            "close": 29995.3809,
+            "change": -0.001689
+          },
+          {
+            "x": 246.21,
+            "y": 13.03,
+            "date": "2026-08-18",
+            "close": 29490.9609,
+            "change": -0.016817
+          },
+          {
+            "x": 260.69,
+            "y": 14.02,
+            "date": "2026-08-19",
+            "close": 29426.0195,
+            "change": -0.002202
+          },
+          {
+            "x": 275.17,
+            "y": 17.26,
+            "date": "2026-08-20",
+            "close": 29213.1602,
+            "change": -0.007234
+          },
+          {
+            "x": 289.66,
+            "y": 15.8,
+            "date": "2026-08-21",
+            "close": 29308.8594,
+            "change": 0.003276
+          },
+          {
+            "x": 304.14,
+            "y": 20.15,
+            "date": "2026-08-24",
+            "close": 29023.1797,
+            "change": -0.009747
+          },
+          {
+            "x": 318.62,
+            "y": 17.32,
+            "date": "2026-08-25",
+            "close": 29209.2305,
+            "change": 0.00641
+          },
+          {
+            "x": 333.1,
+            "y": 17.08,
+            "date": "2026-08-26",
+            "close": 29224.5195,
+            "change": 0.000523
+          },
+          {
+            "x": 347.59,
+            "y": 10.74,
+            "date": "2026-08-27",
+            "close": 29641.5605,
+            "change": 0.01427
+          },
+          {
+            "x": 362.07,
+            "y": 13.9,
+            "date": "2026-08-28",
+            "close": 29433.4297,
+            "change": -0.007022
+          },
+          {
+            "x": 376.55,
+            "y": 13.55,
+            "date": "2026-08-31",
+            "close": 29456.9707,
+            "change": 0.0008
+          },
+          {
+            "x": 391.03,
+            "y": 19.32,
+            "date": "2026-09-01",
+            "close": 29077.2207,
+            "change": -0.012892
+          },
+          {
+            "x": 405.52,
+            "y": 18.32,
+            "date": "2026-09-02",
+            "close": 29143.3301,
+            "change": 0.002274
+          },
+          {
+            "x": 420.0,
+            "y": 13.16,
+            "date": "2026-09-03",
+            "close": 29482.3203,
+            "change": 0.011632
+          }
+        ]
+      }
+    },
+    "dow": {
+      "market_date": "2026-09-03",
+      "close": 53686.109375,
+      "daily_return": 0.0117628576680604,
+      "ytd_return": 0.11698783878873242,
+      "ath": 54349.12109375,
+      "ath_date": "2026-08-05",
+      "drawdown": 0.012199124942726014,
+      "name": "Dow Jones",
+      "ticker": "^DJI",
+      "valid": true,
+      "sparkline": {
+        "line": "M0.0,42.36 L14.48,38.16 L28.97,29.58 L43.45,48.0 L57.93,38.2 L72.41,33.77 L86.9,22.7 L101.38,8.2 L115.86,4.0 L130.34,11.41 L144.83,8.99 L159.31,9.96 L173.79,12.9 L188.28,13.24 L202.76,12.13 L217.24,13.85 L231.72,18.2 L246.21,20.06 L260.69,18.15 L275.17,29.39 L289.66,21.12 L304.14,18.88 L318.62,16.33 L333.1,18.14 L347.59,16.45 L362.07,16.6 L376.55,22.58 L391.03,29.27 L405.52,24.56 L420.0,14.59",
+        "area": "M0.0,42.36 L14.48,38.16 L28.97,29.58 L43.45,48.0 L57.93,38.2 L72.41,33.77 L86.9,22.7 L101.38,8.2 L115.86,4.0 L130.34,11.41 L144.83,8.99 L159.31,9.96 L173.79,12.9 L188.28,13.24 L202.76,12.13 L217.24,13.85 L231.72,18.2 L246.21,20.06 L260.69,18.15 L275.17,29.39 L289.66,21.12 L304.14,18.88 L318.62,16.33 L333.1,18.14 L347.59,16.45 L362.07,16.6 L376.55,22.58 L391.03,29.27 L405.52,24.56 L420.0,14.59 L420.0,52 L0.0,52 Z",
+        "points": [
+          {
+            "x": 0.0,
+            "y": 42.36,
+            "date": "2026-07-24",
+            "close": 51947.25,
+            "change": null
+          },
+          {
+            "x": 14.48,
+            "y": 38.16,
+            "date": "2026-07-27",
+            "close": 52210.0781,
+            "change": 0.00506
+          },
+          {
+            "x": 28.97,
+            "y": 29.58,
+            "date": "2026-07-28",
+            "close": 52747.3203,
+            "change": 0.01029
+          },
+          {
+            "x": 43.45,
+            "y": 48.0,
+            "date": "2026-07-29",
+            "close": 51594.1406,
+            "change": -0.021862
+          },
+          {
+            "x": 57.93,
+            "y": 38.2,
+            "date": "2026-07-30",
+            "close": 52208.0586,
+            "change": 0.011899
+          },
+          {
+            "x": 72.41,
+            "y": 33.77,
+            "date": "2026-07-31",
+            "close": 52485.0312,
+            "change": 0.005305
+          },
+          {
+            "x": 86.9,
+            "y": 22.7,
+            "date": "2026-08-03",
+            "close": 53178.4102,
+            "change": 0.013211
+          },
+          {
+            "x": 101.38,
+            "y": 8.2,
+            "date": "2026-08-04",
+            "close": 54085.8789,
+            "change": 0.017065
+          },
+          {
+            "x": 115.86,
+            "y": 4.0,
+            "date": "2026-08-05",
+            "close": 54349.1211,
+            "change": 0.004867
+          },
+          {
+            "x": 130.34,
+            "y": 11.41,
+            "date": "2026-08-06",
+            "close": 53885.1016,
+            "change": -0.008538
+          },
+          {
+            "x": 144.83,
+            "y": 8.99,
+            "date": "2026-08-07",
+            "close": 54036.9297,
+            "change": 0.002818
+          },
+          {
+            "x": 159.31,
+            "y": 9.96,
+            "date": "2026-08-10",
+            "close": 53975.9805,
+            "change": -0.001128
+          },
+          {
+            "x": 173.79,
+            "y": 12.9,
+            "date": "2026-08-11",
+            "close": 53791.8516,
+            "change": -0.003411
+          },
+          {
+            "x": 188.28,
+            "y": 13.24,
+            "date": "2026-08-12",
+            "close": 53770.2695,
+            "change": -0.000401
+          },
+          {
+            "x": 202.76,
+            "y": 12.13,
+            "date": "2026-08-13",
+            "close": 53839.9883,
+            "change": 0.001297
+          },
+          {
+            "x": 217.24,
+            "y": 13.85,
+            "date": "2026-08-14",
+            "close": 53732.4102,
+            "change": -0.001998
+          },
+          {
+            "x": 231.72,
+            "y": 18.2,
+            "date": "2026-08-17",
+            "close": 53459.7812,
+            "change": -0.005074
+          },
+          {
+            "x": 246.21,
+            "y": 20.06,
+            "date": "2026-08-18",
+            "close": 53343.3984,
+            "change": -0.002177
+          },
+          {
+            "x": 260.69,
+            "y": 18.15,
+            "date": "2026-08-19",
+            "close": 53463.0508,
+            "change": 0.002243
+          },
+          {
+            "x": 275.17,
+            "y": 29.39,
+            "date": "2026-08-20",
+            "close": 52759.2109,
+            "change": -0.013165
+          },
+          {
+            "x": 289.66,
+            "y": 21.12,
+            "date": "2026-08-21",
+            "close": 53277.0117,
+            "change": 0.009814
+          },
+          {
+            "x": 304.14,
+            "y": 18.88,
+            "date": "2026-08-24",
+            "close": 53417.1602,
+            "change": 0.002631
+          },
+          {
+            "x": 318.62,
+            "y": 16.33,
+            "date": "2026-08-25",
+            "close": 53577.3984,
+            "change": 0.003
+          },
+          {
+            "x": 333.1,
+            "y": 18.14,
+            "date": "2026-08-26",
+            "close": 53463.8789,
+            "change": -0.002119
+          },
+          {
+            "x": 347.59,
+            "y": 16.45,
+            "date": "2026-08-27",
+            "close": 53569.4414,
+            "change": 0.001974
+          },
+          {
+            "x": 362.07,
+            "y": 16.6,
+            "date": "2026-08-28",
+            "close": 53559.9883,
+            "change": -0.000176
+          },
+          {
+            "x": 376.55,
+            "y": 22.58,
+            "date": "2026-08-31",
+            "close": 53185.8984,
+            "change": -0.006985
+          },
+          {
+            "x": 391.03,
+            "y": 29.27,
+            "date": "2026-09-01",
+            "close": 52766.8789,
+            "change": -0.007878
+          },
+          {
+            "x": 405.52,
+            "y": 24.56,
+            "date": "2026-09-02",
+            "close": 53061.9492,
+            "change": 0.005592
+          },
+          {
+            "x": 420.0,
+            "y": 14.59,
+            "date": "2026-09-03",
+            "close": 53686.1094,
+            "change": 0.011763
+          }
+        ]
+      }
+    }
+  },
+  "market_context": {
+    "russell2000": {
+      "market_date": "2026-09-03",
+      "close": 2968.27099609375,
+      "daily_return": 0.005113513484913845,
+      "name": "Russell 2000",
+      "ticker": "^RUT",
+      "valid": true
+    },
+    "vix": {
+      "market_date": "2026-09-03",
+      "close": 14.319999694824219,
+      "daily_return": -0.05789474509759629,
+      "name": "VIX",
+      "ticker": "^VIX",
+      "valid": true
+    },
+    "dxy": {
+      "market_date": "2026-09-03",
+      "close": 98.95700073242188,
+      "daily_return": -0.006056617526702834,
+      "name": "美元指数",
+      "ticker": "DX-Y.NYB",
+      "valid": true
+    },
+    "us10y": {
+      "market_date": "2026-09-03",
+      "close": 4.76200008392334,
+      "yield_change_bp": -3.399991989135742,
+      "name": "10Y 美债",
+      "ticker": "^TNX",
+      "valid": true
+    },
+    "gold": {
+      "market_date": "2026-09-03",
+      "close": 4528.10009765625,
+      "daily_return": 0.03705661548825545,
+      "name": "黄金 (COMEX)",
+      "ticker": "GC=F",
+      "valid": true
+    },
+    "wti": {
+      "market_date": "2026-09-03",
+      "close": 91.44999694824219,
+      "daily_return": 0.004834576438676574,
+      "name": "原油 (WTI)",
+      "ticker": "CL=F",
+      "valid": true
+    }
+  },
+  "market_signals": {
+    "tech_relative": 0.0010521898362771953,
+    "small_cap_relative": -0.0054661257616990255,
+    "vix_daily_return": -0.05789474509759629,
+    "dxy_daily_return": -0.006056617526702834,
+    "us10y_bp_change": -3.399991989135742,
+    "signals": [
+      {
+        "key": "small_cap_relative",
+        "value": -0.0054661257616990255,
+        "level": "significant",
+        "message": "Russell 2000 比 S&P 500 落后 0.55 个百分点，小盘相对落后"
+      },
+      {
+        "key": "dxy_daily_return",
+        "value": -0.006056617526702834,
+        "level": "significant",
+        "message": "美元明显走弱"
+      }
+    ]
+  },
+  "market_breadth": {
+    "market_date": "2026-09-03",
+    "stocks": {
+      "market_date": "2026-09-03",
+      "constituent_date": "2026-08-27",
+      "total_constituents": 505,
+      "valid_count": 3,
+      "invalid_count": 502,
+      "advancers": 3,
+      "decliners": 0,
+      "unchanged": 0,
+      "advance_ratio": 1.0,
+      "decline_ratio": 0.0,
+      "unchanged_ratio": 0.0,
+      "coverage_ratio": 0.005940594059405941,
+      "status": "invalid"
+    },
+    "sectors": {
+      "market_date": "2026-09-03",
+      "items": [
+        {
+          "key": "technology",
+          "name": "科技",
+          "ticker": "XLK",
+          "valid": false,
+          "daily_return": null,
+          "direction": null,
+          "bar_strength": null
+        },
+        {
+          "key": "financials",
+          "name": "金融",
+          "ticker": "XLF",
+          "valid": false,
+          "daily_return": null,
+          "direction": null,
+          "bar_strength": null
+        },
+        {
+          "key": "consumer_discretionary",
+          "name": "非必需消费",
+          "ticker": "XLY",
+          "valid": false,
+          "daily_return": null,
+          "direction": null,
+          "bar_strength": null
+        },
+        {
+          "key": "communication_services",
+          "name": "通信服务",
+          "ticker": "XLC",
+          "valid": false,
+          "daily_return": null,
+          "direction": null,
+          "bar_strength": null
+        },
+        {
+          "key": "industrials",
+          "name": "工业",
+          "ticker": "XLI",
+          "valid": false,
+          "daily_return": null,
+          "direction": null,
+          "bar_strength": null
+        },
+        {
+          "key": "health_care",
+          "name": "医疗保健",
+          "ticker": "XLV",
+          "valid": false,
+          "daily_return": null,
+          "direction": null,
+          "bar_strength": null
+        },
+        {
+          "key": "consumer_staples",
+          "name": "必需消费",
+          "ticker": "XLP",
+          "valid": false,
+          "daily_return": null,
+          "direction": null,
+          "bar_strength": null
+        },
+        {
+          "key": "energy",
+          "name": "能源",
+          "ticker": "XLE",
+          "valid": false,
+          "daily_return": null,
+          "direction": null,
+          "bar_strength": null
+        },
+        {
+          "key": "utilities",
+          "name": "公用事业",
+          "ticker": "XLU",
+          "valid": false,
+          "daily_return": null,
+          "direction": null,
+          "bar_strength": null
+        },
+        {
+          "key": "real_estate",
+          "name": "房地产",
+          "ticker": "XLRE",
+          "valid": false,
+          "daily_return": null,
+          "direction": null,
+          "bar_strength": null
+        },
+        {
+          "key": "materials",
+          "name": "材料",
+          "ticker": "XLB",
+          "valid": false,
+          "daily_return": null,
+          "direction": null,
+          "bar_strength": null
+        }
+      ],
+      "valid_count": 0,
+      "advancers": 0,
+      "decliners": 0,
+      "unchanged": 0,
+      "advance_ratio": null
+    },
+    "health": {
+      "valid": false,
+      "score": null,
+      "level": "unavailable",
+      "label": "数据不足",
+      "divergence": null,
+      "summary": "市场宽度数据暂不可用。"
+    }
+  },
+  "market_sentiment": {
+    "vix_score": 78.4,
+    "breadth_score": null,
+    "momentum_score": 52.2,
+    "risk_appetite_score": 22.7,
+    "market_sentiment_score": null,
+    "market_sentiment_label": null
+  },
+  "drawdown": {
+    "sp500": {
+      "index": "sp500",
+      "name": "S&P 500",
+      "cycle_id": "sp500-2026-08-13-77989902",
+      "started_at": "2026-08-14T10:42:09.022326+08:00",
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "last_market_date": "2026-09-03",
+      "last_updated_at": "2026-09-04T09:00:56.764747+08:00",
+      "current_close": 7747.7099609375,
+      "current_drawdown": 0.006575245242836147,
+      "pool": 140000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.1,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.15,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.25,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 140000,
+      "next_threshold": 0.1,
+      "distance_to_next": 0.09342475475716386,
+      "status": "normal",
+      "status_label": "🟢 未触发",
+      "already_invested": 0,
+      "suggested_amount": 0
+    },
+    "nasdaq100": {
+      "index": "nasdaq100",
+      "name": "Nasdaq-100",
+      "cycle_id": "nasdaq100-2026-06-02-306605996",
+      "started_at": "2026-08-12T10:00:00+08:00",
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "last_market_date": "2026-09-03",
+      "last_updated_at": "2026-09-04T09:00:56.764747+08:00",
+      "current_close": 29482.3203125,
+      "current_drawdown": 0.038429753882397,
+      "pool": 60000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.15,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.3,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.4,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 60000,
+      "next_threshold": 0.15,
+      "distance_to_next": 0.111570246117603,
+      "status": "normal",
+      "status_label": "🟢 未触发",
+      "already_invested": 7500,
+      "suggested_amount": 0
+    }
+  },
+  "reserve": {
+    "total": 200000,
+    "remaining": 192500,
+    "used": 7500,
+    "ratio": 0.9625
+  },
+  "discipline": {
+    "monthly_dca": 10000,
+    "holding_years_min": 20
+  },
+  "portfolio_action": "hold",
+  "market_summary": {
+    "market": "9月3日标普500指数上涨1.06%，纳斯达克100指数上涨1.16%，主要股指同步走高；罗素2000跑输标普500约0.55个百分点，VIX降至14.32，市场宽度数据暂不可用。",
+    "drivers": "市场同时关注英伟达拟以约129亿美元收购Hugging Face、OpenAI推出GPT-6 Astra，以及下周公布的8月通胀数据对利率判断的影响。",
+    "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
+    "degraded": false
+  },
+  "news": [
+    {
+      "rank": 1,
+      "candidate_id": "bec25165c52bf034",
+      "category": "大型科技",
+      "title_zh": "英伟达将以129亿美元收购Hugging Face",
+      "summary_zh": "英伟达同意以约129亿美元收购Hugging Face。英伟达CEO黄仁勋表示，此举将扩大开发者和机构获取人工智能的渠道。",
+      "focus": "交易审批、整合计划及对AI开发者生态的影响",
+      "tags": [
+        "英伟达",
+        "Hugging Face",
+        "并购",
+        "AI生态"
+      ],
+      "investment_relevance_score": 94,
+      "source": "CNBC Top News",
+      "url": "https://www.cnbc.com/2026/09/03/nvidia-agrees-to-buy-hugging-face-for-almost-13-billion-ai-expansion.html",
+      "published_at": "2026-09-03T16:43:22+00:00",
+      "original_title": "Hugging Face approached Nvidia’s Huang weeks ahead of $12.9B acquisition, CEO tells CNBC",
+      "selection_reason": "大型科技：并购；129亿美元交易将英伟达的芯片业务延伸至AI模型与开发者平台。",
+      "event_summary": "Nvidia agreed to acquire Hugging Face for about $12.9 billion.",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 2,
+      "candidate_id": "d309bdab2a0a0b8e",
+      "category": "AI / 资本开支",
+      "title_zh": "OpenAI推出GPT-6 Astra模型，称进入AGI时代",
+      "summary_zh": "OpenAI推出GPT-6 Astra，称其在网络安全、专业工作、软件工程、科学和计算机操作等领域实现代际能力提升。",
+      "focus": "模型商业化、算力需求及主要云合作方的部署进展",
+      "tags": [
+        "OpenAI",
+        "GPT-6",
+        "AI模型",
+        "AGI"
+      ],
+      "investment_relevance_score": 91,
+      "source": "The Verge",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/989601/openai-gpt-6-astra-release",
+      "published_at": "2026-09-03T18:00:00+00:00",
+      "original_title": "OpenAI’s next big AI model has ‘entered the AGI era’",
+      "selection_reason": "大型科技：重大产品或平台发布；GPT-6 Astra涉及核心模型能力和AI平台竞争格局。",
+      "event_summary": "OpenAI introduced its GPT-6 Astra model.",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 3,
+      "candidate_id": "8397d5fea4b37ef9",
+      "category": "政策 / 监管",
+      "title_zh": "加拿大称将继续对等反制美国关税",
+      "summary_zh": "加拿大表示将在美国准备好后恢复贸易谈判，并称已针对特朗普政府的50%关税采取“逐美元”反制措施，相关关税下周生效。",
+      "focus": "反制关税生效、美国贸易谈判及受影响行业",
+      "tags": [
+        "美国关税",
+        "加拿大",
+        "贸易谈判",
+        "贸易政策"
+      ],
+      "investment_relevance_score": 86,
+      "source": "CNBC Top News",
+      "url": "https://www.cnbc.com/2026/09/03/carney-lutnick-trump-trade-canada.html",
+      "published_at": "2026-09-03T20:42:29+00:00",
+      "original_title": "Carney claps back at Lutnick, says Canada will resume trade talks 'when the Americans are ready'",
+      "selection_reason": "美国宏观：贸易与关税；加拿大已确认反制关税及生效时间，直接涉及美国商品贸易和企业成本。",
+      "event_summary": "Canada said it would resume trade talks when the US was ready.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 4,
+      "candidate_id": "81be201e089ce771",
+      "category": "美联储 / 利率",
+      "title_zh": "美联储沃勒称将高度依赖8月通胀数据决定利率",
+      "summary_zh": "美联储理事沃勒表示，下一次利率决定将受到下周公布的8月通胀数据显著影响；若通胀继续改善，政策判断将相应调整。",
+      "focus": "8月通胀数据及其对联邦基金利率预期的影响",
+      "tags": [
+        "美联储",
+        "沃勒",
+        "通胀",
+        "利率"
+      ],
+      "investment_relevance_score": 85,
+      "source": "Bloomberg Economics",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-03/fed-s-waller-says-september-rate-decision-hinges-on-august-cpi",
+      "published_at": "2026-09-03T12:30:00+00:00",
+      "original_title": "Fed’s Waller Leans Toward Holding Rates If Inflation Improving",
+      "selection_reason": "美国宏观：美联储利率路径；核心决策者明确将下一次利率决定与即将公布的通胀数据挂钩。",
+      "event_summary": "Fed Governor Waller said his rate decision would depend heavily on August inflation data.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 5,
+      "candidate_id": "c5d587e1423471a5",
+      "category": "半导体",
+      "title_zh": "特朗普考虑进一步提高芯片关税",
+      "summary_zh": "彭博报道特朗普正在考虑追加芯片关税。该议题出现在美国贸易政策和亚洲市场交易展望中。",
+      "focus": "关税范围、执行时间及美国芯片供应链反应",
+      "tags": [
+        "芯片关税",
+        "特朗普",
+        "半导体",
+        "贸易政策"
+      ],
+      "investment_relevance_score": 80,
+      "source": "Bloomberg Markets",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-03/the-asia-trade-9-3-2026-video",
+      "published_at": "2026-09-03T05:14:00+00:00",
+      "original_title": "Trump Mulls More Chip Tariffs, Traders on Yen Intervention Watch | The Asia Trade 9/3/2026",
+      "selection_reason": "美国宏观：贸易与关税；追加芯片关税的政策考虑直接涉及美国半导体进口成本和供应链。",
+      "event_summary": "Trump was considering additional chip tariffs.",
+      "topic_group": "AI_CHIPS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 6,
+      "candidate_id": "646a5556667d590c",
+      "category": "政策 / 监管",
+      "title_zh": "美国财政部拟收紧私立高校免税资格",
+      "summary_zh": "美国财政部提出规则，拟剥夺数千所私立学校的免税资格，并可能影响捐赠相关税收优惠。这是美国财政和税收制度环境的具体变化。",
+      "focus": "规则最终文本、适用高校范围及捐赠税收影响",
+      "tags": [
+        "美国财政部",
+        "税收政策",
+        "高校免税"
+      ],
+      "investment_relevance_score": 79,
+      "source": "CNBC Top News",
+      "url": "https://www.cnbc.com/2026/09/03/treasury-irs-proposal-tax-exempt-schools-charitable-donations.html",
+      "published_at": "2026-09-03T21:00:21+00:00",
+      "original_title": "Trump admin targets tax-exempt status at private colleges — threatening a key tax break for donations",
+      "selection_reason": "美国宏观：财政部提出新的税收规则，涉及私立高校免税资格及捐赠税收优惠，属于已确认的政策制度变化。",
+      "event_summary": "The Treasury proposed rules targeting private colleges' tax-exempt status.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 7,
+      "candidate_id": "820e6c854412602b",
+      "category": "大型科技",
+      "title_zh": "特斯拉正式推出无方向盘和踏板的Cybercab",
+      "summary_zh": "特斯拉正式推出双座Cybercab，车辆没有方向盘和踏板。该产品被描述为可能改变公司发展方向的重要节点。",
+      "focus": "监管审批、量产时间表及自动驾驶商业化进展",
+      "tags": [
+        "特斯拉",
+        "Cybercab",
+        "自动驾驶",
+        "机器人出租车"
+      ],
+      "investment_relevance_score": 78,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/09/03/the-cybercab-is-teslas-fork-in-the-road-moment/",
+      "published_at": "2026-09-03T19:42:48+00:00",
+      "original_title": "The Cybercab is Tesla’s ‘fork in the road’ moment",
+      "selection_reason": "大型科技：重大产品或平台发布；Cybercab采用无方向盘和踏板设计，直接涉及特斯拉自动驾驶战略。",
+      "event_summary": "Tesla formally launched its Cybercab without a steering wheel or pedals.",
+      "topic_group": "MEGA_CAP_TECH",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 8,
+      "candidate_id": "8f309f9482dd5ef0",
+      "category": "美国经济",
+      "title_zh": "美国7月贸易逆差因科技设备进口扩大",
+      "summary_zh": "美国7月贸易逆差明显扩大，达到2025年初以来最高水平，主要反映电脑及其他科技设备进口激增。",
+      "focus": "后续进口、出口及科技设备需求对GDP的影响",
+      "tags": [
+        "美国贸易",
+        "贸易逆差",
+        "科技设备",
+        "GDP"
+      ],
+      "investment_relevance_score": 77,
+      "source": "Bloomberg Economics",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-03/us-trade-gap-widens-to-largest-since-early-last-year-on-imports",
+      "published_at": "2026-09-03T12:32:23+00:00",
+      "original_title": "US Trade Gap Widens to Largest Since Early 2025 on AI Push",
+      "selection_reason": "美国宏观：关键贸易数据；科技设备进口激增推动贸易逆差扩大，直接影响美国GDP核算和外部失衡判断。",
+      "event_summary": "The US trade deficit widened in July on increased technology-equipment imports.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 9,
+      "candidate_id": "d115242f5fd6a273",
+      "category": "大型科技",
+      "title_zh": "Adobe任命Anil Chakravarthy为下一任CEO",
+      "summary_zh": "Adobe任命营销与分析软件业务负责人Anil Chakravarthy为下一任CEO，接任者将面对AI初创公司带来的竞争压力。",
+      "focus": "交接时间表、AI战略及核心软件业务增长",
+      "tags": [
+        "Adobe",
+        "CEO变动",
+        "AI软件",
+        "公司治理"
+      ],
+      "investment_relevance_score": 70,
+      "source": "Bloomberg Technology",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-03/adobe-names-chakravarthy-ceo-to-lead-effort-against-ai-rivals",
+      "published_at": "2026-09-03T20:26:58+00:00",
+      "original_title": "Adobe Names Chakravarthy CEO, While Other Contender Departs",
+      "selection_reason": "大型科技：CEO或核心高管重大变动；Adobe任命新CEO，领导层变化直接关联其AI竞争和软件战略。",
+      "event_summary": "Adobe named Anil Chakravarthy as its next CEO.",
+      "topic_group": "MEGA_CAP_TECH",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 10,
+      "candidate_id": "d700eb472ebeae8f",
+      "category": "政策 / 监管",
+      "title_zh": "特朗普对无人机征收100%关税引发美国供应风险担忧",
+      "summary_zh": "美国对无人机征收100%关税后，批评者警告美国市场缺乏廉价替代品。该政策将直接影响无人机进口成本及相关美国用户和企业。",
+      "focus": "关税执行范围、替代供应及美国无人机价格变化",
+      "tags": [
+        "无人机关税",
+        "美国贸易",
+        "供应链"
+      ],
+      "investment_relevance_score": 70,
+      "source": "Ars Technica",
+      "url": "https://arstechnica.com/tech-policy/2026/09/trumps-100-drone-tariff-has-cops-and-firefighters-panicking/",
+      "published_at": "2026-09-03T17:08:09+00:00",
+      "original_title": "Trump’s 100% tariff on drones will be disaster for the US, critics warn",
+      "selection_reason": "美国宏观：已实施的关税政策直接改变无人机进口成本和美国供应链环境，属于具体贸易政策状态变化。",
+      "event_summary": "Critics warned that Trump's 100% drone tariff would harm the US.",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 11,
+      "candidate_id": "de60b9dd26ac422f",
+      "category": "AI / 资本开支",
+      "title_zh": "Ciena业绩超预期并上调指引，强调AI基础设施需求",
+      "summary_zh": "Ciena公布强劲季度业绩，超过预期并上调指引。CEO称公司是AI基础设施的关键赋能者，但公司股价当日明显下跌。",
+      "focus": "订单增长、AI网络设备需求及上调后的业绩指引",
+      "tags": [
+        "Ciena",
+        "AI基础设施",
+        "业绩指引",
+        "网络设备"
+      ],
+      "investment_relevance_score": 68,
+      "source": "Bloomberg Technology",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-03/ciena-ceo-we-re-a-critical-enabler-of-ai-infrastructure-video",
+      "published_at": "2026-09-03T21:28:46+00:00",
+      "original_title": "Ciena CEO: We’re a Critical Enabler of AI Infrastructure",
+      "selection_reason": "大型科技：财报或业绩指引；Ciena业绩超预期并上调指引，新增AI基础设施需求事实。",
+      "event_summary": "Ciena reported earnings that beat expectations and raised guidance.",
+      "topic_group": "CORPORATE_EARNINGS",
+      "event_category": "other",
+      "source_channel": null
+    },
+    {
+      "rank": 12,
+      "candidate_id": "f3d1650b31125c26",
+      "category": "美联储 / 利率",
+      "title_zh": "副总统万斯再次敦促美联储降息",
+      "summary_zh": "副总统J.D.万斯表示美联储应降低利率，相关表态发生在联邦公开市场委员会会议前不到两周。",
+      "focus": "政府对美联储政策的公开施压及FOMC会议",
+      "tags": [
+        "万斯",
+        "美联储",
+        "降息",
+        "货币政策"
+      ],
+      "investment_relevance_score": 65,
+      "source": "CNBC Top News",
+      "url": "https://www.cnbc.com/2026/09/03/vance-fed-interest-rates-trump-bond-yields.html",
+      "published_at": "2026-09-03T19:18:59+00:00",
+      "original_title": "Vance says Fed should lower interest rates: 'Would be nice to have some help'",
+      "selection_reason": "美国宏观：货币政策公开表态；副总统在FOMC会议前明确敦促降息，构成新的政策压力信号。",
+      "event_summary": "Vice President Vance said the Fed should lower interest rates.",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "other",
+      "source_channel": null
+    }
+  ],
+  "news_candidates": [
+    {
+      "candidate_id": "bec25165c52bf034",
+      "title": "Hugging Face approached Nvidia’s Huang weeks ahead of $12.9B acquisition, CEO tells CNBC",
+      "title_zh": "英伟达将以129亿美元收购Hugging Face",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-03T16:43:22+00:00",
+      "summary": "Nvidia CEO Jensen Huang said that with Hugging Face, the chipmaker will \"expand access to AI for developers and institutions worldwide.\"",
+      "summary_zh": "英伟达同意以约129亿美元收购Hugging Face。英伟达CEO黄仁勋表示，此举将扩大开发者和机构获取人工智能的渠道。",
+      "url": "https://www.cnbc.com/2026/09/03/nvidia-agrees-to-buy-hugging-face-for-almost-13-billion-ai-expansion.html",
+      "category": "大型科技",
+      "selected": true
+    },
+    {
+      "candidate_id": "d50e1a539d392e76",
+      "title": "Google launches AI voice features in Gmail, Docs, and Keep",
+      "title_zh": "谷歌在Gmail、Docs和Keep推出AI语音功能",
+      "source": "TechCrunch",
+      "published_at": "2026-09-03T16:00:00+00:00",
+      "summary": "Users can search for emails or draft documents using the new conversational feature.",
+      "summary_zh": "用户可通过新的对话式功能搜索邮件或起草文档。",
+      "url": "https://techcrunch.com/2026/09/03/google-launches-ai-voice-features-in-gmail-docs-and-keep/",
+      "category": "大型科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "66d7f358b2e1ea54",
+      "title": "South Africa’s Kganyago Sees Room for Caution on Rate Moves",
+      "title_zh": "南非央行行长克加尼亚戈称利率调整可保持谨慎",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-03T18:21:00+00:00",
+      "summary": "South Africa’s central bank chief Lesetja Kganyago said policymakers can afford to respond cautiously to the aftereffects of inflation shocks such as higher oil prices caused by the Iran war and a looming drought.",
+      "summary_zh": "南非央行行长莱塞特亚·克加尼亚戈表示，政策制定者可以谨慎应对通胀冲击的后续影响，例如伊朗战争导致油价上涨及迫近的干旱。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-03/south-africa-s-kganyago-sees-room-for-caution-on-rate-moves",
+      "category": "宏观 / 利率",
+      "selected": false
+    },
+    {
+      "candidate_id": "c5d587e1423471a5",
+      "title": "Trump Mulls More Chip Tariffs, Traders on Yen Intervention Watch | The Asia Trade 9/3/2026",
+      "title_zh": "特朗普考虑进一步提高芯片关税",
+      "source": "Bloomberg Markets",
+      "published_at": "2026-09-03T05:14:00+00:00",
+      "summary": "\"Bloomberg: The Asia Trade\" brings you everything you need to know to get ahead as the trading day begins in Asia. Bloomberg TV is live from Tokyo and Sydney with Shery Ahn and Haidi Stroud-Watts, getting insight and analysis from newsmakers and industry leaders on the biggest stories shaping global markets. (Source: Bloomberg)",
+      "summary_zh": "彭博报道特朗普正在考虑追加芯片关税。该议题出现在美国贸易政策和亚洲市场交易展望中。",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-03/the-asia-trade-9-3-2026-video",
+      "category": "AI / 科技",
+      "selected": true
+    },
+    {
+      "candidate_id": "646a5556667d590c",
+      "title": "Trump admin targets tax-exempt status at private colleges — threatening a key tax break for donations",
+      "title_zh": "美国财政部拟收紧私立高校免税资格",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-03T21:00:21+00:00",
+      "summary": "The Treasury has proposed regulations that would strip thousands of private schools of their tax-exempt status and threaten a valuable tax break for donations.",
+      "summary_zh": "美国财政部提出规则，拟剥夺数千所私立学校的免税资格，并可能影响捐赠相关税收优惠。这是美国财政和税收制度环境的具体变化。",
+      "url": "https://www.cnbc.com/2026/09/03/treasury-irs-proposal-tax-exempt-schools-charitable-donations.html",
+      "category": "地缘政治与风险事件",
+      "selected": true
+    },
+    {
+      "candidate_id": "3dfb68e636d86bfc",
+      "title": "Crusoe reportedly raises $3B at a $30B valuation",
+      "title_zh": "报道称Crusoe以300亿美元估值融资30亿美元",
+      "source": "TechCrunch",
+      "published_at": "2026-09-04T00:48:42+00:00",
+      "summary": "The round came together after the data center developer reportedly secured a $13 billion contract with Jane Street.",
+      "summary_zh": "报道称，这家数据中心开发商获得Jane Street一份130亿美元合同后完成了本轮融资。",
+      "url": "https://techcrunch.com/2026/09/03/crusoe-reportedly-raises-3b-at-a-30b-valuation/",
+      "category": "AI / 科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "2d39fa74c289946a",
+      "title": "Apple Headhunter on Ternus Era: Best AI Talent Will Win",
+      "title_zh": "苹果猎头谈特努斯时代：最优秀的AI人才将胜出",
+      "source": "Bloomberg Technology",
+      "published_at": "2026-09-03T22:22:59+00:00",
+      "summary": "Jeff Christian, who says he oversaw the last two board searches at Apple under Steve Jobs and argues that the selection of John Ternus signals a strategic shift. The discussion then moves to what a hardware engineer can bring to Apple, especially given concerns that the company’s bigger challenges may lie in software and AI rather than hardware. He speaks with Romaine Bostick on \"The Close.\" (Source: Bloomberg)",
+      "summary_zh": "杰夫·克里斯蒂安称，他曾在史蒂夫·乔布斯任内负责苹果最近两次董事会寻聘，并认为选择约翰·特努斯表明战略转变。他讨论了硬件工程师能为苹果带来什么，尤其在公司更大挑战或许在软件和AI的背景下。",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-03/apple-headhunter-on-ternus-era-best-ai-talent-will-win-video",
+      "category": "大型科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "dd1b0c2c01fe0bc8",
+      "title": "Volkswagen board approves plan to cut another 50,000 jobs",
+      "title_zh": "大众董事会批准再裁员5万人计划",
+      "source": "BBC Business",
+      "published_at": "2026-09-04T00:51:11+00:00",
+      "summary": "The group - which includes Audi, Porsche, Skoda as well as the VW brand - plans to cut a total of 100,000 by 2030.",
+      "summary_zh": "该集团包括奥迪、保时捷、斯柯达及大众品牌，计划到2030年共裁减10万个岗位。",
+      "url": "https://www.bbc.co.uk/news/articles/cx2z0kvy4n4o?at_medium=RSS&at_campaign=rss",
+      "category": "其他",
+      "selected": false
+    },
+    {
+      "candidate_id": "8b5b6bafacff7744",
+      "title": "AI data centres are booming in Australia - but at what cost?",
+      "title_zh": "澳大利亚AI数据中心蓬勃发展，但代价是什么？",
+      "source": "BBC News",
+      "published_at": "2026-09-03T18:32:03+00:00",
+      "summary": "Advocates say data centres will bring jobs but others worry they will suck up resources while providing little advantage.",
+      "summary_zh": "支持者称数据中心将创造就业岗位，但也有人担心它们会消耗资源，却带来很少益处。",
+      "url": "https://www.bbc.co.uk/news/articles/cgl3we7wdr3o?at_medium=RSS&at_campaign=rss",
+      "category": "AI / 科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "6e560f53f3474ed5",
+      "title": "Igniting Roman’s Journey",
+      "title_zh": "点燃罗曼的旅程",
+      "source": "NASA",
+      "published_at": "2026-09-03T14:24:23+00:00",
+      "summary": "Now on a three-month, million-mile journey to its final orbit, NASA’s Nancy Grace Roman Space Telescope will soon reveal the universe’s darkest secrets. The mission launched at 7:26 a.m. EDT on Aug. 30 aboard a SpaceX Falcon Heavy rocket from Launch Complex 39A at the agency’s Kennedy Space Center in Florida. Roman pairs a large […]",
+      "summary_zh": "美国宇航局南希·格雷斯·罗曼太空望远镜正进行为期三个月、航程百万英里的最终轨道之旅。该任务于8月30日从佛罗里达州肯尼迪航天中心由SpaceX猎鹰重型火箭发射。",
+      "url": "https://www.nasa.gov/image-article/igniting-romans-journey/",
+      "category": "其他",
+      "selected": false
+    },
+    {
+      "candidate_id": "65bb8905b6179018",
+      "title": "Dollar Falls to Lowest Since May on Waller Remarks, Yen Gain",
+      "title_zh": "受沃勒言论及日元上涨影响，美元跌至5月以来最低",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-03T17:30:24+00:00",
+      "summary": "The dollar sank to the lowest level since May after Federal Reserve Governor Christopher Waller noted progress on inflation and as the yen surged against its major counterparts.",
+      "summary_zh": "美联储理事克里斯托弗·沃勒指出通胀取得进展，加之日元兑主要货币大涨，美元跌至5月以来最低水平。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-03/dollar-falls-to-weakest-since-may-on-waller-comments-yen-surge",
+      "category": "宏观 / 利率",
+      "selected": false
+    },
+    {
+      "candidate_id": "0425c30f9e06726a",
+      "title": "Japan’s Households Cut Outlays for Eighth Month Amid Inflation",
+      "title_zh": "受通胀影响，日本家庭连续第八个月削减支出",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-03T23:37:22+00:00",
+      "summary": "Japanese households cut spending for an eighth consecutive month as rising costs for daily necessities prompt consumers to pare discretionary purchases.",
+      "summary_zh": "日常必需品成本上涨促使消费者削减可自由支配的购买，日本家庭支出连续第八个月下降。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-03/japan-s-households-cut-outlays-for-eighth-month-amid-inflation",
+      "category": "宏观 / 利率",
+      "selected": false
+    },
+    {
+      "candidate_id": "820e6c854412602b",
+      "title": "The Cybercab is Tesla’s ‘fork in the road’ moment",
+      "title_zh": "特斯拉正式推出无方向盘和踏板的Cybercab",
+      "source": "TechCrunch",
+      "published_at": "2026-09-03T19:42:48+00:00",
+      "summary": "The company is about to formally launch the gold two-seater, with no steering wheel or pedals -- a move that could change Tesla forever.",
+      "summary_zh": "特斯拉正式推出双座Cybercab，车辆没有方向盘和踏板。该产品被描述为可能改变公司发展方向的重要节点。",
+      "url": "https://techcrunch.com/2026/09/03/the-cybercab-is-teslas-fork-in-the-road-moment/",
+      "category": "大型科技",
+      "selected": true
+    },
+    {
+      "candidate_id": "6686da81a93a9f30",
+      "title": "The big August jobs report is due out Friday. Here's what to expect for what has been a jobless summer",
+      "title_zh": "8月重磅就业报告将于周五发布：无就业增长夏季后市场预期",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-03T19:38:09+00:00",
+      "summary": "August nonfarm payrolls are expected to rise by 53,000 as a subdued labor market keeps Fed attention focused on inflation.",
+      "summary_zh": "预计8月非农就业人数将增加5.3万人，低迷的劳动力市场使美联储继续将注意力放在通胀上。",
+      "url": "https://www.cnbc.com/2026/09/03/august-2026-jobs-report-payrolls.html",
+      "category": "宏观 / 利率",
+      "selected": false
+    },
+    {
+      "candidate_id": "2dd4e6f210d2aed2",
+      "title": "Hungary Is Said to Pause Interest Rate Cuts and Lower Inflation Goal to 2.5%",
+      "title_zh": "据悉匈牙利将暂停降息并把通胀目标下调至2.5%",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-03T14:33:40+00:00",
+      "summary": "Hungary’s central bank is set to halt interest rate cuts later this month as policymakers prepare to lower the highest inflation target in the European Union, according to a person familiar with the matter. The forint surged against the euro.",
+      "summary_zh": "知情人士称，匈牙利央行将在本月晚些时候停止降息，政策制定者正准备下调欧盟最高的通胀目标。福林兑欧元大涨。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-03/hungary-is-said-to-pause-interest-rate-cuts-and-lower-inflation-goal-to-2-5",
+      "category": "宏观 / 利率",
+      "selected": false
+    },
+    {
+      "candidate_id": "5d726b488273fd4d",
+      "title": "Options volume erupts in retail trading favorites as Robinhood, Tesla surge",
+      "title_zh": "Robinhood和特斯拉上涨，散户热门股期权交易量激增",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-03T19:25:11+00:00",
+      "summary": "Options traders are kicking off the historically worst month for stocks by piling on bullish bets on a handful of retail trading favorites.",
+      "summary_zh": "期权交易者在历来对股市表现最差的月份开始之际，大量押注少数散户交易热门股上涨。",
+      "url": "https://www.cnbc.com/2026/09/03/options-volume-erupts-in-retail-trading-favorites-as-robinhood-tesla-surge.html",
+      "category": "宏观 / 利率",
+      "selected": false
+    },
+    {
+      "candidate_id": "d814f7e821a58c66",
+      "title": "Iceland Data Center Costs Widen Current Account Gap to 2008 High",
+      "title_zh": "冰岛数据中心成本令经常账户缺口扩大至2008年以来最高",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-03T12:56:44+00:00",
+      "summary": "Investments in Icelandic data centers boosted the Atlantic country’s current account gap to the widest level since its financial crisis 18 years ago.",
+      "summary_zh": "对冰岛数据中心的投资使这个大西洋国家的经常账户缺口扩大至18年前金融危机以来最大。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-03/iceland-data-center-costs-widen-current-account-gap-to-2008-high",
+      "category": "AI / 科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "f3d1650b31125c26",
+      "title": "Vance says Fed should lower interest rates: 'Would be nice to have some help'",
+      "title_zh": "副总统万斯再次敦促美联储降息",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-03T19:18:59+00:00",
+      "summary": "Vice President J.D. Vance's remarks came less than two weeks before the Federal Open Market Committee is set to convene and decide whether to adjust rates.",
+      "summary_zh": "副总统J.D.万斯表示美联储应降低利率，相关表态发生在联邦公开市场委员会会议前不到两周。",
+      "url": "https://www.cnbc.com/2026/09/03/vance-fed-interest-rates-trump-bond-yields.html",
+      "category": "宏观 / 利率",
+      "selected": true
+    },
+    {
+      "candidate_id": "8f309f9482dd5ef0",
+      "title": "US Trade Gap Widens to Largest Since Early 2025 on AI Push",
+      "title_zh": "美国7月贸易逆差因科技设备进口扩大",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-03T12:32:23+00:00",
+      "summary": "The US trade deficit widened sharply in July to the largest since early 2025, reflecting a surge in imports of computers and other technology equipment.",
+      "summary_zh": "美国7月贸易逆差明显扩大，达到2025年初以来最高水平，主要反映电脑及其他科技设备进口激增。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-03/us-trade-gap-widens-to-largest-since-early-last-year-on-imports",
+      "category": "宏观 / 利率",
+      "selected": true
+    },
+    {
+      "candidate_id": "81be201e089ce771",
+      "title": "Fed’s Waller Leans Toward Holding Rates If Inflation Improving",
+      "title_zh": "美联储沃勒称将高度依赖8月通胀数据决定利率",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-03T12:30:00+00:00",
+      "summary": "Federal Reserve Governor Christopher Waller said his next decision on interest rates will be “heavily influenced” by August inflation data due next week.",
+      "summary_zh": "美联储理事沃勒表示，下一次利率决定将受到下周公布的8月通胀数据显著影响；若通胀继续改善，政策判断将相应调整。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-03/fed-s-waller-says-september-rate-decision-hinges-on-august-cpi",
+      "category": "宏观 / 利率",
+      "selected": true
+    },
+    {
+      "candidate_id": "0ac85a52749a5d3a",
+      "title": "The world appears to be entering a higher-rate era. Here’s who will pay the price",
+      "title_zh": "世界似乎正进入高利率时代：谁将付出代价",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-03T04:20:20+00:00",
+      "summary": "The bond sell-off is owed to a mix of high government debt issuance, an oil-price shock that has reignited inflation concerns, and expectations of higher rates.",
+      "summary_zh": "债券抛售源于多项因素，包括政府高额发债、重燃通胀担忧的油价冲击，以及对更高利率的预期。",
+      "url": "https://www.cnbc.com/2026/09/03/global-bond-yields-rising-treasuries-jgb-bunds.html",
+      "category": "宏观 / 利率",
+      "selected": false
+    },
+    {
+      "candidate_id": "e56d151ff2add346",
+      "title": "Polish Rates Seen on Hold for Rest of 2026, MPC Member Duda Says",
+      "title_zh": "波兰央行委员杜达称利率料维持至2026年底不变",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-03T11:53:12+00:00",
+      "summary": "Poland’s interest rates are set to stay unchanged for the rest of this year, or potentially longer, as inflation may temporarily top the central bank’s tolerance range, according to policymaker Iwona Duda.",
+      "summary_zh": "政策制定者伊沃娜·杜达称，波兰利率将维持不变直至今年年底，甚至可能更久，因为通胀可能暂时超过央行容忍区间。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-03/polish-rates-seen-on-hold-for-rest-of-2026-mpc-member-duda-says",
+      "category": "宏观 / 利率",
+      "selected": false
+    },
+    {
+      "candidate_id": "d4343fb6bcd9c496",
+      "title": "Swiss Inflation at Fastest in Almost Two Years After Growth Jump",
+      "title_zh": "增长跃升后瑞士通胀升至近两年最快",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-03T06:30:00+00:00",
+      "summary": "Swiss inflation accelerated far more than analysts anticipated to the fastest pace since September 2024, suggesting a weaker franc is feeding through to the economy.",
+      "summary_zh": "瑞士通胀加速幅度远超分析师预期，达到2024年9月以来最快水平，表明瑞郎走弱正传导至实体经济。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-03/swiss-inflation-jumps-more-than-expected-to-fastest-in-two-years",
+      "category": "宏观 / 利率",
+      "selected": false
+    },
+    {
+      "candidate_id": "57b1f27e1e99c3e9",
+      "title": "Trump hints US would not back UK over Falkland Islands due to lack of Iran war support",
+      "title_zh": "特朗普暗示因英国未支持伊朗战争，美国或不支持其在福克兰群岛问题上的立场",
+      "source": "BBC News",
+      "published_at": "2026-09-03T16:16:49+00:00",
+      "summary": "The US president says the UK was not \"there to help me\" in his ongoing war with Iran.",
+      "summary_zh": "美国总统表示，英国在他持续进行的伊朗战争中“没有来帮助我”。",
+      "url": "https://www.bbc.co.uk/news/articles/c1kx4m70l4yo?at_medium=RSS&at_campaign=rss",
+      "category": "地缘政治与风险事件",
+      "selected": false
+    },
+    {
+      "candidate_id": "083053cd56601850",
+      "title": "Yen soars as Bank of Japan tipped to raise interest rates",
+      "title_zh": "市场预期日本央行加息，日元大涨",
+      "source": "The Guardian Business",
+      "published_at": "2026-09-03T14:33:58+00:00",
+      "summary": "Jump lifts currency to highest level against dollar in a month, while global markets remain jittery Business live – latest updates The Japanese yen has soared by more than 2% against the dollar amid speculation the Bank of Japan is set to raise interest rates. The latest jump on Thursday lifted the yen to its highest level against the dollar in a month, at 155.57, and followed a 0.9% move the previous day. Continue reading...",
+      "summary_zh": "市场猜测日本央行将加息，日元兑美元上涨逾2%，升至一个月高点155.57。全球市场仍保持紧张。",
+      "url": "https://www.theguardian.com/business/2026/sep/03/yen-soars-bank-of-japan-tipped-to-raise-interest-rates",
+      "category": "宏观 / 利率",
+      "selected": false
+    },
+    {
+      "candidate_id": "1c153013d19b200c",
+      "title": "SoftBank Group Prices ¥1 Trillion Retail Bond at 4.75%",
+      "title_zh": "软银集团以4.75%票息发行1万亿日元零售债券",
+      "source": "Bloomberg Technology",
+      "published_at": "2026-09-04T00:41:55+00:00",
+      "summary": "SoftBank Group Corp. priced a ¥1 trillion ($6.3 billion) retail bond with a coupon of 4.75%, as higher rates boost the appeal of bonds, potentially drawing more companies to retail funding.",
+      "summary_zh": "软银集团发行1万亿日元、约合63亿美元的零售债券，票息为4.75%。较高利率提升了债券吸引力，可能促使更多企业转向零售融资。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-04/softbank-group-prices-1-trillion-retail-bond-at-4-75",
+      "category": "大型科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "d8b28a49fb722503",
+      "title": "ValueEdge Chair: SpaceX Needs A Succession Plan",
+      "title_zh": "ValueEdge主席：SpaceX需要继任计划",
+      "source": "Bloomberg Technology",
+      "published_at": "2026-09-03T22:36:42+00:00",
+      "summary": "Nell Minow, Chair of ValueEdge Advisors, says Anthropic is moving in the opposite direction from SpaceX on governance, but argues its structure is still unusual and potentially problematic. She says the company is combining elements of public companies and nonprofits, including a public benefit corporation framework that she says both cares about shareholder value and does not. She speaks with Romaine Bostick on \"The Close.\" (Source: Bloomberg)",
+      "summary_zh": "ValueEdge Advisors主席内尔·米诺称，Anthropic在治理方面与SpaceX走向相反，但其结构仍不寻常且可能存在问题。她称该公司结合了上市公司和非营利组织的元素。",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-03/valueedge-chair-spacex-needs-a-succession-plan-video",
+      "category": "大型科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "8397d5fea4b37ef9",
+      "title": "Carney claps back at Lutnick, says Canada will resume trade talks 'when the Americans are ready'",
+      "title_zh": "加拿大称将继续对等反制美国关税",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-03T20:42:29+00:00",
+      "summary": "Canada has retaliated against President Donald Trump's 50% tariffs with \"dollar for dollar\" duties on U.S. goods, which are set to take effect next week.",
+      "summary_zh": "加拿大表示将在美国准备好后恢复贸易谈判，并称已针对特朗普政府的50%关税采取“逐美元”反制措施，相关关税下周生效。",
+      "url": "https://www.cnbc.com/2026/09/03/carney-lutnick-trump-trade-canada.html",
+      "category": "地缘政治与风险事件",
+      "selected": true
+    },
+    {
+      "candidate_id": "260cd172c5c61d43",
+      "title": "Skyworks Chair: It Will Be a While Before This Cycle Ends",
+      "title_zh": "Skyworks董事长：本轮周期结束尚需时日",
+      "source": "Bloomberg Technology",
+      "published_at": "2026-09-03T21:38:47+00:00",
+      "summary": "Chris King, Chairman of Skyworks Solutions, is introduced as a semiconductor industry veteran with more than 50 years of experience. The segment highlights her time at IBM, her role as the first female CEO of a chip company at AMI Semiconductor, and that company’s later acquisition by Onsemi. She speaks with Scarlet Fu & Kristine Aquino on \"The Close.\" (Source: Bloomberg)",
+      "summary_zh": "Skyworks Solutions董事长克里斯·金拥有逾50年半导体行业经验。报道介绍了她在IBM的经历、担任AMI Semiconductor首位女性CEO，以及该公司后来被安森美收购。",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-03/skyworks-chair-it-will-be-a-while-before-the-cycle-ends-video",
+      "category": "AI / 科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "de60b9dd26ac422f",
+      "title": "Ciena CEO: We’re a Critical Enabler of AI Infrastructure",
+      "title_zh": "Ciena业绩超预期并上调指引，强调AI基础设施需求",
+      "source": "Bloomberg Technology",
+      "published_at": "2026-09-03T21:28:46+00:00",
+      "summary": "Gary Smith, CEO and President of Ciena, discusses a strong earnings report that beat expectations and raised guidance. Despite the positive quarterly results, the company’s shares are falling sharply, prompting the host to ask Smith what investors may be overlooking. He speaks with Scarlet Fu & Kristine Aquino on \"The Close.\" (Source: Bloomberg)",
+      "summary_zh": "Ciena公布强劲季度业绩，超过预期并上调指引。CEO称公司是AI基础设施的关键赋能者，但公司股价当日明显下跌。",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-03/ciena-ceo-we-re-a-critical-enabler-of-ai-infrastructure-video",
+      "category": "AI / 科技",
+      "selected": true
+    },
+    {
+      "candidate_id": "9ef455022a0caf5c",
+      "title": "Los Angeles Schools Ban Student Use of AI Tools on District Devices",
+      "title_zh": "洛杉矶学校禁止学生在学区设备上使用AI工具",
+      "source": "Bloomberg Technology",
+      "published_at": "2026-09-03T20:34:13+00:00",
+      "summary": "The Los Angeles Unified School District is barring students from using generative AI tools on district devices as part of a broader push to reduce screen time in the classroom.",
+      "summary_zh": "洛杉矶联合学区禁止学生在学区设备上使用生成式AI工具，此举是减少课堂屏幕使用时间的更广泛行动之一。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-03/los-angeles-schools-bar-students-from-ai-on-district-devices",
+      "category": "AI / 科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "d115242f5fd6a273",
+      "title": "Adobe Names Chakravarthy CEO, While Other Contender Departs",
+      "title_zh": "Adobe任命Anil Chakravarthy为下一任CEO",
+      "source": "Bloomberg Technology",
+      "published_at": "2026-09-03T20:26:58+00:00",
+      "summary": "Adobe Inc. named Anil Chakravarthy, the leader of its marketing and analytics software business, as its next chief executive officer, thrusting the company veteran into a challenging competition with artificial intelligence upstarts.",
+      "summary_zh": "Adobe任命营销与分析软件业务负责人Anil Chakravarthy为下一任CEO，接任者将面对AI初创公司带来的竞争压力。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-03/adobe-names-chakravarthy-ceo-to-lead-effort-against-ai-rivals",
+      "category": "大型科技",
+      "selected": true
+    },
+    {
+      "candidate_id": "039791952d5590ba",
+      "title": "T-Mobile CEO Gopalan Looks to Internet, AI for Growth",
+      "title_zh": "T-Mobile首席执行官戈帕兰寻求通过互联网和AI实现增长",
+      "source": "Bloomberg Technology",
+      "published_at": "2026-09-03T20:05:00+00:00",
+      "summary": "As he nears his one-year anniversary as T-Mobile US Inc.’s chief executive officer, Srini Gopalan is counting on growth in businesses such as home internet and artificial intelligence to help buoy a languishing share price.",
+      "summary_zh": "在担任T-Mobile美国公司首席执行官即将满一年之际，斯里尼·戈帕兰寄望家庭互联网和人工智能等业务增长，以提振低迷的股价。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-03/t-mobile-ceo-gopalan-is-banking-on-home-internet-ai-for-growth",
+      "category": "大型科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "d700eb472ebeae8f",
+      "title": "Trump’s 100% tariff on drones will be disaster for the US, critics warn",
+      "title_zh": "特朗普对无人机征收100%关税引发美国供应风险担忧",
+      "source": "Ars Technica",
+      "published_at": "2026-09-03T17:08:09+00:00",
+      "summary": "Americans fear there are no cheap alternatives as tariffs suddenly hit drones.",
+      "summary_zh": "美国对无人机征收100%关税后，批评者警告美国市场缺乏廉价替代品。该政策将直接影响无人机进口成本及相关美国用户和企业。",
+      "url": "https://arstechnica.com/tech-policy/2026/09/trumps-100-drone-tariff-has-cops-and-firefighters-panicking/",
+      "category": "地缘政治与风险事件",
+      "selected": true
+    },
+    {
+      "candidate_id": "14e89cd5510f4c90",
+      "title": "'I lost my savings after a job interview scam'",
+      "title_zh": "“我因求职面试骗局失去了积蓄”",
+      "source": "BBC Business",
+      "published_at": "2026-09-03T23:41:49+00:00",
+      "summary": "Job seekers, especially Gen Z, are being targeted with fake, booby-trapped recruitment apps.",
+      "summary_zh": "求职者，尤其是Z世代，正成为虚假且暗藏陷阱的招聘应用程序的目标。",
+      "url": "https://www.bbc.co.uk/news/articles/crk3xd8j3k5o?at_medium=RSS&at_campaign=rss",
+      "category": "其他",
+      "selected": false
+    },
+    {
+      "candidate_id": "d309bdab2a0a0b8e",
+      "title": "OpenAI’s next big AI model has ‘entered the AGI era’",
+      "title_zh": "OpenAI推出GPT-6 Astra模型，称进入AGI时代",
+      "source": "The Verge",
+      "published_at": "2026-09-03T18:00:00+00:00",
+      "summary": "OpenAI's next big model is here: GPT-6 Astra. The company calls it a \"generational leap in capability\" for areas like cybersecurity, professional work, software engineering, science, and computer use. As OpenAI announced earlier this week, it's also the first model designated as meeting OpenAI's \"critical cybersecurity capability threshold\" - but the company promises that won't […]",
+      "summary_zh": "OpenAI推出GPT-6 Astra，称其在网络安全、专业工作、软件工程、科学和计算机操作等领域实现代际能力提升。",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/989601/openai-gpt-6-astra-release",
+      "category": "AI / 科技",
+      "selected": true
+    },
+    {
+      "candidate_id": "057f2275ab27f75b",
+      "title": "NASA to Cover Progress 96 Spacecraft Launch, Docking",
+      "title_zh": "NASA将直播进步96号飞船发射与对接",
+      "source": "NASA",
+      "published_at": "2026-09-03T17:06:00+00:00",
+      "summary": "NASA will provide live coverage of the launch and docking of a Roscosmos cargo spacecraft carrying about three tons of food, fuel, and supplies for the crew aboard the International Space Station. The unpiloted Progress 96 resupply spacecraft is scheduled to launch at 12:15 p.m. EDT (9:15 p.m. Baikonur time), Wednesday, Sept. 9, on a […]",
+      "summary_zh": "NASA将直播俄罗斯航天局货运飞船的发射和对接。该飞船将向国际空间站乘组运送约3吨食品、燃料和物资；无人进步96号补给飞船计划于9月9日发射。",
+      "url": "https://www.nasa.gov/news-release/nasa-to-cover-progress-96-spacecraft-launch-docking/",
+      "category": "其他",
+      "selected": false
+    },
+    {
+      "candidate_id": "b44dcd38cd96c4d7",
+      "title": "Is India's internet boom running into an undersea problem?",
+      "title_zh": "印度互联网繁荣是否正遭遇海底问题？",
+      "source": "BBC Business",
+      "published_at": "2026-09-03T23:40:08+00:00",
+      "summary": "At least 13 of India's 18 intercontinental cables come ashore within six kilometres of Mumbai's Versova beach.",
+      "summary_zh": "印度18条洲际海底电缆中，至少13条在孟买韦尔索瓦海滩六码范围内登陆。",
+      "url": "https://www.bbc.co.uk/news/articles/cx2r2mzelxko?at_medium=RSS&at_campaign=rss",
+      "category": "其他",
+      "selected": false
+    },
+    {
+      "candidate_id": "bcc2926650b5af67",
+      "title": "Transplanted pig kidney works in US man's body for record 271 days",
+      "title_zh": "猪肾移植在美国男子体内工作创纪录271天",
+      "source": "BBC News",
+      "published_at": "2026-09-03T22:31:23+00:00",
+      "summary": "A man has lived for a record nine months with a transplanted pig kidney while waiting for a human transplant.",
+      "summary_zh": "一名男子在等待人类肾脏移植期间，带着移植的猪肾存活创纪录的九个月。",
+      "url": "https://www.bbc.co.uk/news/articles/c305qn2jeggo?at_medium=RSS&at_campaign=rss",
+      "category": "其他",
+      "selected": false
+    },
+    {
+      "candidate_id": "a9a7fc0ab976483f",
+      "title": "Microsoft opens up Xbox Cloud Gaming with new pay-as-you-go option",
+      "title_zh": "微软为Xbox云游戏推出新的按次付费选项",
+      "source": "The Verge",
+      "published_at": "2026-09-03T17:00:00+00:00",
+      "summary": "Microsoft says it will let anyone access Xbox Cloud Gaming in November, without the need to subscribe to Xbox Game Pass. The change to a pay-as-you-go model is part of some sweeping changes to Xbox Cloud Gaming today, and is designed for people who don't use cloud access enough to warrant a monthly subscription. \"Players […]",
+      "summary_zh": "微软称，任何人从11月起均可使用Xbox云游戏，无需订阅Xbox Game Pass。改为按次付费模式是该服务一系列重大调整的一部分，面向云游戏使用频率不足以订阅月费的用户。",
+      "url": "https://www.theverge.com/news/989211/microsoft-xbox-cloud-gaming-pay-as-you-go-option",
+      "category": "大型科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "17931cd62e81ef9c",
+      "title": "Curiosity Blog, Sols 4988-4994: More New Tricks for an Old Dog",
+      "title_zh": "好奇号博客，第4988至4994火星日：老狗的新把戏",
+      "source": "NASA",
+      "published_at": "2026-09-03T15:59:48+00:00",
+      "summary": "Written by Michelle Minitti, MAHLI Deputy Principal Investigator Earth planning date: Friday, Aug. 21, 2026 After Curiosity’s 14 years on the surface, Mars continues to surprise. Both of our workspaces this week contained features unlike quite anything we have seen in the past — broad, shallow pits (like the one in the image above) dotted […]",
+      "summary_zh": "在火星表面运行14年后，好奇号仍不断遇到惊喜。本周两个工作区都出现了此前少见的地貌特征，包括散布着凹点的宽阔浅坑。",
+      "url": "https://science.nasa.gov/blog/curiosity-blog-sols-4988-4994-more-new-tricks-for-an-old-dog/",
+      "category": "其他",
+      "selected": false
+    },
+    {
+      "candidate_id": "236c84aea34a413c",
+      "title": "From cake to pizza: How to get the best birthday freebies (and why there's a catch)",
+      "title_zh": "从蛋糕到披萨：如何获得最佳生日免费赠品及其限制",
+      "source": "BBC Business",
+      "published_at": "2026-09-03T23:25:45+00:00",
+      "summary": "Cake, coffee, make-up and burgers are just some of the free things you can get on your birthday.",
+      "summary_zh": "生日当天可免费获得的物品包括蛋糕、咖啡、化妆品和汉堡等，但这些优惠也存在限制。",
+      "url": "https://www.bbc.co.uk/news/articles/c5y4jr4yr2eo?at_medium=RSS&at_campaign=rss",
+      "category": "其他",
+      "selected": false
+    },
+    {
+      "candidate_id": "cfff0f0b6b4e7038",
+      "title": "Oura files to go public",
+      "title_zh": "Oura提交上市申请",
+      "source": "TechCrunch",
+      "published_at": "2026-09-03T22:35:41+00:00",
+      "summary": "The ring maker says that its business has shown significant revenue growth over the past year.",
+      "summary_zh": "这家智能戒指制造商称，其业务在过去一年实现显著营收增长。",
+      "url": "https://techcrunch.com/2026/09/03/oura-files-to-go-public/",
+      "category": "其他",
+      "selected": false
+    }
+  ],
+  "news_degraded": false,
+  "news_source_diagnostics": [],
+  "event_clustering_diagnostics": {
+    "fallback_used": false,
+    "reason": null
+  },
+  "warnings": [
+    "市场宽度数据暂不可用",
+    "板块宽度数据不足"
+  ]
+}
