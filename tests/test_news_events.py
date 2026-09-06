@@ -3,14 +3,18 @@ from datetime import datetime
 import pytest
 
 from src.news_events import (
+    FALLBACK_MAX_ITEMS,
+    STAGE_B_MAX_INPUT,
     NewsEventError,
     _cluster_candidate_input,
     _importance_signal,
     _rank_stage_a_candidates,
+    build_deterministic_fallback_selection,
     build_event_representatives,
     cluster_news_events,
     event_selection_candidates,
     select_event_representative,
+    select_stage_b_input,
     validate_event_clusters,
 )
 
@@ -300,6 +304,92 @@ def test_importance_signal_recognizes_spacex_as_mega_cap_tech():
     assert major_score > minor_score
 
 
+def test_importance_signal_keyword_match_is_word_bounded_not_substring():
+    """Regression for a real 2026-09-06 production false positive: "hikers"
+    contains "hike" as a literal substring, which used to score an unrelated
+    human-interest rescue story as an interest-rate-hike macro signal. Word-
+    boundary matching must not treat "hike" as present inside "hikers"."""
+    hikers_story = {
+        **candidate("hikers"),
+        "title": "Hikers rescued after using Google Gemini for planning",
+        "summary": "The sheriff's office said the hikers were advised by Gemini "
+                   "to bring far less food and water than their group required.",
+    }
+
+    score, reason = _importance_signal(hikers_story)
+
+    assert "macro_rates" not in reason.split(",")
+
+
+def test_importance_signal_keyword_match_still_allows_simple_plurals():
+    """The word-boundary fix must not regress legitimate plural forms of a
+    singular keyword (e.g. "semiconductor" matching "semiconductors")."""
+    major = {**candidate("nvidia-major"), "title": "Nvidia faces major export controls on AI semiconductors"}
+
+    score, reason = _importance_signal(major)
+
+    assert score > 0
+    assert "ai_chips" in reason
+
+
+def test_geopolitics_policy_requires_both_region_and_economic_signal():
+    """Regression for a real 2026-09-06 production false positive: a purely
+    local/cultural policy story (a Ukrainian city weighing a Russian-language
+    arts ban) matched the old flat keyword list via a bare region name plus a
+    generic policy word ("ban"), even though it has no US-market relevance.
+    geopolitics_policy must require a real economic/market-transmission signal
+    (sanctions, tariffs, energy, war, export controls, ...) alongside the
+    region -- not just region + ban/regulation/policy/law."""
+    local_policy = {
+        **candidate("odesa-language-ban"),
+        "title": "Majority Russian-speaking city in Ukraine considers language ban in the arts",
+        "summary": "Ukraine's third-biggest city Odesa decides this week whether to ban "
+                   "Russian-language content in music and literature in public.",
+    }
+    real_sanctions = {
+        **candidate("russia-sanctions"),
+        "title": "New sanctions target Russian energy exports",
+    }
+    export_controls = {
+        **candidate("china-export-controls"),
+        "title": "US tightens export controls on chip sales to China",
+    }
+
+    local_score, local_reason = _importance_signal(local_policy)
+    sanctions_score, sanctions_reason = _importance_signal(real_sanctions)
+    export_score, export_reason = _importance_signal(export_controls)
+
+    assert "geopolitics_policy" not in local_reason.split(",")
+    assert "geopolitics_policy" in sanctions_reason
+    assert "geopolitics_policy" in export_reason
+
+
+def test_geopolitics_policy_still_recognizes_us_market_events():
+    """Real economic/market-transmission geopolitical events (an oil-tanker
+    strike, the Russia/Ukraine war, energy-supply disruption, and tariffs) must
+    still be recognized after the two-tier tightening."""
+    oil_tanker_strike = {
+        **candidate("iran-oil-strike"),
+        "title": "US strikes Iranian oil tankers amid rising Gulf tensions",
+    }
+    russia_ukraine_war = {
+        **candidate("russia-ukraine-war"),
+        "title": "Russia launches new missile strikes as Ukraine war escalates",
+    }
+    energy_disruption = {
+        **candidate("energy-disruption"),
+        "title": "Middle East conflict disrupts oil shipping through key strait",
+    }
+    tariffs = {
+        **candidate("us-china-tariffs"),
+        "title": "US announces new tariffs on Chinese semiconductor exports",
+    }
+
+    for item in (oil_tanker_strike, russia_ukraine_war, energy_disruption, tariffs):
+        score, reason = _importance_signal(item)
+        assert "geopolitics_policy" in reason, f"{item['title']!r} should still match: {reason}"
+
+
 def test_pre_cap_ranking_softly_diversifies_quality_matched_sources():
     pool = [
         {**candidate(f"bbc-{index}", priority="P0", published_at="2026-08-24T12:00:00+00:00"),
@@ -406,3 +496,107 @@ def test_cluster_max_attempts_is_configurable_independent_of_shared_stage_b_cons
     assert len(calls) == 1
     assert [item["candidate_ids"] for item in events] == [["a"], ["b"]]
     assert "事件级去重暂时失败" in warning
+
+
+def stage_b_candidate(cid, priority="P1", title=None, topic_group="OTHER_SYSTEMIC",
+                      event_summary=None, published_at="2026-08-12T10:00:00+00:00"):
+    """Shape one Stage B input item -- i.e. what event_selection_candidates()
+    actually hands to select_stage_b_input / Stage B, not a raw RSS candidate."""
+    return {
+        "candidate_id": cid,
+        "source": "Source",
+        "priority": priority,
+        "title": title or f"Title {cid}",
+        "summary": "summary",
+        "published_at": published_at,
+        "url": f"https://example.com/{cid}",
+        "topic_group": topic_group,
+        "event_category": "other",
+        "event_summary": event_summary or f"事件 {cid} 的中文摘要。",
+    }
+
+
+def test_select_stage_b_input_keeps_pool_unchanged_at_or_below_cap():
+    pool = [stage_b_candidate(f"c{i}") for i in range(STAGE_B_MAX_INPUT)]
+
+    result = select_stage_b_input(pool)
+
+    assert result == pool
+
+
+def test_select_stage_b_input_caps_pool_above_threshold():
+    pool = [stage_b_candidate(f"c{i}", priority="P2") for i in range(44)]
+
+    result = select_stage_b_input(pool)
+
+    assert len(result) == STAGE_B_MAX_INPUT
+    assert STAGE_B_MAX_INPUT <= 30
+
+
+def test_select_stage_b_input_keeps_high_importance_events_when_pool_exceeds_cap():
+    """A P1/P2 event with clear macro/mega-cap/AI significance must survive the
+    cap even when there are more than enough ordinary P0 events to fill it,
+    mirroring the Stage A cap's own priority-vs-importance behavior."""
+    ordinary = [
+        stage_b_candidate(f"ordinary-{i}", priority="P0", title="Routine local company update")
+        for i in range(STAGE_B_MAX_INPUT + 10)
+    ]
+    important = [
+        stage_b_candidate("fed-rates", priority="P1",
+                          title="Fed signals rate cut path after inflation and jobs data surprise",
+                          topic_group="US_MARKET_MACRO"),
+        stage_b_candidate("nvidia-chip", priority="P1",
+                          title="Nvidia unveils new AI chip for data centers",
+                          topic_group="AI_CHIPS"),
+    ]
+
+    result = select_stage_b_input(ordinary + important)
+    kept_ids = {item["candidate_id"] for item in result}
+
+    assert len(result) == STAGE_B_MAX_INPUT
+    assert {"fed-rates", "nvidia-chip"}.issubset(kept_ids)
+
+
+def test_build_deterministic_fallback_selection_caps_item_count():
+    pool = [stage_b_candidate(f"c{i}", priority="P0") for i in range(20)]
+
+    result = build_deterministic_fallback_selection(pool)
+
+    assert 0 < len(result) <= FALLBACK_MAX_ITEMS
+    assert FALLBACK_MAX_ITEMS <= 8
+
+
+def test_build_deterministic_fallback_selection_on_empty_pool_returns_empty():
+    assert build_deterministic_fallback_selection([]) == []
+
+
+def test_build_deterministic_fallback_selection_is_deterministic_and_repeatable():
+    pool = [stage_b_candidate(f"c{i}", priority=("P0", "P1", "P2")[i % 3]) for i in range(20)]
+
+    first = build_deterministic_fallback_selection(pool)
+    second = build_deterministic_fallback_selection(pool)
+
+    assert [item["candidate_id"] for item in first] == [item["candidate_id"] for item in second]
+
+
+def test_build_deterministic_fallback_selection_never_calls_ai_or_fabricates_fields():
+    pool = [stage_b_candidate("fed", priority="P0", event_summary="美联储维持利率不变。")]
+
+    result = build_deterministic_fallback_selection(pool)
+
+    assert len(result) == 1
+    item = result[0]
+    assert item["title_zh"] == "美联储维持利率不变。"
+    assert item["summary_zh"] == "美联储维持利率不变。"
+    assert item["fallback"] is True
+    assert item["investment_relevance_score"] is None
+    assert item["tags"] == []
+    assert "确定性降级选取" in item["selection_reason"]
+
+
+def test_build_deterministic_fallback_selection_falls_back_to_english_title_without_event_summary():
+    pool = [{**stage_b_candidate("nvidia", title="Nvidia unveils new AI chip"), "event_summary": ""}]
+
+    result = build_deterministic_fallback_selection(pool)
+
+    assert result[0]["title_zh"] == "Nvidia unveils new AI chip"

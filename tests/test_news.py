@@ -6,10 +6,13 @@ import time
 from types import SimpleNamespace
 from zoneinfo import ZoneInfo
 
+import httpx
 import pytest
 import yaml
 
-from src.deepseek_client import NewsSelectionError, select_news, select_news_two_pass, validate_selection
+from src.deepseek_client import (
+    NewsSelectionError, select_news, select_news_two_pass, select_news_with_fallback, validate_selection,
+)
 import src.deepseek_client as deepseek_client
 from src.news_dedupe import dedupe_candidates
 from src.news_events import build_event_representatives, cluster_news_events, event_selection_candidates
@@ -838,13 +841,39 @@ def test_deepseek_client_uses_bounded_timeout_and_disables_sdk_retries(monkeypat
     assert deepseek_client.call_deepseek("system", "user", "key") == "{}"
     assert captured["max_retries"] == 0
     assert captured["timeout"].connect == 5.0
-    assert captured["timeout"].read == 60.0
+    assert captured["timeout"].read == 90.0
     assert captured["timeout"].write == 15.0
     assert captured["timeout"].pool == 5.0
     assert captured["request"]["model"] == "gpt-5.6-terra"
     assert "temperature" not in captured["request"]
     assert "extra_body" not in captured["request"]
     assert "reasoning_effort" not in captured["request"]
+
+
+def test_deepseek_client_timeout_is_overridable_per_call_site(monkeypatch):
+    """Candidate Pool Translation binds a shorter timeout than the shared Stage
+    A/B default via functools.partial (see news_candidate_translation.py) so a
+    stuck translation call can't eat into the rest of the workflow's budget."""
+    captured = {}
+
+    class FakeCompletions:
+        def create(self, **kwargs):
+            return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content="{}"))])
+
+    class FakeClient:
+        def __init__(self, **kwargs):
+            captured.update(kwargs)
+            self.chat = SimpleNamespace(completions=FakeCompletions())
+
+    import openai
+    monkeypatch.setattr(openai, "OpenAI", FakeClient)
+
+    custom_timeout = httpx.Timeout(connect=5.0, read=45.0, write=15.0, pool=5.0)
+    deepseek_client.call_deepseek("system", "user", "key", timeout=custom_timeout)
+
+    assert captured["timeout"].read == 45.0
+    assert deepseek_client.CANDIDATE_TRANSLATION_TIMEOUT.read == 45.0
+    assert deepseek_client.LLM_TIMEOUT.read == 90.0
 
 
 def test_news_selection_timeout_retries_once_then_returns_timeout_reason():
@@ -1915,3 +1944,96 @@ def test_stage_b_two_pass_borderline_review_can_drop_foreign_local_macro_with_ai
     assert [item["candidate_id"] for item in selected] == ["0"]
     assert observability["stage_b_borderline_count"] == 1
     assert observability["stage_b_review_keep_count"] == 0
+
+
+def _always_timeout(system_prompt, user_payload, api_key):
+    raise TimeoutError("simulated stage b timeout")
+
+
+def test_select_news_with_fallback_both_samples_timeout_uses_deterministic_fallback():
+    """The exact incident this fix targets: sample A and sample B both time out on
+    every attempt, so select_news_two_pass returns ([], warning). Instead of that
+    zeroing out the whole report, select_news_with_fallback must produce a small,
+    non-empty, rule-based selection and record it in observability."""
+    pool = stage_b_pool([f"c{i}" for i in range(10)])
+
+    observability = {}
+    selected, warning = select_news_with_fallback(
+        pool, "key", call_model=_always_timeout, sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert len(selected) > 0
+    assert warning is not None
+    assert "规则降级" in warning
+    assert observability["stage_b_fallback_used"] is True
+    assert observability["stage_b_fallback_count"] == len(selected)
+    assert observability["two_pass_degraded"] == "both_samples_failed"
+    assert all(item.get("fallback") is True for item in selected)
+
+
+def test_select_news_with_fallback_caps_fallback_count():
+    pool = stage_b_pool([f"c{i}" for i in range(20)])
+
+    observability = {}
+    selected, _ = select_news_with_fallback(
+        pool, "key", call_model=_always_timeout, sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert 0 < len(selected) <= 8
+
+
+def test_select_news_with_fallback_one_sample_success_skips_fallback():
+    """When only one two-pass sample fails, select_news_two_pass already degrades
+    to the surviving sample's real (non-fallback) results -- the deterministic
+    fallback must not fire in that case."""
+    pool = stage_b_pool(["0"])
+    lock = threading.Lock()
+    call_count = 0
+
+    def model(system_prompt, user_payload, api_key):
+        nonlocal call_count
+        with lock:
+            call_count += 1
+            call_number = call_count
+        if call_number != 1:
+            raise TimeoutError("simulated sample timeout")
+        return json.dumps({"selected": [stage_b_item("0", 1, 92)], "reserve": []}, ensure_ascii=False)
+
+    observability = {}
+    selected, warning = select_news_with_fallback(
+        pool, "key", call_model=model, sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert warning is None
+    assert [item["candidate_id"] for item in selected] == ["0"]
+    assert observability["stage_b_fallback_used"] is False
+    assert observability["stage_b_fallback_count"] == 0
+
+
+def test_select_news_with_fallback_normal_two_pass_success_is_unaffected():
+    pool = stage_b_pool(["0"])
+    resp = json.dumps({"selected": [stage_b_item("0", 1, 92)], "reserve": []}, ensure_ascii=False)
+
+    observability = {}
+    selected, warning = select_news_with_fallback(
+        pool, "key", call_model=lambda *args: resp, sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert warning is None
+    assert [item["candidate_id"] for item in selected] == ["0"]
+    assert observability["stage_b_fallback_used"] is False
+
+
+def test_select_news_with_fallback_preserves_original_failure_when_fallback_is_empty():
+    """An empty candidate pool can't produce a fallback either; the original
+    two-pass failure (or its warning) must be returned unchanged rather than
+    claiming a fallback that never happened."""
+    observability = {}
+    selected, warning = select_news_with_fallback(
+        [], "key", call_model=_always_timeout, sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert selected == []
+    assert warning is None
+    assert observability["stage_b_fallback_used"] is False
+    assert observability["stage_b_fallback_count"] == 0

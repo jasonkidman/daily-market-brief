@@ -11,7 +11,9 @@ from zoneinfo import ZoneInfo
 
 import yaml
 
-from .deepseek_client import DeepSeekUsageTracker, select_news, select_news_two_pass, validate_selection
+from .deepseek_client import (
+    DeepSeekUsageTracker, select_news, select_news_two_pass, select_news_with_fallback, validate_selection,
+)
 from .drawdown import compute_suggested_topup, reserve_used_total, summarize_index_state, update_drawdown_state
 from .market import (
     build_sparkline,
@@ -30,6 +32,7 @@ from .news_events import (
     build_event_representatives,
     cluster_news_events,
     event_selection_candidates,
+    select_stage_b_input,
     stage_a_input_counts,
     validate_event_clusters,
 )
@@ -95,10 +98,13 @@ def _write_json(path: Path, payload) -> None:
 
 
 def replay_stage_b_snapshot(snapshot_path: Path, api_key: str) -> list[dict]:
-    """Replay Stage B (two-pass) from a persisted production input snapshot."""
+    """Replay Stage B (two-pass, with deterministic fallback) from a persisted
+    production input snapshot. Snapshots written after the Stage B input pre-filter
+    landed already reflect the capped pool Stage B actually saw in production; older
+    snapshots are replayed as-is (uncapped)."""
     snapshot = load_stage_b_snapshot(snapshot_path)
     candidates = snapshot["stage_b"]["candidates"]
-    selected, warning = select_news_two_pass(
+    selected, warning = select_news_with_fallback(
         candidates,
         api_key,
         recent_selected=snapshot["stage_b"].get("recent_7_days_events", []),
@@ -431,6 +437,7 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
             news, ai_warning = [], "⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：未配置 AI 凭据。"
             event_representatives = []
             selection_candidates = []
+            stage_b_input_candidates = []
             stage_a_actual_input_count = 0
         else:
             events, clustering_warning = cluster_news_events(candidates, api_key, usage_tracker=usage_tracker)
@@ -449,6 +456,7 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
             }
             event_representatives = build_event_representatives(events, candidates)
             selection_candidates = event_selection_candidates(event_representatives)
+            stage_b_input_candidates = select_stage_b_input(selection_candidates)
             ai_market_context = None
             if validity_summary["context_any_valid"] or market_breadth["health"].get("valid"):
                 ai_market_context = {
@@ -475,19 +483,20 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
                     "stage_a_pre_cap": stage_a_pre_cap_count,
                     "stage_a_actual_input": stage_a_actual_input_count,
                     "stage_a_events": len(events),
-                    "stage_b_input": len(selection_candidates),
+                    "stage_b_input": len(stage_b_input_candidates),
+                    "stage_b_pre_filter_pool": len(selection_candidates),
                 },
                 "stage_a_events": events,
                 "stage_b": {
-                    "candidates": selection_candidates,
+                    "candidates": stage_b_input_candidates,
                     "recent_7_days_events": recent_events,
                     "market_context": ai_market_context,
                 },
             }
             # Snapshot persistence is fail-fast: a report without a replayable Stage B input is incomplete.
             write_stage_b_snapshot(base_dir, snapshot)
-            news, ai_warning = select_news_two_pass(
-                selection_candidates, api_key, recent_events, market_context=ai_market_context,
+            news, ai_warning = select_news_with_fallback(
+                stage_b_input_candidates, api_key, recent_events, market_context=ai_market_context,
                 usage_tracker=usage_tracker, observability=stage_b_observability,
             )
             selected_candidate_ids = {item["candidate_id"] for item in news}
@@ -501,7 +510,7 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
             news_candidates = build_news_candidates(selection_candidates, news, candidate_translations)
         _log_news_pipeline(
             rss_candidate_count, window_candidate_count, len(candidates), stage_a_pre_cap_count,
-            stage_a_actual_input_count, event_representatives, selection_candidates,
+            stage_a_actual_input_count, event_representatives, stage_b_input_candidates,
             stage_b_observability["raw_count"], stage_b_observability["validated_count"],
             recent_events, news, stage_b_observability,
         )
@@ -575,6 +584,7 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         "news": news,
         "news_candidates": news_candidates,
         "news_degraded": news_degraded,
+        "stage_b_fallback_used": stage_b_observability.get("stage_b_fallback_used", False),
         "news_source_diagnostics": news_source_diagnostics,
         "event_clustering_diagnostics": event_clustering_diagnostics,
         "warnings": warnings,

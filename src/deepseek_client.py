@@ -31,7 +31,26 @@ SUMMARY_ZH_LIMIT = 180
 FOCUS_LIMIT = 80
 SELECTION_REASON_LIMIT = 120
 TAG_LIMIT = 16
-LLM_TIMEOUT = httpx.Timeout(connect=5.0, read=60.0, write=15.0, pool=5.0)
+
+# Single source of truth for every news-AI stage's per-request read timeout, so
+# individual call sites never hardcode their own magic number. Stage A and Stage B
+# share the same budget; Candidate Pool Translation gets a shorter one on purpose
+# (see CANDIDATE_TRANSLATION_TIMEOUT) so a stuck translation call can't eat into
+# the rest of the workflow's time. SDK-level retries stay at 0 (DEEPSEEK_MAX_RETRIES)
+# -- every stage controls its own retry/backoff/fallback behavior instead.
+STAGE_TIMEOUT_SECONDS = {
+    "stage_a": 90.0,
+    "stage_b": 90.0,
+    "candidate_translation": 45.0,
+}
+
+
+def _llm_timeout(read_seconds: float) -> httpx.Timeout:
+    return httpx.Timeout(connect=5.0, read=read_seconds, write=15.0, pool=5.0)
+
+
+LLM_TIMEOUT = _llm_timeout(STAGE_TIMEOUT_SECONDS["stage_a"])
+CANDIDATE_TRANSLATION_TIMEOUT = _llm_timeout(STAGE_TIMEOUT_SECONDS["candidate_translation"])
 DEEPSEEK_MAX_RETRIES = 0
 DEEPSEEK_MAX_ATTEMPTS = 2
 DEEPSEEK_MODEL = "gpt-5.6-terra"
@@ -420,20 +439,24 @@ def validate_selection(payload: Any, candidates: list[dict]) -> list[dict]:
 
 
 def call_deepseek(system_prompt: str, user_payload: str, api_key: str, *,
-                  thinking_enabled: bool = False, reasoning_effort: str | None = None) -> str:
+                  thinking_enabled: bool = False, reasoning_effort: str | None = None,
+                  timeout: httpx.Timeout | None = None) -> str:
     """Call the terra reasoning model (via 灵眸's OpenAI-compatible API) and return final content.
 
     terra is always a reasoning model: there is no separate "thinking" toggle like
     DeepSeek's extra_body param, and it does not accept `temperature`. Reasoning depth
     is controlled solely via `reasoning_effort`; `thinking_enabled` is accepted for
-    call-site compatibility but has no effect here.
+    call-site compatibility but has no effect here. `timeout` defaults to the shared
+    Stage A/B budget (LLM_TIMEOUT); callers with a different budget (e.g. the shorter
+    CANDIDATE_TRANSLATION_TIMEOUT) bind it via functools.partial rather than passing
+    a raw number down through invoke_model's generic call-site dispatch.
     """
     from openai import OpenAI
 
     client = OpenAI(
         api_key=api_key,
         base_url=DEEPSEEK_BASE_URL,
-        timeout=LLM_TIMEOUT,
+        timeout=timeout or LLM_TIMEOUT,
         max_retries=DEEPSEEK_MAX_RETRIES,
     )
     request = {
@@ -815,3 +838,53 @@ def select_news_two_pass(candidates: list[dict], api_key: str, recent_selected: 
         observability["validated_count"] = len(merged)
         observability["stage_b_final_count"] = len(merged)
     return merged, None
+
+
+def select_news_with_fallback(candidates: list[dict], api_key: str, recent_selected: list[dict] = None,
+                              market_context: dict = None,
+                              call_model: Callable = call_deepseek,
+                              review_call_model: Callable | None = None,
+                              sleep_fn: Callable = time.sleep,
+                              usage_tracker: DeepSeekUsageTracker | None = None,
+                              observability: dict | None = None,
+                              fallback_builder: Callable[[list[dict]], list[dict]] | None = None,
+                              ) -> tuple[list[dict], Optional[str]]:
+    """select_news_two_pass, plus a deterministic (non-LLM) fallback for the one
+    failure mode that used to zero out the whole report: both two-pass samples
+    (and the single-pass path select_news_two_pass itself falls back to on an
+    orchestration error) exhausting their retries with nothing selected, even
+    though Stage B had a non-empty candidate pool to choose from.
+
+    The fallback never calls the LLM -- see build_deterministic_fallback_selection
+    in news_events.py (imported lazily below to avoid a circular import: that
+    module already imports from this one) for its ranking and field rules. A
+    fallback that itself comes back empty (e.g. an empty candidate pool) is not
+    treated as a new failure; the original two-pass warning is returned unchanged
+    so a genuine "no news at all" failure still surfaces as such.
+    """
+    if observability is not None:
+        observability.setdefault("stage_b_fallback_used", False)
+        observability.setdefault("stage_b_fallback_count", 0)
+    news, warning = select_news_two_pass(
+        candidates, api_key, recent_selected, market_context,
+        call_model, review_call_model, sleep_fn, usage_tracker, observability,
+    )
+    if news or not candidates:
+        return news, warning
+    if fallback_builder is None:
+        from .news_events import build_deterministic_fallback_selection
+        fallback_builder = build_deterministic_fallback_selection
+    fallback = fallback_builder(candidates)
+    if not fallback:
+        print("[NEWS STAGE B FALLBACK] deterministic fallback produced no items, preserving original failure")
+        return news, warning
+    print(
+        f"[NEWS STAGE B FALLBACK] triggered | ai_failure_reason={warning} | fallback_count={len(fallback)}"
+    )
+    for item in fallback:
+        print(f"[NEWS STAGE B FALLBACK ITEM] candidate_id={item['candidate_id']} | reason={item['selection_reason']}")
+    if observability is not None:
+        observability["stage_b_fallback_used"] = True
+        observability["stage_b_fallback_count"] = len(fallback)
+        observability["stage_b_final_count"] = len(fallback)
+    return fallback, "⚠️ 新闻 AI 筛选超时，已使用规则降级结果。"

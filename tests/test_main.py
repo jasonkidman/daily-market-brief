@@ -267,7 +267,7 @@ def test_end_to_end_supplementary_rss_failure_does_not_flip_status_or_show_banne
     monkeypatch.setattr(main, "cluster_news_events", lambda *args, **kwargs: ([], None))
     monkeypatch.setattr(main, "build_event_representatives", lambda events, candidates: [])
     monkeypatch.setattr(main, "event_selection_candidates", lambda events: [])
-    monkeypatch.setattr(main, "select_news_two_pass", lambda *args, **kwargs: ([], None))
+    monkeypatch.setattr(main, "select_news_with_fallback", lambda *args, **kwargs: ([], None))
     monkeypatch.setattr(main, "generate_market_summary", lambda *args, **kwargs: {"degraded": True})
     monkeypatch.setattr(main, "render_site", lambda *args, **kwargs: None)
 
@@ -333,7 +333,7 @@ def test_event_clustering_fallback_does_not_flip_status_or_show_banner_warning(t
     )
     monkeypatch.setattr(main, "build_event_representatives", lambda events, candidates: [])
     monkeypatch.setattr(main, "event_selection_candidates", lambda events: [])
-    monkeypatch.setattr(main, "select_news_two_pass", lambda *args, **kwargs: ([], None))
+    monkeypatch.setattr(main, "select_news_with_fallback", lambda *args, **kwargs: ([], None))
     monkeypatch.setattr(main, "generate_market_summary", lambda *args, **kwargs: {"degraded": True})
     monkeypatch.setattr(main, "render_site", lambda *args, **kwargs: None)
 
@@ -392,7 +392,7 @@ def test_report_news_candidates_covers_full_stage_b_pool_flagged_by_final_select
     monkeypatch.setattr(main, "cluster_news_events", lambda *args, **kwargs: ([], None))
     monkeypatch.setattr(main, "build_event_representatives", lambda events, candidates: [])
     monkeypatch.setattr(main, "event_selection_candidates", lambda events: selection_candidates)
-    monkeypatch.setattr(main, "select_news_two_pass", lambda *args, **kwargs: (selected_news, None))
+    monkeypatch.setattr(main, "select_news_with_fallback", lambda *args, **kwargs: (selected_news, None))
     monkeypatch.setattr(main, "generate_market_summary", lambda *args, **kwargs: {"degraded": True})
     monkeypatch.setattr(main, "render_site", lambda *args, **kwargs: None)
 
@@ -458,7 +458,7 @@ def test_report_generation_survives_candidate_translation_failure_with_english_f
     monkeypatch.setattr(main, "cluster_news_events", lambda *args, **kwargs: ([], None))
     monkeypatch.setattr(main, "build_event_representatives", lambda events, candidates: [])
     monkeypatch.setattr(main, "event_selection_candidates", lambda events: selection_candidates)
-    monkeypatch.setattr(main, "select_news_two_pass", lambda *args, **kwargs: ([], None))
+    monkeypatch.setattr(main, "select_news_with_fallback", lambda *args, **kwargs: ([], None))
     monkeypatch.setattr(main, "translate_candidates", lambda candidates, api_key, **kwargs: {})
     monkeypatch.setattr(main, "generate_market_summary", lambda *args, **kwargs: {"degraded": True})
     monkeypatch.setattr(main, "render_site", lambda *args, **kwargs: None)

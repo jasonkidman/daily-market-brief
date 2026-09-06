@@ -162,9 +162,12 @@
     {% endif %}
   </div>
   <div class="card news-card">
-    {% if report.news_degraded %}
-    <div class="alert">⚠️ 新闻 AI 处理暂时失败，RSS 数据已获取，等待下一次更新</div>
+    {% if not report.news and report.news_degraded %}
+    <div class="alert critical">⚠️ 新闻 AI 处理暂时失败，RSS 数据已获取，等待下一次更新</div>
     {% elif report.news %}
+    {% if report.stage_b_fallback_used %}
+    <div class="alert">⚠️ 新闻 AI 筛选超时，已使用规则降级结果</div>
+    {% endif %}
     {% for item in report.news %}
     <div class="news-item">
       <div class="rank">{{ item.rank }}</div>

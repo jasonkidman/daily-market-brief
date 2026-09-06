@@ -11,14 +11,23 @@ from __future__ import annotations
 
 import json
 import time
+from functools import partial
 from typing import Any, Callable
 
-from .deepseek_client import DEEPSEEK_MAX_ATTEMPTS, DeepSeekUsageTracker, call_deepseek, invoke_model
+from .deepseek_client import (
+    CANDIDATE_TRANSLATION_TIMEOUT, DEEPSEEK_MAX_ATTEMPTS, DeepSeekUsageTracker, call_deepseek, invoke_model,
+)
 from .news_candidate_translation_prompt import SYSTEM_PROMPT
 
 
 TITLE_ZH_LIMIT = 70
 SUMMARY_ZH_LIMIT = 180
+
+# Shorter than Stage A/B's timeout on purpose: a stuck candidate-pool translation
+# must not eat into the rest of the workflow's time budget, and a failure here
+# always degrades to the original English text (see translate_candidates) rather
+# than affecting the main news selection.
+_call_deepseek_translation = partial(call_deepseek, timeout=CANDIDATE_TRANSLATION_TIMEOUT)
 
 
 class NewsCandidateTranslationError(ValueError):
@@ -80,7 +89,7 @@ def validate_translations(payload: Any, candidates: list[dict]) -> dict[str, dic
 
 
 def translate_candidates(candidates: list[dict], api_key: str,
-                         call_model: Callable = call_deepseek,
+                         call_model: Callable = _call_deepseek_translation,
                          sleep_fn: Callable = time.sleep,
                          usage_tracker: DeepSeekUsageTracker | None = None,
                          max_attempts: int = DEEPSEEK_MAX_ATTEMPTS) -> dict[str, dict]:
