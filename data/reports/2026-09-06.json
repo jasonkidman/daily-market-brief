@@ -1,9 +1,9 @@
 {
   "report_date": "2026-09-06",
-  "generated_at": "2026-09-06 09:01 CST",
+  "generated_at": "2026-09-06 13:19 CST",
   "market_date": "2026-09-04",
-  "status": "ok",
-  "status_label": "🟢 数据更新正常",
+  "status": "partial",
+  "status_label": "🟠 部分数据源异常",
   "market_data_valid": true,
   "core_market_valid": true,
   "context_market_valid": true,
@@ -729,8 +729,8 @@
     },
     "gold": {
       "market_date": "2026-09-04",
-      "close": 4429.7998046875,
-      "daily_return": -0.01378106016283076,
+      "close": 4476.60009765625,
+      "daily_return": -0.003361777723279058,
       "name": "黄金 (COMEX)",
       "ticker": "GC=F",
       "valid": true
@@ -917,7 +917,7 @@
       "ath": 7798.990234375,
       "ath_date": "2026-08-13",
       "last_market_date": "2026-09-04",
-      "last_updated_at": "2026-09-06T09:01:02.547886+08:00",
+      "last_updated_at": "2026-09-06T13:19:37.463349+08:00",
       "current_close": 7718.60009765625,
       "current_drawdown": 0.010307762197780512,
       "pool": 140000,
@@ -975,7 +975,7 @@
       "ath": 30660.599609375,
       "ath_date": "2026-06-02",
       "last_market_date": "2026-09-04",
-      "last_updated_at": "2026-09-06T09:01:02.547886+08:00",
+      "last_updated_at": "2026-09-06T13:19:37.463349+08:00",
       "current_close": 29544.150390625,
       "current_drawdown": 0.03641315672145651,
       "pool": 60000,
@@ -1038,109 +1038,12 @@
   },
   "portfolio_action": "hold",
   "market_summary": {
-    "market": "9月4日，标普500下跌0.38%，道指下跌0.51%，纳斯达克100上涨0.21%；市场宽度偏弱，175只股票上涨、327只股票下跌，科技和小盘股相对占优。",
-    "drivers": "市场同时关注就业报告强于预期及美伊冲突扩大至油轮目标。",
+    "market": "标普500下跌0.38%，道指下跌0.51%，而纳斯达克100上涨0.21%；科技和小盘相对占优，但市场宽度偏弱，标普成分股中327只下跌。",
+    "drivers": "市场同时关注科技板块上涨0.70%与非必需消费板块下跌1.33%；未提供最终新闻，关注点仅限市场结构。",
     "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
     "degraded": false
   },
-  "news": [
-    {
-      "rank": 1,
-      "candidate_id": "78b1bf164bf55ead",
-      "category": "地缘政治",
-      "title_zh": "美军袭击伊朗油轮，霍尔木兹航运与能源压力升级",
-      "summary_zh": "美国中央司令部称，伊朗革命卫队向两艘美国海军舰艇发射弹道导弹后，美军打击了三艘伊朗原油运输船。冲突扩大至油轮目标，且霍尔木兹海峡周边航运已承压。",
-      "focus": "霍尔木兹海峡通行、原油运输与美国后续军事行动",
-      "tags": [
-        "伊朗",
-        "霍尔木兹",
-        "原油运输",
-        "美军行动"
-      ],
-      "investment_relevance_score": 93,
-      "source": "Bloomberg Markets",
-      "url": "https://www.bloomberg.com/news/videos/2026-09-05/us-strikes-iranian-tankers-after-attack-on-us-warships-video",
-      "published_at": "2026-09-05T14:34:22+00:00",
-      "original_title": "US Strikes Iranian Tankers After Attack on US Warships",
-      "selection_reason": "市场影响：美军打击伊朗原油运输船，直接涉及霍尔木兹航运和全球能源供应。",
-      "event_summary": "US forces struck three Iranian oil tankers after attacks targeting US Navy warships.",
-      "topic_group": "GEOPOLITICS",
-      "event_category": "other",
-      "source_channel": null
-    },
-    {
-      "rank": 2,
-      "candidate_id": "d2aac71cd888169a",
-      "category": "就业 / 通胀",
-      "title_zh": "美国就业增长超预期，市场重估9月加息可能",
-      "summary_zh": "美国就业报告强于预期。报道援引策略师观点称，这强化了美联储9月加息的理由；同时，政府借款与AI投资对资本的竞争令长期美债收益率成为另一项焦点。",
-      "focus": "9月FOMC决定、后续通胀数据及长期美债收益率",
-      "tags": [
-        "美国就业",
-        "美联储",
-        "利率",
-        "美债收益率"
-      ],
-      "investment_relevance_score": 88,
-      "source": "Bloomberg Markets",
-      "url": "https://www.bloomberg.com/news/videos/2026-09-05/jobs-surge-raises-odds-of-september-fed-hike-video",
-      "published_at": "2026-09-05T15:37:28+00:00",
-      "original_title": "Jobs Surge Raises Odds of September Fed Hike",
-      "selection_reason": "美国宏观：美国就业增长超预期，直接改变美联储利率路径与利率预期。",
-      "event_summary": "US payroll growth exceeded forecasts, strengthening the case for a Fed rate hike.",
-      "topic_group": "US_MARKET_MACRO",
-      "event_category": "other",
-      "source_channel": null
-    },
-    {
-      "rank": 3,
-      "candidate_id": "c358d62d97f8f78d",
-      "category": "大型科技",
-      "title_zh": "两家美国报业机构起诉OpenAI和微软涉AI训练",
-      "summary_zh": "《西雅图时报》和Newsday起诉OpenAI及微软，指控两家公司使用其新闻内容训练AI。该案为两家公司围绕训练数据版权争议新增诉讼。",
-      "focus": "诉讼具体指控、司法程序及训练数据授权成本",
-      "tags": [
-        "OpenAI",
-        "微软",
-        "版权诉讼",
-        "AI训练"
-      ],
-      "investment_relevance_score": 75,
-      "source": "TechCrunch",
-      "url": "https://techcrunch.com/2026/09/05/seattle-times-and-newsday-are-the-latest-publications-to-sue-openai-and-microsoft/",
-      "published_at": "2026-09-05T22:49:55+00:00",
-      "original_title": "Seattle Times and Newsday are the latest publications to sue OpenAI and Microsoft",
-      "selection_reason": "大型科技：微软面临新增重大诉讼，属于与其AI核心业务相关的版权法律风险。",
-      "event_summary": "The Seattle Times and Newsday sued OpenAI and Microsoft over AI training use.",
-      "topic_group": "MEGA_CAP_TECH",
-      "event_category": "other",
-      "source_channel": null
-    },
-    {
-      "rank": 4,
-      "candidate_id": "7f23f0c435e4c8a5",
-      "category": "美联储 / 利率",
-      "title_zh": "两名美联储理事在静默期参加银行相关活动",
-      "summary_zh": "美联储理事的日程显示，两名理事近月在央行静默期内会见或参加由私营银行业人士主办的活动；此类会议受相关限制约束。",
-      "focus": "美联储对静默期会议的解释、披露或后续处理",
-      "tags": [
-        "美联储",
-        "静默期",
-        "银行业",
-        "治理"
-      ],
-      "investment_relevance_score": 61,
-      "source": "Bloomberg Economics",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-05/fed-governors-calendars-show-blackout-events-with-bankers",
-      "published_at": "2026-09-05T13:15:07+00:00",
-      "original_title": "Fed Governors’ Calendars Show Blackout Events With Bankers",
-      "selection_reason": "美国宏观：美联储理事在静默期参与银行相关活动，是涉及央行治理与沟通限制的新事实。",
-      "event_summary": "Two Fed governors attended banking-related events during blackout periods.",
-      "topic_group": "US_MARKET_MACRO",
-      "event_category": "other",
-      "source_channel": null
-    }
-  ],
+  "news": [],
   "news_candidates": [
     {
       "candidate_id": "91a206f9f96f40c4",
@@ -1157,14 +1060,14 @@
     {
       "candidate_id": "d2aac71cd888169a",
       "title": "Jobs Surge Raises Odds of September Fed Hike",
-      "title_zh": "美国就业增长超预期，市场重估9月加息可能",
+      "title_zh": "Jobs Surge Raises Odds of September Fed Hike",
       "source": "Bloomberg Markets",
       "published_at": "2026-09-05T15:37:28+00:00",
       "summary": "On Bloomberg This Weekend, Seaport Research Partner Managing Director & Chief Equity Strategist Jonathan Golub says a stronger-than-expected US jobs report reinforces the case for the Federal Reserve to raise interest rates, despite President Donald Trump’s calls for lower borrowing costs. Golub also says to hosts Christina Ruffini and Jeff Mason that his bigger concern is longer-term bond yields as heavy AI investment and government borrowing compete for capital. (Source: Bloomberg)",
-      "summary_zh": "美国就业报告强于预期。报道援引策略师观点称，这强化了美联储9月加息的理由；同时，政府借款与AI投资对资本的竞争令长期美债收益率成为另一项焦点。",
+      "summary_zh": "On Bloomberg This Weekend, Seaport Research Partner Managing Director & Chief Equity Strategist Jonathan Golub says a stronger-than-expected US jobs report reinforces the case for the Federal Reserve to raise interest rates, despite President Donald Trump’s calls for lower borrowing costs. Golub also says to hosts Christina Ruffini and Jeff Mason that his bigger concern is longer-term bond yields as heavy AI investment and government borrowing compete for capital. (Source: Bloomberg)",
       "url": "https://www.bloomberg.com/news/videos/2026-09-05/jobs-surge-raises-odds-of-september-fed-hike-video",
       "category": "宏观 / 利率",
-      "selected": true
+      "selected": false
     },
     {
       "candidate_id": "859f9fa0d7109dd6",
@@ -1187,31 +1090,31 @@
       "summary": "The sheriff’s office said the hikers “were advised by Gemini to bring far less food and water than their group required.\"",
       "summary_zh": "The sheriff’s office said the hikers “were advised by Gemini to bring far less food and water than their group required.\"",
       "url": "https://techcrunch.com/2026/09/05/hikers-rescued-after-using-google-gemini-for-planning/",
-      "category": "AI / 科技",
+      "category": "大型科技",
       "selected": false
     },
     {
       "candidate_id": "7f23f0c435e4c8a5",
       "title": "Fed Governors’ Calendars Show Blackout Events With Bankers",
-      "title_zh": "两名美联储理事在静默期参加银行相关活动",
+      "title_zh": "Fed Governors’ Calendars Show Blackout Events With Bankers",
       "source": "Bloomberg Economics",
       "published_at": "2026-09-05T13:15:07+00:00",
       "summary": "Two Federal Reserve governors met with or attended events hosted by private-sector banking officials in recent months during the central bank’s blackout periods, when such meetings are subject to restrictions.",
-      "summary_zh": "美联储理事的日程显示，两名理事近月在央行静默期内会见或参加由私营银行业人士主办的活动；此类会议受相关限制约束。",
+      "summary_zh": "Two Federal Reserve governors met with or attended events hosted by private-sector banking officials in recent months during the central bank’s blackout periods, when such meetings are subject to restrictions.",
       "url": "https://www.bloomberg.com/news/articles/2026-09-05/fed-governors-calendars-show-blackout-events-with-bankers",
       "category": "宏观 / 利率",
-      "selected": true
+      "selected": false
     },
     {
-      "candidate_id": "774c445ef5cf1680",
-      "title": "AI May Transform How Humans Understand Animals",
-      "title_zh": "AI May Transform How Humans Understand Animals",
+      "candidate_id": "d934dfb9f128a38a",
+      "title": "Australia Spring Property Season Begins Sharply Lower Than 2025",
+      "title_zh": "Australia Spring Property Season Begins Sharply Lower Than 2025",
       "source": "Bloomberg Markets",
-      "published_at": "2026-09-05T12:46:10+00:00",
-      "summary": "Researchers are using AI to analyze vast collections of animal vocalizations, looking for patterns that could help humans better understand how species such as crows communicate. Bloomberg Weekend Senior Writer Morgan Meaker is on Bloomberg This Weekend and says the technology could reshape humans’ relationship with animals, but researchers warn it also raises ethical questions about privacy, exploitation and how those discoveries might be used. (Source: Bloomberg)",
-      "summary_zh": "Researchers are using AI to analyze vast collections of animal vocalizations, looking for patterns that could help humans better understand how species such as crows communicate. Bloomberg Weekend Senior Writer Morgan Meaker is on Bloomberg This Weekend and says the technology could reshape humans’ relationship with animals, but researchers warn it also raises ethical questions about privacy, exploitation and how those discoveries might be used. (Source: Bloomberg)",
-      "url": "https://www.bloomberg.com/news/videos/2026-09-05/ai-may-transform-how-humans-understand-animals-video",
-      "category": "AI / 科技",
+      "published_at": "2026-09-06T00:42:58+00:00",
+      "summary": "Australia’s spring property season began with far fewer homes going under the hammer than a year earlier, even as auction clearance rates held broadly steady, according to data from property researcher Cotality.",
+      "summary_zh": "Australia’s spring property season began with far fewer homes going under the hammer than a year earlier, even as auction clearance rates held broadly steady, according to data from property researcher Cotality.",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-06/australia-spring-property-season-begins-sharply-lower-than-2025",
+      "category": "宏观 / 利率",
       "selected": false
     },
     {
@@ -1236,6 +1139,18 @@
       "summary_zh": "Ten days ahead of the next Federal Reserve meeting, the Trump administration looks to be in a full-court press to halt a rate hike in its tracks.",
       "url": "https://www.cnbc.com/2026/09/05/trump-warsh-fed-september-rate-hike.html",
       "category": "宏观 / 利率",
+      "selected": false
+    },
+    {
+      "candidate_id": "774c445ef5cf1680",
+      "title": "AI May Transform How Humans Understand Animals",
+      "title_zh": "AI May Transform How Humans Understand Animals",
+      "source": "Bloomberg Markets",
+      "published_at": "2026-09-05T12:46:10+00:00",
+      "summary": "Researchers are using AI to analyze vast collections of animal vocalizations, looking for patterns that could help humans better understand how species such as crows communicate. Bloomberg Weekend Senior Writer Morgan Meaker is on Bloomberg This Weekend and says the technology could reshape humans’ relationship with animals, but researchers warn it also raises ethical questions about privacy, exploitation and how those discoveries might be used. (Source: Bloomberg)",
+      "summary_zh": "Researchers are using AI to analyze vast collections of animal vocalizations, looking for patterns that could help humans better understand how species such as crows communicate. Bloomberg Weekend Senior Writer Morgan Meaker is on Bloomberg This Weekend and says the technology could reshape humans’ relationship with animals, but researchers warn it also raises ethical questions about privacy, exploitation and how those discoveries might be used. (Source: Bloomberg)",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-05/ai-may-transform-how-humans-understand-animals-video",
+      "category": "AI / 科技",
       "selected": false
     },
     {
@@ -1275,26 +1190,14 @@
       "selected": false
     },
     {
-      "candidate_id": "78b1bf164bf55ead",
-      "title": "US Strikes Iranian Tankers After Attack on US Warships",
-      "title_zh": "美军袭击伊朗油轮，霍尔木兹航运与能源压力升级",
+      "candidate_id": "50dbea3246c664de",
+      "title": "Energy Markets Strained by Iran, Ukraine Wars",
+      "title_zh": "Energy Markets Strained by Iran, Ukraine Wars",
       "source": "Bloomberg Markets",
-      "published_at": "2026-09-05T14:34:22+00:00",
-      "summary": "Bloomberg This Weekend has breaking news that US forces struck three Iranian crude carriers after the Islamic Revolutionary Guard Corps launched ballistic missiles toward two US Navy warships, according to US Central Command. The renewed fighting around the Strait of Hormuz adds pressure to shipping and energy markets as President Donald Trump continues to downplay the conflict as something short of war. (Source: Bloomberg)",
-      "summary_zh": "美国中央司令部称，伊朗革命卫队向两艘美国海军舰艇发射弹道导弹后，美军打击了三艘伊朗原油运输船。冲突扩大至油轮目标，且霍尔木兹海峡周边航运已承压。",
-      "url": "https://www.bloomberg.com/news/videos/2026-09-05/us-strikes-iranian-tankers-after-attack-on-us-warships-video",
-      "category": "地缘政治与风险事件",
-      "selected": true
-    },
-    {
-      "candidate_id": "acfc270dc19f873c",
-      "title": "How much can Canada fight back in its trade war with the US?",
-      "title_zh": "How much can Canada fight back in its trade war with the US?",
-      "source": "BBC News",
-      "published_at": "2026-09-05T02:13:21+00:00",
-      "summary": "The US may be the bigger trading partner, but Canada shouldn't be counted out quite yet in the escalating trade fight.",
-      "summary_zh": "The US may be the bigger trading partner, but Canada shouldn't be counted out quite yet in the escalating trade fight.",
-      "url": "https://www.bbc.co.uk/news/videos/c74knp7y04eo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-09-05T11:54:03+00:00",
+      "summary": "Renewed US-Iran fighting and uncertainty over shipping through the Strait of Hormuz are adding pressure to global energy markets, while the threat of mines continues to deter some traffic. Ukraine’s attacks on Russian refineries are compounding tight diesel supplies, creating what Bloomberg News Oil Products Reporter Will Kubzansky describes as a distillates crisis heading into peak demand season. Also joining Bloomberg This Weekend to discuss the situation is Bloomberg News Middle East Correspondent Abeer Abu Omar. (Source: Bloomberg)",
+      "summary_zh": "Renewed US-Iran fighting and uncertainty over shipping through the Strait of Hormuz are adding pressure to global energy markets, while the threat of mines continues to deter some traffic. Ukraine’s attacks on Russian refineries are compounding tight diesel supplies, creating what Bloomberg News Oil Products Reporter Will Kubzansky describes as a distillates crisis heading into peak demand season. Also joining Bloomberg This Weekend to discuss the situation is Bloomberg News Middle East Correspondent Abeer Abu Omar. (Source: Bloomberg)",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-05/energy-markets-strained-by-iran-ukraine-wars-video",
       "category": "地缘政治与风险事件",
       "selected": false
     },
@@ -1323,18 +1226,6 @@
       "selected": false
     },
     {
-      "candidate_id": "50dbea3246c664de",
-      "title": "Energy Markets Strained by Iran, Ukraine Wars",
-      "title_zh": "Energy Markets Strained by Iran, Ukraine Wars",
-      "source": "Bloomberg Markets",
-      "published_at": "2026-09-05T11:54:03+00:00",
-      "summary": "Renewed US-Iran fighting and uncertainty over shipping through the Strait of Hormuz are adding pressure to global energy markets, while the threat of mines continues to deter some traffic. Ukraine’s attacks on Russian refineries are compounding tight diesel supplies, creating what Bloomberg News Oil Products Reporter Will Kubzansky describes as a distillates crisis heading into peak demand season. Also joining Bloomberg This Weekend to discuss the situation is Bloomberg News Middle East Correspondent Abeer Abu Omar. (Source: Bloomberg)",
-      "summary_zh": "Renewed US-Iran fighting and uncertainty over shipping through the Strait of Hormuz are adding pressure to global energy markets, while the threat of mines continues to deter some traffic. Ukraine’s attacks on Russian refineries are compounding tight diesel supplies, creating what Bloomberg News Oil Products Reporter Will Kubzansky describes as a distillates crisis heading into peak demand season. Also joining Bloomberg This Weekend to discuss the situation is Bloomberg News Middle East Correspondent Abeer Abu Omar. (Source: Bloomberg)",
-      "url": "https://www.bloomberg.com/news/videos/2026-09-05/energy-markets-strained-by-iran-ukraine-wars-video",
-      "category": "能源 / 大宗商品",
-      "selected": false
-    },
-    {
       "candidate_id": "31a40c58993b3307",
       "title": "Leonardo CEO Mariani Sees Ukraine Unit as Acquisition Outpost",
       "title_zh": "Leonardo CEO Mariani Sees Ukraine Unit as Acquisition Outpost",
@@ -1344,6 +1235,18 @@
       "summary_zh": "Leonardo SpA, the Italian state-controlled defense company, is aiming to deepen ties with Ukraine’s fast-growing military-technology sector through its new Kyiv unit, seeking partnership, investment or acquisition opportunities, Chief Executive Officer Lorenzo Mariani said.",
       "url": "https://www.bloomberg.com/news/articles/2026-09-05/leonardo-ceo-mariani-sees-ukraine-unit-as-acquisition-outpost",
       "category": "地缘政治与风险事件",
+      "selected": false
+    },
+    {
+      "candidate_id": "0951ad5c8c179ed9",
+      "title": "OpenAI confirms ‘wiki incident,’ says it’s ‘working on a framework’ for more disclosure",
+      "title_zh": "OpenAI confirms ‘wiki incident,’ says it’s ‘working on a framework’ for more disclosure",
+      "source": "TechCrunch",
+      "published_at": "2026-09-05T18:05:27+00:00",
+      "summary": "OpenAI acknowledged its role in a recently reported incident where AI agents took over a German wiki forum.",
+      "summary_zh": "OpenAI acknowledged its role in a recently reported incident where AI agents took over a German wiki forum.",
+      "url": "https://techcrunch.com/2026/09/05/openai-confirms-wiki-incident-says-its-working-on-a-framework-for-more-disclosure/",
+      "category": "大型科技",
       "selected": false
     },
     {
@@ -1371,39 +1274,27 @@
       "selected": false
     },
     {
-      "candidate_id": "a5fed7ec318945d1",
-      "title": "APOD: 2026 September 5 – Chasing the Moon’s Shadow",
-      "title_zh": "APOD: 2026 September 5 – Chasing the Moon’s Shadow",
-      "source": "NASA",
-      "published_at": "2026-09-05T04:05:00+00:00",
-      "summary": "APOD Science APOD APOD: 2026 September 5 –… Today’s APOD Archive Submissions Index Search Calendar RSS Education About Discuss APOD Astronomy Picture of the Day Discover the cosmos! Each day a different image or photograph of our fascinating universe is featured, along with a brief explanation written by a professional astronomer. Chasing the Moon’s […]",
-      "summary_zh": "APOD Science APOD APOD: 2026 September 5 –… Today’s APOD Archive Submissions Index Search Calendar RSS Education About Discuss APOD Astronomy Picture of the Day Discover the cosmos! Each day a different image or photograph of our fascinating universe is featured, along with a brief explanation written by a professional astronomer. Chasing the Moon’s […]",
-      "url": "https://science.nasa.gov/image-article/apod-2026-september-5-chasing-the-moons-shadow/",
-      "category": "其他",
-      "selected": false
-    },
-    {
       "candidate_id": "c358d62d97f8f78d",
       "title": "Seattle Times and Newsday are the latest publications to sue OpenAI and Microsoft",
-      "title_zh": "两家美国报业机构起诉OpenAI和微软涉AI训练",
+      "title_zh": "Seattle Times and Newsday are the latest publications to sue OpenAI and Microsoft",
       "source": "TechCrunch",
       "published_at": "2026-09-05T22:49:55+00:00",
       "summary": "Two more news organizations are suing OpenAI and Microsoft over the supposed use of their journalism to train AI.",
-      "summary_zh": "《西雅图时报》和Newsday起诉OpenAI及微软，指控两家公司使用其新闻内容训练AI。该案为两家公司围绕训练数据版权争议新增诉讼。",
+      "summary_zh": "Two more news organizations are suing OpenAI and Microsoft over the supposed use of their journalism to train AI.",
       "url": "https://techcrunch.com/2026/09/05/seattle-times-and-newsday-are-the-latest-publications-to-sue-openai-and-microsoft/",
       "category": "大型科技",
-      "selected": true
+      "selected": false
     },
     {
-      "candidate_id": "2582996e49dc3e6a",
-      "title": "Flight price rises due to 'foolish leaders' starting wars, Virgin's Branson says",
-      "title_zh": "Flight price rises due to 'foolish leaders' starting wars, Virgin's Branson says",
-      "source": "BBC Business",
-      "published_at": "2026-09-05T01:03:35+00:00",
-      "summary": "Middle East tensions have choked the production and transportation of oil, causing a surge in the price of car and jet fuels.",
-      "summary_zh": "Middle East tensions have choked the production and transportation of oil, causing a surge in the price of car and jet fuels.",
-      "url": "https://www.bbc.co.uk/news/articles/cje8wx2qw9vo?at_medium=RSS&at_campaign=rss",
-      "category": "能源 / 大宗商品",
+      "candidate_id": "4b30f7f6e65510ca",
+      "title": "TV presenter among 11 sentenced to death in Egypt drugs case",
+      "title_zh": "TV presenter among 11 sentenced to death in Egypt drugs case",
+      "source": "BBC News",
+      "published_at": "2026-09-06T05:04:04+00:00",
+      "summary": "Sarah Khalifa is best known for her TV programme Mission Impossible which dealt with crime issues.",
+      "summary_zh": "Sarah Khalifa is best known for her TV programme Mission Impossible which dealt with crime issues.",
+      "url": "https://www.bbc.co.uk/news/articles/c5y7gk9knnlo?at_medium=RSS&at_campaign=rss",
+      "category": "其他",
       "selected": false
     },
     {
@@ -1419,18 +1310,6 @@
       "selected": false
     },
     {
-      "candidate_id": "42a285a8f233c44f",
-      "title": "'He was a lifeline' - Families at a loss after Haitian caregivers let go in US",
-      "title_zh": "'He was a lifeline' - Families at a loss after Haitian caregivers let go in US",
-      "source": "BBC News",
-      "published_at": "2026-09-06T00:17:05+00:00",
-      "summary": "Haitian immigrants make up a large portion of the already overburdened home-care workforce.",
-      "summary_zh": "Haitian immigrants make up a large portion of the already overburdened home-care workforce.",
-      "url": "https://www.bbc.co.uk/news/articles/cg491zp13qqo?at_medium=RSS&at_campaign=rss",
-      "category": "其他",
-      "selected": false
-    },
-    {
       "candidate_id": "5f646a7dedd2b515",
       "title": "Clucky’s new alarm app wakes you up with a crowing rooster",
       "title_zh": "Clucky’s new alarm app wakes you up with a crowing rooster",
@@ -1439,7 +1318,7 @@
       "summary": "Clucky's new alarm app has an option where users are woken up to the sound of a rooster. They then complete a mission to turn it off.",
       "summary_zh": "Clucky's new alarm app has an option where users are woken up to the sound of a rooster. They then complete a mission to turn it off.",
       "url": "https://techcrunch.com/2026/09/05/cluckys-new-alarm-app-wakes-you-up-with-a-crowing-rooster/",
-      "category": "大型科技",
+      "category": "其他",
       "selected": false
     },
     {
@@ -1455,14 +1334,14 @@
       "selected": false
     },
     {
-      "candidate_id": "588e3e94b4910285",
-      "title": "Aviation faces hotter, stormier skies – and passengers might have to accept more disruption",
-      "title_zh": "Aviation faces hotter, stormier skies – and passengers might have to accept more disruption",
+      "candidate_id": "6bf5510e96074446",
+      "title": "Watch: Moment 64-year-old Nepali woman is found alive in mud-buried home",
+      "title_zh": "Watch: Moment 64-year-old Nepali woman is found alive in mud-buried home",
       "source": "BBC News",
-      "published_at": "2026-09-05T23:20:00+00:00",
-      "summary": "Are people going to have to increasingly accept more delays and diversions as the effects of climate change intensify?",
-      "summary_zh": "Are people going to have to increasingly accept more delays and diversions as the effects of climate change intensify?",
-      "url": "https://www.bbc.co.uk/news/articles/cm274p8m88lo?at_medium=RSS&at_campaign=rss",
+      "published_at": "2026-09-06T01:54:29+00:00",
+      "summary": "Chandika Shrestha was airlifted to hospital after spending more than 10 days in her partially buried house.",
+      "summary_zh": "Chandika Shrestha was airlifted to hospital after spending more than 10 days in her partially buried house.",
+      "url": "https://www.bbc.co.uk/news/videos/c4gd24d1d0do?at_medium=RSS&at_campaign=rss",
       "category": "其他",
       "selected": false
     },
@@ -1475,18 +1354,18 @@
       "summary": "While Oura has largely dominated the smart ring market for years, a growing number of rivals are now racing to dethrone it by trying all sorts of approaches to get an edge over it.",
       "summary_zh": "While Oura has largely dominated the smart ring market for years, a growing number of rivals are now racing to dethrone it by trying all sorts of approaches to get an edge over it.",
       "url": "https://techcrunch.com/2026/09/05/oura-is-going-public-but-these-smart-ring-companies-are-coming-for-its-crown/",
-      "category": "大型科技",
+      "category": "其他",
       "selected": false
     },
     {
-      "candidate_id": "e261a0de09263d9e",
-      "title": "Switzerland’s Startup Factory Wrestles With Europe’s Funding Gap",
-      "title_zh": "Switzerland’s Startup Factory Wrestles With Europe’s Funding Gap",
-      "source": "Bloomberg Economics",
-      "published_at": "2026-09-05T05:00:00+00:00",
-      "summary": "When Clara Lepsius graduated from ETH Zurich, she went to Harvard University to do her thesis. In the US, she teamed up with another ETH alum on a startup that merges tech with infant nutrition.",
-      "summary_zh": "When Clara Lepsius graduated from ETH Zurich, she went to Harvard University to do her thesis. In the US, she teamed up with another ETH alum on a startup that merges tech with infant nutrition.",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-05/switzerland-s-startup-factory-wrestles-with-europe-s-funding-gap",
+      "candidate_id": "42a285a8f233c44f",
+      "title": "'He was a lifeline' - Families at a loss after Haitian caregivers let go in US",
+      "title_zh": "'He was a lifeline' - Families at a loss after Haitian caregivers let go in US",
+      "source": "BBC News",
+      "published_at": "2026-09-06T00:17:05+00:00",
+      "summary": "Haitian immigrants make up a large portion of the already overburdened home-care workforce.",
+      "summary_zh": "Haitian immigrants make up a large portion of the already overburdened home-care workforce.",
+      "url": "https://www.bbc.co.uk/news/articles/cg491zp13qqo?at_medium=RSS&at_campaign=rss",
       "category": "其他",
       "selected": false
     },
@@ -1503,27 +1382,27 @@
       "selected": false
     },
     {
-      "candidate_id": "3316d9e10f6abf66",
-      "title": "Brazilian Court Suspends Permits, Halts Sigma Lithium’s Mine",
-      "title_zh": "Brazilian Court Suspends Permits, Halts Sigma Lithium’s Mine",
-      "source": "Bloomberg Markets",
-      "published_at": "2026-09-05T23:26:30+00:00",
-      "summary": "A Brazilian court ordered the suspension of all environmental permits for Sigma Mineração SA, an operating subsidiary of Sigma Lithium Corp., and the complete halt of mining activities for the company’s Grota do Cirilo lithium project.",
-      "summary_zh": "A Brazilian court ordered the suspension of all environmental permits for Sigma Mineração SA, an operating subsidiary of Sigma Lithium Corp., and the complete halt of mining activities for the company’s Grota do Cirilo lithium project.",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-05/brazilian-court-suspends-permits-halts-sigma-lithium-s-mine",
-      "category": "能源 / 大宗商品",
+      "candidate_id": "588e3e94b4910285",
+      "title": "Aviation faces hotter, stormier skies – and passengers might have to accept more disruption",
+      "title_zh": "Aviation faces hotter, stormier skies – and passengers might have to accept more disruption",
+      "source": "BBC News",
+      "published_at": "2026-09-05T23:20:00+00:00",
+      "summary": "Are people going to have to increasingly accept more delays and diversions as the effects of climate change intensify?",
+      "summary_zh": "Are people going to have to increasingly accept more delays and diversions as the effects of climate change intensify?",
+      "url": "https://www.bbc.co.uk/news/articles/cm274p8m88lo?at_medium=RSS&at_campaign=rss",
+      "category": "其他",
       "selected": false
     },
     {
-      "candidate_id": "4b30f7f6e65510ca",
-      "title": "TV presenter among 11 sentenced to death in Egypt drugs case",
-      "title_zh": "TV presenter among 11 sentenced to death in Egypt drugs case",
-      "source": "BBC News",
-      "published_at": "2026-09-05T21:29:38+00:00",
-      "summary": "Sarah Khalifa is best known for her TV programme Mission Impossible which dealt with crime issues.",
-      "summary_zh": "Sarah Khalifa is best known for her TV programme Mission Impossible which dealt with crime issues.",
-      "url": "https://www.bbc.co.uk/news/articles/c5y7gk9knnlo?at_medium=RSS&at_campaign=rss",
-      "category": "地缘政治与风险事件",
+      "candidate_id": "d2edeabd239adf40",
+      "title": "NZ’s National Vows to Ease Deposit Rules for First-Home Buyers",
+      "title_zh": "NZ’s National Vows to Ease Deposit Rules for First-Home Buyers",
+      "source": "Bloomberg Markets",
+      "published_at": "2026-09-06T02:30:47+00:00",
+      "summary": "New Zealand’s ruling National Party pledged to widen access to low-deposit mortgages for first-home buyers if it wins November’s election.",
+      "summary_zh": "New Zealand’s ruling National Party pledged to widen access to low-deposit mortgages for first-home buyers if it wins November’s election.",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-06/nz-s-national-vows-to-ease-deposit-rules-for-first-home-buyers",
+      "category": "宏观 / 利率",
       "selected": false
     },
     {
@@ -1535,7 +1414,7 @@
       "summary": "The Prince of Wales will represent the King at the funeral of Harald V in Oslo next week.",
       "summary_zh": "The Prince of Wales will represent the King at the funeral of Harald V in Oslo next week.",
       "url": "https://www.bbc.co.uk/news/articles/cp301rw6kvro?at_medium=RSS&at_campaign=rss",
-      "category": "地缘政治与风险事件",
+      "category": "其他",
       "selected": false
     },
     {
@@ -1547,7 +1426,43 @@
       "summary": "LeBron James on Saturday teased an upcoming partnership with the prediction markets platform Polymarket in a social media post.",
       "summary_zh": "LeBron James on Saturday teased an upcoming partnership with the prediction markets platform Polymarket in a social media post.",
       "url": "https://www.cnbc.com/2026/09/05/lebron-james-polymarket-partnership.html",
-      "category": "大型科技",
+      "category": "其他",
+      "selected": false
+    },
+    {
+      "candidate_id": "b8cb81992bb71e59",
+      "title": "Traders Flock to Bullish Chinese Stock Bets for AI Alternative",
+      "title_zh": "Traders Flock to Bullish Chinese Stock Bets for AI Alternative",
+      "source": "Bloomberg Markets",
+      "published_at": "2026-09-06T01:00:00+00:00",
+      "summary": "Investors seeking to diversify beyond crowded AI trades in Korea and Japan are increasingly seizing on Chinese equity derivatives.",
+      "summary_zh": "Investors seeking to diversify beyond crowded AI trades in Korea and Japan are increasingly seizing on Chinese equity derivatives.",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-06/traders-flock-to-bullish-chinese-stock-bets-for-ai-alternative",
+      "category": "AI / 科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "6177f5cd34430cc7",
+      "title": "Indonesia Halts Jakarta, Lampung Flights on Volcano Eruption",
+      "title_zh": "Indonesia Halts Jakarta, Lampung Flights on Volcano Eruption",
+      "source": "Bloomberg Markets",
+      "published_at": "2026-09-06T00:44:33+00:00",
+      "summary": "Indonesia suspended flights at airports in Jakarta and Lampung on Sunday after volcanic ash from Mount Anak Krakatau spread across parts of Java and Sumatra, according to state-owned airport operator InJourney Airports.",
+      "summary_zh": "Indonesia suspended flights at airports in Jakarta and Lampung on Sunday after volcanic ash from Mount Anak Krakatau spread across parts of Java and Sumatra, according to state-owned airport operator InJourney Airports.",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-06/indonesia-halts-jakarta-lampung-flights-on-volcanic-eruptions",
+      "category": "其他",
+      "selected": false
+    },
+    {
+      "candidate_id": "3316d9e10f6abf66",
+      "title": "Brazilian Court Suspends Permits, Halts Sigma Lithium’s Mine",
+      "title_zh": "Brazilian Court Suspends Permits, Halts Sigma Lithium’s Mine",
+      "source": "Bloomberg Markets",
+      "published_at": "2026-09-05T23:26:30+00:00",
+      "summary": "A Brazilian court ordered the suspension of all environmental permits for Sigma Mineração SA, an operating subsidiary of Sigma Lithium Corp., and the complete halt of mining activities for the company’s Grota do Cirilo lithium project.",
+      "summary_zh": "A Brazilian court ordered the suspension of all environmental permits for Sigma Mineração SA, an operating subsidiary of Sigma Lithium Corp., and the complete halt of mining activities for the company’s Grota do Cirilo lithium project.",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-05/brazilian-court-suspends-permits-halts-sigma-lithium-s-mine",
+      "category": "能源 / 大宗商品",
       "selected": false
     },
     {
@@ -1643,7 +1558,7 @@
       "summary": "Walmart's deal to deliver for Dunkin' follows one earlier this year for Subway sandwiches, as the nation's largest retailer targets Uber Eats and DoorDash.",
       "summary_zh": "Walmart's deal to deliver for Dunkin' follows one earlier this year for Subway sandwiches, as the nation's largest retailer targets Uber Eats and DoorDash.",
       "url": "https://www.cnbc.com/2026/09/05/walmart-dunkin-subway-delivery-uber-eats-doordash.html",
-      "category": "大型科技",
+      "category": "其他",
       "selected": false
     },
     {
@@ -1657,25 +1572,15 @@
       "url": "https://www.bloomberg.com/news/videos/2026-09-05/esper-raises-concern-over-pentagon-leadership-loss-video",
       "category": "地缘政治与风险事件",
       "selected": false
-    },
-    {
-      "candidate_id": "6ef21d4752aa0305",
-      "title": "Nepal bet nearly everything on hydropower - the floods show why that's a problem",
-      "title_zh": "Nepal bet nearly everything on hydropower - the floods show why that's a problem",
-      "source": "BBC News",
-      "published_at": "2026-09-05T14:07:38+00:00",
-      "summary": "More than 10% of Nepal's energy generation capacity was knocked out by last week's floods.",
-      "summary_zh": "More than 10% of Nepal's energy generation capacity was knocked out by last week's floods.",
-      "url": "https://www.bbc.co.uk/news/articles/cy0zx368prno?at_medium=RSS&at_campaign=rss",
-      "category": "能源 / 大宗商品",
-      "selected": false
     }
   ],
-  "news_degraded": false,
+  "news_degraded": true,
   "news_source_diagnostics": [],
   "event_clustering_diagnostics": {
     "fallback_used": false,
     "reason": null
   },
-  "warnings": []
+  "warnings": [
+    "⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：timeout: Request timed out."
+  ]
 }
