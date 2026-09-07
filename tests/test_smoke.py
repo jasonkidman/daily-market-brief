@@ -28,7 +28,7 @@ def test_smoke_accepts_current_important_news_heading(tmp_path):
         " ".join(
             (
                 "Daily Market Brief",
-                "今日市场一句话",
+                "今日结论",
                 "今日重要新闻",
                 "市场环境",
                 "市场广度",
@@ -67,7 +67,7 @@ def _write_report(reports_dir, report_date="2026-08-25"):
 
 _VALID_HTML = " ".join((
     "Daily Market Brief",
-    "今日市场一句话",
+    "今日结论",
     "今日重要新闻",
     "市场环境",
     "市场广度",

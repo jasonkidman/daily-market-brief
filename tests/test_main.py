@@ -4,6 +4,7 @@ import pytest
 
 import src.main as main
 from src.main import _classify_rss_warnings, _log_news_pipeline, assess_market_validity, generate_daily_report
+from src.smoke import validate_generated
 
 
 def test_news_pipeline_logs_distinct_stage_counts(capsys):
@@ -81,6 +82,12 @@ def test_offline_fixture_runs_complete_pipeline(tmp_path):
         "offline-fed-reuters", "offline-nvidia-techcrunch", "offline-oil-bbc",
     ]
     assert all(item["selected"] for item in report["news_candidates"])
+    # Regression: src/smoke.py's REQUIRED_HTML must stay in sync with the real
+    # rendered template -- CI's smoke-check step runs validate_generated against
+    # the actual site/index.html, not a hand-written fixture, so this is the
+    # only place that would have caught the 2026-09-07 "今日市场一句话" ->
+    # "今日结论" heading rename silently breaking CI's smoke check.
+    validate_generated(tmp_path)
 
 
 def test_reserve_reflects_persisted_executions_and_is_idempotent_across_runs(tmp_path):

@@ -16,7 +16,7 @@ _SECRET_KEY_PATTERN = re.compile(r"\bsk-[A-Za-z0-9]{16,}\b")
 
 REQUIRED_HTML = (
     "Daily Market Brief",
-    "今日市场一句话",
+    "今日结论",
     "今日重要新闻",
     "市场环境",
     "市场广度",
