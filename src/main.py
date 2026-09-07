@@ -12,7 +12,8 @@ from zoneinfo import ZoneInfo
 import yaml
 
 from .deepseek_client import (
-    DeepSeekUsageTracker, select_news, select_news_two_pass, select_news_with_fallback, validate_selection,
+    DeepSeekUsageTracker, select_news, select_news_multi_batch, select_news_two_pass,
+    select_news_with_fallback, validate_selection,
 )
 from .drawdown import compute_suggested_topup, reserve_used_total, summarize_index_state, update_drawdown_state
 from .market import (
@@ -30,9 +31,8 @@ from .market_summary import derive_portfolio_action, generate_market_summary
 from .news_dedupe import dedupe_candidates
 from .news_events import (
     build_event_representatives,
-    cluster_news_events,
+    cluster_news_events_batched,
     event_selection_candidates,
-    select_stage_b_input,
     stage_a_input_counts,
     validate_event_clusters,
 )
@@ -98,13 +98,14 @@ def _write_json(path: Path, payload) -> None:
 
 
 def replay_stage_b_snapshot(snapshot_path: Path, api_key: str) -> list[dict]:
-    """Replay Stage B (two-pass, with deterministic fallback) from a persisted
-    production input snapshot. Snapshots written after the Stage B input pre-filter
-    landed already reflect the capped pool Stage B actually saw in production; older
-    snapshots are replayed as-is (uncapped)."""
+    """Replay Stage B (batched, two-pass, with deterministic fallback) from a
+    persisted production input snapshot. `stage_b.candidates` holds the full
+    Stage A representative pool (no longer pre-capped -- see
+    select_news_multi_batch), so replay reproduces exactly what production ran,
+    batch-by-batch, for every candidate."""
     snapshot = load_stage_b_snapshot(snapshot_path)
     candidates = snapshot["stage_b"]["candidates"]
-    selected, warning = select_news_with_fallback(
+    selected, warning = select_news_multi_batch(
         candidates,
         api_key,
         recent_selected=snapshot["stage_b"].get("recent_7_days_events", []),
@@ -251,7 +252,8 @@ def _log_news_pipeline(rss_raw_count: int, within_24h_count: int, deduplicated_c
                        event_representatives: list[dict], stage_b_candidates: list[dict],
                        stage_b_raw_count: int, stage_b_validated_count: int,
                        recent_events: list[dict], selected: list[dict],
-                       stage_b_observability: dict | None = None) -> None:
+                       stage_b_observability: dict | None = None,
+                       stage_a_observability: dict | None = None) -> None:
     print("[NEWS PIPELINE]")
     print(f"rss_raw_count: {rss_raw_count}")
     print(f"within_24h_count: {within_24h_count}")
@@ -261,6 +263,14 @@ def _log_news_pipeline(rss_raw_count: int, within_24h_count: int, deduplicated_c
     print(f"duplicates_removed: {within_24h_count - deduplicated_count}")
     print(f"stage_a_cap_dropped: {stage_a_pre_cap_count - stage_a_actual_input_count}")
     print("[EVENT CLUSTERING]")
+    if stage_a_observability:
+        for key in (
+            "stage_a_total_candidate_count", "stage_a_batch_count", "stage_a_batch_sizes",
+            "stage_a_batch_output_counts", "stage_a_batch_fallback_used",
+            "stage_a_uncovered_candidate_count", "stage_a_final_event_count",
+        ):
+            if key in stage_a_observability:
+                print(f"{key}: {stage_a_observability.get(key)}")
     print(f"stage_a_output_event_count: {len(event_representatives)}")
     print(f"clustering_collapsed: {max(stage_a_actual_input_count - len(event_representatives), 0)}")
     print("Largest clusters:")
@@ -277,10 +287,15 @@ def _log_news_pipeline(rss_raw_count: int, within_24h_count: int, deduplicated_c
     print(f"stage_b_validated_count: {stage_b_validated_count}")
     if stage_b_observability:
         for key in (
+            "stage_b_total_candidate_count", "stage_b_batch_count", "stage_b_batch_sizes",
+            "stage_b_batch_selected_counts", "stage_b_batches_fallback_used_count",
+            "stage_b_uncovered_candidate_count", "stage_b_final_reviewed_count",
             "stage_b_selected_count", "stage_b_reserve_count", "stage_b_selected_valid_count",
             "stage_b_backfilled_count", "stage_b_final_count", "stage_b_target_count",
             "stage_b_sample_a_count", "stage_b_sample_b_count", "stage_b_intersection_count",
             "stage_b_borderline_count", "stage_b_review_keep_count",
+            "stage_b_fallback_used", "stage_b_fallback_count",
+            "stage_b_ai_selected_count", "stage_b_fallback_selected_count", "stage_b_failed_batch_count",
         ):
             if key in stage_b_observability:
                 print(f"{key}: {stage_b_observability.get(key, 0)}")
@@ -416,6 +431,7 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
     api_key = os.environ.get("DEEPSEEK_API_KEY")
     usage_tracker = DeepSeekUsageTracker()
     stage_b_observability = {"raw_count": 0, "validated_count": 0}
+    stage_a_observability: dict = {}
     news_source_diagnostics = []
     event_clustering_diagnostics = {"fallback_used": False, "reason": None}
     news_candidates = []
@@ -437,10 +453,11 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
             news, ai_warning = [], "⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：未配置 AI 凭据。"
             event_representatives = []
             selection_candidates = []
-            stage_b_input_candidates = []
             stage_a_actual_input_count = 0
         else:
-            events, clustering_warning = cluster_news_events(candidates, api_key, usage_tracker=usage_tracker)
+            events, clustering_warning = cluster_news_events_batched(
+                candidates, api_key, usage_tracker=usage_tracker, observability=stage_a_observability,
+            )
             # The fallback (one event per candidate) always preserves basic
             # (exact-URL-level) dedup -- `dedupe_candidates` already ran above
             # unconditionally -- and can never leave the pipeline empty for a
@@ -456,7 +473,6 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
             }
             event_representatives = build_event_representatives(events, candidates)
             selection_candidates = event_selection_candidates(event_representatives)
-            stage_b_input_candidates = select_stage_b_input(selection_candidates)
             ai_market_context = None
             if validity_summary["context_any_valid"] or market_breadth["health"].get("valid"):
                 ai_market_context = {
@@ -483,20 +499,19 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
                     "stage_a_pre_cap": stage_a_pre_cap_count,
                     "stage_a_actual_input": stage_a_actual_input_count,
                     "stage_a_events": len(events),
-                    "stage_b_input": len(stage_b_input_candidates),
-                    "stage_b_pre_filter_pool": len(selection_candidates),
+                    "stage_b_input": len(selection_candidates),
                 },
                 "stage_a_events": events,
                 "stage_b": {
-                    "candidates": stage_b_input_candidates,
+                    "candidates": selection_candidates,
                     "recent_7_days_events": recent_events,
                     "market_context": ai_market_context,
                 },
             }
             # Snapshot persistence is fail-fast: a report without a replayable Stage B input is incomplete.
             write_stage_b_snapshot(base_dir, snapshot)
-            news, ai_warning = select_news_with_fallback(
-                stage_b_input_candidates, api_key, recent_events, market_context=ai_market_context,
+            news, ai_warning = select_news_multi_batch(
+                selection_candidates, api_key, recent_events, market_context=ai_market_context,
                 usage_tracker=usage_tracker, observability=stage_b_observability,
             )
             selected_candidate_ids = {item["candidate_id"] for item in news}
@@ -504,15 +519,25 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
                 candidate for candidate in selection_candidates
                 if candidate["candidate_id"] not in selected_candidate_ids
             ]
+            translation_observability: dict = {}
             candidate_translations = translate_candidates(
-                untranslated_candidates, api_key, usage_tracker=usage_tracker,
+                untranslated_candidates, api_key, usage_tracker=usage_tracker, observability=translation_observability,
             )
+            print(
+                "[NEWS CANDIDATE TRANSLATION SUMMARY] "
+                f"requested={translation_observability.get('translation_requested_count', 0)} "
+                f"batches={translation_observability.get('translation_batch_count', 0)} "
+                f"success={translation_observability.get('translation_success_count', 0)} "
+                f"failed={translation_observability.get('translation_failed_count', 0)}"
+            )
+            for failure in translation_observability.get("translation_batch_failures", []):
+                print(f"[NEWS CANDIDATE TRANSLATION SUMMARY] batch {failure['batch']} failed | reason={failure['reason']}")
             news_candidates = build_news_candidates(selection_candidates, news, candidate_translations)
         _log_news_pipeline(
             rss_candidate_count, window_candidate_count, len(candidates), stage_a_pre_cap_count,
-            stage_a_actual_input_count, event_representatives, stage_b_input_candidates,
+            stage_a_actual_input_count, event_representatives, selection_candidates,
             stage_b_observability["raw_count"], stage_b_observability["validated_count"],
-            recent_events, news, stage_b_observability,
+            recent_events, news, stage_b_observability, stage_a_observability,
         )
         if ai_warning:
             warnings.append(ai_warning)
@@ -585,6 +610,9 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         "news_candidates": news_candidates,
         "news_degraded": news_degraded,
         "stage_b_fallback_used": stage_b_observability.get("stage_b_fallback_used", False),
+        "stage_b_ai_selected_count": stage_b_observability.get("stage_b_ai_selected_count", 0),
+        "stage_b_fallback_selected_count": stage_b_observability.get("stage_b_fallback_selected_count", 0),
+        "stage_b_failed_batch_count": stage_b_observability.get("stage_b_failed_batch_count", 0),
         "news_source_diagnostics": news_source_diagnostics,
         "event_clustering_diagnostics": event_clustering_diagnostics,
         "warnings": warnings,

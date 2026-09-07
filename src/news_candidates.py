@@ -30,7 +30,15 @@ _CATEGORY_BY_ALLOWED_CATEGORY = {
     "AI / 资本开支": "AI / 科技",
     "半导体": "AI / 科技",
     "地缘政治": "地缘政治与风险事件",
-    "政策 / 监管": "地缘政治与风险事件",
+    # Stage B is instructed to only use "政策 / 监管" for system-wide/macro
+    # regulatory changes (financial stability, market-structure/trading rules,
+    # broad multi-company impact, or major macro/trade/Fed/Treasury policy) --
+    # a regulatory event specific to one of the tracked mega-cap companies is
+    # instructed to use "大型科技" instead (see news_prompt.py's Category
+    # section). So "政策 / 监管" belongs with the macro bucket, not geopolitics;
+    # it was previously mismapped to "地缘政治与风险事件", which made routine
+    # US financial-market/regulatory news display as a geopolitical risk event.
+    "政策 / 监管": "宏观 / 利率",
 }
 
 # Unselected candidates only carry Stage A's topic_group (no AI category was

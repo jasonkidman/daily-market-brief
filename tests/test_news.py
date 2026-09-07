@@ -11,11 +11,12 @@ import pytest
 import yaml
 
 from src.deepseek_client import (
-    NewsSelectionError, select_news, select_news_two_pass, select_news_with_fallback, validate_selection,
+    NewsSelectionError, select_news, select_news_multi_batch, select_news_two_pass,
+    select_news_with_fallback, validate_selection,
 )
 import src.deepseek_client as deepseek_client
 from src.news_dedupe import dedupe_candidates
-from src.news_events import build_event_representatives, cluster_news_events, event_selection_candidates
+from src.news_events import batch_stage_b_input, build_event_representatives, cluster_news_events, event_selection_candidates
 from src.main import _recent_news_events
 from src.rss_news import fetch_candidates, filter_final_candidates
 
@@ -872,7 +873,7 @@ def test_deepseek_client_timeout_is_overridable_per_call_site(monkeypatch):
     deepseek_client.call_deepseek("system", "user", "key", timeout=custom_timeout)
 
     assert captured["timeout"].read == 45.0
-    assert deepseek_client.CANDIDATE_TRANSLATION_TIMEOUT.read == 45.0
+    assert deepseek_client.CANDIDATE_TRANSLATION_TIMEOUT.read == 60.0
     assert deepseek_client.LLM_TIMEOUT.read == 90.0
 
 
@@ -1950,12 +1951,22 @@ def _always_timeout(system_prompt, user_payload, api_key):
     raise TimeoutError("simulated stage b timeout")
 
 
+def _macro_candidate(cid, title):
+    return candidate(cid, title, f"https://x/{cid}")
+
+
 def test_select_news_with_fallback_both_samples_timeout_uses_deterministic_fallback():
     """The exact incident this fix targets: sample A and sample B both time out on
     every attempt, so select_news_two_pass returns ([], warning). Instead of that
-    zeroing out the whole report, select_news_with_fallback must produce a small,
-    non-empty, rule-based selection and record it in observability."""
-    pool = stage_b_pool([f"c{i}" for i in range(10)])
+    zeroing out the whole report, select_news_with_fallback must produce a
+    high-confidence, rule-based selection (here: real Fed/macro candidates) and
+    record it in observability -- but only because these candidates actually
+    clear a high-confidence rule, not merely because the pool is non-empty."""
+    pool = [
+        _macro_candidate("fed", "Federal Reserve holds interest rates steady after September meeting"),
+        _macro_candidate("payroll", "US nonfarm payroll report shows hiring slowdown"),
+        _macro_candidate("treasury", "US Treasury yield jumps after weak auction"),
+    ]
 
     observability = {}
     selected, warning = select_news_with_fallback(
@@ -1965,21 +1976,61 @@ def test_select_news_with_fallback_both_samples_timeout_uses_deterministic_fallb
     assert len(selected) > 0
     assert warning is not None
     assert "规则降级" in warning
+    assert observability["stage_b_ai_failed"] is True
     assert observability["stage_b_fallback_used"] is True
     assert observability["stage_b_fallback_count"] == len(selected)
     assert observability["two_pass_degraded"] == "both_samples_failed"
     assert all(item.get("fallback") is True for item in selected)
+    assert all(item.get("selection_mode") == "deterministic_fallback" for item in selected)
 
 
-def test_select_news_with_fallback_caps_fallback_count():
-    pool = stage_b_pool([f"c{i}" for i in range(20)])
+def test_select_news_with_fallback_no_high_confidence_candidate_returns_empty_not_padded():
+    """Quality over quantity: a batch where the real AI fails AND nothing
+    clears a high-confidence rule must return [], never padded with ordinary
+    low-value candidates just because the pool itself is non-empty. Real
+    2026-09-07 examples that must not appear on the homepage this way."""
+    pool = [
+        _macro_candidate("turkey", "Turkey Cuts 2027 GDP Growth Forecast as Elections Beckon"),
+        _macro_candidate("germany", "Germany's far-right AfD set for big win in eastern state"),
+        _macro_candidate("parenting", "Parents who are really good at handling tantrums do 5 things"),
+        _macro_candidate("sugar", "Sugar is outperforming the stock market this year"),
+    ]
+
+    observability = {}
+    selected, warning = select_news_with_fallback(
+        pool, "key", call_model=_always_timeout, sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert selected == []
+    assert warning is not None  # the original AI failure still surfaces
+    assert observability["stage_b_ai_failed"] is True
+    assert observability["stage_b_fallback_used"] is False
+    assert observability["stage_b_fallback_count"] == 0
+
+
+def test_select_news_with_fallback_has_no_artificial_maximum_item_count():
+    """The old top-N-by-composite-score cut (previously 8) is gone: every
+    candidate that clears a high-confidence rule is kept, however many that
+    turns out to be."""
+    pool = [
+        _macro_candidate("fed", "Federal Reserve holds interest rates steady"),
+        _macro_candidate("payroll", "US nonfarm payroll report shows hiring slowdown"),
+        _macro_candidate("treasury", "US Treasury yield jumps after auction"),
+        _macro_candidate("cpi", "US CPI inflation cools for a third straight month"),
+        _macro_candidate("nvidia", "Nvidia announces major acquisition of AI startup"),
+        _macro_candidate("spacex", "SpaceX Starship completes major government contract milestone"),
+        _macro_candidate("sanctions", "New sanctions target Russian energy exports"),
+        _macro_candidate("oil", "Oil prices surge after major pipeline attack disrupts supply"),
+        _macro_candidate("fomc", "FOMC minutes show growing debate over rate path"),
+        _macro_candidate("apple", "Apple reports quarterly earnings beat with strong guidance"),
+    ]
 
     observability = {}
     selected, _ = select_news_with_fallback(
         pool, "key", call_model=_always_timeout, sleep_fn=lambda _: None, observability=observability,
     )
 
-    assert 0 < len(selected) <= 8
+    assert len(selected) == 10
 
 
 def test_select_news_with_fallback_one_sample_success_skips_fallback():
@@ -2024,6 +2075,36 @@ def test_select_news_with_fallback_normal_two_pass_success_is_unaffected():
     assert observability["stage_b_fallback_used"] is False
 
 
+def test_select_news_with_fallback_does_not_trigger_when_ai_legitimately_selects_nothing():
+    """Regression for a real bug found via 2026-09-07 batch-level replay: a
+    small batch of genuinely low-value articles (e.g. a phone review, a
+    Pokemon story, a DIY-solar piece) got zero picks from BOTH two-pass
+    samples -- a normal, confident "nothing here qualifies" outcome (warning
+    is None), not a failure. The old code triggered the deterministic
+    fallback on any empty `news` list regardless of *why* it was empty, and
+    injected those exact low-value items onto the homepage. Both samples
+    succeeding with zero selections must return an empty list with no
+    warning, and must NOT invoke the fallback builder at all."""
+    pool = stage_b_pool(["0", "1"])
+
+    def model(system_prompt, user_payload, api_key):
+        return json.dumps({"selected": [], "reserve": []}, ensure_ascii=False)
+
+    def exploding_fallback_builder(candidates):
+        raise AssertionError("deterministic fallback must not run when the AI legitimately selected nothing")
+
+    observability = {}
+    selected, warning = select_news_with_fallback(
+        pool, "key", call_model=model, sleep_fn=lambda _: None,
+        fallback_builder=exploding_fallback_builder, observability=observability,
+    )
+
+    assert selected == []
+    assert warning is None
+    assert observability["stage_b_fallback_used"] is False
+    assert observability["stage_b_fallback_count"] == 0
+
+
 def test_select_news_with_fallback_preserves_original_failure_when_fallback_is_empty():
     """An empty candidate pool can't produce a fallback either; the original
     two-pass failure (or its warning) must be returned unchanged rather than
@@ -2037,3 +2118,167 @@ def test_select_news_with_fallback_preserves_original_failure_when_fallback_is_e
     assert warning is None
     assert observability["stage_b_fallback_used"] is False
     assert observability["stage_b_fallback_count"] == 0
+
+
+def test_select_news_multi_batch_covers_every_candidate_across_batches():
+    """Regression for the real 2026-09-07 incident: a 50-candidate pool must
+    all reach Stage B across batches -- nothing silently dropped past a
+    single-batch cap."""
+    pool = stage_b_pool([f"c{i}" for i in range(50)])
+
+    def model(system_prompt, user_payload, api_key):
+        payload = json.loads(user_payload)
+        selected = [stage_b_item(item["candidate_id"], rank=i + 1, score=90 - i)
+                    for i, item in enumerate(payload["events"])]
+        return json.dumps({"selected": selected, "reserve": []}, ensure_ascii=False)
+
+    observability = {}
+    selected, warning = select_news_multi_batch(
+        pool, "key", call_model=model, sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert observability["stage_b_total_candidate_count"] == 50
+    assert observability["stage_b_batch_count"] == 2
+    assert sum(observability["stage_b_batch_sizes"]) == 50
+    assert observability["stage_b_uncovered_candidate_count"] == 0
+    assert {item["candidate_id"] for item in selected} == {f"c{i}" for i in range(50)}
+
+
+def test_select_news_multi_batch_one_batch_timeout_does_not_affect_other_batch():
+    """One batch exhausting its retries must not prevent a different batch
+    from completing normally. The failing batch here has only ordinary
+    (non-high-confidence) candidates, so its deterministic fallback correctly
+    finds nothing -- the AI failure still shows up in stage_b_failed_batch_count,
+    even though stage_b_batches_fallback_used_count (which counts batches
+    where fallback actually contributed items) stays 0 for it."""
+    pool = stage_b_pool([f"c{i}" for i in range(50)])
+    first_batch_ids = {item["candidate_id"] for item in batch_stage_b_input(pool)[0]}
+
+    def model(system_prompt, user_payload, api_key):
+        payload = json.loads(user_payload)
+        candidate_ids = {item["candidate_id"] for item in payload["events"]}
+        if candidate_ids == first_batch_ids:
+            raise TimeoutError("simulated batch 1 timeout")
+        selected = [stage_b_item(item["candidate_id"], rank=i + 1, score=90 - i)
+                    for i, item in enumerate(payload["events"])]
+        return json.dumps({"selected": selected, "reserve": []}, ensure_ascii=False)
+
+    observability = {}
+    selected, warning = select_news_multi_batch(
+        pool, "key", call_model=model, sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert observability["stage_b_batch_count"] == 2
+    assert observability["stage_b_failed_batch_count"] == 1
+    assert observability["stage_b_batches_fallback_used_count"] == 0
+    assert observability["stage_b_uncovered_candidate_count"] == 0
+    second_batch_ids = {item["candidate_id"] for item in batch_stage_b_input(pool)[1]}
+    selected_ids = {item["candidate_id"] for item in selected}
+    assert second_batch_ids.issubset(selected_ids)
+    assert len(selected) > 0
+
+
+def test_select_news_multi_batch_on_empty_pool_returns_empty():
+    observability = {}
+    selected, warning = select_news_multi_batch(
+        [], "key", call_model=_always_timeout, sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert selected == []
+    assert warning is None
+    assert observability["stage_b_total_candidate_count"] == 0
+    assert observability["stage_b_batch_count"] == 0
+    assert observability["stage_b_uncovered_candidate_count"] == 0
+
+
+def test_prompt_excludes_routine_regulatory_and_proxy_adviser_news_by_default():
+    """Regression for the real 2026-09-07 incident: "SEC sues ISS as Trump
+    administration ramps up scrutiny of proxy advisers" was selected onto the
+    homepage despite being routine regulatory enforcement against a proxy
+    advisory firm, not a systemically important event. Confirms the new
+    default-exclude category and its generalized (non-ISS-specific) wording."""
+    from src.news_prompt import SYSTEM_PROMPT
+
+    assert "普通监管执法与公司治理新闻" in SYSTEM_PROMPT
+    assert "proxy voting / proxy adviser 相关的常规事件" in SYSTEM_PROMPT
+    assert "传票（subpoena）" in SYSTEM_PROMPT
+    assert "\"发生在美国\"或\"涉及监管机构\"本身不构成入选理由" in SYSTEM_PROMPT
+    # Must be generalized, not a blacklist naming ISS or any specific firm.
+    assert "ISS" not in SYSTEM_PROMPT
+
+
+def test_prompt_defines_policy_regulation_exception_standard_with_five_conditions():
+    """Confirms all 5 required exception conditions are present, so a routine
+    regulatory/governance story is excluded unless it clears one of them --
+    while a real Fed/financial-stability/major-tech-company/major-macro event
+    can still qualify."""
+    from src.news_prompt import SYSTEM_PROMPT
+
+    assert "政策 / 监管新闻例外标准" in SYSTEM_PROMPT
+    for phrase in (
+        "实质影响美国金融体系或金融稳定",
+        "改变广泛市场交易、资本形成、市场结构或资产定价规则",
+        "对大量美国上市公司存在明确、重大的普遍性影响",
+        "直接涉及上文重点科技公司，并对其业务、财务、竞争格局或监管环境具有重大实质影响",
+        "属于真正重要的宏观政策、贸易、关税、财政、Fed、国债等事件",
+    ):
+        assert phrase in SYSTEM_PROMPT
+
+
+def test_borderline_review_prompt_also_applies_policy_regulation_exception_standard():
+    from src.news_prompt import BORDERLINE_REVIEW_PROMPT
+
+    assert "proxy voting / proxy adviser 常规事件默认 keep 为 false" in BORDERLINE_REVIEW_PROMPT
+    assert "政策 / 监管新闻例外标准" in BORDERLINE_REVIEW_PROMPT
+
+
+def test_prompt_requires_material_impact_for_big_tech_lawsuits():
+    """Regression for real 2026-09-07 data: "Seattle Times and Newsday sue
+    OpenAI and Microsoft for infringement" -- an ordinary copyright lawsuit by
+    individual media companies -- must not automatically qualify as a "重大
+    诉讼或和解" just because the defendants are tracked mega-cap companies.
+    Confirms the 5-condition exception standard and the explicit default-
+    exclude wording for ordinary/individual/procedural lawsuits."""
+    from src.news_prompt import SYSTEM_PROMPT
+
+    assert "「重大诉讼或和解」的入选门槛" in SYSTEM_PROMPT
+    assert "普通版权诉讼、个别媒体机构或个人用户提起的诉讼" in SYSTEM_PROMPT
+    for phrase in (
+        "涉及巨额财务风险",
+        "对公司核心产品或商业模式构成实质性限制",
+        "可能形成重大判例",
+        "具有广泛监管影响",
+        "对公司战略方向或竞争格局产生重大变化",
+    ):
+        assert phrase in SYSTEM_PROMPT
+    # Must be generalized, not a blacklist naming the real plaintiffs/defendants.
+    assert "Seattle Times" not in SYSTEM_PROMPT
+    assert "Newsday" not in SYSTEM_PROMPT
+
+
+def test_prompt_downgrades_analyst_speculation_versus_confirmed_facts():
+    """Regression for real 2026-09-07 data: "Japan may sell U.S. Treasuries to
+    fund record yen intervention" is analyst speculation ("may"/"likely"), not
+    an official policy signal or confirmed fund flow, and must not qualify for
+    the homepage purely on potential market impact. Confirms the generalized
+    four-tier confidence framework."""
+    from src.news_prompt import SYSTEM_PROMPT
+
+    assert "分析推演与官方信号的区分" in SYSTEM_PROMPT
+    for phrase in (
+        "已经发生的事实",
+        "官方确认/政策信号",
+        "高可信度即将发生的事件",
+        "分析推演/市场猜测",
+        "不得仅因为\"如果发生将有重大市场影响\"而提升为高优先级",
+    ):
+        assert phrase in SYSTEM_PROMPT
+    # Generalized rule, not a blacklist naming a specific country.
+    assert "日本" not in SYSTEM_PROMPT
+
+
+def test_borderline_review_prompt_applies_lawsuit_and_speculation_standards():
+    from src.news_prompt import BORDERLINE_REVIEW_PROMPT
+
+    assert "重大诉讼或和解」的入选门槛" in BORDERLINE_REVIEW_PROMPT
+    assert "分析推演/市场猜测" in BORDERLINE_REVIEW_PROMPT

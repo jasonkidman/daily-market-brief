@@ -1,6 +1,6 @@
 import json
 
-from src.news_candidate_translation import translate_candidates, validate_translations
+from src.news_candidate_translation import TRANSLATION_BATCH_SIZE, translate_candidates, validate_translations
 
 
 def candidate(candidate_id, title="Title", summary="Summary"):
@@ -92,3 +92,78 @@ def test_translate_candidates_falls_back_to_empty_dict_on_malformed_json():
     )
 
     assert result == {}
+
+
+def _translating_model(system_prompt, user_payload, api_key):
+    payload = json.loads(user_payload)
+    return json.dumps({"translations": [
+        {"candidate_id": c["candidate_id"], "title_zh": f"中文-{c['title']}", "summary_zh": f"摘要-{c['summary']}"}
+        for c in payload["candidates"]
+    ]}, ensure_ascii=False)
+
+
+def test_translate_candidates_splits_large_pool_into_multiple_batches():
+    """Regression for the real 2026-09-07 incident: ~46 unselected candidates
+    were all sent to Candidate Pool Translation in one request."""
+    candidates = [candidate(f"c{i}") for i in range(46)]
+    observability = {}
+
+    result = translate_candidates(
+        candidates, api_key="test-key", call_model=_translating_model, observability=observability,
+    )
+
+    assert observability["translation_requested_count"] == 46
+    assert observability["translation_batch_count"] == 6  # ceil(46 / 8)
+    assert all(len(result[c["candidate_id"]]) == 2 for c in candidates)
+    assert len(result) == 46
+
+
+def test_translate_candidates_one_batch_failure_does_not_fall_back_other_batches():
+    """A failing batch must only cost its own candidates their translation --
+    other batches must still come back in Chinese, not all-English."""
+    candidates = [candidate(f"c{i}") for i in range(20)]  # 2 batches of 10
+    first_batch_ids = {c["candidate_id"] for c in candidates[:TRANSLATION_BATCH_SIZE]}
+
+    def flaky_model(system_prompt, user_payload, api_key):
+        payload = json.loads(user_payload)
+        ids = {c["candidate_id"] for c in payload["candidates"]}
+        if ids == first_batch_ids:
+            raise TimeoutError("simulated batch timeout")
+        return _translating_model(system_prompt, user_payload, api_key)
+
+    observability = {}
+    result = translate_candidates(
+        candidates, api_key="test-key", call_model=flaky_model,
+        sleep_fn=lambda seconds: None, observability=observability,
+    )
+
+    second_batch_ids = {c["candidate_id"] for c in candidates[TRANSLATION_BATCH_SIZE:]}
+    assert second_batch_ids.issubset(result.keys())
+    assert not (first_batch_ids & result.keys())
+    assert len(observability["translation_batch_failures"]) == 1
+    assert observability["translation_batch_failures"][0]["batch"] == 1
+
+
+def test_translate_candidates_success_plus_failed_equals_requested():
+    candidates = [candidate(f"c{i}") for i in range(25)]  # 3 batches
+    second_batch_ids = {c["candidate_id"] for c in candidates[TRANSLATION_BATCH_SIZE:2 * TRANSLATION_BATCH_SIZE]}
+
+    def flaky_model(system_prompt, user_payload, api_key):
+        payload = json.loads(user_payload)
+        ids = {c["candidate_id"] for c in payload["candidates"]}
+        if ids == second_batch_ids:
+            raise TimeoutError("simulated batch timeout")
+        return _translating_model(system_prompt, user_payload, api_key)
+
+    observability = {}
+    translate_candidates(
+        candidates, api_key="test-key", call_model=flaky_model,
+        sleep_fn=lambda seconds: None, observability=observability,
+    )
+
+    assert (
+        observability["translation_success_count"] + observability["translation_failed_count"]
+        == observability["translation_requested_count"]
+        == 25
+    )
+    assert observability["translation_failed_count"] == TRANSLATION_BATCH_SIZE

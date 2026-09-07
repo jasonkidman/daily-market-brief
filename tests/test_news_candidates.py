@@ -39,6 +39,21 @@ def test_selected_candidate_uses_stage_b_ai_category_bucketed_to_display_group()
     assert result[0]["category"] == "AI / 科技"
 
 
+def test_policy_regulation_category_maps_to_macro_not_geopolitics():
+    """Regression: "政策 / 监管" (policy/regulation) was previously mismapped
+    to the "地缘政治与风险事件" (geopolitics/risk) display bucket, making
+    routine US financial-market/regulatory news display as a geopolitical
+    risk event. Stage B is instructed to reserve "政策 / 监管" for system-wide
+    macro/financial regulation (Fed/Treasury/market-structure rules), not
+    geopolitics, so it belongs in the macro bucket."""
+    candidates = [selection_candidate("a", "OTHER_SYSTEMIC")]
+    news = [selected_news_item("a", "政策 / 监管")]
+
+    result = build_news_candidates(candidates, news)
+
+    assert result[0]["category"] == "宏观 / 利率"
+
+
 def test_unselected_candidate_falls_back_to_topic_group_bucket():
     candidates = [selection_candidate("a", "ENERGY_COMMODITIES")]
 

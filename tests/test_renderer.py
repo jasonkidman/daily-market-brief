@@ -181,8 +181,7 @@ def test_hero_shows_only_sp500_and_nasdaq_with_summary_and_strategy(tmp_path):
     reports.mkdir()
     payload = report("2026-08-12")
     payload["market_summary"] = {
-        "market": "标普500小幅上涨，纳指100相对更强，市场内部仍有分化。",
-        "drivers": "市场同时关注利率预期与人工智能相关事件。",
+        "summary": "标普500小幅上涨，纳指100相对更强，市场内部仍有分化。市场同时关注利率预期与人工智能相关事件。",
         "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
         "degraded": False,
     }
@@ -197,19 +196,19 @@ def test_hero_shows_only_sp500_and_nasdaq_with_summary_and_strategy(tmp_path):
     legacy_html = (site / "history" / "2026-08-11.html").read_text(encoding="utf-8")
     assert index_html.count('class="index-card"') == 2
     assert "Dow Jones" not in index_html.split('class="summary-text"')[0]
-    assert '今日市场一句话' in index_html
+    assert '今日结论' in index_html
     assert "标普500小幅上涨" in index_html
     assert 'class="card strategy"' in index_html
-    assert index_html.index("今日市场一句话") > index_html.index("</header>")
-    assert index_html.index("今日市场一句话") < index_html.index("今日重要新闻")
-    assert "今日市场一句话" not in legacy_html
+    assert index_html.index("今日结论") > index_html.index("</header>")
+    assert index_html.index("今日结论") < index_html.index("今日重要新闻")
+    assert "今日结论" not in legacy_html
 
 
 def test_index_card_shows_value_signed_change_and_ytd(tmp_path):
     reports = tmp_path / "reports"
     reports.mkdir()
     payload = report("2026-08-12")
-    payload["market_summary"] = {"market": "示例。", "drivers": "示例。", "action": "示例。"}
+    payload["market_summary"] = {"summary": "示例。示例。", "action": "示例。"}
     payload["market"]["sp500"].update({"daily_return": 0.0072, "ytd_return": 0.129, "close": 7730.99})
     payload["market"]["nasdaq100"].update({"daily_return": -0.014, "ytd_return": 0.174, "close": 29641.56})
     (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
@@ -229,7 +228,7 @@ def test_index_card_omits_sparkline_gracefully_when_history_unavailable(tmp_path
     reports = tmp_path / "reports"
     reports.mkdir()
     payload = report("2026-08-12")
-    payload["market_summary"] = {"market": "示例。", "drivers": "示例。", "action": "示例。"}
+    payload["market_summary"] = {"summary": "示例。示例。", "action": "示例。"}
     # No "sparkline" key present, mirroring an older report schema.
     (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
     site = tmp_path / "site"
@@ -245,7 +244,7 @@ def test_index_card_renders_real_sparkline_path_when_present(tmp_path):
     reports = tmp_path / "reports"
     reports.mkdir()
     payload = report("2026-08-12")
-    payload["market_summary"] = {"market": "示例。", "drivers": "示例。", "action": "示例。"}
+    payload["market_summary"] = {"summary": "示例。示例。", "action": "示例。"}
     payload["market"]["sp500"]["sparkline"] = {"line": "M0,10 L420,4", "area": "M0,10 L420,4 L420,52 L0,52 Z"}
     (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
     site = tmp_path / "site"
@@ -263,7 +262,7 @@ def test_strategy_card_shows_hold_state_and_drawdown_rules_drawer(tmp_path):
     reports.mkdir()
     payload = report("2026-08-12")
     payload["market_summary"] = {
-        "market": "标普500上涨0.72%。", "drivers": "市场关注利率预期。",
+        "summary": "标普500上涨0.72%。市场关注利率预期。",
         "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
     }
     payload["drawdown"]["sp500"].update({
@@ -316,7 +315,7 @@ def test_strategy_card_shows_pending_tier_allocation_and_amount(tmp_path):
     reports.mkdir()
     payload = report("2026-08-12")
     payload["market_summary"] = {
-        "market": "标普500下跌。", "drivers": "市场关注利率预期。",
+        "summary": "标普500下跌。市场关注利率预期。",
         "action": "已触发回撤加仓条件，等待人工确认。",
     }
     (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
@@ -344,7 +343,7 @@ def test_pending_tier_shows_suggested_amount_net_of_historical_investment(tmp_pa
     reports.mkdir()
     payload = report("2026-08-12")
     payload["market_summary"] = {
-        "market": "标普500下跌。", "drivers": "市场关注利率预期。",
+        "summary": "标普500下跌。市场关注利率预期。",
         "action": "已触发回撤加仓条件，等待人工确认。",
     }
     payload["drawdown"]["nasdaq100"].update({"already_invested": 7500, "suggested_amount": 4500})
@@ -366,7 +365,7 @@ def test_strategy_card_pauses_when_market_data_invalid(tmp_path):
     reports.mkdir()
     payload = report("2026-08-12")
     payload["market_summary"] = {
-        "market": "行情数据暂不可用。", "drivers": "市场关注利率预期。",
+        "summary": "行情数据暂不可用。市场关注利率预期。",
         "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
     }
     payload["market_data_valid"] = False
@@ -676,7 +675,7 @@ def test_v5_visual_contract_is_the_rendered_dom_and_css_baseline(tmp_path):
     reports = tmp_path / "reports"
     reports.mkdir()
     payload = report("2026-08-12")
-    payload["market_summary"] = {"market": "标普500上涨。", "drivers": "市场关注利率。", "action": "备用金保持待命。"}
+    payload["market_summary"] = {"summary": "标普500上涨。市场关注利率。", "action": "备用金保持待命。"}
     payload["market_context"] = {
         "vix": {"name": "VIX", "valid": True, "close": 14.55, "daily_return": -0.048},
         "us10y": {"name": "10Y 美债", "valid": True, "close": 4.68, "yield_change_bp": 8},

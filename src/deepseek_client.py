@@ -41,7 +41,11 @@ TAG_LIMIT = 16
 STAGE_TIMEOUT_SECONDS = {
     "stage_a": 90.0,
     "stage_b": 90.0,
-    "candidate_translation": 45.0,
+    # Raised from 45s after real 2026-09-07 production data showed multiple
+    # successful translation-batch requests taking 36-44s -- dangerously close
+    # to the old ceiling, which caused ~2 of 5 real batches to time out
+    # outright (see TRANSLATION_BATCH_SIZE in news_candidate_translation.py).
+    "candidate_translation": 60.0,
 }
 
 
@@ -324,6 +328,7 @@ def _validate_item(item: Any, pool: dict[str, dict], raw_count: int) -> tuple[di
         "topic_group": source.get("topic_group"),
         "event_category": source.get("event_category", "other"),
         "source_channel": source.get("source_channel"),
+        "selection_mode": "ai",
     }
     normalized_fields = []
     if tags_normalized:
@@ -373,7 +378,13 @@ def _validate_selection_items(payload: Any, candidates: list[dict]) -> dict[str,
 def _apply_topic_cap(validated_items: list[dict]) -> tuple[list[dict], list[dict]]:
     """Drop items beyond the per-topic_group cap (>4), unless the item scores >=85 and
     its selection_reason explicitly claims the '主题上限例外'. Order-sensitive: call with
-    items already sorted by descending priority so the cap keeps the strongest ones."""
+    items already sorted by descending priority so the cap keeps the strongest ones.
+
+    `investment_relevance_score` is normally a validated int (50-100), but a
+    deterministic Stage B fallback item (see build_deterministic_fallback_selection
+    in news_events.py) leaves it as None rather than fabricating an AI score; `or 0`
+    keeps that comparable without crashing and correctly never qualifies a fallback
+    item for the >=85 topic-cap exception (it was never AI-scored)."""
     kept = []
     issues = []
     topic_counts: dict[str, int] = {}
@@ -382,7 +393,7 @@ def _apply_topic_cap(validated_items: list[dict]) -> tuple[list[dict], list[dict
         if topic_group:
             topic_counts[topic_group] = topic_counts.get(topic_group, 0) + 1
             if topic_counts[topic_group] > 4 and (
-                item["investment_relevance_score"] < 85
+                (item["investment_relevance_score"] or 0) < 85
                 or "主题上限例外" not in item["selection_reason"]
             ):
                 issues.append({
@@ -855,29 +866,54 @@ def select_news_with_fallback(candidates: list[dict], api_key: str, recent_selec
     orchestration error) exhausting their retries with nothing selected, even
     though Stage B had a non-empty candidate pool to choose from.
 
+    Critically, this must trigger ONLY on an actual AI failure (select_news_two_pass
+    returning a non-None warning), never merely on an empty `news` list: both
+    samples succeeding and genuinely agreeing that nothing in this batch is
+    worth selecting is a normal, confident outcome (warning is None) -- not a
+    failure -- and must be returned as an empty list, not papered over with
+    low-value filler. Confirmed as a real bug via 2026-09-07 batch-level replay:
+    a small residual Stage B batch of genuinely low-value articles (a phone
+    review, a Pokemon story, a DIY-solar piece) correctly got zero picks from
+    both samples, but the old `if news or not candidates` check -- blind to
+    *why* news was empty -- still ran the deterministic fallback and injected
+    those exact low-value items onto the homepage.
+
     The fallback never calls the LLM -- see build_deterministic_fallback_selection
     in news_events.py (imported lazily below to avoid a circular import: that
-    module already imports from this one) for its ranking and field rules. A
-    fallback that itself comes back empty (e.g. an empty candidate pool) is not
-    treated as a new failure; the original two-pass warning is returned unchanged
-    so a genuine "no news at all" failure still surfaces as such.
+    module already imports from this one) for its strict, high-confidence-only
+    eligibility rules. It is expected to come back empty whenever nothing in
+    the batch clears one of those rules (not just when the candidate pool
+    itself is empty) -- quality over quantity, no padding to any target count.
+    An empty fallback is not treated as a new failure; the original two-pass
+    warning is returned unchanged so a genuine "no news at all" outcome still
+    surfaces as a real AI failure in observability (stage_b_ai_failed), even
+    though the visible result is the same empty list a healthy zero-pick batch
+    would also produce.
     """
     if observability is not None:
         observability.setdefault("stage_b_fallback_used", False)
         observability.setdefault("stage_b_fallback_count", 0)
+        observability.setdefault("stage_b_ai_failed", False)
     news, warning = select_news_two_pass(
         candidates, api_key, recent_selected, market_context,
         call_model, review_call_model, sleep_fn, usage_tracker, observability,
     )
-    if news or not candidates:
+    if news or not candidates or warning is None:
         return news, warning
+    # Genuine AI failure from here on (warning is not None): record it
+    # regardless of what the strict high-confidence fallback below finds --
+    # "the AI failed" and "the fallback found nothing worth showing" are two
+    # separate, both-true-able facts, and callers need the first one even when
+    # the second empties the batch out entirely.
+    if observability is not None:
+        observability["stage_b_ai_failed"] = True
     if fallback_builder is None:
         from .news_events import build_deterministic_fallback_selection
         fallback_builder = build_deterministic_fallback_selection
     fallback = fallback_builder(candidates)
     if not fallback:
-        print("[NEWS STAGE B FALLBACK] deterministic fallback produced no items, preserving original failure")
-        return news, warning
+        print("[NEWS STAGE B FALLBACK] deterministic fallback found no high-confidence candidate, returning zero rather than padding")
+        return [], warning
     print(
         f"[NEWS STAGE B FALLBACK] triggered | ai_failure_reason={warning} | fallback_count={len(fallback)}"
     )
@@ -888,3 +924,134 @@ def select_news_with_fallback(candidates: list[dict], api_key: str, recent_selec
         observability["stage_b_fallback_count"] = len(fallback)
         observability["stage_b_final_count"] = len(fallback)
     return fallback, "⚠️ 新闻 AI 筛选超时，已使用规则降级结果。"
+
+
+def _sortable_score(item: dict) -> int:
+    """`investment_relevance_score` is normally a validated int, but a
+    deterministic Stage B fallback item leaves it None rather than fabricating
+    an AI score (see build_deterministic_fallback_selection) -- treat that as
+    the lowest possible score for cross-batch sort ordering only."""
+    score = item.get("investment_relevance_score")
+    return score if isinstance(score, int) else 0
+
+
+def select_news_multi_batch(candidates: list[dict], api_key: str, recent_selected: list[dict] = None,
+                            market_context: dict = None,
+                            call_model: Callable = call_deepseek,
+                            review_call_model: Callable | None = None,
+                            sleep_fn: Callable = time.sleep,
+                            usage_tracker: DeepSeekUsageTracker | None = None,
+                            observability: dict | None = None,
+                            fallback_builder: Callable[[list[dict]], list[dict]] | None = None,
+                            batch_size: int | None = None,
+                            ) -> tuple[list[dict], Optional[str]]:
+    """Run Stage B (select_news_with_fallback) over the FULL candidate pool,
+    split into batches so no single request grows large enough to risk the
+    timeout that used to motivate a hard, permanently-dropping cap on Stage B's
+    input (select_stage_b_input, now removed). Unlike that cap, no candidate is
+    silently skipped: batch_stage_b_input (news_events.py) partitions every
+    candidate into some batch, and every batch is run through the same
+    two-pass-plus-deterministic-fallback pipeline a single un-batched pool used
+    to get -- so each candidate is guaranteed at least one real Stage B
+    judgment, confirmed via observability["stage_b_uncovered_candidate_count"].
+
+    Batches run sequentially, not concurrently: each batch's own two-pass
+    sampling already makes 2 concurrent calls, and one batch timing out (or
+    exhausting retries into its own deterministic fallback) must not affect
+    any other batch's independent attempt -- but running batches themselves in
+    parallel would multiply simultaneous API load by batch count, which is
+    exactly the kind of regression that caused the original 2026-09-06/09-07
+    timeouts. This does trade batch_count-times the worst-case wall-clock time
+    (and, if every batch degrades, API cost) for guaranteed full coverage --
+    see the caller for how that trade-off is surfaced.
+
+    The per-batch results are merged and passed through one more deterministic
+    (non-LLM) pass -- the same score-sorted _apply_topic_cap already used to
+    finalize a single batch's own two-pass merge -- so the topic_group cap and
+    final rank numbering are consistent across the whole pool, not just within
+    one batch. This intentionally does not add a second LLM review call: each
+    batch's investment_relevance_score already comes from a real Stage B
+    judgment on a consistent 50-100 scale, so a deterministic re-sort is
+    sufficient and keeps this fix from adding yet another timeout-prone request.
+    """
+    from .news_events import batch_stage_b_input, STAGE_B_MAX_INPUT
+
+    if observability is not None:
+        observability["stage_b_total_candidate_count"] = len(candidates)
+    if not candidates:
+        if observability is not None:
+            observability.update({
+                "stage_b_batch_count": 0, "stage_b_batch_sizes": [], "stage_b_batch_selected_counts": [],
+                "stage_b_uncovered_candidate_count": 0, "stage_b_final_reviewed_count": 0,
+                "raw_count": 0, "validated_count": 0, "stage_b_final_count": 0,
+                "stage_b_ai_selected_count": 0, "stage_b_fallback_selected_count": 0,
+                "stage_b_failed_batch_count": 0,
+            })
+        return [], None
+
+    batches = batch_stage_b_input(candidates, batch_size=batch_size or STAGE_B_MAX_INPUT)
+    if observability is not None:
+        observability["stage_b_batch_count"] = len(batches)
+        observability["stage_b_batch_sizes"] = [len(batch) for batch in batches]
+        observability["stage_b_batch_selected_counts"] = []
+        observability["stage_b_batches_fallback_used_count"] = 0
+        observability["stage_b_failed_batch_count"] = 0
+
+    merged: list[dict] = []
+    batch_warnings: list[str] = []
+    covered_ids: set[str] = set()
+    for index, batch in enumerate(batches, start=1):
+        batch_observability: dict = {}
+        batch_selected, batch_warning = select_news_with_fallback(
+            batch, api_key, recent_selected, market_context,
+            call_model, review_call_model, sleep_fn, usage_tracker, batch_observability, fallback_builder,
+        )
+        covered_ids.update(item["candidate_id"] for item in batch)
+        merged.extend(batch_selected)
+        print(
+            f"[NEWS STAGE B BATCH] batch={index}/{len(batches)} input={len(batch)} "
+            f"selected={len(batch_selected)} ai_failed={batch_observability.get('stage_b_ai_failed', False)} "
+            f"fallback_used={batch_observability.get('stage_b_fallback_used', False)} warning={batch_warning}"
+        )
+        if observability is not None:
+            observability["stage_b_batch_selected_counts"].append(len(batch_selected))
+            if batch_observability.get("stage_b_fallback_used"):
+                observability["stage_b_batches_fallback_used_count"] += 1
+            if batch_observability.get("stage_b_ai_failed"):
+                observability["stage_b_failed_batch_count"] += 1
+        if batch_warning:
+            batch_warnings.append(f"batch {index}/{len(batches)}: {batch_warning}")
+
+    all_ids = {item["candidate_id"] for item in candidates}
+    uncovered = all_ids - covered_ids
+    if uncovered:
+        print(f"[NEWS STAGE B BATCH] WARNING uncovered candidates (should never happen): {sorted(uncovered)}")
+    if observability is not None:
+        observability["stage_b_uncovered_candidate_count"] = len(uncovered)
+
+    merged.sort(key=lambda item: (-_sortable_score(item), item["candidate_id"]))
+    final, cap_issues = _apply_topic_cap(merged)
+    for issue in cap_issues:
+        print(f"[NEWS STAGE B BATCH] dropped on final cross-batch merge by topic cap | candidate_id={issue['candidate_id']}")
+    for rank, item in enumerate(final, start=1):
+        item["rank"] = rank
+
+    ai_selected_count = sum(1 for item in final if item.get("selection_mode") == "ai")
+    fallback_selected_count = sum(1 for item in final if item.get("selection_mode") == "deterministic_fallback")
+    print(
+        f"[NEWS STAGE B BATCH] final_count={len(final)} (ai={ai_selected_count}, "
+        f"deterministic_fallback={fallback_selected_count}) from {len(batches)} batches "
+        f"over {len(candidates)} candidates | uncovered={len(uncovered)} | "
+        f"failed_batches={observability.get('stage_b_failed_batch_count', 0) if observability is not None else 'n/a'}"
+    )
+    if observability is not None:
+        observability["stage_b_final_reviewed_count"] = len(final)
+        observability["raw_count"] = len(candidates)
+        observability["validated_count"] = len(final)
+        observability["stage_b_final_count"] = len(final)
+        observability["stage_b_ai_selected_count"] = ai_selected_count
+        observability["stage_b_fallback_selected_count"] = fallback_selected_count
+
+    if final:
+        return final, None
+    return final, (batch_warnings[0] if batch_warnings else None)

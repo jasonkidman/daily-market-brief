@@ -65,7 +65,7 @@ def test_replay_restores_same_stage_b_candidates_without_rss_or_stage_a(tmp_path
         return inner
 
     monkeypatch.setattr(main, "fetch_candidates", fail("RSS"))
-    monkeypatch.setattr(main, "cluster_news_events", fail("Stage A"))
+    monkeypatch.setattr(main, "cluster_news_events_batched", fail("Stage A"))
 
     def fake_select(candidates, api_key, recent_selected=None, market_context=None, **kwargs):
         calls["candidates"] = candidates
@@ -73,7 +73,7 @@ def test_replay_restores_same_stage_b_candidates_without_rss_or_stage_a(tmp_path
         calls["market_context"] = market_context
         return [], None
 
-    monkeypatch.setattr(main, "select_news_with_fallback", fake_select)
+    monkeypatch.setattr(main, "select_news_multi_batch", fake_select)
 
     result = main.replay_stage_b_snapshot(path, api_key="test-key")
 
@@ -99,7 +99,7 @@ def test_snapshot_replay_preserves_old_report_schema(tmp_path, monkeypatch):
     report_path.write_text(json.dumps(report), encoding="utf-8")
     path = write_stage_b_snapshot(tmp_path, sample_snapshot())
 
-    monkeypatch.setattr(main, "select_news_with_fallback", lambda *args, **kwargs: ([], None))
+    monkeypatch.setattr(main, "select_news_multi_batch", lambda *args, **kwargs: ([], None))
     main.replay_stage_b_snapshot(path, api_key="test-key")
 
     assert json.loads(report_path.read_text(encoding="utf-8")) == report
@@ -129,7 +129,7 @@ def test_production_pipeline_writes_snapshot_before_stage_b(tmp_path, monkeypatc
     monkeypatch.setattr(main, "filter_final_candidates", lambda candidates, now: candidates)
     monkeypatch.setattr(main, "dedupe_candidates", lambda candidates: candidates)
     monkeypatch.setattr(main, "stage_a_input_counts", lambda candidates: (1, 1))
-    monkeypatch.setattr(main, "cluster_news_events", lambda *args, **kwargs: (events, None))
+    monkeypatch.setattr(main, "cluster_news_events_batched", lambda *args, **kwargs: (events, None))
     event_representatives = [{**candidate, "candidate_ids": ["event-1"]}]
     monkeypatch.setattr(main, "build_event_representatives", lambda events, candidates: event_representatives)
     monkeypatch.setattr(main, "event_selection_candidates", lambda events: selection_candidates)
@@ -142,7 +142,7 @@ def test_production_pipeline_writes_snapshot_before_stage_b(tmp_path, monkeypatc
         assert load_stage_b_snapshot(path)["stage_b"]["candidates"] == candidates
         return [], None
 
-    monkeypatch.setattr(main, "select_news_with_fallback", fake_select)
+    monkeypatch.setattr(main, "select_news_multi_batch", fake_select)
     monkeypatch.setattr(main, "translate_candidates", lambda candidates, api_key, **kwargs: {})
     main.generate_daily_report(base_dir=tmp_path, report_date="2026-08-12")
 

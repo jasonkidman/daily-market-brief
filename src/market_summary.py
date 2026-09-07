@@ -16,7 +16,11 @@ ACTION_COPY = {
     "drawdown_buy_executed": "对应回撤档位已经人工确认执行。",
 }
 HOLD_CONFLICTS = ("暂停定投", "停止定投", "减仓", "清仓", "卖出", "提前加仓", "提前买入", "建议抄底", "建议卖出")
-MAX_SUMMARY_LENGTH = 220
+# V2 ("今日结论"): raised from the old 220-char single-sentence cap to fit a
+# genuine 3-4 sentence Executive Summary (target ~250-350 Chinese characters
+# per the prompt); 400 leaves headroom above that target without being the
+# target itself.
+MAX_SUMMARY_LENGTH = 400
 
 
 class MarketSummaryError(ValueError):
@@ -67,20 +71,15 @@ def _parse_model_summary(raw: Any, drawdown_action: str) -> dict:
         raise MarketSummaryError("市场摘要输出无法解析为 JSON。") from exc
     if not isinstance(payload, dict):
         raise MarketSummaryError("市场摘要输出不是 JSON 对象。")
-    fields = {}
-    for key in ("market", "drivers", "action"):
-        value = str(payload.get(key, "")).strip()
-        if not value:
-            raise MarketSummaryError(f"{key} 不能为空。")
-        fields[key] = value
-    text = "".join(fields.values())
-    if len(text) > MAX_SUMMARY_LENGTH:
-        raise MarketSummaryError("市场摘要超过长度上限。")
-    if drawdown_action == "hold" and any(term in text for term in HOLD_CONFLICTS):
+    summary = str(payload.get("summary", "")).strip()
+    if not summary:
+        raise MarketSummaryError("summary 不能为空。")
+    if len(summary) > MAX_SUMMARY_LENGTH:
+        raise MarketSummaryError("今日结论超过长度上限。")
+    if drawdown_action == "hold" and any(term in summary for term in HOLD_CONFLICTS):
         raise MarketSummaryError("hold 状态下出现冲突的投资指令。")
     return {
-        "market": fields["market"],
-        "drivers": fields["drivers"],
+        "summary": summary,
         "action": ACTION_COPY[drawdown_action],
         "degraded": False,
     }
@@ -98,7 +97,12 @@ def _movement(label: str, value: float | None) -> str:
 
 def deterministic_market_summary(market_data: dict, market_breadth: dict, news: list[dict],
                                  drawdown_action: str) -> dict:
-    """Produce a compact, evidence-only result when AI is unavailable or unsafe."""
+    """Produce a compact, evidence-only "今日结论" when AI is unavailable or unsafe.
+
+    Still program-owned facts only (no LLM call), but combined into the same
+    single `summary` field the AI path returns, so the template has one field
+    to render regardless of which path produced it.
+    """
     sp500 = _valid_snapshot(market_data.get("sp500", {}), "daily_return")
     nasdaq = _valid_snapshot(market_data.get("nasdaq100", {}), "daily_return")
     market = f"{_movement('标普500', sp500)}，{_movement('纳指100', nasdaq)}。"
@@ -118,8 +122,7 @@ def deterministic_market_summary(market_data: dict, market_breadth: dict, news: 
     else:
         drivers = "新闻解释数据暂不可用。"
     return {
-        "market": market,
-        "drivers": drivers,
+        "summary": f"{market}{drivers}",
         "action": ACTION_COPY[drawdown_action],
         "degraded": True,
     }

@@ -72,8 +72,8 @@ def test_offline_fixture_runs_complete_pipeline(tmp_path):
         assert "不代表真实新闻或投资信息" in item["summary_zh"]
     assert report["portfolio_action"] == "hold"
     assert report["market_summary"]["degraded"] is True
-    assert "标普500当日下跌0.5%" in report["market_summary"]["market"]
-    assert report["market_summary"]["drivers"].startswith("市场同时关注")
+    assert "标普500当日下跌0.5%" in report["market_summary"]["summary"]
+    assert "市场同时关注" in report["market_summary"]["summary"]
     assert report["market_summary"]["action"] == "未触发额外回撤加仓，维持正常定投，备用金保持不动。"
     assert "Daily Market Brief" in index_path.read_text(encoding="utf-8")
     assert result == report_path
@@ -264,10 +264,10 @@ def test_end_to_end_supplementary_rss_failure_does_not_flip_status_or_show_banne
     monkeypatch.setattr(main, "filter_final_candidates", lambda candidates, now: candidates)
     monkeypatch.setattr(main, "dedupe_candidates", lambda candidates: candidates)
     monkeypatch.setattr(main, "stage_a_input_counts", lambda candidates: (len(candidates), len(candidates)))
-    monkeypatch.setattr(main, "cluster_news_events", lambda *args, **kwargs: ([], None))
+    monkeypatch.setattr(main, "cluster_news_events_batched", lambda *args, **kwargs: ([], None))
     monkeypatch.setattr(main, "build_event_representatives", lambda events, candidates: [])
     monkeypatch.setattr(main, "event_selection_candidates", lambda events: [])
-    monkeypatch.setattr(main, "select_news_with_fallback", lambda *args, **kwargs: ([], None))
+    monkeypatch.setattr(main, "select_news_multi_batch", lambda *args, **kwargs: ([], None))
     monkeypatch.setattr(main, "generate_market_summary", lambda *args, **kwargs: {"degraded": True})
     monkeypatch.setattr(main, "render_site", lambda *args, **kwargs: None)
 
@@ -328,12 +328,12 @@ def test_event_clustering_fallback_does_not_flip_status_or_show_banner_warning(t
     monkeypatch.setattr(main, "dedupe_candidates", lambda candidates: candidates)
     monkeypatch.setattr(main, "stage_a_input_counts", lambda candidates: (len(candidates), len(candidates)))
     monkeypatch.setattr(
-        main, "cluster_news_events",
+        main, "cluster_news_events_batched",
         lambda *args, **kwargs: (fallback_events, clustering_reason),
     )
     monkeypatch.setattr(main, "build_event_representatives", lambda events, candidates: [])
     monkeypatch.setattr(main, "event_selection_candidates", lambda events: [])
-    monkeypatch.setattr(main, "select_news_with_fallback", lambda *args, **kwargs: ([], None))
+    monkeypatch.setattr(main, "select_news_multi_batch", lambda *args, **kwargs: ([], None))
     monkeypatch.setattr(main, "generate_market_summary", lambda *args, **kwargs: {"degraded": True})
     monkeypatch.setattr(main, "render_site", lambda *args, **kwargs: None)
 
@@ -389,10 +389,10 @@ def test_report_news_candidates_covers_full_stage_b_pool_flagged_by_final_select
     monkeypatch.setattr(main, "filter_final_candidates", lambda candidates, now: candidates)
     monkeypatch.setattr(main, "dedupe_candidates", lambda candidates: candidates)
     monkeypatch.setattr(main, "stage_a_input_counts", lambda candidates: (len(candidates), len(candidates)))
-    monkeypatch.setattr(main, "cluster_news_events", lambda *args, **kwargs: ([], None))
+    monkeypatch.setattr(main, "cluster_news_events_batched", lambda *args, **kwargs: ([], None))
     monkeypatch.setattr(main, "build_event_representatives", lambda events, candidates: [])
     monkeypatch.setattr(main, "event_selection_candidates", lambda events: selection_candidates)
-    monkeypatch.setattr(main, "select_news_with_fallback", lambda *args, **kwargs: (selected_news, None))
+    monkeypatch.setattr(main, "select_news_multi_batch", lambda *args, **kwargs: (selected_news, None))
     monkeypatch.setattr(main, "generate_market_summary", lambda *args, **kwargs: {"degraded": True})
     monkeypatch.setattr(main, "render_site", lambda *args, **kwargs: None)
 
@@ -455,10 +455,10 @@ def test_report_generation_survives_candidate_translation_failure_with_english_f
     monkeypatch.setattr(main, "filter_final_candidates", lambda candidates, now: candidates)
     monkeypatch.setattr(main, "dedupe_candidates", lambda candidates: candidates)
     monkeypatch.setattr(main, "stage_a_input_counts", lambda candidates: (len(candidates), len(candidates)))
-    monkeypatch.setattr(main, "cluster_news_events", lambda *args, **kwargs: ([], None))
+    monkeypatch.setattr(main, "cluster_news_events_batched", lambda *args, **kwargs: ([], None))
     monkeypatch.setattr(main, "build_event_representatives", lambda events, candidates: [])
     monkeypatch.setattr(main, "event_selection_candidates", lambda events: selection_candidates)
-    monkeypatch.setattr(main, "select_news_with_fallback", lambda *args, **kwargs: ([], None))
+    monkeypatch.setattr(main, "select_news_multi_batch", lambda *args, **kwargs: ([], None))
     monkeypatch.setattr(main, "translate_candidates", lambda candidates, api_key, **kwargs: {})
     monkeypatch.setattr(main, "generate_market_summary", lambda *args, **kwargs: {"degraded": True})
     monkeypatch.setattr(main, "render_site", lambda *args, **kwargs: None)

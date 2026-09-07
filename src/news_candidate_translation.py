@@ -23,6 +23,16 @@ from .news_candidate_translation_prompt import SYSTEM_PROMPT
 TITLE_ZH_LIMIT = 70
 SUMMARY_ZH_LIMIT = 180
 
+# Small enough that one batch's failure only ever costs that batch's own
+# candidates their Chinese translation, never the whole pool -- confirmed live
+# on 2026-09-07, where a single failed request (of ~46 unselected candidates
+# sent in one shot) fell every one of them back to English at once. Lowered
+# from 10 to 8 alongside the CANDIDATE_TRANSLATION_TIMEOUT increase (see
+# deepseek_client.py): a smaller per-request payload plus a longer timeout
+# together, rather than either alone, is what real 2026-09-07 replay data
+# showed was needed to get a real translation success rate above ~90%.
+TRANSLATION_BATCH_SIZE = 8
+
 # Shorter than Stage A/B's timeout on purpose: a stuck candidate-pool translation
 # must not eat into the rest of the workflow's time budget, and a failure here
 # always degrades to the original English text (see translate_candidates) rather
@@ -88,24 +98,21 @@ def validate_translations(payload: Any, candidates: list[dict]) -> dict[str, dic
     return result
 
 
-def translate_candidates(candidates: list[dict], api_key: str,
-                         call_model: Callable = _call_deepseek_translation,
-                         sleep_fn: Callable = time.sleep,
-                         usage_tracker: DeepSeekUsageTracker | None = None,
-                         max_attempts: int = DEEPSEEK_MAX_ATTEMPTS) -> dict[str, dict]:
-    """Translate title/summary for candidates Stage B never looked at.
-
-    Returns {} (never raises) on any failure -- callers must treat a missing
-    candidate_id as "keep the original English", never as an error.
+def _translate_batch(candidates: list[dict], api_key: str, call_model: Callable, sleep_fn: Callable,
+                     usage_tracker: DeepSeekUsageTracker | None, max_attempts: int) -> tuple[dict[str, dict], str | None]:
+    """Translate ONE batch, with its own independent request/validate/retry.
+    Returns (translations, failure_reason) -- failure_reason is None whenever
+    the batch got a usable response (even if validate_translations dropped
+    some malformed individual entries from it), and a short diagnostic string
+    only when every attempt for this batch failed outright.
     """
-    if not candidates or not api_key:
-        return {}
     translation_input = [
         {"candidate_id": item["candidate_id"], "title": item.get("title", ""), "summary": item.get("summary", "")}
         for item in candidates
     ]
     user_payload = json.dumps({"candidates": translation_input}, ensure_ascii=False)
     started = time.monotonic()
+    last_error: Exception | None = None
     for attempt in range(max_attempts):
         try:
             raw = invoke_model(
@@ -114,18 +121,75 @@ def translate_candidates(candidates: list[dict], api_key: str,
             )
             translations = validate_translations(raw, translation_input)
             print(
-                f"[NEWS CANDIDATE TRANSLATION] translated {len(translations)}/{len(translation_input)} "
+                f"[NEWS CANDIDATE TRANSLATION] batch translated {len(translations)}/{len(translation_input)} "
                 f"candidates in {time.monotonic() - started:.1f}s"
             )
-            return translations
+            return translations, None
         except Exception as exc:
+            last_error = exc
             print(
-                f"[NEWS CANDIDATE TRANSLATION] attempt {attempt + 1}/{max_attempts} failed "
+                f"[NEWS CANDIDATE TRANSLATION] batch attempt {attempt + 1}/{max_attempts} failed "
                 f"after {time.monotonic() - started:.1f}s: {exc}"
             )
             if usage_tracker is not None:
                 usage_tracker.record_validation_failure("Candidate Pool Translation", attempt + 1, exc)
             if attempt < max_attempts - 1:
                 sleep_fn((5, 10)[min(attempt, 1)])
-    print("[NEWS CANDIDATE TRANSLATION] all attempts failed, falling back to English for untranslated candidates")
-    return {}
+    reason = f"{type(last_error).__name__}: {last_error}" if last_error is not None else "unknown"
+    print(f"[NEWS CANDIDATE TRANSLATION] batch all attempts failed, falling back to English | reason={reason}")
+    return {}, reason
+
+
+def translate_candidates(candidates: list[dict], api_key: str,
+                         call_model: Callable = _call_deepseek_translation,
+                         sleep_fn: Callable = time.sleep,
+                         usage_tracker: DeepSeekUsageTracker | None = None,
+                         max_attempts: int = DEEPSEEK_MAX_ATTEMPTS,
+                         batch_size: int = TRANSLATION_BATCH_SIZE,
+                         observability: dict | None = None) -> dict[str, dict]:
+    """Translate title/summary for candidates Stage B never looked at, split
+    into independent batches of at most `batch_size` so one batch's failure
+    can never fall the whole pool back to English at once (see
+    TRANSLATION_BATCH_SIZE). Only title/summary are translated -- this never
+    re-selects, re-ranks, re-scores, or re-categorizes anything, staying
+    decoupled from Stage B.
+
+    Returns {candidate_id: {"title_zh", "summary_zh"}} merged across every
+    batch; never raises. A candidate_id absent from the result means either
+    its batch failed after all retries, or the model didn't return a
+    well-formed entry for it -- callers must treat that the same as "keep the
+    original English", never as an error. Pass `observability` to record
+    translation_requested_count/translation_batch_count/translation_success_count/
+    translation_failed_count and each failed batch's reason.
+    """
+    if observability is not None:
+        observability.update({
+            "translation_requested_count": len(candidates),
+            "translation_batch_count": 0,
+            "translation_success_count": 0,
+            "translation_failed_count": 0,
+            "translation_batch_failures": [],
+        })
+    if not candidates or not api_key:
+        return {}
+    batches = [candidates[start:start + batch_size] for start in range(0, len(candidates), batch_size)]
+    if observability is not None:
+        observability["translation_batch_count"] = len(batches)
+    merged: dict[str, dict] = {}
+    for index, batch in enumerate(batches, start=1):
+        translations, failure_reason = _translate_batch(batch, api_key, call_model, sleep_fn, usage_tracker, max_attempts)
+        merged.update(translations)
+        print(
+            f"[NEWS CANDIDATE TRANSLATION BATCH] batch={index}/{len(batches)} input={len(batch)} "
+            f"translated={len(translations)} failure_reason={failure_reason}"
+        )
+        if observability is not None and failure_reason is not None:
+            observability["translation_batch_failures"].append({"batch": index, "reason": failure_reason})
+    if observability is not None:
+        observability["translation_success_count"] = len(merged)
+        observability["translation_failed_count"] = len(candidates) - len(merged)
+    print(
+        f"[NEWS CANDIDATE TRANSLATION] requested={len(candidates)} translated={len(merged)} "
+        f"failed={len(candidates) - len(merged)} batches={len(batches)}"
+    )
+    return merged

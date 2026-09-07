@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import difflib
 import json
 import re
 import time
@@ -30,6 +31,16 @@ PRIORITY_BASE_WEIGHT = {"P0": 6, "P1": 3, "P2": 0}
 IMPORTANCE_WEIGHT = 2
 SOURCE_PENALTY_WEIGHT = 0.25
 MAX_SOURCE_PENALTY = 2.0
+
+# Maximum candidates per single Stage A clustering request (see
+# batch_stage_a_input). Bounds one request's size -- and therefore its odds of
+# finishing inside its timeout -- but is NOT a total cap on how many dedup'd
+# candidates Stage A ever clusters: a pool larger than this is split into
+# multiple batches, each run through clustering in full, so nothing is
+# silently dropped on a heavy news day. Confirmed live on 2026-09-07: 72
+# dedup'd candidates were silently capped to the top 50 by composite score
+# before ever reaching Stage A, permanently losing the other 22.
+STAGE_A_MAX_INPUT = 50
 
 # These signals are intentionally small and explicit: they improve the cap
 # ranking without asking an LLM to classify candidates or changing source data.
@@ -79,10 +90,12 @@ RATE_CONTEXT_WORDS = (
 )
 AMBIGUOUS_TERMS_REQUIRING_CONTEXT = {"raise", "cut", "rates", "hike"}
 
-# Stage B's own input pool is capped the same way Stage A's clustering input is:
-# a pure ranking cut, no extra LLM call. Keeps Stage B's per-request payload (and
-# therefore its odds of finishing inside its timeout) bounded regardless of how
-# many events Stage A produces on a heavy news day.
+# Maximum candidates per single Stage B request (see batch_stage_b_input).
+# Bounds one request's size -- and therefore its odds of finishing inside its
+# timeout -- but is NOT a total cap on how many candidates Stage B ever judges:
+# a pool larger than this is split into multiple batches, each run through
+# Stage B in full, so nothing is silently dropped regardless of how many
+# events Stage A produces on a heavy news day.
 STAGE_B_MAX_INPUT = 28
 
 # Used only by the deterministic Stage B fallback below, never by the real AI
@@ -90,7 +103,6 @@ STAGE_B_MAX_INPUT = 28
 # B's own category labels, so a fallback item still renders with a category
 # instead of leaving the field blank. This is a fixed lookup, not a judgement
 # call, so it is not "fabricating an AI field".
-FALLBACK_MAX_ITEMS = 8
 TOPIC_GROUP_TO_CATEGORY = {
     "US_MARKET_MACRO": "美国经济",
     "AI_CHIPS": "半导体",
@@ -110,6 +122,66 @@ EVENT_SIGNIFICANCE_TERMS = (
     "trade war", "export control", "regulation", "regulator", "acquisition", "merger", "launch", "unveil",
     "announced", "announces", "ban", "restriction", "crisis", "war",
 )
+
+# Deterministic topic/category classification used ONLY when Stage A event
+# clustering itself fails and falls back to one event per candidate (see
+# _fallback_events). Without this, every fallback event used to collapse to
+# OTHER_SYSTEMIC/other, discarding all semantic topic information for the
+# whole day whenever the clustering call timed out or the model returned a
+# malformed contract -- confirmed live on 2026-09-07 (50/50 fallback events
+# all OTHER_SYSTEMIC). This does not aim to match Stage A's own LLM-quality
+# classification, only to be meaningfully better than "everything is other";
+# it reuses the same word-boundary/ambiguous-term-gated matching as the rest
+# of the ranking pipeline (_keyword_present, _geopolitics_policy_matches) so
+# it doesn't reintroduce the "hikers"/"clearance rates" substring bugs.
+FALLBACK_MEGA_CAP_COMPANIES = (
+    "apple", "microsoft", "amazon", "tesla", "nvidia", "alphabet", "google", "meta", "spacex",
+)
+FALLBACK_AI_CHIPS_TERMS = (
+    "artificial intelligence", "ai", "gpu", "semiconductor", "chip", "data center", "datacenter", "cloud", "model",
+)
+FALLBACK_EARNINGS_TERMS = (
+    "earnings", "quarterly results", "quarterly profit", "quarterly revenue", "revenue guidance", "profit warning",
+)
+FALLBACK_MACRO_TERMS = (
+    "fed", "federal reserve", "treasury", "inflation", "jobs", "employment", "gdp", "tariff", "fiscal",
+)
+FALLBACK_ENERGY_TERMS = ("oil", "opec", "crude", "natural gas", "gas price", "energy price")
+FALLBACK_TOPIC_TO_CATEGORY = {
+    "US_MARKET_MACRO": "macro_policy",
+    "MEGA_CAP_TECH": "high_tech",
+    "AI_CHIPS": "high_tech",
+    "ENERGY_COMMODITIES": "financial_markets",
+    "GEOPOLITICS": "geopolitics",
+    "CORPORATE_EARNINGS": "financial_markets",
+    "OTHER_SYSTEMIC": "other",
+}
+
+
+def _classify_fallback_topic(candidate: dict) -> tuple[str, str]:
+    """Return (topic_group, event_category) for one Stage-A-fallback event.
+
+    Order matters and is deliberate: a recognized mega-cap company name takes
+    priority over generic AI/chip language (a company's own AI product news
+    still reads as MEGA_CAP_TECH, per explicit product requirement), which in
+    turn takes priority over generic earnings/macro/energy/geopolitics terms.
+    """
+    text = " ".join(str(candidate.get(field, "")) for field in ("title", "summary")).lower()
+    if any(_keyword_present(text, word) for word in FALLBACK_MEGA_CAP_COMPANIES):
+        topic_group = "MEGA_CAP_TECH"
+    elif any(_keyword_present(text, word) for word in FALLBACK_AI_CHIPS_TERMS):
+        topic_group = "AI_CHIPS"
+    elif any(_keyword_present(text, word) for word in FALLBACK_EARNINGS_TERMS):
+        topic_group = "CORPORATE_EARNINGS"
+    elif any(_keyword_present(text, word) for word in FALLBACK_MACRO_TERMS):
+        topic_group = "US_MARKET_MACRO"
+    elif any(_keyword_present(text, word) for word in FALLBACK_ENERGY_TERMS):
+        topic_group = "ENERGY_COMMODITIES"
+    elif _geopolitics_policy_matches(text):
+        topic_group = "GEOPOLITICS"
+    else:
+        topic_group = "OTHER_SYSTEMIC"
+    return topic_group, FALLBACK_TOPIC_TO_CATEGORY[topic_group]
 
 
 class NewsEventError(ValueError):
@@ -298,15 +370,21 @@ def event_selection_candidates(event_representatives: list[dict]) -> list[dict]:
 
 
 def _cluster_candidate_input(candidates: list[dict]) -> list[dict]:
-    """Bound the clustering prompt without exposing article URLs to the model."""
-    limited = [item for item, _, _, _, _, _ in _rank_stage_a_candidates(candidates)[:50]]
+    """Bound one clustering *request's* size without exposing article URLs to
+    the model. `candidates` is expected to already be at most one batch (see
+    batch_stage_a_input) -- the [:STAGE_A_MAX_INPUT] slice here is a no-op
+    safety bound for that case, not the total-pool cap it used to be."""
+    limited = [item for item, _, _, _, _, _ in _rank_stage_a_candidates(candidates)[:STAGE_A_MAX_INPUT]]
     fields = ("candidate_id", "source", "priority", "title", "summary", "published_at")
     return [{field: item.get(field, "") for field in fields} for item in limited]
 
 
 def stage_a_input_counts(candidates: list[dict]) -> tuple[int, int]:
-    """Return pre-cap and actual Stage A input counts without changing selection."""
-    return len(candidates), len(_cluster_candidate_input(candidates))
+    """Return (pre-cap, actual Stage A input) counts. Batching (see
+    cluster_news_events_batched) guarantees every dedup'd candidate reaches
+    some Stage A batch, so these are always equal now; both are still reported
+    for the snapshot/report schema's sake."""
+    return len(candidates), len(candidates)
 
 
 def _log_stage_a_cap(candidates: list[dict], cluster_input: list[dict]) -> None:
@@ -347,13 +425,17 @@ def _log_stage_a_mapping(events: list[dict]) -> None:
 
 
 def _fallback_events(candidates: list[dict]) -> list[dict]:
-    return [{
-        "event_id": f"fallback_{index:03d}",
-        "candidate_ids": [item["candidate_id"]],
-        "event_summary": item.get("title", "新闻事件"),
-        "topic_group": "OTHER_SYSTEMIC",
-        "event_category": "other",
-    } for index, item in enumerate(candidates, 1)]
+    events = []
+    for index, item in enumerate(candidates, 1):
+        topic_group, event_category = _classify_fallback_topic(item)
+        events.append({
+            "event_id": f"fallback_{index:03d}",
+            "candidate_ids": [item["candidate_id"]],
+            "event_summary": item.get("title", "新闻事件"),
+            "topic_group": topic_group,
+            "event_category": event_category,
+        })
+    return events
 
 
 def _log_stage_a_events(events: list[dict]) -> None:
@@ -427,69 +509,370 @@ def cluster_news_events(candidates: list[dict], api_key: str,
     )
 
 
-def _log_stage_b_input_cap(pool: list[dict], capped: list[dict]) -> None:
-    capped_ids = {item["candidate_id"] for item in capped}
-    ranking = _rank_stage_a_candidates(pool)
-    print(
-        f"[NEWS STAGE B CAP] pre_filter_pool={len(pool)} stage_b_input={len(capped)} "
-        f"cap_dropped={len(pool) - len(capped)}"
-    )
-    for rank, (item, importance_score, reason, source_penalty, priority_base, composite_score) in enumerate(ranking, 1):
-        action = "keep" if item["candidate_id"] in capped_ids else "drop"
-        print(
-            f"[NEWS STAGE B CAP ITEM] candidate_id={item.get('candidate_id', '')} "
-            f"| source={item.get('source', '')} | composite_score={composite_score:g} "
-            f"| importance_reason={reason} | pre_filter_rank={rank} | action={action}"
-        )
+def batch_stage_a_input(candidates: list[dict], batch_size: int = STAGE_A_MAX_INPUT) -> list[list[dict]]:
+    """Split the FULL dedup'd candidate pool into batches of at most
+    `batch_size`, so every candidate reaches at least one real Stage A
+    clustering request -- unlike the old single [:STAGE_A_MAX_INPUT] slice
+    inside _cluster_candidate_input, which permanently dropped anything past
+    the top 50 by composite score (confirmed live on 2026-09-07: 72 dedup'd
+    candidates, only 50 ever reached Stage A).
 
-
-def select_stage_b_input(candidates: list[dict], max_input: int = STAGE_B_MAX_INPUT) -> list[dict]:
-    """Deterministically bound Stage B's LLM input before it is ever called.
-
-    Reuses the exact same priority/importance/composite-score/source-diversity/
-    recency ranking as the Stage A clustering input cap (`_rank_stage_a_candidates`)
-    rather than adding a second LLM call: a heavy news day used to hand Stage B all
-    40+ Stage A events in one request, which is what pushed it past its own timeout
-    budget. `candidates` is expected to be the Stage B input pool (one representative
-    per Stage A event, from `event_selection_candidates`) -- its priority/title/
-    summary/published_at/source fields are exactly what the ranking function reads.
-    """
-    if len(candidates) <= max_input:
-        _log_stage_b_input_cap(candidates, candidates)
-        return candidates
-    ranked = _rank_stage_a_candidates(candidates)
-    capped = [item for item, _, _, _, _, _ in ranked[:max_input]]
-    _log_stage_b_input_cap(candidates, capped)
-    return capped
-
-
-def build_deterministic_fallback_selection(candidates: list[dict], max_items: int = FALLBACK_MAX_ITEMS) -> list[dict]:
-    """Rule-based Stage B replacement for when the two-pass AI selection comes back
-    with nothing (e.g. both samples time out after their own retries). Never calls
-    the LLM: candidates are ranked with the same priority/importance/composite-score
-    logic as the Stage A and Stage B input caps (`_rank_stage_a_candidates`), and
-    only a small, high-confidence prefix is kept -- an empty or short result here is
-    expected behavior (favor recall precision over padding to `max_items`), not a bug.
-
-    title_zh/summary_zh reuse Stage A's own Chinese event_summary (falling back to
-    the original English title/summary only when no event_summary exists) instead of
-    fabricating an AI translation; investment_relevance_score and tags are left
-    unset/empty rather than invented, and selection_reason spells out the ranking
-    signals that were actually used so a fallback item is never mistaken for one the
-    AI itself vetted.
+    Candidates are ranked with the same priority/importance/composite-score
+    logic used everywhere else in this module (_rank_stage_a_candidates), then
+    sliced into batches in that order, mirroring batch_stage_b_input: the
+    highest-value candidates land in the first (always-run) batch.
     """
     if not candidates:
         return []
-    ranked = _rank_stage_a_candidates(candidates)[:max_items]
+    ranked = [item for item, _, _, _, _, _ in _rank_stage_a_candidates(candidates)]
+    return [ranked[start:start + batch_size] for start in range(0, len(ranked), batch_size)]
+
+
+def _events_are_likely_duplicates(a: dict, b: dict) -> bool:
+    """Lightweight, deterministic (no LLM) same-real-event check used only to
+    merge across independently-clustered Stage A batches -- within one batch,
+    Stage A's own clustering already handles this. Two different batches can
+    each cluster a different article about the same real event without ever
+    seeing each other's candidates, so a plain text-similarity check on the
+    event_summary catches the obvious cases (near-identical wording) without
+    a second LLM request."""
+    text_a = (a.get("event_summary") or "").strip().lower()
+    text_b = (b.get("event_summary") or "").strip().lower()
+    if not text_a or not text_b:
+        return False
+    return difflib.SequenceMatcher(None, text_a, text_b).ratio() >= 0.72
+
+
+def _merge_cross_batch_duplicate_events(events: list[dict]) -> list[dict]:
+    """Merge events from different Stage A batches that likely describe the
+    same real-world event, so the same story doesn't reach Stage B twice just
+    because its two source articles landed in different batches. Prefers a
+    successfully-classified topic_group over a fallback OTHER_SYSTEMIC one,
+    and keeps the longer (more informative) event_summary."""
+    merged: list[dict] = []
+    for event in events:
+        match = next((existing for existing in merged if _events_are_likely_duplicates(existing, event)), None)
+        if match is None:
+            merged.append({**event, "candidate_ids": list(event["candidate_ids"])})
+            continue
+        match["candidate_ids"] = list(dict.fromkeys(match["candidate_ids"] + event["candidate_ids"]))
+        if match["topic_group"] == "OTHER_SYSTEMIC" and event["topic_group"] != "OTHER_SYSTEMIC":
+            match["topic_group"] = event["topic_group"]
+            match["event_category"] = event["event_category"]
+        if len(event.get("event_summary") or "") > len(match.get("event_summary") or ""):
+            match["event_summary"] = event["event_summary"]
+    return merged
+
+
+def cluster_news_events_batched(candidates: list[dict], api_key: str,
+                                call_model: Callable = call_deepseek,
+                                sleep_fn: Callable = time.sleep,
+                                usage_tracker: DeepSeekUsageTracker | None = None,
+                                max_attempts: int = DEEPSEEK_MAX_ATTEMPTS + 1,
+                                batch_size: int | None = None,
+                                observability: dict | None = None) -> tuple[list[dict], Optional[str]]:
+    """Run Stage A clustering (cluster_news_events) over the FULL dedup'd
+    candidate pool, split into batches so no single request grows large enough
+    to risk the timeout that used to motivate a hard, permanently-dropping cap
+    (the old bare [:50] inside _cluster_candidate_input). Unlike that cap, no
+    candidate is silently skipped: batch_stage_a_input partitions every
+    candidate into some batch, and every batch is run through the same
+    cluster_news_events pipeline (its own retries, then its own deterministic
+    per-candidate fallback classification) a single un-batched pool used to
+    get -- so a batch that fails only ever costs that batch's own candidates
+    their AI clustering, never any other batch's.
+
+    Events from different batches that likely describe the same real-world
+    event are merged (see _merge_cross_batch_duplicate_events) so the same
+    story doesn't reach Stage B twice just because its source articles landed
+    in different batches -- a lightweight text-similarity check, not a second
+    LLM request.
+    """
+    if observability is not None:
+        observability["stage_a_total_candidate_count"] = len(candidates)
+    if not candidates:
+        if observability is not None:
+            observability.update({
+                "stage_a_batch_count": 0, "stage_a_batch_sizes": [], "stage_a_batch_fallback_used": [],
+                "stage_a_uncovered_candidate_count": 0, "stage_a_final_event_count": 0,
+            })
+        return [], None
+
+    batches = batch_stage_a_input(candidates, batch_size=batch_size or STAGE_A_MAX_INPUT)
+    if observability is not None:
+        observability["stage_a_batch_count"] = len(batches)
+        observability["stage_a_batch_sizes"] = [len(batch) for batch in batches]
+        observability["stage_a_batch_fallback_used"] = []
+        observability["stage_a_batch_output_counts"] = []
+
+    all_events: list[dict] = []
+    batch_warnings: list[str] = []
+    covered_ids: set[str] = set()
+    for index, batch in enumerate(batches, start=1):
+        events, warning = cluster_news_events(batch, api_key, call_model, sleep_fn, usage_tracker, max_attempts)
+        covered_ids.update(item["candidate_id"] for item in batch)
+        all_events.extend(events)
+        fallback_used = warning is not None
+        print(
+            f"[NEWS STAGE A BATCH] batch={index}/{len(batches)} input={len(batch)} "
+            f"output_events={len(events)} fallback_used={fallback_used}"
+        )
+        if observability is not None:
+            observability["stage_a_batch_fallback_used"].append(fallback_used)
+            observability["stage_a_batch_output_counts"].append(len(events))
+        if warning:
+            batch_warnings.append(f"batch {index}/{len(batches)}: {warning}")
+
+    all_ids = {item["candidate_id"] for item in candidates}
+    uncovered = all_ids - covered_ids
+    if uncovered:
+        print(f"[NEWS STAGE A BATCH] WARNING uncovered candidates (should never happen): {sorted(uncovered)}")
+    if observability is not None:
+        observability["stage_a_uncovered_candidate_count"] = len(uncovered)
+
+    merged_events = _merge_cross_batch_duplicate_events(all_events)
+    print(
+        f"[NEWS STAGE A BATCH] final_event_count={len(merged_events)} (pre_merge={len(all_events)}) "
+        f"from {len(batches)} batches over {len(candidates)} candidates | uncovered={len(uncovered)}"
+    )
+    if observability is not None:
+        observability["stage_a_final_event_count"] = len(merged_events)
+
+    warning = "; ".join(batch_warnings) if batch_warnings else None
+    return merged_events, warning
+
+
+def _log_stage_b_batches(pool: list[dict], batches: list[list[dict]]) -> None:
+    ranking = _rank_stage_a_candidates(pool)
+    batch_by_candidate = {
+        item["candidate_id"]: index
+        for index, batch in enumerate(batches, 1)
+        for item in batch
+    }
+    print(
+        f"[NEWS STAGE B BATCH PLAN] total_candidates={len(pool)} batch_count={len(batches)} "
+        f"batch_sizes={[len(batch) for batch in batches]}"
+    )
+    for rank, (item, importance_score, reason, source_penalty, priority_base, composite_score) in enumerate(ranking, 1):
+        candidate_id = item.get("candidate_id", "")
+        print(
+            f"[NEWS STAGE B BATCH PLAN ITEM] candidate_id={candidate_id} "
+            f"| source={item.get('source', '')} | composite_score={composite_score:g} "
+            f"| importance_reason={reason} | rank={rank} | batch={batch_by_candidate.get(candidate_id, '<none>')}"
+        )
+
+
+def batch_stage_b_input(candidates: list[dict], batch_size: int = STAGE_B_MAX_INPUT) -> list[list[dict]]:
+    """Split the FULL Stage B input pool into batches of at most `batch_size`,
+    so every candidate is guaranteed to reach at least one real Stage B request
+    -- unlike the old select_stage_b_input, which permanently dropped anything
+    past the first `batch_size` (confirmed live on 2026-09-07: Stage A produced
+    50 events but only the top 28 by composite score were ever sent to Stage B;
+    the other 22, including a real Nvidia/Hugging Face acquisition story, were
+    silently never judged by any model).
+
+    Candidates are first ranked with the same priority/importance/composite-score
+    logic used everywhere else in this module (`_rank_stage_a_candidates`), then
+    sliced into batches in that order -- so the highest-value candidates land in
+    the first batch (the one guaranteed to run even under the tightest time
+    budget), and each batch is still small enough to fit the same per-request
+    timeout budget a single un-batched call already had to meet. `batch_size`
+    bounds a single request's size, not the total candidate pool: unlike the
+    old cap, nothing here is ever dropped -- see the caller (select_news_multi_batch
+    in deepseek_client.py) for how every batch is then actually sent to Stage B.
+    """
+    if not candidates:
+        return []
+    ranked = [item for item, _, _, _, _, _ in _rank_stage_a_candidates(candidates)]
+    batches = [ranked[start:start + batch_size] for start in range(0, len(ranked), batch_size)]
+    _log_stage_b_batches(candidates, batches)
+    return batches
+
+
+# Stage B's deterministic fallback (build_deterministic_fallback_selection) is
+# an ELIGIBILITY FILTER, not a ranking cut: a candidate is only ever included
+# if it clears one of these four high-confidence rules. There is deliberately
+# no minimum or maximum count -- quality over quantity. Confirmed necessary
+# via real 2026-09-07 replay: the previous composite-score top-8 cut surfaced
+# Turkey's GDP forecast, a German state election, parenting advice, and sugar
+# prices onto the homepage the moment two of three real Stage B batches timed
+# out, none of which belong in front of a long-term SPY/Nasdaq-100 investor.
+#
+# Rule A -- US macro/Fed/Treasury: specific phrases only, never bare generic
+# words like "rates" or "jobs" (which show up in unrelated contexts -- see the
+# AMBIGUOUS_TERMS_REQUIRING_CONTEXT precedent above for the same lesson).
+FALLBACK_MACRO_STRICT_TERMS = (
+    "federal reserve", "fed", "fomc",
+    "us inflation", "cpi", "core cpi", "pce",
+    "us employment", "nonfarm payroll", "payrolls", "unemployment rate",
+    "us treasury", "treasury yield", "us bond market",
+    "us fiscal", "us tariff", "us trade policy",
+)
+
+# Rule B -- a tracked mega-cap company AND a major event type. A company name
+# alone is never enough (that was the exact 2026-09-07 "Model fatigue" lesson
+# applied to Stage A; the same principle holds here). "lawsuit"/"sue" are
+# deliberately NOT in the major-event list: an LLM can judge whether a lawsuit
+# is actually material (see news_prompt.py's "「重大诉讼或和解」的入选门槛"),
+# but this deterministic filter cannot, and bare "lawsuit" is exactly what let
+# an ordinary Seattle Times/Newsday copyright suit slip through before that
+# prompt rule existed -- so a lawsuit only qualifies here via a stronger,
+# less ambiguous signal (antitrust/DOJ/FTC involvement).
+FALLBACK_MEGA_CAP_COMPANIES = (
+    "apple", "microsoft", "alphabet", "google", "amazon", "meta", "nvidia", "tesla", "spacex",
+)
+FALLBACK_MEGA_CAP_MAJOR_EVENT_TERMS = (
+    "earnings", "quarterly results", "guidance",
+    "acquisition", "acquire", "acquires", "merger", "investment",
+    "capital expenditure", "capex",
+    "unveil", "launch",
+    "government contract", "nasa contract",
+    "antitrust", "doj", "ftc",
+)
+# "crash"/"explosion"/"mission failure"/"anomaly"/"starship"/"starlink" only
+# count for SpaceX specifically -- SpaceX's entire business is spaceflight, so
+# a launch/mission accident is a core business event; the same words applied
+# to any of the other eight companies is not (confirmed via real 2026-09-07
+# data: "Five dead after Amazon cargo plane crashes at Miami airport" is a
+# tragic accident involving an Amazon-branded cargo flight, not a material
+# Amazon business event, and must not qualify just because "Amazon" + "crash"
+# both appear).
+FALLBACK_SPACEX_ONLY_EVENT_TERMS = ("starship", "starlink", "explosion", "crash", "mission failure", "anomaly")
+
+# Bare "CEO"/"chief executive" is deliberately NOT a qualifying major-event
+# term (removed from the list above): a company mentioning its CEO at all --
+# an interview, a pay-package writeup, a routine appearance -- is not itself a
+# major event. Confirmed via real 2026-09-07 data: "Apple's New CEO-Like Cook
+# Pay Package Shows He's Going Nowhere" matched the old bare "ceo" term even
+# though the story is explicitly about Cook *staying*, not any leadership
+# change. Only real executive-change language qualifies.
+FALLBACK_EXECUTIVE_CHANGE_TERMS = (
+    "resign", "resignation", "step down", "steps down", "stepping down",
+    "appointed ceo", "appoints ceo", "named ceo", "names ceo",
+    "replaced", "succession", "successor",
+    "fired", "removed", "departure",
+    "leadership reorganization", "leadership shakeup",
+)
+
+# Rule C reuses _geopolitics_policy_matches (region + real economic/market-
+# transmission signal, both required) as its base gate, plus one more
+# condition below (_fallback_matches_geopolitics) for policy-type signals
+# specifically (tariff/sanction/export control/trade/banking): those need an
+# actual policy-action state change, not just commentary about an existing
+# policy. A kinetic/already-happened signal (war, a military strike, an oil-
+# shipping disruption, etc.) needs no such extra confirmation -- the verb
+# itself already describes something that happened.
+#
+# Confirmed via real 2026-09-07 data: "Rep. Stevens Says Canadian Tariffs Are
+# Squeezing Michigan" matched the base region ("Canadian") + signal ("tariff")
+# check, but the story is a politician's commentary on an *existing* tariff
+# ("raising costs"), not a new policy action -- deterministic fallback cannot
+# tell "a new tariff was just imposed" from "a politician commented on tariffs
+# that already exist" the way the Stage B AI prompt can.
+FALLBACK_GEOPOLITICS_KINETIC_SIGNALS = (
+    "oil", "energy", "gas", "shipping", "strait", "supply chain",
+    "war", "military strike", "missile", "conflict", "commodity", "market disruption",
+    "tanker attack", "tanker strike",
+)
+FALLBACK_GEOPOLITICS_POLICY_SIGNALS = (
+    "sanction", "tariff", "trade", "export control", "chip restriction", "financial sanction", "banking",
+)
+FALLBACK_POLICY_ACTION_TERMS = (
+    "announced", "announces", "imposed", "imposes", "enacted", "effective",
+    "raised", "raises", "cut", "cuts", "removed", "removes", "suspended", "suspends",
+    "retaliatory tariff", "export control introduced", "export controls tightened",
+)
+
+
+def _fallback_matches_geopolitics(text: str) -> bool:
+    if not _geopolitics_policy_matches(text):
+        return False
+    if any(_keyword_present(text, word) for word in FALLBACK_GEOPOLITICS_KINETIC_SIGNALS):
+        return True
+    if any(_keyword_present(text, word) for word in FALLBACK_GEOPOLITICS_POLICY_SIGNALS):
+        return any(_keyword_present(text, term) for term in FALLBACK_POLICY_ACTION_TERMS)
+    return False
+
+# Rule D -- energy: a core oil/OPEC term AND a real supply/shipping disruption
+# signal, both required, mirroring geopolitics's two-tier structure. Ordinary
+# commodity coverage (sugar, agricultural prices, a routine "oil market
+# roundup" with no disruption) does not qualify just for mentioning oil.
+FALLBACK_ENERGY_CORE_TERMS = ("oil", "crude", "opec")
+FALLBACK_ENERGY_DISRUPTION_TERMS = (
+    "supply disruption", "shipping disruption", "strait", "pipeline attack",
+    "production cut", "supply cut", "export ban", "blockade", "tanker attack", "tanker strike",
+)
+
+
+def _fallback_high_confidence_rule(item: dict) -> Optional[str]:
+    """Return the name of the one high-confidence rule `item` clears, or None
+    if it clears none of them.
+
+    Text is drawn from title + event_summary ONLY -- deliberately excluding
+    the raw article `summary` field. Confirmed necessary via real 2026-09-07
+    data: "Turkey Cuts 2027 GDP Growth Forecast as Elections Beckon" (an
+    ordinary foreign-country GDP story) has a summary that happens to mention
+    "fallout from the Iran war reverberates" purely as passing background
+    color, which alone satisfied the geopolitics rule's region+signal check --
+    even though the story is not about Iran or the war at all. Stage A's own
+    event_summary is a distilled, on-topic factual restatement (here: "Turkey
+    cut its 2027 GDP growth forecast.") and does not carry that kind of
+    incidental cross-reference, making title+event_summary a much more
+    reliable signal of what a story is actually about than the original
+    (often noisy) article summary.
+    """
+    text = " ".join(str(item.get(field) or "") for field in ("title", "event_summary")).lower()
+    if any(_keyword_present(text, term) for term in FALLBACK_MACRO_STRICT_TERMS):
+        return "us_macro_fed_treasury"
+    matched_companies = [word for word in FALLBACK_MEGA_CAP_COMPANIES if _keyword_present(text, word)]
+    if matched_companies:
+        has_major_event = any(_keyword_present(text, word) for word in FALLBACK_MEGA_CAP_MAJOR_EVENT_TERMS)
+        has_executive_change = any(_keyword_present(text, word) for word in FALLBACK_EXECUTIVE_CHANGE_TERMS)
+        has_spacex_event = "spacex" in matched_companies and any(
+            _keyword_present(text, word) for word in FALLBACK_SPACEX_ONLY_EVENT_TERMS
+        )
+        if has_major_event or has_executive_change or has_spacex_event:
+            return "mega_cap_major_event"
+    if _fallback_matches_geopolitics(text):
+        return "geopolitics_region_and_market_transmission"
+    has_energy_core = any(_keyword_present(text, word) for word in FALLBACK_ENERGY_CORE_TERMS)
+    has_disruption = any(_keyword_present(text, word) for word in FALLBACK_ENERGY_DISRUPTION_TERMS)
+    if has_energy_core and has_disruption:
+        return "energy_supply_disruption"
+    return None
+
+
+def build_deterministic_fallback_selection(candidates: list[dict]) -> list[dict]:
+    """Strict, high-confidence-only Stage B replacement for when the two-pass
+    AI selection actually fails (see select_news_with_fallback for exactly
+    when this runs -- never merely because the AI legitimately selected zero
+    items). Never calls the LLM.
+
+    This is a pure ELIGIBILITY FILTER (see the four rules above), not a
+    ranking cut: every candidate is checked against all four rules, and only
+    those that clear one are kept, in composite-score order for display.
+    Returning [] is the correct, expected result when nothing in this batch
+    clears the bar -- there is no padding to reach any target count.
+
+    title_zh/summary_zh reuse Stage A's own Chinese event_summary (falling back
+    to the original English title/summary only when no event_summary exists)
+    instead of fabricating an AI translation; investment_relevance_score and
+    tags are left unset/empty rather than invented, and selection_reason names
+    the specific rule that qualified the item so it is never mistaken for one
+    the AI itself vetted.
+    """
+    if not candidates:
+        return []
     fallback = []
-    for rank, (item, importance_score, signal_reason, source_penalty, priority_base, composite_score) in enumerate(
-        ranked, start=1
-    ):
+    for item, importance_score, signal_reason, source_penalty, priority_base, composite_score in _rank_stage_a_candidates(candidates):
+        rule = _fallback_high_confidence_rule(item)
+        if rule is None:
+            continue
         original_title = item.get("title", "")
         event_summary = (item.get("event_summary") or "").strip()
         zh_text = event_summary or original_title
         fallback.append({
-            "rank": rank,
+            "rank": len(fallback) + 1,
             "candidate_id": item["candidate_id"],
             "category": TOPIC_GROUP_TO_CATEGORY.get(item.get("topic_group"), "美国经济"),
             "title_zh": zh_text[:TITLE_ZH_LIMIT],
@@ -502,14 +885,15 @@ def build_deterministic_fallback_selection(candidates: list[dict], max_items: in
             "published_at": item.get("published_at"),
             "original_title": original_title,
             "selection_reason": (
-                f"确定性降级选取（AI 筛选超时未产出结果）：composite_score={composite_score:g} "
-                f"(priority_base={priority_base:g}, importance_score={importance_score}, "
-                f"source_penalty={source_penalty:g}, signals={signal_reason})"
+                f"确定性降级选取（AI 筛选失败）：命中高置信规则「{rule}」 "
+                f"| composite_score={composite_score:g} (priority_base={priority_base:g}, "
+                f"importance_score={importance_score}, source_penalty={source_penalty:g}, signals={signal_reason})"
             ),
             "event_summary": item.get("event_summary", original_title),
             "topic_group": item.get("topic_group"),
             "event_category": item.get("event_category", "other"),
             "source_channel": item.get("source_channel"),
             "fallback": True,
+            "selection_mode": "deterministic_fallback",
         })
     return fallback
