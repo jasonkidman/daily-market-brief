@@ -1,6 +1,6 @@
 {
   "report_date": "2026-09-07",
-  "generated_at": "2026-09-07 13:28 CST",
+  "generated_at": "2026-09-07 19:01 CST",
   "market_date": "2026-09-04",
   "status": "ok",
   "status_label": "🟢 数据更新正常",
@@ -704,17 +704,17 @@
       "valid": true
     },
     "vix": {
-      "market_date": "2026-09-04",
-      "close": 14.529999732971191,
-      "daily_return": 0.01466480744569254,
+      "market_date": "2026-09-07",
+      "close": 15.039999961853027,
+      "daily_return": 0.03509980992804507,
       "name": "VIX",
       "ticker": "^VIX",
       "valid": true
     },
     "dxy": {
       "market_date": "2026-09-07",
-      "close": 99.17500305175781,
-      "daily_return": 0.0001512645128529666,
+      "close": 98.93299865722656,
+      "daily_return": -0.002289279916289022,
       "name": "美元指数",
       "ticker": "DX-Y.NYB",
       "valid": true
@@ -747,8 +747,8 @@
   "market_signals": {
     "tech_relative": 0.005854413331139119,
     "small_cap_relative": 0.0062434788437908395,
-    "vix_daily_return": 0.01466480744569254,
-    "dxy_daily_return": 0.0001512645128529666,
+    "vix_daily_return": 0.03509980992804507,
+    "dxy_daily_return": -0.002289279916289022,
     "us10y_bp_change": 2.199983596801758,
     "signals": [
       {
@@ -901,11 +901,11 @@
     }
   },
   "market_sentiment": {
-    "vix_score": 77.4,
+    "vix_score": 74.8,
     "breadth_score": 31.8,
     "momentum_score": 47.2,
     "risk_appetite_score": 81.2,
-    "market_sentiment_score": 58.2,
+    "market_sentiment_score": 57.3,
     "market_sentiment_label": "中性"
   },
   "drawdown": {
@@ -917,7 +917,7 @@
       "ath": 7798.990234375,
       "ath_date": "2026-08-13",
       "last_market_date": "2026-09-04",
-      "last_updated_at": "2026-09-07T13:28:20.183602+08:00",
+      "last_updated_at": "2026-09-07T19:01:14.147621+08:00",
       "current_close": 7718.60009765625,
       "current_drawdown": 0.010307762197780512,
       "pool": 140000,
@@ -975,7 +975,7 @@
       "ath": 30660.599609375,
       "ath_date": "2026-06-02",
       "last_market_date": "2026-09-04",
-      "last_updated_at": "2026-09-07T13:28:20.183602+08:00",
+      "last_updated_at": "2026-09-07T19:01:14.147621+08:00",
       "current_close": 29544.150390625,
       "current_drawdown": 0.03641315672145651,
       "pool": 60000,
@@ -1038,180 +1038,278 @@
   },
   "portfolio_action": "hold",
   "market_summary": {
-    "market": "9月4日标普500下跌0.38%，纳斯达克100上涨0.21%；市场宽度偏弱，多数股票和板块走低。纳斯达克100相对标普500领先0.59个百分点，小盘股领先0.62个百分点。",
-    "drivers": "市场同时关注美国与伊朗围绕霍尔木兹海峡的油轮袭击升级，以及《西雅图时报》和Newsday起诉OpenAI与微软的版权侵权指控。",
+    "summary": "标普500当日下跌0.4%，纳指100当日上涨0.2%，当前市场宽度为市场偏弱。市场同时关注Treasury yields face 4.8% test as fiscal risks threaten to spill into 。",
     "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
-    "degraded": false
+    "degraded": true
   },
   "news": [
     {
       "rank": 1,
-      "candidate_id": "ac8809c88fa3897c",
-      "category": "地缘政治",
-      "title_zh": "美伊在霍尔木兹海峡互袭油轮，能源供应风险升温",
-      "summary_zh": "布隆伯格报道，美国与伊朗围绕霍尔木兹海峡的油轮袭击形成升级循环。分析人士称，实物市场供应趋紧，柴油价格和未来数周的能源短缺风险上升。",
-      "focus": "霍尔木兹海峡通航、原油及柴油价格、后续军事升级",
-      "tags": [
-        "霍尔木兹海峡",
-        "美伊冲突",
-        "能源供应",
-        "油价"
-      ],
-      "investment_relevance_score": 91,
-      "source": "Bloomberg Markets",
-      "url": "https://www.bloomberg.com/news/videos/2026-09-07/hari-oil-prices-to-keep-grinding-higher-video",
-      "published_at": "2026-09-07T05:04:43+00:00",
-      "original_title": "Hari: Oil Prices to Keep Grinding Higher",
-      "selection_reason": "地缘政治：美伊已发生油轮袭击，涉及全球关键航运通道；能源供应趋紧可直接传导至油价与美国通胀预期。",
-      "event_summary": "The US and Iran exchanged tanker attacks amid escalating conflict around Hormuz.",
-      "topic_group": "GEOPOLITICS",
-      "event_category": "other",
-      "source_channel": null
+      "candidate_id": "01e8280118efb713",
+      "category": "美国经济",
+      "title_zh": "Treasury yields face 4.8% test as fiscal risks threaten to spill into ",
+      "summary_zh": "Treasury yields face 4.8% test as fiscal risks threaten to spill into other assets",
+      "focus": "",
+      "tags": [],
+      "investment_relevance_score": null,
+      "source": "CNBC Top News",
+      "url": "https://www.cnbc.com/2026/09/07/us-treasury-yields-markets-scott-bessent.html",
+      "published_at": "2026-09-07T02:01:52+00:00",
+      "original_title": "Treasury yields face 4.8% test as fiscal risks threaten to spill into other assets",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「us_macro_fed_treasury」 | composite_score=11.75 (priority_base=6, importance_score=3, source_penalty=0.25, signals=macro_rates)",
+      "event_summary": "Treasury yields face 4.8% test as fiscal risks threaten to spill into other assets",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "macro_policy",
+      "source_channel": null,
+      "fallback": true,
+      "selection_mode": "deterministic_fallback"
     },
     {
       "rank": 2,
-      "candidate_id": "d5c736f2ff6288d2",
-      "category": "大型科技",
-      "title_zh": "《西雅图时报》等起诉 OpenAI 与微软侵权",
-      "summary_zh": "《西雅图时报》和 Newsday 起诉 OpenAI 与微软，指控其未经许可使用新闻报道训练 AI 模型，并在回答用户问题时复现报道段落。",
-      "focus": "诉讼进展、训练数据使用规则及潜在赔偿责任",
-      "tags": [
-        "OpenAI",
-        "微软",
-        "版权诉讼",
-        "AI监管"
-      ],
-      "investment_relevance_score": 78,
-      "source": "The Verge",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/990932/seattle-times-newsday-lawsuit-openai-microsoft",
-      "published_at": "2026-09-06T23:36:04+00:00",
-      "original_title": "Seattle Times and Newsday sue OpenAI and Microsoft for infringement",
-      "selection_reason": "大型科技：重大诉讼；案件直接涉及 OpenAI 与微软的 AI 训练数据、内容授权和潜在责任。",
-      "event_summary": "The Seattle Times and Newsday sued OpenAI and Microsoft for copyright infringement.",
-      "topic_group": "MEGA_CAP_TECH",
-      "event_category": "other",
-      "source_channel": null
+      "candidate_id": "033a8d954c64d876",
+      "category": "地缘政治",
+      "title_zh": "U.S. Energy Secretary Wright says Iran nuclear deal may never happen",
+      "summary_zh": "U.S. Energy Secretary Wright says Iran nuclear deal may never happen",
+      "focus": "",
+      "tags": [],
+      "investment_relevance_score": null,
+      "source": "CNBC Top News",
+      "url": "https://www.cnbc.com/2026/09/06/iran-us-response-oil-tanker-strikes.html",
+      "published_at": "2026-09-07T07:35:18+00:00",
+      "original_title": "U.S. Energy Secretary Wright says Iran nuclear deal may never happen",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「geopolitics_region_and_market_transmission」 | composite_score=9 (priority_base=6, importance_score=2, source_penalty=1, signals=geopolitics_policy)",
+      "event_summary": "U.S. Energy Secretary Wright says Iran nuclear deal may never happen",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "geopolitics",
+      "source_channel": null,
+      "fallback": true,
+      "selection_mode": "deterministic_fallback"
     },
     {
       "rank": 3,
-      "candidate_id": "aa48fd78d5a3c8da",
-      "category": "政策 / 监管",
-      "title_zh": "澳大利亚拟要求社交平台允许用户关闭算法推荐",
-      "summary_zh": "澳大利亚计划立法，要求 Meta、Google 和 TikTok 为用户提供关闭社交媒体算法的选项；相关企业若不遵守，可能面临高额处罚。",
-      "focus": "立法是否通过、处罚规模及 Meta 与 Google 的合规调整",
-      "tags": [
-        "Meta",
-        "Google",
-        "平台监管",
-        "算法推荐"
-      ],
-      "investment_relevance_score": 70,
-      "source": "BBC News",
-      "url": "https://www.bbc.co.uk/news/articles/cn9wyvxn95vo?at_medium=RSS&at_campaign=rss",
-      "published_at": "2026-09-07T03:40:09+00:00",
-      "original_title": "Australians will be able to switch off social media algorithms under planned legislation",
-      "selection_reason": "政策 / 监管：澳大利亚拟建立算法关闭选项及处罚制度，直接涉及 Meta、Google 等美国上市公司的平台规则与合规成本。",
-      "event_summary": "Australia planned legislation allowing users to switch off social media algorithms.",
-      "topic_group": "MEGA_CAP_TECH",
-      "event_category": "other",
-      "source_channel": null
+      "candidate_id": "470316493c16ab92",
+      "category": "金融市场",
+      "title_zh": "SocGen’s Bokobza Says 5.5% Treasury Yield Would Crack Equities",
+      "summary_zh": "SocGen’s Bokobza Says 5.5% Treasury Yield Would Crack Equities",
+      "focus": "",
+      "tags": [],
+      "investment_relevance_score": null,
+      "source": "Bloomberg Markets",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-07/socgen-s-bokobza-says-5-5-treasury-yield-would-crack-equities",
+      "published_at": "2026-09-07T10:14:39+00:00",
+      "original_title": "SocGen’s Bokobza Says 5.5% Treasury Yield Would Crack Equities",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「us_macro_fed_treasury」 | composite_score=11.75 (priority_base=6, importance_score=3, source_penalty=0.25, signals=macro_rates)",
+      "event_summary": "SocGen’s Bokobza Says 5.5% Treasury Yield Would Crack Equities",
+      "topic_group": "CORPORATE_EARNINGS",
+      "event_category": "financial_markets",
+      "source_channel": null,
+      "fallback": true,
+      "selection_mode": "deterministic_fallback"
+    },
+    {
+      "rank": 4,
+      "candidate_id": "91b8bf5457ce2afb",
+      "category": "美国经济",
+      "title_zh": "Global Reserves Shift From Dollar Overstated, NY Fed Study Says",
+      "summary_zh": "Global Reserves Shift From Dollar Overstated, NY Fed Study Says",
+      "focus": "",
+      "tags": [],
+      "investment_relevance_score": null,
+      "source": "Bloomberg Economics",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-07/global-reserves-shift-from-dollar-overstated-ny-fed-study-says",
+      "published_at": "2026-09-07T10:32:14+00:00",
+      "original_title": "Global Reserves Shift From Dollar Overstated, NY Fed Study Says",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「us_macro_fed_treasury」 | composite_score=5.75 (priority_base=6, importance_score=0, source_penalty=0.25, signals=none)",
+      "event_summary": "Global Reserves Shift From Dollar Overstated, NY Fed Study Says",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "macro_policy",
+      "source_channel": null,
+      "fallback": true,
+      "selection_mode": "deterministic_fallback"
+    },
+    {
+      "rank": 5,
+      "candidate_id": "9c2ddbe1db23bcfc",
+      "category": "美国经济",
+      "title_zh": "Fed Latest: Warsh’s speech contrasts with New York Fed president’s tak",
+      "summary_zh": "Fed Latest: Warsh’s speech contrasts with New York Fed president’s take",
+      "focus": "",
+      "tags": [],
+      "investment_relevance_score": null,
+      "source": "Bloomberg Economics",
+      "url": "https://www.bloomberg.com/news/newsletters/2026-09-07/fed-latest-warsh-s-speech-contrasts-with-new-york-fed-president-s-take",
+      "published_at": "2026-09-07T11:00:01+00:00",
+      "original_title": "Fed Latest: Warsh’s speech contrasts with New York Fed president’s take",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「us_macro_fed_treasury」 | composite_score=6 (priority_base=6, importance_score=0, source_penalty=0, signals=none)",
+      "event_summary": "Fed Latest: Warsh’s speech contrasts with New York Fed president’s take",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "macro_policy",
+      "source_channel": null,
+      "fallback": true,
+      "selection_mode": "deterministic_fallback"
+    },
+    {
+      "rank": 6,
+      "candidate_id": "9f1aec32d4be63e5",
+      "category": "美国经济",
+      "title_zh": "US-Iran Tanker Attacks Escalate, Sending Oil Higher | The Pulse 9/7/20",
+      "summary_zh": "US-Iran Tanker Attacks Escalate, Sending Oil Higher | The Pulse 9/7/2026",
+      "focus": "",
+      "tags": [],
+      "investment_relevance_score": null,
+      "source": "Bloomberg Markets",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-07/the-pulse-9-7-2026-video",
+      "published_at": "2026-09-07T09:46:50+00:00",
+      "original_title": "US-Iran Tanker Attacks Escalate, Sending Oil Higher | The Pulse 9/7/2026",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「geopolitics_region_and_market_transmission」 | composite_score=8.25 (priority_base=6, importance_score=2, source_penalty=1.75, signals=geopolitics_policy)",
+      "event_summary": "US-Iran Tanker Attacks Escalate, Sending Oil Higher | The Pulse 9/7/2026",
+      "topic_group": "ENERGY_COMMODITIES",
+      "event_category": "financial_markets",
+      "source_channel": null,
+      "fallback": true,
+      "selection_mode": "deterministic_fallback"
+    },
+    {
+      "rank": 7,
+      "candidate_id": "a2968aab0fdfdc41",
+      "category": "地缘政治",
+      "title_zh": "Israel-Hezbollah clashes kill 11 as Mideast conflict escalation gather",
+      "summary_zh": "Israel-Hezbollah clashes kill 11 as Mideast conflict escalation gathers pace after U.S.-Iran strikes",
+      "focus": "",
+      "tags": [],
+      "investment_relevance_score": null,
+      "source": "CNBC Top News",
+      "url": "https://www.cnbc.com/2026/09/07/us-iran-war-trump-hormuz-israel-hezbollah-fighting-strikes-.html",
+      "published_at": "2026-09-07T09:26:27+00:00",
+      "original_title": "Israel-Hezbollah clashes kill 11 as Mideast conflict escalation gathers pace after U.S.-Iran strikes",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「geopolitics_region_and_market_transmission」 | composite_score=9.25 (priority_base=6, importance_score=2, source_penalty=0.75, signals=geopolitics_policy)",
+      "event_summary": "Israel-Hezbollah clashes kill 11 as Mideast conflict escalation gathers pace after U.S.-Iran strikes",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "geopolitics",
+      "source_channel": null,
+      "fallback": true,
+      "selection_mode": "deterministic_fallback"
     }
   ],
   "news_candidates": [
     {
-      "candidate_id": "0766ed7d8242f425",
-      "title": "Iran, US Trade Tanker Attacks, Strong US Payrolls Fuel Fed Hike Bets | The Asia Trade 9/7/2026",
-      "title_zh": "Iran, US Trade Tanker Attacks, Strong US Payrolls Fuel Fed Hike Bets | The Asia Trade 9/7/2026",
+      "candidate_id": "470316493c16ab92",
+      "title": "SocGen’s Bokobza Says 5.5% Treasury Yield Would Crack Equities",
+      "title_zh": "SocGen’s Bokobza Says 5.5% Treasury Yield Would Crack Equities",
       "source": "Bloomberg Markets",
-      "published_at": "2026-09-07T03:45:55+00:00",
-      "summary": "\"Bloomberg: The Asia Trade\" brings you everything you need to know to get ahead as the trading day begins in Asia. Bloomberg TV is live from Tokyo and Sydney with Avril Hong and Paul Allen, getting insight and analysis from newsmakers and industry leaders on the biggest stories shaping global markets. (Source: Bloomberg)",
-      "summary_zh": "\"Bloomberg: The Asia Trade\" brings you everything you need to know to get ahead as the trading day begins in Asia. Bloomberg TV is live from Tokyo and Sydney with Avril Hong and Paul Allen, getting insight and analysis from newsmakers and industry leaders on the biggest stories shaping global markets. (Source: Bloomberg)",
-      "url": "https://www.bloomberg.com/news/videos/2026-09-07/the-asia-trade-9-7-2026-video",
+      "published_at": "2026-09-07T10:14:39+00:00",
+      "summary": "A 10-year US Treasury yield of 5.5% represents the threshold at which higher borrowing costs would overwhelm earnings growth and begin to pressure equity valuations, according to Alain Bokobza, head of global asset allocation at Societe Generale SA.",
+      "summary_zh": "SocGen’s Bokobza Says 5.5% Treasury Yield Would Crack Equities",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-07/socgen-s-bokobza-says-5-5-treasury-yield-would-crack-equities",
       "category": "宏观 / 利率",
-      "selected": false
-    },
-    {
-      "candidate_id": "9a1ed785eb818a67",
-      "title": "Australia’s AI Boom Risks Demand Surge and Higher Rates, BE Says",
-      "title_zh": "Australia’s AI Boom Risks Demand Surge and Higher Rates, BE Says",
-      "source": "Bloomberg Technology",
-      "published_at": "2026-09-07T01:23:56+00:00",
-      "summary": "Australia’s data center boom risks pushing demand beyond the economy’s supply capacity, fueling inflation and requiring the Reserve Bank to run higher interest rates, according to James McIntyre at Bloomberg Economics.",
-      "summary_zh": "Australia’s data center boom risks pushing demand beyond the economy’s supply capacity, fueling inflation and requiring the Reserve Bank to run higher interest rates, according to James McIntyre at Bloomberg Economics.",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-07/australia-s-ai-boom-risks-demand-surge-and-higher-rates-be-says",
-      "category": "AI / 科技",
-      "selected": false
-    },
-    {
-      "candidate_id": "a29c0a5cfdda1e97",
-      "title": "Thai Inflation Accelerates More Than Expected to 2.53%",
-      "title_zh": "Thai Inflation Accelerates More Than Expected to 2.53%",
-      "source": "Bloomberg Economics",
-      "published_at": "2026-09-07T03:56:33+00:00",
-      "summary": "Thailand’s inflation accelerated more than expected in August but still remained within the central bank’s target range, giving policymakers little reason to shift course as they focus on supporting a slowing economy.",
-      "summary_zh": "Thailand’s inflation accelerated more than expected in August but still remained within the central bank’s target range, giving policymakers little reason to shift course as they focus on supporting a slowing economy.",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-07/thai-inflation-accelerates-more-than-expected-to-2-53-in-august",
-      "category": "宏观 / 利率",
-      "selected": false
+      "selected": true
     },
     {
       "candidate_id": "01e8280118efb713",
       "title": "Treasury yields face 4.8% test as fiscal risks threaten to spill into other assets",
-      "title_zh": "Treasury yields face 4.8% test as fiscal risks threaten to spill into other assets",
+      "title_zh": "Treasury yields face 4.8% test as fiscal risks threaten to spill into ",
       "source": "CNBC Top News",
       "published_at": "2026-09-07T02:01:52+00:00",
       "summary": "Treasury yields face a test at 4.8%, with a sustained move above that potentially creating \"meaningful problems\" for other asset classes, said Miller Tabak.",
-      "summary_zh": "Treasury yields face a test at 4.8%, with a sustained move above that potentially creating \"meaningful problems\" for other asset classes, said Miller Tabak.",
+      "summary_zh": "Treasury yields face 4.8% test as fiscal risks threaten to spill into other assets",
       "url": "https://www.cnbc.com/2026/09/07/us-treasury-yields-markets-scott-bessent.html",
       "category": "宏观 / 利率",
-      "selected": false
+      "selected": true
     },
     {
-      "candidate_id": "02d4bb0d362b6d85",
-      "title": "Five dead after Amazon cargo plane crashes at Miami airport",
-      "title_zh": "Five dead after Amazon cargo plane crashes at Miami airport",
-      "source": "BBC News",
-      "published_at": "2026-09-07T00:57:38+00:00",
-      "summary": "Five people are dead and five seriously injured after a Boeing 767-300 cargo plane \"overran\" the runway and caught fire, officials say.",
-      "summary_zh": "Five people are dead and five seriously injured after a Boeing 767-300 cargo plane \"overran\" the runway and caught fire, officials say.",
-      "url": "https://www.bbc.co.uk/news/articles/c0e3p1j7n3ro?at_medium=RSS&at_campaign=rss",
-      "category": "其他",
-      "selected": false
+      "candidate_id": "a2968aab0fdfdc41",
+      "title": "Israel-Hezbollah clashes kill 11 as Mideast conflict escalation gathers pace after U.S.-Iran strikes",
+      "title_zh": "Israel-Hezbollah clashes kill 11 as Mideast conflict escalation gather",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-07T09:26:27+00:00",
+      "summary": "Lebanese President Joseph Aoun called on the U.S. to help stop Israeli attacks after Sunday strikes killed at least seven people.",
+      "summary_zh": "Israel-Hezbollah clashes kill 11 as Mideast conflict escalation gathers pace after U.S.-Iran strikes",
+      "url": "https://www.cnbc.com/2026/09/07/us-iran-war-trump-hormuz-israel-hezbollah-fighting-strikes-.html",
+      "category": "地缘政治与风险事件",
+      "selected": true
+    },
+    {
+      "candidate_id": "033a8d954c64d876",
+      "title": "U.S. Energy Secretary Wright says Iran nuclear deal may never happen",
+      "title_zh": "U.S. Energy Secretary Wright says Iran nuclear deal may never happen",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-07T07:35:18+00:00",
+      "summary": "Iran warned of faster, heavier retaliation against U.S. attacks while acknowledging the war’s mounting toll on its economy.",
+      "summary_zh": "U.S. Energy Secretary Wright says Iran nuclear deal may never happen",
+      "url": "https://www.cnbc.com/2026/09/06/iran-us-response-oil-tanker-strikes.html",
+      "category": "地缘政治与风险事件",
+      "selected": true
+    },
+    {
+      "candidate_id": "9f1aec32d4be63e5",
+      "title": "US-Iran Tanker Attacks Escalate, Sending Oil Higher | The Pulse 9/7/2026",
+      "title_zh": "US-Iran Tanker Attacks Escalate, Sending Oil Higher | The Pulse 9/7/20",
+      "source": "Bloomberg Markets",
+      "published_at": "2026-09-07T09:46:50+00:00",
+      "summary": "\"The Pulse With Francine Lacqua\" is all about conversations with high profile guests in the beating heart of global business, economics, finance and politics. Based in London, we go wherever the story is, bringing you exclusive interviews and market-moving scoops. Today's guests: Alain Bokobza, Societe Generale Global Asset Allocation Head; Paula Diehl, Kiel University Professor of Politics; Evangelos Mytilineos, Metlen Energy & Metals Chairman (Source: Bloomberg)",
+      "summary_zh": "US-Iran Tanker Attacks Escalate, Sending Oil Higher | The Pulse 9/7/2026",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-07/the-pulse-9-7-2026-video",
+      "category": "宏观 / 利率",
+      "selected": true
+    },
+    {
+      "candidate_id": "9c2ddbe1db23bcfc",
+      "title": "Fed Latest: Warsh’s speech contrasts with New York Fed president’s take",
+      "title_zh": "Fed Latest: Warsh’s speech contrasts with New York Fed president’s tak",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-07T11:00:01+00:00",
+      "summary": "Chair Warsh’s speech contrasts with New York Fed president’s take.",
+      "summary_zh": "Fed Latest: Warsh’s speech contrasts with New York Fed president’s take",
+      "url": "https://www.bloomberg.com/news/newsletters/2026-09-07/fed-latest-warsh-s-speech-contrasts-with-new-york-fed-president-s-take",
+      "category": "宏观 / 利率",
+      "selected": true
+    },
+    {
+      "candidate_id": "91b8bf5457ce2afb",
+      "title": "Global Reserves Shift From Dollar Overstated, NY Fed Study Says",
+      "title_zh": "Global Reserves Shift From Dollar Overstated, NY Fed Study Says",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-07T10:32:14+00:00",
+      "summary": "The decline in the dollar’s share of foreign-exchange reserves doesn’t reflect a widespread reallocation away from the currency, but rather moves by a small number of reserve managers, according to research from the Federal Reserve Bank of New York.",
+      "summary_zh": "Global Reserves Shift From Dollar Overstated, NY Fed Study Says",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-07/global-reserves-shift-from-dollar-overstated-ny-fed-study-says",
+      "category": "宏观 / 利率",
+      "selected": true
     },
     {
       "candidate_id": "d5c736f2ff6288d2",
       "title": "Seattle Times and Newsday sue OpenAI and Microsoft for infringement",
-      "title_zh": "《西雅图时报》等起诉 OpenAI 与微软侵权",
+      "title_zh": "Seattle Times and Newsday sue OpenAI and Microsoft for infringement",
       "source": "The Verge",
       "published_at": "2026-09-06T23:36:04+00:00",
       "summary": "The Seattle Times and Newsday are just the latest plaintiffs to take OpenAI to court, alleging copyright infringement. The two outlets say the company used their journalism as training data for its AI models without permission and often reproduces passages from their reporting in response to user queries. This is similar to lawsuits filed by […]",
-      "summary_zh": "《西雅图时报》和 Newsday 起诉 OpenAI 与微软，指控其未经许可使用新闻报道训练 AI 模型，并在回答用户问题时复现报道段落。",
+      "summary_zh": "The Seattle Times and Newsday are just the latest plaintiffs to take OpenAI to court, alleging copyright infringement. The two outlets say the company used their journalism as training data for its AI models without permission and often reproduces passages from their reporting in response to user queries. This is similar to lawsuits filed by […]",
       "url": "https://www.theverge.com/ai-artificial-intelligence/990932/seattle-times-newsday-lawsuit-openai-microsoft",
-      "category": "大型科技",
-      "selected": true
-    },
-    {
-      "candidate_id": "0b3b4241f8f22256",
-      "title": "Starbase Infrastructure Advances Toward Flight 14",
-      "title_zh": "Starbase Infrastructure Advances Toward Flight 14",
-      "source": "NASASpaceflight",
-      "published_at": "2026-09-06T18:49:44+00:00",
-      "summary": "SpaceX is still building out assembly, test, and launch infrastructure at Starbase while Flight 14… The post Starbase Infrastructure Advances Toward Flight 14 appeared first on NASASpaceFlight.com .",
-      "summary_zh": "SpaceX is still building out assembly, test, and launch infrastructure at Starbase while Flight 14… The post Starbase Infrastructure Advances Toward Flight 14 appeared first on NASASpaceFlight.com .",
-      "url": "https://www.nasaspaceflight.com/2026/09/starbase-infrastructure-spacex-flight-14/",
       "category": "大型科技",
       "selected": false
     },
     {
-      "candidate_id": "47c2e37038ee0ccb",
-      "title": "EM Stocks Jump to 2-Month High as Tech Rally Offsets Higher Oil",
-      "title_zh": "EM Stocks Jump to 2-Month High as Tech Rally Offsets Higher Oil",
+      "candidate_id": "7feea6840bdb3bd9",
+      "title": "Saudi Arabia, UAE Push Ahead With Data Center Plans",
+      "title_zh": "Saudi Arabia, UAE Push Ahead With Data Center Plans",
       "source": "Bloomberg Markets",
-      "published_at": "2026-09-07T03:44:49+00:00",
-      "summary": "Emerging-market equities rallied at the start of the week as optimism over new AI models boosted heavyweight tech stocks, helping counter the drag on sentiment from higher oil prices.",
-      "summary_zh": "Emerging-market equities rallied at the start of the week as optimism over new AI models boosted heavyweight tech stocks, helping counter the drag on sentiment from higher oil prices.",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-07/em-stocks-jump-to-2-month-high-as-tech-rally-offsets-higher-oil",
-      "category": "宏观 / 利率",
+      "published_at": "2026-09-07T08:58:04+00:00",
+      "summary": "The Persian Gulf’s richest states are pushing ahead with plans for a massive build-out of artificial intelligence infrastructure despite data centers becoming targets in the US-Iran war. Bloomberg's Zainab Fattah discusses how firms are responding to perceptions of higher risk on Horizons Middle East & Africa. (Source: Bloomberg)",
+      "summary_zh": "The Persian Gulf’s richest states are pushing ahead with plans for a massive build-out of artificial intelligence infrastructure despite data centers becoming targets in the US-Iran war. Bloomberg's Zainab Fattah discusses how firms are responding to perceptions of higher risk on Horizons Middle East & Africa. (Source: Bloomberg)",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-07/saudi-arabia-uae-push-ahead-with-data-center-plans-video",
+      "category": "AI / 科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "2dc3b7de97b8601a",
+      "title": "IQE CEO Warns of Emerging China Supply Risk for Chip Industry",
+      "title_zh": "IQE CEO Warns of Emerging China Supply Risk for Chip Industry",
+      "source": "Bloomberg Technology",
+      "published_at": "2026-09-07T08:51:49+00:00",
+      "summary": "IQE Plc Chief Executive Officer Jutta Meier said access to indium phosphide substrates is emerging as a key risk for the semiconductor industry as Chinese export controls create uncertainty over supplies.",
+      "summary_zh": "IQE Plc Chief Executive Officer Jutta Meier said access to indium phosphide substrates is emerging as a key risk for the semiconductor industry as Chinese export controls create uncertainty over supplies.",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-07/iqe-ceo-warns-of-emerging-china-supply-risk-for-chip-industry",
+      "category": "AI / 科技",
       "selected": false
     },
     {
@@ -1227,287 +1325,11 @@
       "selected": false
     },
     {
-      "candidate_id": "b0aeb1815f0990d5",
-      "title": "Japan’s Nikkei Gains as Tech Tailwinds Help Balance Macro Nerves",
-      "title_zh": "Japan’s Nikkei Gains as Tech Tailwinds Help Balance Macro Nerves",
-      "source": "Bloomberg Markets",
-      "published_at": "2026-09-07T00:48:55+00:00",
-      "summary": "Japan’s Nikkei 225 climbed as tech stocks followed their US peers higher after Friday’s rally. Gains on the broader Topix were smaller as concerns about the yen and bond yields limited risk appetite.",
-      "summary_zh": "Japan’s Nikkei 225 climbed as tech stocks followed their US peers higher after Friday’s rally. Gains on the broader Topix were smaller as concerns about the yen and bond yields limited risk appetite.",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-07/japanese-stocks-advance-as-tech-chip-shares-follow-us-peers",
-      "category": "宏观 / 利率",
-      "selected": false
-    },
-    {
-      "candidate_id": "6e63f9afaf96d4d2",
-      "title": "Gold Extends Drop as Jobs Data, Hormuz Clashes Up Rate-Hike Bets",
-      "title_zh": "Gold Extends Drop as Jobs Data, Hormuz Clashes Up Rate-Hike Bets",
-      "source": "Bloomberg Markets",
-      "published_at": "2026-09-06T23:28:46+00:00",
-      "summary": "Gold extended a decline, as stronger-than-expected US jobs growth and rising tensions in the Middle East raised the prospects for an interest-rate hike as early as next week.",
-      "summary_zh": "Gold extended a decline, as stronger-than-expected US jobs growth and rising tensions in the Middle East raised the prospects for an interest-rate hike as early as next week.",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-06/gold-holds-decline-as-traders-weigh-prospects-for-fed-rate-hike",
-      "category": "能源 / 大宗商品",
-      "selected": false
-    },
-    {
-      "candidate_id": "7a2d160d0f2f6c55",
-      "title": "Turkey Cuts 2027 GDP Growth Forecast as Elections Beckon",
-      "title_zh": "Turkey Cuts 2027 GDP Growth Forecast as Elections Beckon",
-      "source": "Bloomberg Economics",
-      "published_at": "2026-09-06T08:28:54+00:00",
-      "summary": "Turkey trimmed its 2027 gross domestic product growth forecast, signaling a delicate balancing act between price stability and growth as fallout from the Iran war reverberates and a potential election beckons.",
-      "summary_zh": "Turkey trimmed its 2027 gross domestic product growth forecast, signaling a delicate balancing act between price stability and growth as fallout from the Iran war reverberates and a potential election beckons.",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-06/turkey-cuts-2027-gdp-growth-forecast-to-4-2-as-elections-beckon",
-      "category": "宏观 / 利率",
-      "selected": false
-    },
-    {
-      "candidate_id": "ac8809c88fa3897c",
-      "title": "Hari: Oil Prices to Keep Grinding Higher",
-      "title_zh": "美伊在霍尔木兹海峡互袭油轮，能源供应风险升温",
-      "source": "Bloomberg Markets",
-      "published_at": "2026-09-07T05:04:43+00:00",
-      "summary": "Vandana Hari, Founder of Vanda Insights, says oil prices are likely to continue a slow and steady climb as the U.S. and Iran remain locked in a cycle of escalation around the Strait of Hormuz. She says crude futures are not fully reflecting the physical market tightness, pointing to diesel prices near $200 a barrel in Atlantic markets and warning of further scarcity in the coming weeks and months. Hari also says markets would remain cautious even if Hormuz reopened, given doubts over whether any de-escalation would prove sustainable. She speaks with Abeer Abu Omar on Horizons Middle East & Africa. (Source: Bloomberg)",
-      "summary_zh": "布隆伯格报道，美国与伊朗围绕霍尔木兹海峡的油轮袭击形成升级循环。分析人士称，实物市场供应趋紧，柴油价格和未来数周的能源短缺风险上升。",
-      "url": "https://www.bloomberg.com/news/videos/2026-09-07/hari-oil-prices-to-keep-grinding-higher-video",
-      "category": "地缘政治与风险事件",
-      "selected": true
-    },
-    {
-      "candidate_id": "a5113df05324d9ee",
-      "title": "Tech Shares Lead Gains in Asian Stocks, Oil Rises: Markets Wrap",
-      "title_zh": "Tech Shares Lead Gains in Asian Stocks, Oil Rises: Markets Wrap",
-      "source": "Bloomberg Markets",
-      "published_at": "2026-09-06T22:15:34+00:00",
-      "summary": "Technology shares led gains in Asian equities following a rally in their US info-tech peers on Friday. Oil climbed after the US and Iran exchanged attacks involving tankers in the Strait of Hormuz.",
-      "summary_zh": "Technology shares led gains in Asian equities following a rally in their US info-tech peers on Friday. Oil climbed after the US and Iran exchanged attacks involving tankers in the Strait of Hormuz.",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-06/stock-market-today-dow-s-p-live-updates",
-      "category": "宏观 / 利率",
-      "selected": false
-    },
-    {
-      "candidate_id": "3f8b2a673888fb77",
-      "title": "How long could you manage on £3 of food a day?",
-      "title_zh": "How long could you manage on £3 of food a day?",
-      "source": "BBC Business",
-      "published_at": "2026-09-07T04:57:53+00:00",
-      "summary": "It wants people to experience what it is like for people facing food insecurity.",
-      "summary_zh": "It wants people to experience what it is like for people facing food insecurity.",
-      "url": "https://www.bbc.co.uk/news/articles/c07lz5d5z34o?at_medium=RSS&at_campaign=rss",
-      "category": "其他",
-      "selected": false
-    },
-    {
-      "candidate_id": "a9cc669b23a2f022",
-      "title": "APOD: 2026 September 7 – The Pelican Nebula in Gas, Dust, and Stars",
-      "title_zh": "APOD: 2026 September 7 – The Pelican Nebula in Gas, Dust, and Stars",
-      "source": "NASA",
-      "published_at": "2026-09-07T04:05:00+00:00",
-      "summary": "APOD Science APOD APOD: 2026 September 7 – The… Today’s APOD Archive Submissions Index Search Calendar RSS Education About Discuss APOD Astronomy Picture of the Day Discover the cosmos! Each day a different image or photograph of our fascinating universe is featured, along with a brief explanation written by a professional astronomer. The Pelican […]",
-      "summary_zh": "APOD Science APOD APOD: 2026 September 7 – The… Today’s APOD Archive Submissions Index Search Calendar RSS Education About Discuss APOD Astronomy Picture of the Day Discover the cosmos! Each day a different image or photograph of our fascinating universe is featured, along with a brief explanation written by a professional astronomer. The Pelican […]",
-      "url": "https://science.nasa.gov/image-article/apod-2026-september-7-the-pelican-nebula-in-gas-dust-and-stars/",
-      "category": "其他",
-      "selected": false
-    },
-    {
-      "candidate_id": "930c747322f8899e",
-      "title": "Phil Schiller’s App Store exit reportedly driven by wariness over future plans",
-      "title_zh": "Phil Schiller’s App Store exit reportedly driven by wariness over future plans",
-      "source": "TechCrunch",
-      "published_at": "2026-09-06T21:41:06+00:00",
-      "summary": "Schiller reportedly had reservations about new CEO John Ternus' goal of bringing in more recurring revenue from the App Store.",
-      "summary_zh": "Schiller reportedly had reservations about new CEO John Ternus' goal of bringing in more recurring revenue from the App Store.",
-      "url": "https://techcrunch.com/2026/09/06/phil-schillers-app-store-exit-reportedly-driven-by-wariness-over-future-plans/",
-      "category": "大型科技",
-      "selected": false
-    },
-    {
-      "candidate_id": "a5ac83c8068cfdc3",
-      "title": "A Bright Spot at Mount Michael",
-      "title_zh": "A Bright Spot at Mount Michael",
-      "source": "NASA",
-      "published_at": "2026-09-07T04:01:00+00:00",
-      "summary": "With austral winter nearing its end, clouds cleared for a satellite view of volcanic activity in the remote South Atlantic.",
-      "summary_zh": "With austral winter nearing its end, clouds cleared for a satellite view of volcanic activity in the remote South Atlantic.",
-      "url": "https://science.nasa.gov/earth/earth-observatory/a-bright-spot-at-mount-michael/",
-      "category": "其他",
-      "selected": false
-    },
-    {
-      "candidate_id": "dfa4c88ef2ad6dec",
-      "title": "Healey to Pitch UK Regional Growth Paired With Fiscal Discipline",
-      "title_zh": "Healey to Pitch UK Regional Growth Paired With Fiscal Discipline",
-      "source": "Bloomberg Economics",
-      "published_at": "2026-09-06T23:01:00+00:00",
-      "summary": "John Healey plans to put regional growth at the heart of his economic vision, while vowing fiscal discipline, in his first major speech as chancellor of the exchequer on Monday.",
-      "summary_zh": "John Healey plans to put regional growth at the heart of his economic vision, while vowing fiscal discipline, in his first major speech as chancellor of the exchequer on Monday.",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-06/healey-to-pitch-uk-regional-growth-paired-with-fiscal-discipline",
-      "category": "宏观 / 利率",
-      "selected": false
-    },
-    {
-      "candidate_id": "b5898210effe4127",
-      "title": "Authors push back as publishers and agents make claims on Anthropic settlement",
-      "title_zh": "Authors push back as publishers and agents make claims on Anthropic settlement",
-      "source": "TechCrunch",
-      "published_at": "2026-09-06T20:47:37+00:00",
-      "summary": "Authors say publishers seem to be claiming more than their fair share of settlement payments.",
-      "summary_zh": "Authors say publishers seem to be claiming more than their fair share of settlement payments.",
-      "url": "https://techcrunch.com/2026/09/06/authors-push-back-as-publishers-and-agents-seek-share-of-anthropic-settlement/",
-      "category": "大型科技",
-      "selected": false
-    },
-    {
-      "candidate_id": "cd797fe0ad6bc2f6",
-      "title": "Cape neighbors Stoke and Relativity advance LC-14 and LC-16 toward first flights",
-      "title_zh": "Cape neighbors Stoke and Relativity advance LC-14 and LC-16 toward first flights",
-      "source": "NASASpaceflight",
-      "published_at": "2026-09-06T15:52:38+00:00",
-      "summary": "Along Missile Row at Cape Canaveral Space Force Station, Stoke Space and Relativity Space are… The post Cape neighbors Stoke and Relativity advance LC-14 and LC-16 toward first flights appeared first on NASASpaceFlight.com .",
-      "summary_zh": "Along Missile Row at Cape Canaveral Space Force Station, Stoke Space and Relativity Space are… The post Cape neighbors Stoke and Relativity advance LC-14 and LC-16 toward first flights appeared first on NASASpaceFlight.com .",
-      "url": "https://www.nasaspaceflight.com/2026/09/cape-neighbors-stoke-relativity-advance-lc-14-lc-16/",
-      "category": "其他",
-      "selected": false
-    },
-    {
-      "candidate_id": "21e7df83c71516c4",
-      "title": "The £70 refund letter that isn't a scam",
-      "title_zh": "The £70 refund letter that isn't a scam",
-      "source": "BBC Business",
-      "published_at": "2026-09-06T23:16:05+00:00",
-      "summary": "About one million people - mostly women - are owed pension tax relief and will be contacted by HMRC.",
-      "summary_zh": "About one million people - mostly women - are owed pension tax relief and will be contacted by HMRC.",
-      "url": "https://www.bbc.co.uk/news/articles/c23x0kd8eleo?at_medium=RSS&at_campaign=rss",
-      "category": "其他",
-      "selected": false
-    },
-    {
-      "candidate_id": "e5a52f329370720b",
-      "title": "UK Hiring Accelerates for the First Time in Four Years, REC Says",
-      "title_zh": "UK Hiring Accelerates for the First Time in Four Years, REC Says",
-      "source": "Bloomberg Economics",
-      "published_at": "2026-09-06T23:01:00+00:00",
-      "summary": "UK firms increased their hiring of full-time staff in August, according to a survey that’s watched closely by Bank of England policymakers.",
-      "summary_zh": "UK firms increased their hiring of full-time staff in August, according to a survey that’s watched closely by Bank of England policymakers.",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-06/uk-hiring-accelerates-for-the-first-time-in-four-years-rec-says",
-      "category": "宏观 / 利率",
-      "selected": false
-    },
-    {
-      "candidate_id": "632e747639f17525",
-      "title": "Travis Kalanick’s Atoms might be getting into the robotaxi business",
-      "title_zh": "Travis Kalanick’s Atoms might be getting into the robotaxi business",
-      "source": "TechCrunch",
-      "published_at": "2026-09-06T16:45:00+00:00",
-      "summary": "The Uber founder has said that Atoms will allow him to complete \"unfinished business.\"",
-      "summary_zh": "The Uber founder has said that Atoms will allow him to complete \"unfinished business.\"",
-      "url": "https://techcrunch.com/2026/09/06/travis-kalanicks-atoms-might-be-getting-into-the-robotaxi-business/",
-      "category": "大型科技",
-      "selected": false
-    },
-    {
-      "candidate_id": "a2968aab0fdfdc41",
-      "title": "Israel-Hezbollah clashes deepen threat to fragile truce as Lebanon's president calls for U.S. support",
-      "title_zh": "Israel-Hezbollah clashes deepen threat to fragile truce as Lebanon's president calls for U.S. support",
-      "source": "CNBC Top News",
-      "published_at": "2026-09-07T05:15:44+00:00",
-      "summary": "Lebanese President Joseph Aoun called on the U.S. to help stop Israeli attacks after Sunday strikes killed at least seven people.",
-      "summary_zh": "Lebanese President Joseph Aoun called on the U.S. to help stop Israeli attacks after Sunday strikes killed at least seven people.",
-      "url": "https://www.cnbc.com/2026/09/07/us-iran-war-trump-hormuz-israel-hezbollah-fighting-strikes-.html",
-      "category": "地缘政治与风险事件",
-      "selected": false
-    },
-    {
-      "candidate_id": "f2d63d41b43a4a6d",
-      "title": "Six dead and more feared trapped in collapsed building in Delhi",
-      "title_zh": "Six dead and more feared trapped in collapsed building in Delhi",
-      "source": "BBC News",
-      "published_at": "2026-09-07T05:10:18+00:00",
-      "summary": "Eyewitnesses say two-to-four dozen are thought to have been inside the five-storey hostel when it came down.",
-      "summary_zh": "Eyewitnesses say two-to-four dozen are thought to have been inside the five-storey hostel when it came down.",
-      "url": "https://www.bbc.co.uk/news/articles/c8r6ezx1jmro?at_medium=RSS&at_campaign=rss",
-      "category": "其他",
-      "selected": false
-    },
-    {
-      "candidate_id": "7d7fbbc3c3d01b87",
-      "title": "Manchester to Keep Booming Without Burnham as Mayor, Study Says",
-      "title_zh": "Manchester to Keep Booming Without Burnham as Mayor, Study Says",
-      "source": "Bloomberg Economics",
-      "published_at": "2026-09-06T23:01:00+00:00",
-      "summary": "A growth spurt in Greater Manchester, which has been hailed by Prime Minister Andy Burnham as a model for Britain’s sluggish economy, is expected to endure in the coming years, according to new forecasts.",
-      "summary_zh": "A growth spurt in Greater Manchester, which has been hailed by Prime Minister Andy Burnham as a model for Britain’s sluggish economy, is expected to endure in the coming years, according to new forecasts.",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-06/manchester-to-keep-booming-without-burnham-as-mayor-study-says",
-      "category": "宏观 / 利率",
-      "selected": false
-    },
-    {
-      "candidate_id": "9146aeb602af863c",
-      "title": "Minister to meet Jaguar Land Rover boss as thousands of job cuts expected",
-      "title_zh": "Minister to meet Jaguar Land Rover boss as thousands of job cuts expected",
-      "source": "BBC Business",
-      "published_at": "2026-09-06T16:32:59+00:00",
-      "summary": "Speaking to the BBC, Business Secretary Jonathan Reynolds ruled out a bailout for the company.",
-      "summary_zh": "Speaking to the BBC, Business Secretary Jonathan Reynolds ruled out a bailout for the company.",
-      "url": "https://www.bbc.co.uk/news/articles/crer948xq00o?at_medium=RSS&at_campaign=rss",
-      "category": "其他",
-      "selected": false
-    },
-    {
-      "candidate_id": "aab9520e647c9982",
-      "title": "TechCrunch Mobility: Tesla Cybercab hits the road — and a snag",
-      "title_zh": "TechCrunch Mobility: Tesla Cybercab hits the road — and a snag",
-      "source": "TechCrunch",
-      "published_at": "2026-09-06T16:08:00+00:00",
-      "summary": "Welcome back to TechCrunch Mobility, your hub for the future of transportation and now, more than ever, the role AI is playing in it.",
-      "summary_zh": "Welcome back to TechCrunch Mobility, your hub for the future of transportation and now, more than ever, the role AI is playing in it.",
-      "url": "https://techcrunch.com/2026/09/06/techcrunch-mobility-tesla-cybercab-hits-the-road-and-a-snag/",
-      "category": "大型科技",
-      "selected": false
-    },
-    {
-      "candidate_id": "e7354262e6d4e912",
-      "title": "Europe wrestles with impact of historic regional gains for Germany's AfD",
-      "title_zh": "Europe wrestles with impact of historic regional gains for Germany's AfD",
-      "source": "BBC News",
-      "published_at": "2026-09-07T04:07:23+00:00",
-      "summary": "The BBC's Europe editor Katya Adler sees the far-right win in Saxony-Anhalt state ringing alarm bells for the EU and traditional parties.",
-      "summary_zh": "The BBC's Europe editor Katya Adler sees the far-right win in Saxony-Anhalt state ringing alarm bells for the EU and traditional parties.",
-      "url": "https://www.bbc.co.uk/news/articles/c986w38r4j5o?at_medium=RSS&at_campaign=rss",
-      "category": "地缘政治与风险事件",
-      "selected": false
-    },
-    {
-      "candidate_id": "b2c43e6c5cb592f1",
-      "title": "Volcano eruption disrupts hundreds of flights at Southeast Asia's second-busiest airport",
-      "title_zh": "Volcano eruption disrupts hundreds of flights at Southeast Asia's second-busiest airport",
-      "source": "CNBC Top News",
-      "published_at": "2026-09-07T01:31:03+00:00",
-      "summary": "Mount Anak Krakatau’s eruption disrupted hundreds of flights across Indonesia, with flight cancellations extending into Monday.",
-      "summary_zh": "Mount Anak Krakatau’s eruption disrupted hundreds of flights across Indonesia, with flight cancellations extending into Monday.",
-      "url": "https://www.cnbc.com/2026/09/07/flights-canceled-jakarta-airport-anak-krakatau-eruption-disrupts-regional-travel-volcano.html",
-      "category": "其他",
-      "selected": false
-    },
-    {
-      "candidate_id": "8ee6bc2a199beaf1",
-      "title": "Fuel duty proposal withdrawn after discussions",
-      "title_zh": "Fuel duty proposal withdrawn after discussions",
-      "source": "BBC Business",
-      "published_at": "2026-09-06T12:01:41+00:00",
-      "summary": "Deputy Lucy Stephenson had wanted to cut the tax by 10p a litre for three months.",
-      "summary_zh": "Deputy Lucy Stephenson had wanted to cut the tax by 10p a litre for three months.",
-      "url": "https://www.bbc.co.uk/news/articles/cy8znkkn5rvo?at_medium=RSS&at_campaign=rss",
-      "category": "宏观 / 利率",
-      "selected": false
-    },
-    {
       "candidate_id": "1fca6b5f55b61231",
       "title": "Data centers in space: Four big obstacles and Elon Musk's ambitious timeline",
       "title_zh": "Data centers in space: Four big obstacles and Elon Musk's ambitious timeline",
       "source": "CNBC Top News",
-      "published_at": "2026-09-07T00:06:18+00:00",
+      "published_at": "2026-09-07T05:56:40+00:00",
       "summary": "",
       "summary_zh": "",
       "url": "https://www.cnbc.com/2026/09/07/data-centers-space-elon-musk-obstacles.html",
@@ -1515,132 +1337,421 @@
       "selected": false
     },
     {
-      "candidate_id": "aa48fd78d5a3c8da",
-      "title": "Australians will be able to switch off social media algorithms under planned legislation",
-      "title_zh": "澳大利亚拟要求社交平台允许用户关闭算法推荐",
-      "source": "BBC News",
-      "published_at": "2026-09-07T03:40:09+00:00",
-      "summary": "Firms like Meta, Google and TikTok should face \"substantial\" penalties if they don't give the option, minister says.",
-      "summary_zh": "澳大利亚计划立法，要求 Meta、Google 和 TikTok 为用户提供关闭社交媒体算法的选项；相关企业若不遵守，可能面临高额处罚。",
-      "url": "https://www.bbc.co.uk/news/articles/cn9wyvxn95vo?at_medium=RSS&at_campaign=rss",
-      "category": "地缘政治与风险事件",
-      "selected": true
-    },
-    {
-      "candidate_id": "729421d04b394ecb",
-      "title": "SEC sues ISS as Trump administration ramps up scrutiny of proxy advisers",
-      "title_zh": "SEC sues ISS as Trump administration ramps up scrutiny of proxy advisers",
+      "candidate_id": "26acf0a88eeb5518",
+      "title": "AI data centers are transforming rural land markets — and fueling a backlash",
+      "title_zh": "AI data centers are transforming rural land markets — and fueling a backlash",
       "source": "CNBC Top News",
-      "published_at": "2026-09-06T17:53:53+00:00",
-      "summary": "The SEC sued Institutional Shareholder Services to enforce a subpoena as the Trump administration increases scrutiny of influential proxy advisers.",
-      "summary_zh": "The SEC sued Institutional Shareholder Services to enforce a subpoena as the Trump administration increases scrutiny of influential proxy advisers.",
-      "url": "https://www.cnbc.com/2026/09/06/sec-iss-proxy-adviser-subpoena.html",
-      "category": "宏观 / 利率",
-      "selected": false
-    },
-    {
-      "candidate_id": "77ec433833ef8545",
-      "title": "China to pump $54bn into state banks and insurers to boost economy",
-      "title_zh": "China to pump $54bn into state banks and insurers to boost economy",
-      "source": "BBC News",
-      "published_at": "2026-09-07T02:26:12+00:00",
-      "summary": "It comes as Beijing is aiming to reshape its economy in the face of a number of challenges.",
-      "summary_zh": "It comes as Beijing is aiming to reshape its economy in the face of a number of challenges.",
-      "url": "https://www.bbc.co.uk/news/articles/cx2z37qj4wno?at_medium=RSS&at_campaign=rss",
-      "category": "宏观 / 利率",
-      "selected": false
-    },
-    {
-      "candidate_id": "85be387f16a5892f",
-      "title": "'Everyone has an AI secret': This artist has spent a year collecting and sharing hundreds of anonymous AI confessions",
-      "title_zh": "'Everyone has an AI secret': This artist has spent a year collecting and sharing hundreds of anonymous AI confessions",
-      "source": "CNBC Top News",
-      "published_at": "2026-09-06T14:00:01+00:00",
-      "summary": "Through her project \"What We Tell AI,\" Olivia Tai has collected over 350 handwritten secrets about how people use AI to navigate dating, work and life.",
-      "summary_zh": "Through her project \"What We Tell AI,\" Olivia Tai has collected over 350 handwritten secrets about how people use AI to navigate dating, work and life.",
-      "url": "https://www.cnbc.com/2026/09/06/artists-ai-secrets-project-collects-hundreds-of-anonymous-confessions.html",
+      "published_at": "2026-09-06T12:00:01+00:00",
+      "summary": "The data center buildout is driving up the price of rural land as some farmers and property owners buy in and others push back against development.",
+      "summary_zh": "The data center buildout is driving up the price of rural land as some farmers and property owners buy in and others push back against development.",
+      "url": "https://www.cnbc.com/2026/09/06/ai-data-centers-are-transforming-rural-land-markets-fueling-backlash.html",
       "category": "AI / 科技",
       "selected": false
     },
     {
-      "candidate_id": "00368b42da758b17",
-      "title": "Dangote Aims to Raise $1.6 Bln in Nigeria's Biggest IPO",
-      "title_zh": "Dangote Aims to Raise $1.6 Bln in Nigeria's Biggest IPO",
-      "source": "Bloomberg Markets",
-      "published_at": "2026-09-07T05:18:22+00:00",
-      "summary": "Billionaire Aliko Dangote is seeking to raise $1.6 billion in what would be Nigeria’s biggest initial public offering. Dangote Petroleum Refinery and Petrochemicals FZE is offering 4.1 billion shares at 525 naira ($0.40) each, a company spokesman said Friday. The IPO will open on Sept. 14. Bloomberg's Anthony Osae-Brown reports. (Source: Bloomberg)",
-      "summary_zh": "Billionaire Aliko Dangote is seeking to raise $1.6 billion in what would be Nigeria’s biggest initial public offering. Dangote Petroleum Refinery and Petrochemicals FZE is offering 4.1 billion shares at 525 naira ($0.40) each, a company spokesman said Friday. The IPO will open on Sept. 14. Bloomberg's Anthony Osae-Brown reports. (Source: Bloomberg)",
-      "url": "https://www.bloomberg.com/news/videos/2026-09-07/dangote-aims-to-raise-1-6-bln-in-nigeria-s-biggest-ipo-video",
-      "category": "其他",
+      "candidate_id": "2594357137eea56a",
+      "title": "Japan’s Preferred Networks Seeks IPO to Keep Up in AI Chip Race",
+      "title_zh": "Japan’s Preferred Networks Seeks IPO to Keep Up in AI Chip Race",
+      "source": "Bloomberg Technology",
+      "published_at": "2026-09-07T09:10:50+00:00",
+      "summary": "Japanese startup Preferred Networks Inc. is seeking to go public to mass-produce its chips, a reflection of the rising cost and scale needed to stay relevant in a global AI race.",
+      "summary_zh": "Japanese startup Preferred Networks Inc. is seeking to go public to mass-produce its chips, a reflection of the rising cost and scale needed to stay relevant in a global AI race.",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-07/japan-s-preferred-networks-seeks-ipo-to-keep-up-in-ai-chip-race",
+      "category": "AI / 科技",
       "selected": false
     },
     {
-      "candidate_id": "74b47867e31a32ac",
-      "title": "Philippines’ Ombudsman Files Plunder Case Against Marcos Cousin",
-      "title_zh": "Philippines’ Ombudsman Files Plunder Case Against Marcos Cousin",
-      "source": "Bloomberg Markets",
-      "published_at": "2026-09-07T05:03:54+00:00",
-      "summary": "The Philippines’ Office of the Ombudsman on Monday filed a plunder case against former House Speaker Martin Romualdez, a cousin of President Ferdinand Marcos Jr., according to a court filing.",
-      "summary_zh": "The Philippines’ Office of the Ombudsman on Monday filed a plunder case against former House Speaker Martin Romualdez, a cousin of President Ferdinand Marcos Jr., according to a court filing.",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-07/philippines-ombudsman-files-plunder-case-against-marcos-cousin",
-      "category": "地缘政治与风险事件",
-      "selected": false
-    },
-    {
-      "candidate_id": "54e2303401c20b22",
-      "title": "Palm Oil Climbs as Indonesian Forest Fires Puts Supply at Risk",
-      "title_zh": "Palm Oil Climbs as Indonesian Forest Fires Puts Supply at Risk",
-      "source": "Bloomberg Markets",
-      "published_at": "2026-09-07T04:58:05+00:00",
-      "summary": "Palm oil rose as traders weighed the risk of supply disruptions from forest fires raging across Indonesia, the world’s biggest producer.",
-      "summary_zh": "Palm oil rose as traders weighed the risk of supply disruptions from forest fires raging across Indonesia, the world’s biggest producer.",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-07/palm-oil-climbs-as-indonesian-forest-fires-puts-supply-at-risk",
-      "category": "能源 / 大宗商品",
-      "selected": false
-    },
-    {
-      "candidate_id": "d341df64a15c1065",
-      "title": "Philippines Wants To Deepen Economic Ties With China",
-      "title_zh": "Philippines Wants To Deepen Economic Ties With China",
-      "source": "Bloomberg Markets",
-      "published_at": "2026-09-07T04:31:59+00:00",
-      "summary": "Philippine Finance Secretary Frederick Go discusses Manila's economic ties with Beijing. He is in Hong Kong to conduct an economic briefing and speaks exclusively on \"Bloomberg: The China Show.” (Source: Bloomberg)",
-      "summary_zh": "Philippine Finance Secretary Frederick Go discusses Manila's economic ties with Beijing. He is in Hong Kong to conduct an economic briefing and speaks exclusively on \"Bloomberg: The China Show.” (Source: Bloomberg)",
-      "url": "https://www.bloomberg.com/news/videos/2026-09-07/philippines-wants-to-deepen-economic-ties-with-china-video",
-      "category": "地缘政治与风险事件",
-      "selected": false
-    },
-    {
-      "candidate_id": "e78ec879c9c4aad6",
-      "title": "Bond Market: Gilts, BTPs, OATs Hit by Fears of Energy Shock, Political Risk",
-      "title_zh": "Bond Market: Gilts, BTPs, OATs Hit by Fears of Energy Shock, Political Risk",
-      "source": "Bloomberg Markets",
-      "published_at": "2026-09-07T04:00:00+00:00",
-      "summary": "Spiraling gas prices and growing political risks are accelerating a selloff in Europe’s bond market, the steepest among major economies in recent weeks.",
-      "summary_zh": "Spiraling gas prices and growing political risks are accelerating a selloff in Europe’s bond market, the steepest among major economies in recent weeks.",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-07/bond-market-gilts-btps-oats-hit-by-fears-of-energy-shock-political-risk",
-      "category": "宏观 / 利率",
-      "selected": false
-    },
-    {
-      "candidate_id": "bb9807f027d11e88",
-      "title": "Iron Ore Tops $100 on Position Unwinds and China Buying Hopes",
-      "title_zh": "Iron Ore Tops $100 on Position Unwinds and China Buying Hopes",
-      "source": "Bloomberg Markets",
-      "published_at": "2026-09-07T03:47:54+00:00",
-      "summary": "Iron ore broke above $100 a ton for the first time in seven weeks as traders unwound bets that favored coking coal, adding to support from expectations for pre-holiday restocking in China and high freight costs.",
-      "summary_zh": "Iron ore broke above $100 a ton for the first time in seven weeks as traders unwound bets that favored coking coal, adding to support from expectations for pre-holiday restocking in China and high freight costs.",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-07/iron-ore-tops-100-on-position-unwinds-and-china-buying-hopes",
-      "category": "能源 / 大宗商品",
+      "candidate_id": "ddf12dc5a36cb447",
+      "title": "Malaysia Eyes Huawei Chips for AI Project Despite US Warning",
+      "title_zh": "Malaysia Eyes Huawei Chips for AI Project Despite US Warning",
+      "source": "Bloomberg Technology",
+      "published_at": "2026-09-07T07:01:38+00:00",
+      "summary": "Malaysia is leaning toward relying on Huawei Technologies Co.’s artificial intelligence chips to power its sovereign AI efforts, in what would be a major victory for Chinese AI technology in the face of strong opposition from President Donald Trump’s administration.",
+      "summary_zh": "Malaysia is leaning toward relying on Huawei Technologies Co.’s artificial intelligence chips to power its sovereign AI efforts, in what would be a major victory for Chinese AI technology in the face of strong opposition from President Donald Trump’s administration.",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-07/malaysia-eyes-huawei-chips-for-ai-project-despite-us-warning",
+      "category": "AI / 科技",
       "selected": false
     }
   ],
   "news_degraded": false,
   "stage_b_fallback_used": false,
+  "stage_b_ai_selected_count": 0,
+  "stage_b_fallback_selected_count": 7,
+  "stage_b_failed_batch_count": 4,
   "news_source_diagnostics": [],
   "event_clustering_diagnostics": {
-    "fallback_used": false,
-    "reason": null
+    "fallback_used": true,
+    "reason": "batch 1/3: ⚠️ 新闻事件级去重暂时失败，已使用基础去重结果继续生成日报。 原因：Error code: 403 - {'balance': -0.01350627, 'code': 'INSUFFICIENT_BALANCE', 'error': {'code': 'insufficient_quota', 'message': '【账户余额不足】当前可用余额 $-0.01\\n按量计费需要可用余额 > 0 才能发起请求。\\n去充值：https://api.lmuai.com/purchase?recharge=1', 'param': None, 'type': 'insufficient_quota'}, 'frozen_balance': 0, 'message': '【账户余额不足】当前可用余额 $-0.01\\n按量计费需要可用余额 > 0 才能发起请求。\\n去充值：https://api.lmuai.com/purchase?recharge=1', 'reason': 'Insufficient account balance', 'recharge_url': 'https://api.lmuai.com/purchase?recharge=1'}; batch 2/3: ⚠️ 新闻事件级去重暂时失败，已使用基础去重结果继续生成日报。 原因：Error code: 403 - {'balance': -0.01350627, 'code': 'INSUFFICIENT_BALANCE', 'error': {'code': 'insufficient_quota', 'message': '【账户余额不足】当前可用余额 $-0.01\\n按量计费需要可用余额 > 0 才能发起请求。\\n去充值：https://api.lmuai.com/purchase?recharge=1', 'param': None, 'type': 'insufficient_quota'}, 'frozen_balance': 0, 'message': '【账户余额不足】当前可用余额 $-0.01\\n按量计费需要可用余额 > 0 才能发起请求。\\n去充值：https://api.lmuai.com/purchase?recharge=1', 'reason': 'Insufficient account balance', 'recharge_url': 'https://api.lmuai.com/purchase?recharge=1'}; batch 3/3: ⚠️ 新闻事件级去重暂时失败，已使用基础去重结果继续生成日报。 原因：Error code: 403 - {'balance': -0.01350627, 'code': 'INSUFFICIENT_BALANCE', 'error': {'code': 'insufficient_quota', 'message': '【账户余额不足】当前可用余额 $-0.01\\n按量计费需要可用余额 > 0 才能发起请求。\\n去充值：https://api.lmuai.com/purchase?recharge=1', 'param': None, 'type': 'insufficient_quota'}, 'frozen_balance': 0, 'message': '【账户余额不足】当前可用余额 $-0.01\\n按量计费需要可用余额 > 0 才能发起请求。\\n去充值：https://api.lmuai.com/purchase?recharge=1', 'reason': 'Insufficient account balance', 'recharge_url': 'https://api.lmuai.com/purchase?recharge=1'}"
+  },
+  "news_review_diagnostics": {
+    "unselected_candidate_count": 98,
+    "review_candidate_count": 8,
+    "review_filtered_count": 90,
+    "review_translation_requested_count": 8,
+    "review_translation_success_count": 0,
+    "review_translation_failed_count": 8,
+    "review_filtered_candidates": [
+      {
+        "candidate_id": "d9c4c5ea12e586ab",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "8764a9f011475b5d",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "9a1ed785eb818a67",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "23a5af60b9335c57",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "52548e104d98c705",
+        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+      },
+      {
+        "candidate_id": "0b3b4241f8f22256",
+        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+      },
+      {
+        "candidate_id": "5b1a80a83516642c",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "a29c0a5cfdda1e97",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "c8062e19392f18c7",
+        "filter_reason": "no_qualifying_signal:topic_group=CORPORATE_EARNINGS"
+      },
+      {
+        "candidate_id": "511bcf93ce594068",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "65d345c99b743249",
+        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+      },
+      {
+        "candidate_id": "47c2e37038ee0ccb",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "0d78e641d5f3d5f2",
+        "filter_reason": "no_qualifying_signal:topic_group=ENERGY_COMMODITIES"
+      },
+      {
+        "candidate_id": "2d5e157169d65296",
+        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+      },
+      {
+        "candidate_id": "b06e2cbbfdf79cea",
+        "filter_reason": "no_qualifying_signal:topic_group=ENERGY_COMMODITIES"
+      },
+      {
+        "candidate_id": "6e63f9afaf96d4d2",
+        "filter_reason": "no_qualifying_signal:topic_group=ENERGY_COMMODITIES"
+      },
+      {
+        "candidate_id": "e73874a7674a4972",
+        "filter_reason": "no_qualifying_signal:topic_group=ENERGY_COMMODITIES"
+      },
+      {
+        "candidate_id": "a9cc669b23a2f022",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "930c747322f8899e",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "a5ac83c8068cfdc3",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "b5898210effe4127",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "cd797fe0ad6bc2f6",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "f2d63d41b43a4a6d",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "293684f51b392074",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "632e747639f17525",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "aa7629b690e81db1",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "176d658e556e3767",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "aab9520e647c9982",
+        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+      },
+      {
+        "candidate_id": "faf6c20a0b3331e9",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "1c5e2822d4920b2a",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "21e7df83c71516c4",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "80c3cfae212f6952",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "02d4bb0d362b6d85",
+        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+      },
+      {
+        "candidate_id": "aa56d6a1cdb502da",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "066cc6e9ec7bccb4",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "b11f9c6f557e9342",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "eee8ed53c63509f0",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "1ee9ce6f1dd9e6ae",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "3f8b2a673888fb77",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "6a01bf581cd473b2",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "89cc2387c9855e66",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "aa27a2b1222f7bbf",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "e6cfb9c6bf55476c",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "8ee6bc2a199beaf1",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "a81adfb5936024e2",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "44d249cf7cec3f89",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "e82726cc8aa972a6",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "e5a52f329370720b",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "cdb37908b3f7ce2b",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "ce8c63a5d110b9ef",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "dfa4c88ef2ad6dec",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "6b7c4a559af8b57f",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "e7354262e6d4e912",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "b2c43e6c5cb592f1",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "7d7fbbc3c3d01b87",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "1dbe4adf650e4da4",
+        "filter_reason": "no_qualifying_signal:topic_group=ENERGY_COMMODITIES"
+      },
+      {
+        "candidate_id": "aa48fd78d5a3c8da",
+        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+      },
+      {
+        "candidate_id": "729421d04b394ecb",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "fc0a2c3b7902e6fc",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "77ec433833ef8545",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "85be387f16a5892f",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "5ee945fce5841d40",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "9e7b3f4984e695ec",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "cf39226707eb395e",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "5f28e82020e63ae0",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "deba1ed0f2aa95c0",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "4533aac93b7f8c28",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "e78ec879c9c4aad6",
+        "filter_reason": "no_qualifying_signal:topic_group=ENERGY_COMMODITIES"
+      },
+      {
+        "candidate_id": "df124f4c8da31c56",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "a5113df05324d9ee",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "802b3bc782a05eda",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "e51208de54ed4214",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "c2a7555f7c9584db",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "40ff8d57a306d228",
+        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+      },
+      {
+        "candidate_id": "50e2bad87fbca8c6",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "18d637ce35f25f3a",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "faeb0dc7f42d7737",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "b14f175b29a5f10d",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "6122915037b33298",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "253f583b66b5fcc2",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "cf678d2441aab0c4",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "552c8a7faaa1adef",
+        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+      },
+      {
+        "candidate_id": "f0b94fb044cbbc19",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "a42f15239b0977e4",
+        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+      },
+      {
+        "candidate_id": "47ae05fd7626c5bf",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "0e5a7a74ebb7a10c",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "0d615389cf0d32f8",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "3ebfdfa2baadde71",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "de0bcf43d9fb6c2e",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "d805416fd871e129",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      }
+    ]
   },
   "warnings": []
 }
