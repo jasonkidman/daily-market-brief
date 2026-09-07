@@ -599,6 +599,13 @@ def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict
                 observability["stage_b_selected_count"] = len(raw_items)
                 observability["stage_b_reserve_count"] = len(raw_reserve)
                 observability["stage_b_target_count"] = target_count
+                # Recorded purely for the news-candidates Review Filter (see
+                # news_review_filter.py), which treats a candidate Stage B put in
+                # its own reserve list as a near-miss worth surfacing for manual
+                # review -- this never feeds back into selection itself.
+                observability["stage_b_reserve_ids"] = [
+                    item.get("candidate_id") for item in raw_reserve if item.get("candidate_id")
+                ]
             try:
                 validation = _validate_selection_items({"news": raw_items}, candidates)
                 for issue in validation["issues"]:
@@ -737,17 +744,25 @@ def select_news_two_pass(candidates: list[dict], api_key: str, recent_selected: 
             "stage_b_sample_a_count": 0, "stage_b_sample_b_count": 0,
             "stage_b_intersection_count": 0, "stage_b_borderline_count": 0,
             "stage_b_review_keep_count": 0, "two_pass_degraded": False,
+            # Populated below for the news-candidates Review Filter (see
+            # news_review_filter.py). These never feed back into Stage B's own
+            # selection -- they only record what Stage B already decided, so a
+            # later stage can prioritize genuine near-misses for manual review.
+            "stage_b_borderline_ids": [], "stage_b_borderline_dropped_ids": [],
+            "stage_b_reserve_ids": [], "stage_b_topic_cap_dropped_ids": [],
         })
 
+    sample_a_observability: dict = {}
+    sample_b_observability: dict = {}
     try:
         with ThreadPoolExecutor(max_workers=2) as executor:
             future_a = executor.submit(
                 select_news, candidates, api_key, recent_selected, market_context,
-                call_model, sleep_fn, usage_tracker, None, "Stage B (sample A)",
+                call_model, sleep_fn, usage_tracker, sample_a_observability, "Stage B (sample A)",
             )
             future_b = executor.submit(
                 select_news, candidates, api_key, recent_selected, market_context,
-                call_model, sleep_fn, usage_tracker, None, "Stage B (sample B)",
+                call_model, sleep_fn, usage_tracker, sample_b_observability, "Stage B (sample B)",
             )
             sample_a, warning_a = future_a.result()
             sample_b, warning_b = future_b.result()
@@ -782,6 +797,7 @@ def select_news_two_pass(candidates: list[dict], api_key: str, recent_selected: 
             observability["raw_count"] = len(sample_a)
             observability["validated_count"] = len(sample_a)
             observability["stage_b_final_count"] = len(sample_a)
+            observability["stage_b_reserve_ids"] = sorted(set(sample_a_observability.get("stage_b_reserve_ids", [])))
         return sample_a, None
 
     if ok_b and not ok_a:
@@ -791,6 +807,7 @@ def select_news_two_pass(candidates: list[dict], api_key: str, recent_selected: 
             observability["raw_count"] = len(sample_b)
             observability["validated_count"] = len(sample_b)
             observability["stage_b_final_count"] = len(sample_b)
+            observability["stage_b_reserve_ids"] = sorted(set(sample_b_observability.get("stage_b_reserve_ids", [])))
         return sample_b, None
 
     ids_a = {item["candidate_id"] for item in sample_a}
@@ -809,6 +826,11 @@ def select_news_two_pass(candidates: list[dict], api_key: str, recent_selected: 
     if observability is not None:
         observability["stage_b_intersection_count"] = len(intersection_items)
         observability["stage_b_borderline_count"] = len(borderline_items)
+        observability["stage_b_borderline_ids"] = sorted(borderline_ids)
+        observability["stage_b_reserve_ids"] = sorted(
+            set(sample_a_observability.get("stage_b_reserve_ids", []))
+            | set(sample_b_observability.get("stage_b_reserve_ids", []))
+        )
 
     kept_borderline: list[dict] = []
     if borderline_items:
@@ -834,12 +856,16 @@ def select_news_two_pass(candidates: list[dict], api_key: str, recent_selected: 
 
     if observability is not None:
         observability["stage_b_review_keep_count"] = len(kept_borderline)
+        kept_ids = {item["candidate_id"] for item in kept_borderline}
+        observability["stage_b_borderline_dropped_ids"] = sorted(borderline_ids - kept_ids)
 
     merged = intersection_items + kept_borderline
     merged.sort(key=lambda item: (-item["investment_relevance_score"], item["candidate_id"]))
     merged, cap_issues = _apply_topic_cap(merged)
     for issue in cap_issues:
         print(f"[NEWS STAGE B TWO-PASS] dropped on merge by topic cap | candidate_id={issue['candidate_id']}")
+    if observability is not None:
+        observability["stage_b_topic_cap_dropped_ids"] = [issue["candidate_id"] for issue in cap_issues]
     for rank, item in enumerate(merged, start=1):
         item["rank"] = rank
 
@@ -986,6 +1012,8 @@ def select_news_multi_batch(candidates: list[dict], api_key: str, recent_selecte
                 "raw_count": 0, "validated_count": 0, "stage_b_final_count": 0,
                 "stage_b_ai_selected_count": 0, "stage_b_fallback_selected_count": 0,
                 "stage_b_failed_batch_count": 0,
+                "stage_b_borderline_dropped_ids": [], "stage_b_reserve_ids": [],
+                "stage_b_topic_cap_dropped_ids": [],
             })
         return [], None
 
@@ -996,6 +1024,12 @@ def select_news_multi_batch(candidates: list[dict], api_key: str, recent_selecte
         observability["stage_b_batch_selected_counts"] = []
         observability["stage_b_batches_fallback_used_count"] = 0
         observability["stage_b_failed_batch_count"] = 0
+        # Aggregated across every batch below for the news-candidates Review
+        # Filter (see news_review_filter.py) -- pure bookkeeping of what Stage B
+        # already decided, never fed back into selection.
+        observability["stage_b_borderline_dropped_ids"] = []
+        observability["stage_b_reserve_ids"] = []
+        observability["stage_b_topic_cap_dropped_ids"] = []
 
     merged: list[dict] = []
     batch_warnings: list[str] = []
@@ -1019,6 +1053,13 @@ def select_news_multi_batch(candidates: list[dict], api_key: str, recent_selecte
                 observability["stage_b_batches_fallback_used_count"] += 1
             if batch_observability.get("stage_b_ai_failed"):
                 observability["stage_b_failed_batch_count"] += 1
+            observability["stage_b_borderline_dropped_ids"].extend(
+                batch_observability.get("stage_b_borderline_dropped_ids", [])
+            )
+            observability["stage_b_reserve_ids"].extend(batch_observability.get("stage_b_reserve_ids", []))
+            observability["stage_b_topic_cap_dropped_ids"].extend(
+                batch_observability.get("stage_b_topic_cap_dropped_ids", [])
+            )
         if batch_warning:
             batch_warnings.append(f"batch {index}/{len(batches)}: {batch_warning}")
 
@@ -1033,6 +1074,8 @@ def select_news_multi_batch(candidates: list[dict], api_key: str, recent_selecte
     final, cap_issues = _apply_topic_cap(merged)
     for issue in cap_issues:
         print(f"[NEWS STAGE B BATCH] dropped on final cross-batch merge by topic cap | candidate_id={issue['candidate_id']}")
+    if observability is not None:
+        observability["stage_b_topic_cap_dropped_ids"].extend(issue["candidate_id"] for issue in cap_issues)
     for rank, item in enumerate(final, start=1):
         item["rank"] = rank
 

@@ -1489,6 +1489,62 @@ def test_stage_b_two_pass_review_can_reject_borderline():
     assert observability["stage_b_review_keep_count"] == 0
 
 
+def test_stage_b_two_pass_records_borderline_dropped_ids_for_review_filter():
+    """Regression: the news-candidates Review Filter (news_review_filter.py)
+    needs to know which unselected candidates Stage B itself considered a
+    near-miss (one sample picked, review then dropped) -- this is pure
+    observability bookkeeping and must never affect the actual selection."""
+    pool = stage_b_pool(["0", "1"])
+    resp_a = json.dumps({"selected": [stage_b_item("0", 1, 92)], "reserve": []}, ensure_ascii=False)
+    resp_b = json.dumps(
+        {"selected": [stage_b_item("0", 1, 92), stage_b_item("1", 2, 80)], "reserve": []},
+        ensure_ascii=False,
+    )
+    model = _alternating_model(first_response=resp_a, second_response=resp_b)
+
+    def review_model(system_prompt, user_payload, api_key):
+        payload = json.loads(user_payload)
+        reviews = [{"candidate_id": c["candidate_id"], "keep": False, "reason": "缺乏新事实"}
+                   for c in payload["candidates"]]
+        return json.dumps({"reviews": reviews}, ensure_ascii=False)
+
+    observability = {}
+    selected, warning = select_news_two_pass(
+        pool, "key", call_model=model, review_call_model=review_model,
+        sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert warning is None
+    assert [item["candidate_id"] for item in selected] == ["0"]
+    assert observability["stage_b_borderline_ids"] == ["1"]
+    assert observability["stage_b_borderline_dropped_ids"] == ["1"]
+
+
+def test_stage_b_two_pass_records_reserve_ids_from_both_samples_for_review_filter():
+    pool = stage_b_pool(["0", "1", "2"])
+    resp_a = json.dumps(
+        {"selected": [stage_b_item("0", 1, 92)], "reserve": [stage_b_item("1", 1, 70)]},
+        ensure_ascii=False,
+    )
+    resp_b = json.dumps(
+        {"selected": [stage_b_item("0", 1, 92)], "reserve": [stage_b_item("2", 1, 65)]},
+        ensure_ascii=False,
+    )
+    model = _alternating_model(first_response=resp_a, second_response=resp_b)
+
+    def review_model(system_prompt, user_payload, api_key):
+        raise AssertionError("borderline review must not run when both samples agree")
+
+    observability = {}
+    selected, warning = select_news_two_pass(
+        pool, "key", call_model=model, review_call_model=review_model,
+        sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert warning is None
+    assert observability["stage_b_reserve_ids"] == ["1", "2"]
+
+
 def test_stage_b_two_pass_review_batch_is_single_call():
     pool = stage_b_pool([str(i) for i in range(5)])
     resp_a = json.dumps({"selected": [stage_b_item("0", 1, 92)], "reserve": []}, ensure_ascii=False)

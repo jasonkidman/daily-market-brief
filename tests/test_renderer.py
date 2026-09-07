@@ -750,7 +750,10 @@ def test_news_pool_button_and_drawer_render_when_candidates_present(tmp_path):
     render(reports, site)
 
     html = (site / "index.html").read_text(encoding="utf-8")
-    assert "更多新闻 · 2" in html
+    # The button counts only the unselected (review-pool) candidates, not the
+    # full drawer pool -- "更多新闻" means news beyond what's already on the
+    # homepage, not the homepage selections themselves.
+    assert "更多新闻 · 1" in html
     assert 'id="news-pool-drawer"' in html
     assert "今日新闻候选池" in html
     assert "2026-08-12 · 共 2 条" in html
@@ -770,6 +773,26 @@ def test_news_pool_button_and_drawer_render_when_candidates_present(tmp_path):
     assert 'class="news-item news-pool-item"' in html
     assert '<div class="news-title"><a href="https://example.com/c1"' in html
     assert '<div class="news-desc">候选中文摘要</div>' in html
+
+
+def test_news_pool_diagnostics_subtitle_renders_when_present(tmp_path):
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    payload = report("2026-08-12")
+    payload["news_candidates"] = [
+        candidate_item("c1", "宏观 / 利率", True, title="已入选新闻"),
+        candidate_item("c2", "AI / 科技", False, title="未入选新闻"),
+    ]
+    payload["news_review_diagnostics"] = {
+        "unselected_candidate_count": 46, "review_candidate_count": 18, "review_filtered_count": 28,
+    }
+    (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
+    site = tmp_path / "site"
+
+    render(reports, site)
+
+    html = (site / "index.html").read_text(encoding="utf-8")
+    assert "未入选候选 46 条 · 已过滤明显低相关 28 条 · 待人工复核 18 条" in html
 
 
 def test_news_pool_button_and_drawer_absent_when_no_candidates(tmp_path):

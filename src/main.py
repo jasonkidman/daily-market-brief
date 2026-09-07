@@ -38,6 +38,7 @@ from .news_events import (
 )
 from .news_candidate_translation import translate_candidates
 from .news_candidates import build_news_candidates
+from .news_review_filter import select_review_pool
 from .news_snapshot import load_stage_b_snapshot, write_stage_b_snapshot
 from .report import load_reports, retain_latest_reports, write_report
 from .renderer import render_site
@@ -435,6 +436,11 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
     news_source_diagnostics = []
     event_clustering_diagnostics = {"fallback_used": False, "reason": None}
     news_candidates = []
+    news_review_diagnostics = {
+        "unselected_candidate_count": 0, "review_candidate_count": 0, "review_filtered_count": 0,
+        "review_translation_requested_count": 0, "review_translation_success_count": 0,
+        "review_translation_failed_count": 0, "review_filtered_candidates": [],
+    }
     if offline_fixture:
         news, news_candidates = _offline_news()
     else:
@@ -515,13 +521,36 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
                 usage_tracker=usage_tracker, observability=stage_b_observability,
             )
             selected_candidate_ids = {item["candidate_id"] for item in news}
-            untranslated_candidates = [
+            selected_pool_items = [
+                candidate for candidate in selection_candidates
+                if candidate["candidate_id"] in selected_candidate_ids
+            ]
+            unselected_candidates = [
                 candidate for candidate in selection_candidates
                 if candidate["candidate_id"] not in selected_candidate_ids
             ]
+            # Review Filter sits strictly between Stage B's final selection and
+            # Candidate Pool Translation: it never affects what Stage A/B saw or
+            # selected (unselected_candidates above already reflects Stage B's full,
+            # untouched decision) -- it only decides which of the leftover
+            # candidates are worth a human's time in the "more news" drawer, so
+            # translation is requested for that smaller review pool instead of
+            # every unselected candidate.
+            review_result = select_review_pool(unselected_candidates, {
+                "borderline_ids": stage_b_observability.get("stage_b_borderline_dropped_ids", []),
+                "reserve_ids": stage_b_observability.get("stage_b_reserve_ids", []),
+                "topic_cap_dropped_ids": stage_b_observability.get("stage_b_topic_cap_dropped_ids", []),
+            })
+            review_candidates = review_result["review_candidates"]
+            print(
+                "[NEWS REVIEW FILTER SUMMARY] "
+                f"unselected={review_result['unselected_candidate_count']} "
+                f"review={review_result['review_candidate_count']} "
+                f"filtered={review_result['review_filtered_count']}"
+            )
             translation_observability: dict = {}
             candidate_translations = translate_candidates(
-                untranslated_candidates, api_key, usage_tracker=usage_tracker, observability=translation_observability,
+                review_candidates, api_key, usage_tracker=usage_tracker, observability=translation_observability,
             )
             print(
                 "[NEWS CANDIDATE TRANSLATION SUMMARY] "
@@ -532,7 +561,16 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
             )
             for failure in translation_observability.get("translation_batch_failures", []):
                 print(f"[NEWS CANDIDATE TRANSLATION SUMMARY] batch {failure['batch']} failed | reason={failure['reason']}")
-            news_candidates = build_news_candidates(selection_candidates, news, candidate_translations)
+            news_candidates = build_news_candidates(selected_pool_items + review_candidates, news, candidate_translations)
+            news_review_diagnostics = {
+                "unselected_candidate_count": review_result["unselected_candidate_count"],
+                "review_candidate_count": review_result["review_candidate_count"],
+                "review_filtered_count": review_result["review_filtered_count"],
+                "review_translation_requested_count": translation_observability.get("translation_requested_count", 0),
+                "review_translation_success_count": translation_observability.get("translation_success_count", 0),
+                "review_translation_failed_count": translation_observability.get("translation_failed_count", 0),
+                "review_filtered_candidates": review_result["filtered_candidates"],
+            }
         _log_news_pipeline(
             rss_candidate_count, window_candidate_count, len(candidates), stage_a_pre_cap_count,
             stage_a_actual_input_count, event_representatives, selection_candidates,
@@ -615,6 +653,7 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         "stage_b_failed_batch_count": stage_b_observability.get("stage_b_failed_batch_count", 0),
         "news_source_diagnostics": news_source_diagnostics,
         "event_clustering_diagnostics": event_clustering_diagnostics,
+        "news_review_diagnostics": news_review_diagnostics,
         "warnings": warnings,
     }
     reports_dir = base_dir / "data" / "reports"

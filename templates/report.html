@@ -156,7 +156,7 @@
     <div class="section-title"><span class="bar"></span><span>今日重要新闻</span><span class="small">（按重要性排序）</span></div>
     {% if report.news_candidates %}
     <button type="button" class="news-pool-open" id="news-pool-open" aria-haspopup="dialog" aria-controls="news-pool-drawer">
-      <span>更多新闻 · {{ report.news_candidates|length }}</span>
+      <span>更多新闻 · {{ report.news_candidates|rejectattr('selected')|list|length }}</span>
       <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
     </button>
     {% endif %}
@@ -395,6 +395,10 @@
     <div>
       <h2 id="news-pool-title">今日新闻候选池</h2>
       <div class="news-pool-subtitle">{{ report.report_date }} · 共 {{ total_candidates }} 条</div>
+      {% set review_diag = report.get('news_review_diagnostics') %}
+      {% if review_diag %}
+      <div class="news-pool-subtitle">未入选候选 {{ review_diag.unselected_candidate_count }} 条 · 已过滤明显低相关 {{ review_diag.review_filtered_count }} 条 · 待人工复核 {{ review_diag.review_candidate_count }} 条</div>
+      {% endif %}
     </div>
     <button type="button" class="drawer-close" id="news-pool-close" aria-label="关闭">✕</button>
   </div>
