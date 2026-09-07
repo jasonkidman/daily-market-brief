@@ -949,7 +949,11 @@ def select_news_with_fallback(candidates: list[dict], api_key: str, recent_selec
         observability["stage_b_fallback_used"] = True
         observability["stage_b_fallback_count"] = len(fallback)
         observability["stage_b_final_count"] = len(fallback)
-    return fallback, "⚠️ 新闻 AI 筛选超时，已使用规则降级结果。"
+    # Carries the real underlying failure (from select_news_two_pass/select_news,
+    # e.g. "api_error_402: Insufficient Balance", not just "timeout") through to
+    # the top-level report.warnings banner -- see select_news_multi_batch for how
+    # this reaches main.py even when the fallback fills in a non-empty result.
+    return fallback, f"{warning}（已使用规则降级结果补足 {len(fallback)} 条新闻）"
 
 
 def _sortable_score(item: dict) -> int:
@@ -1094,7 +1098,23 @@ def select_news_multi_batch(candidates: list[dict], api_key: str, recent_selecte
         observability["stage_b_final_count"] = len(final)
         observability["stage_b_ai_selected_count"] = ai_selected_count
         observability["stage_b_fallback_selected_count"] = fallback_selected_count
+        # Previously only surfaced in per-batch print logs and the batch-local
+        # stage_b_fallback_used flag (never copied up here) -- main.py reads
+        # this exact top-level key into report["stage_b_fallback_used"], which
+        # the template uses to decide whether to show the homepage's inline
+        # "已使用规则降级结果" banner, so a batch using fallback silently never
+        # reached the page. Confirmed live on 2026-09-07 (DeepSeek account ran
+        # out of balance): every batch fell back to deterministic selection,
+        # yet the page showed no warning of any kind.
+        observability["stage_b_fallback_used"] = fallback_selected_count > 0
 
-    if final:
+    # A batch that used deterministic fallback always contributes a real warning
+    # (see select_news_with_fallback) -- surfacing it here, even though `final`
+    # is non-empty, is what makes report.warnings/status flip to "🟠 部分数据源异常"
+    # instead of silently looking like a fully healthy AI-selected report.
+    # Only suppressed when every batch's AI genuinely succeeded (no fallback
+    # content anywhere in `final`), matching this function's own existing
+    # distinction between "AI confidently selected nothing" and "AI failed".
+    if final and fallback_selected_count == 0:
         return final, None
     return final, (batch_warnings[0] if batch_warnings else None)

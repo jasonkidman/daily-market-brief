@@ -2040,6 +2040,29 @@ def test_select_news_with_fallback_both_samples_timeout_uses_deterministic_fallb
     assert all(item.get("selection_mode") == "deterministic_fallback" for item in selected)
 
 
+def test_select_news_with_fallback_warning_carries_the_real_underlying_failure_reason():
+    """Regression: the returned warning must include the real failure reason
+    verbatim, not a generic fixed "筛选超时" label that would mislabel a
+    non-timeout failure. Confirmed live on 2026-09-07: a DeepSeek account with
+    no remaining balance surfaced no warning of any kind on the page before
+    this fix -- and would have been mislabeled "超时" without this one."""
+    pool = [
+        _macro_candidate("fed", "Federal Reserve holds interest rates steady after September meeting"),
+    ]
+
+    def always_insufficient_balance(system_prompt, user_payload, api_key):
+        raise RuntimeError("insufficient balance")
+
+    observability = {}
+    selected, warning = select_news_with_fallback(
+        pool, "key", call_model=always_insufficient_balance, sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert len(selected) > 0
+    assert "insufficient balance" in warning
+    assert "规则降级" in warning
+
+
 def test_select_news_with_fallback_no_high_confidence_candidate_returns_empty_not_padded():
     """Quality over quantity: a batch where the real AI fails AND nothing
     clears a high-confidence rule must return [], never padded with ordinary
@@ -2232,6 +2255,29 @@ def test_select_news_multi_batch_one_batch_timeout_does_not_affect_other_batch()
     selected_ids = {item["candidate_id"] for item in selected}
     assert second_batch_ids.issubset(selected_ids)
     assert len(selected) > 0
+
+
+def test_select_news_multi_batch_surfaces_warning_and_fallback_flag_when_final_includes_fallback_content():
+    """Regression: confirmed live on 2026-09-07 when a DeepSeek account ran out
+    of balance -- every batch fell back to deterministic selection, but the
+    page showed no warning at all, because this function unconditionally
+    returned (final, None) whenever final was non-empty (discarding every
+    batch's real failure reason) and never copied stage_b_fallback_used up to
+    the top-level observability the report template reads."""
+    pool = [
+        _macro_candidate("fed", "Federal Reserve holds interest rates steady after September meeting"),
+        _macro_candidate("payroll", "US nonfarm payroll report shows hiring slowdown"),
+    ]
+
+    observability = {}
+    selected, warning = select_news_multi_batch(
+        pool, "key", call_model=_always_timeout, sleep_fn=lambda _: None, observability=observability,
+    )
+
+    assert len(selected) > 0
+    assert warning is not None
+    assert "simulated stage b timeout" in warning
+    assert observability["stage_b_fallback_used"] is True
 
 
 def test_select_news_multi_batch_on_empty_pool_returns_empty():
