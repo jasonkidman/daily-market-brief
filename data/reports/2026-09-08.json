@@ -1,6 +1,6 @@
 {
   "report_date": "2026-09-08",
-  "generated_at": "2026-09-08 09:00 CST",
+  "generated_at": "2026-09-08 13:28 CST",
   "market_date": "2026-09-04",
   "status": "partial",
   "status_label": "🟠 部分数据源异常",
@@ -712,9 +712,9 @@
       "valid": true
     },
     "dxy": {
-      "market_date": "2026-09-07",
-      "close": 99.1760025024414,
-      "daily_return": 0.00016134368436038216,
+      "market_date": "2026-09-08",
+      "close": 98.8030014038086,
+      "daily_return": -0.0036002646744274225,
       "name": "美元指数",
       "ticker": "DX-Y.NYB",
       "valid": true
@@ -728,17 +728,17 @@
       "valid": true
     },
     "gold": {
-      "market_date": "2026-09-07",
-      "close": 4464.2001953125,
-      "daily_return": 0.007765676134753985,
+      "market_date": "2026-09-08",
+      "close": 4474.39990234375,
+      "daily_return": 0.010068197124631917,
       "name": "黄金 (COMEX)",
       "ticker": "GC=F",
       "valid": true
     },
     "wti": {
-      "market_date": "2026-09-07",
-      "close": 92.36000061035156,
-      "daily_return": 0.009619558604347933,
+      "market_date": "2026-09-08",
+      "close": 93.16000366210938,
+      "daily_return": 0.018364672535273296,
       "name": "原油 (WTI)",
       "ticker": "CL=F",
       "valid": true
@@ -748,7 +748,7 @@
     "tech_relative": 0.005854413331139119,
     "small_cap_relative": 0.0062434788437908395,
     "vix_daily_return": 0.05299383839742289,
-    "dxy_daily_return": 0.00016134368436038216,
+    "dxy_daily_return": -0.0036002646744274225,
     "us10y_bp_change": 2.199983596801758,
     "signals": [
       {
@@ -917,7 +917,7 @@
       "ath": 7798.990234375,
       "ath_date": "2026-08-13",
       "last_market_date": "2026-09-04",
-      "last_updated_at": "2026-09-08T09:00:56.371311+08:00",
+      "last_updated_at": "2026-09-08T13:28:25.812177+08:00",
       "current_close": 7718.60009765625,
       "current_drawdown": 0.010307762197780512,
       "pool": 140000,
@@ -975,7 +975,7 @@
       "ath": 30660.599609375,
       "ath_date": "2026-06-02",
       "last_market_date": "2026-09-04",
-      "last_updated_at": "2026-09-08T09:00:56.371311+08:00",
+      "last_updated_at": "2026-09-08T13:28:25.812177+08:00",
       "current_close": 29544.150390625,
       "current_drawdown": 0.03641315672145651,
       "pool": 60000,
@@ -1038,38 +1038,66 @@
   },
   "portfolio_action": "hold",
   "market_summary": {
-    "summary": "标普500当日下跌0.4%，纳指100当日上涨0.2%，当前市场宽度为市场偏弱。市场同时关注Treasury yields face 4.8% test as fiscal risks threaten to spill into 。",
+    "summary": "今日新闻主线集中在地缘与贸易风险：美国能源部长称伊朗核协议可能无法达成，加拿大拟对数百种美国商品加征最高50%的关税；与此同时，铜价因供应紧张与关税预期连续创纪录高位，相关定价显示商品与通胀扰动仍受关注。跨资产表现较为分化，随后可用数据中10年期美债收益率上升2.2个基点，美元指数下跌0.36%，VIX上升5.3%，黄金和WTI原油分别上涨1.01%和1.84%。美股内部同样缺乏一致性，标普500下跌0.38%至7718.60点，而纳斯达克100逆势上涨0.21%，科技板块上涨0.70%，并较标普领先0.59个百分点；但标普成分股仅175家上涨、327家下跌，金融、能源、医疗和非必需消费等板块走弱。当前市场更接近高位震荡、宽度偏弱且科技相对占优的阶段，尚未显示为全面回撤结构。",
     "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
-    "degraded": true
+    "degraded": false
   },
   "news": [
     {
       "rank": 1,
-      "candidate_id": "01e8280118efb713",
-      "category": "美国经济",
-      "title_zh": "Treasury yields face 4.8% test as fiscal risks threaten to spill into ",
-      "summary_zh": "Treasury yields face 4.8% test as fiscal risks threaten to spill into other assets",
-      "focus": "",
-      "tags": [],
-      "investment_relevance_score": null,
+      "candidate_id": "4ca73037d8455bc0",
+      "category": "AI / 资本开支",
+      "title_zh": "Mistral获三星领投，估值升至240亿美元",
+      "summary_zh": "欧洲AI公司Mistral在三星领投的融资后估值达到240亿美元，并押注开放权重模型与OpenAI、Anthropic竞争。",
+      "focus": "后续关注融资规模、模型商业化进展及与三星的产业合作",
+      "tags": [
+        "Mistral",
+        "AI融资",
+        "开放权重模型",
+        "三星"
+      ],
+      "investment_relevance_score": 78,
       "source": "CNBC Top News",
-      "url": "https://www.cnbc.com/2026/09/07/us-treasury-yields-markets-scott-bessent.html",
-      "published_at": "2026-09-07T02:01:52+00:00",
-      "original_title": "Treasury yields face 4.8% test as fiscal risks threaten to spill into other assets",
-      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「us_macro_fed_treasury」 | composite_score=10.75 (priority_base=6, importance_score=3, source_penalty=1.25, signals=macro_rates)",
-      "event_summary": "Treasury yields face 4.8% test as fiscal risks threaten to spill into other assets",
-      "topic_group": "US_MARKET_MACRO",
-      "event_category": "macro_policy",
+      "url": "https://www.cnbc.com/2026/09/08/mistral-ai-funding-valuation-samsung.html",
+      "published_at": "2026-09-08T05:00:01+00:00",
+      "original_title": "Mistral bags $24 billion valuation as Samsung leads funding for Europe's AI champion",
+      "selection_reason": "AI产业：重要AI公司获得超大规模融资并达到240亿美元估值，涉及开放权重模型竞争格局与重大投资。",
+      "event_summary": "Mistral bags $24 billion valuation as Samsung leads funding for Europe's AI champion",
+      "topic_group": "AI_CHIPS",
+      "event_category": "high_tech",
       "source_channel": null,
-      "fallback": true,
-      "selection_mode": "deterministic_fallback"
+      "selection_mode": "ai"
     },
     {
       "rank": 2,
+      "candidate_id": "8705c8f414f4db2c",
+      "category": "美国经济",
+      "title_zh": "铜价连续创纪录，供应紧张与美国关税预期推升价格",
+      "summary_zh": "铜价连续第二个交易日创纪录高位，摘要称短期供应紧张以及美国可能对精炼铜进口征收关税的预期共同推动涨势。",
+      "focus": "美国精炼铜关税政策是否落地及铜供应收紧能否持续",
+      "tags": [
+        "铜价",
+        "美国关税",
+        "工业成本"
+      ],
+      "investment_relevance_score": 78,
+      "source": "Bloomberg Markets",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-08/copper-ascends-to-new-heights-on-tight-supply-and-tariff-fears",
+      "published_at": "2026-09-08T03:09:18+00:00",
+      "original_title": "Copper Ascends to New Heights on Tight Supply and Tariff Fears",
+      "selection_reason": "美国市场相关性：精炼铜供应收紧推动价格连续创纪录；摘要同时指向美国精炼铜关税预期，关联美国贸易政策与工业成本。",
+      "event_summary": "Copper Ascends to New Heights on Tight Supply and Tariff Fears",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "macro_policy",
+      "source_channel": null,
+      "selection_mode": "ai"
+    },
+    {
+      "rank": 3,
       "candidate_id": "033a8d954c64d876",
       "category": "地缘政治",
-      "title_zh": "U.S. Energy Secretary Wright says Iran nuclear deal may never happen",
-      "summary_zh": "U.S. Energy Secretary Wright says Iran nuclear deal may never happen",
+      "title_zh": "美国能源部长表示伊朗核协议可能无法达成。",
+      "summary_zh": "美国能源部长表示伊朗核协议可能无法达成。",
       "focus": "",
       "tags": [],
       "investment_relevance_score": null,
@@ -1077,52 +1105,31 @@
       "url": "https://www.cnbc.com/2026/09/06/iran-us-response-oil-tanker-strikes.html",
       "published_at": "2026-09-07T07:35:18+00:00",
       "original_title": "U.S. Energy Secretary Wright says Iran nuclear deal may never happen",
-      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「geopolitics_region_and_market_transmission」 | composite_score=10 (priority_base=6, importance_score=2, source_penalty=0, signals=geopolitics_policy)",
-      "event_summary": "U.S. Energy Secretary Wright says Iran nuclear deal may never happen",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「geopolitics_region_and_market_transmission」 | composite_score=8 (priority_base=6, importance_score=2, source_penalty=2, signals=geopolitics_policy)",
+      "event_summary": "美国能源部长表示伊朗核协议可能无法达成。",
       "topic_group": "GEOPOLITICS",
-      "event_category": "geopolitics",
-      "source_channel": null,
-      "fallback": true,
-      "selection_mode": "deterministic_fallback"
-    },
-    {
-      "rank": 3,
-      "candidate_id": "44c2a106139ca77f",
-      "category": "美国经济",
-      "title_zh": "Canada Set to Hit Back at Trump Tariffs, Risking Wider Trade War",
-      "summary_zh": "Canada Set to Hit Back at Trump Tariffs, Risking Wider Trade War",
-      "focus": "",
-      "tags": [],
-      "investment_relevance_score": null,
-      "source": "Bloomberg Economics",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-07/canada-set-to-hit-back-at-trump-tariffs-risking-wider-trade-war",
-      "published_at": "2026-09-07T14:35:53+00:00",
-      "original_title": "Canada Set to Hit Back at Trump Tariffs, Risking Wider Trade War",
-      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「geopolitics_region_and_market_transmission」 | composite_score=8.75 (priority_base=6, importance_score=2, source_penalty=1.25, signals=geopolitics_policy)",
-      "event_summary": "Canada Set to Hit Back at Trump Tariffs, Risking Wider Trade War",
-      "topic_group": "US_MARKET_MACRO",
-      "event_category": "macro_policy",
+      "event_category": "other",
       "source_channel": null,
       "fallback": true,
       "selection_mode": "deterministic_fallback"
     },
     {
       "rank": 4,
-      "candidate_id": "7390bacbe9fce048",
-      "category": "美国经济",
-      "title_zh": "Oil Extends Gain, Iran Says Deal With Oman Is Close",
-      "summary_zh": "Oil Extends Gain, Iran Says Deal With Oman Is Close",
+      "candidate_id": "5876942c5523608c",
+      "category": "地缘政治",
+      "title_zh": "伊朗外交部批评加拿大支持美国在霍尔木兹海峡采取的行动。",
+      "summary_zh": "伊朗外交部批评加拿大支持美国在霍尔木兹海峡采取的行动。",
       "focus": "",
       "tags": [],
       "investment_relevance_score": null,
-      "source": "Bloomberg Markets",
-      "url": "https://www.bloomberg.com/news/videos/2026-09-07/oil-extends-gain-iran-says-deal-with-oman-is-close-video",
-      "published_at": "2026-09-07T23:41:22+00:00",
-      "original_title": "Oil Extends Gain, Iran Says Deal With Oman Is Close",
-      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「geopolitics_region_and_market_transmission」 | composite_score=9 (priority_base=6, importance_score=2, source_penalty=1, signals=geopolitics_policy)",
-      "event_summary": "Oil Extends Gain, Iran Says Deal With Oman Is Close",
-      "topic_group": "ENERGY_COMMODITIES",
-      "event_category": "financial_markets",
+      "source": "CNBC Top News",
+      "url": "https://www.cnbc.com/2026/09/08/us-iran-war-trump-hormuz-canada-trade-talks-greenland.html",
+      "published_at": "2026-09-08T01:50:07+00:00",
+      "original_title": "Iran foreign ministry takes aim at Canada for support of U.S. actions in Strait of Hormuz",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「geopolitics_region_and_market_transmission」 | composite_score=8.25 (priority_base=6, importance_score=2, source_penalty=1.75, signals=geopolitics_policy)",
+      "event_summary": "伊朗外交部批评加拿大支持美国在霍尔木兹海峡采取的行动。",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other",
       "source_channel": null,
       "fallback": true,
       "selection_mode": "deterministic_fallback"
@@ -1131,8 +1138,8 @@
       "rank": 5,
       "candidate_id": "78bf602e34fda248",
       "category": "大型科技",
-      "title_zh": "What we expect from the upcoming Apple launch",
-      "summary_zh": "What we expect from the upcoming Apple launch",
+      "title_zh": "苹果即将举行发布会，预计推出折叠屏iPhone并更新AirPods和HomePods。",
+      "summary_zh": "苹果即将举行发布会，预计推出折叠屏iPhone并更新AirPods和HomePods。",
       "focus": "",
       "tags": [],
       "investment_relevance_score": null,
@@ -1140,10 +1147,10 @@
       "url": "https://techcrunch.com/2026/09/07/what-we-expect-from-the-upcoming-apple-launch/",
       "published_at": "2026-09-07T15:58:00+00:00",
       "original_title": "What we expect from the upcoming Apple launch",
-      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「mega_cap_major_event」 | composite_score=12 (priority_base=6, importance_score=3, source_penalty=0, signals=mega_cap_tech)",
-      "event_summary": "What we expect from the upcoming Apple launch",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「mega_cap_major_event」 | composite_score=11.75 (priority_base=6, importance_score=3, source_penalty=0.25, signals=mega_cap_tech)",
+      "event_summary": "苹果即将举行发布会，预计推出折叠屏iPhone并更新AirPods和HomePods。",
       "topic_group": "MEGA_CAP_TECH",
-      "event_category": "high_tech",
+      "event_category": "other",
       "source_channel": null,
       "fallback": true,
       "selection_mode": "deterministic_fallback"
@@ -1151,9 +1158,9 @@
     {
       "rank": 6,
       "candidate_id": "8e4a5fd62629f31b",
-      "category": "大型科技",
-      "title_zh": "SpaceX rival launches rocket in historic first, says industry is 'desp",
-      "summary_zh": "SpaceX rival launches rocket in historic first, says industry is 'desperate' for more",
+      "category": "美国经济",
+      "title_zh": "德国火箭初创公司Isar Aerospace在第二次试飞中成功进入轨道。",
+      "summary_zh": "德国火箭初创公司Isar Aerospace在第二次试飞中成功进入轨道。",
       "focus": "",
       "tags": [],
       "investment_relevance_score": null,
@@ -1161,52 +1168,52 @@
       "url": "https://www.cnbc.com/2026/09/07/isar-aerospace-spacex-rival-rocket-launch.html",
       "published_at": "2026-09-07T12:26:40+00:00",
       "original_title": "SpaceX rival launches rocket in historic first, says industry is 'desperate' for more",
-      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「mega_cap_major_event」 | composite_score=11 (priority_base=6, importance_score=3, source_penalty=1, signals=mega_cap_tech)",
-      "event_summary": "SpaceX rival launches rocket in historic first, says industry is 'desperate' for more",
-      "topic_group": "MEGA_CAP_TECH",
-      "event_category": "high_tech",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「mega_cap_major_event」 | composite_score=10.75 (priority_base=6, importance_score=3, source_penalty=1.25, signals=mega_cap_tech)",
+      "event_summary": "德国火箭初创公司Isar Aerospace在第二次试飞中成功进入轨道。",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other",
       "source_channel": null,
       "fallback": true,
       "selection_mode": "deterministic_fallback"
     },
     {
       "rank": 7,
-      "candidate_id": "91b8bf5457ce2afb",
-      "category": "美国经济",
-      "title_zh": "Global Reserves Shift From Dollar Overstated, NY Fed Study Says",
-      "summary_zh": "Global Reserves Shift From Dollar Overstated, NY Fed Study Says",
+      "candidate_id": "d673a619b71c185e",
+      "category": "地缘政治",
+      "title_zh": "加拿大对数百种美国商品加征最高50%的关税。",
+      "summary_zh": "加拿大对数百种美国商品加征最高50%的关税。",
       "focus": "",
       "tags": [],
       "investment_relevance_score": null,
-      "source": "Bloomberg Economics",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-07/global-reserves-shift-from-dollar-overstated-ny-fed-study-says",
-      "published_at": "2026-09-07T10:32:14+00:00",
-      "original_title": "Global Reserves Shift From Dollar Overstated, NY Fed Study Says",
-      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「us_macro_fed_treasury」 | composite_score=5 (priority_base=6, importance_score=0, source_penalty=1, signals=none)",
-      "event_summary": "Global Reserves Shift From Dollar Overstated, NY Fed Study Says",
-      "topic_group": "US_MARKET_MACRO",
-      "event_category": "macro_policy",
+      "source": "Bloomberg Markets",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-08/the-asia-trade-9-8-2026-video",
+      "published_at": "2026-09-08T04:26:34+00:00",
+      "original_title": "Yen Rally Continues, Canada To Retaliate Against US Tariffs | The Asia Trade 9/8/2026",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「us_macro_fed_treasury」 | composite_score=9.5 (priority_base=6, importance_score=2, source_penalty=0.5, signals=geopolitics_policy)",
+      "event_summary": "加拿大对数百种美国商品加征最高50%的关税。",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other",
       "source_channel": null,
       "fallback": true,
       "selection_mode": "deterministic_fallback"
     },
     {
       "rank": 8,
-      "candidate_id": "9c2ddbe1db23bcfc",
+      "candidate_id": "eaaa1a84ab276c5b",
       "category": "美国经济",
-      "title_zh": "Fed Latest: Warsh’s speech contrasts with New York Fed president’s tak",
-      "summary_zh": "Fed Latest: Warsh’s speech contrasts with New York Fed president’s take",
+      "title_zh": "俄罗斯继续乌克兰战争的迹象推动小麦价格上涨。",
+      "summary_zh": "俄罗斯继续乌克兰战争的迹象推动小麦价格上涨。",
       "focus": "",
       "tags": [],
       "investment_relevance_score": null,
-      "source": "Bloomberg Economics",
-      "url": "https://www.bloomberg.com/news/newsletters/2026-09-07/fed-latest-warsh-s-speech-contrasts-with-new-york-fed-president-s-take",
-      "published_at": "2026-09-07T11:00:01+00:00",
-      "original_title": "Fed Latest: Warsh’s speech contrasts with New York Fed president’s take",
-      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「us_macro_fed_treasury」 | composite_score=5.25 (priority_base=6, importance_score=0, source_penalty=0.75, signals=none)",
-      "event_summary": "Fed Latest: Warsh’s speech contrasts with New York Fed president’s take",
-      "topic_group": "US_MARKET_MACRO",
-      "event_category": "macro_policy",
+      "source": "Bloomberg Markets",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-08/wheat-jumps-as-russia-focused-on-ukraine-war-despite-us-talks",
+      "published_at": "2026-09-08T02:29:12+00:00",
+      "original_title": "Wheat Jumps as Russia Focused on Ukraine War Despite US Talks",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「geopolitics_region_and_market_transmission」 | composite_score=9.25 (priority_base=6, importance_score=2, source_penalty=0.75, signals=geopolitics_policy)",
+      "event_summary": "俄罗斯继续乌克兰战争的迹象推动小麦价格上涨。",
+      "topic_group": "ENERGY_COMMODITIES",
+      "event_category": "other",
       "source_channel": null,
       "fallback": true,
       "selection_mode": "deterministic_fallback"
@@ -1216,11 +1223,11 @@
     {
       "candidate_id": "78bf602e34fda248",
       "title": "What we expect from the upcoming Apple launch",
-      "title_zh": "What we expect from the upcoming Apple launch",
+      "title_zh": "苹果即将举行发布会，预计推出折叠屏iPhone并更新AirPods和HomePods。",
       "source": "TechCrunch",
       "published_at": "2026-09-07T15:58:00+00:00",
       "summary": "While Apple's first foldable iPhone Ultra will headline the September 9 launch, we're also expecting news about AirPods and HomePods.",
-      "summary_zh": "What we expect from the upcoming Apple launch",
+      "summary_zh": "苹果即将举行发布会，预计推出折叠屏iPhone并更新AirPods和HomePods。",
       "url": "https://techcrunch.com/2026/09/07/what-we-expect-from-the-upcoming-apple-launch/",
       "category": "大型科技",
       "selected": true
@@ -1228,109 +1235,109 @@
     {
       "candidate_id": "8e4a5fd62629f31b",
       "title": "SpaceX rival launches rocket in historic first, says industry is 'desperate' for more",
-      "title_zh": "SpaceX rival launches rocket in historic first, says industry is 'desp",
+      "title_zh": "德国火箭初创公司Isar Aerospace在第二次试飞中成功进入轨道。",
       "source": "CNBC Top News",
       "published_at": "2026-09-07T12:26:40+00:00",
       "summary": "Isar Aerospace reached orbit on its second test flight as the German rocket startup looks to scale production amid booming satellite launch demand.",
-      "summary_zh": "SpaceX rival launches rocket in historic first, says industry is 'desperate' for more",
+      "summary_zh": "德国火箭初创公司Isar Aerospace在第二次试飞中成功进入轨道。",
       "url": "https://www.cnbc.com/2026/09/07/isar-aerospace-spacex-rival-rocket-launch.html",
-      "category": "大型科技",
-      "selected": true
-    },
-    {
-      "candidate_id": "01e8280118efb713",
-      "title": "Treasury yields face 4.8% test as fiscal risks threaten to spill into other assets",
-      "title_zh": "Treasury yields face 4.8% test as fiscal risks threaten to spill into ",
-      "source": "CNBC Top News",
-      "published_at": "2026-09-07T02:01:52+00:00",
-      "summary": "Treasury yields face a test at 4.8%, with a sustained move above that potentially creating \"meaningful problems\" for other asset classes, said Miller Tabak.",
-      "summary_zh": "Treasury yields face 4.8% test as fiscal risks threaten to spill into other assets",
-      "url": "https://www.cnbc.com/2026/09/07/us-treasury-yields-markets-scott-bessent.html",
       "category": "宏观 / 利率",
       "selected": true
     },
     {
-      "candidate_id": "7390bacbe9fce048",
-      "title": "Oil Extends Gain, Iran Says Deal With Oman Is Close",
-      "title_zh": "Oil Extends Gain, Iran Says Deal With Oman Is Close",
+      "candidate_id": "d673a619b71c185e",
+      "title": "Yen Rally Continues, Canada To Retaliate Against US Tariffs | The Asia Trade 9/8/2026",
+      "title_zh": "加拿大对数百种美国商品加征最高50%的关税。",
       "source": "Bloomberg Markets",
-      "published_at": "2026-09-07T23:41:22+00:00",
-      "summary": "Oil extended gains as traders watched for details of an Iranian deal with Oman to manage shipping through the Strait of Hormuz. Bloomberg's Michael Heath shares what we know so far. (Source: Bloomberg)",
-      "summary_zh": "Oil Extends Gain, Iran Says Deal With Oman Is Close",
-      "url": "https://www.bloomberg.com/news/videos/2026-09-07/oil-extends-gain-iran-says-deal-with-oman-is-close-video",
+      "published_at": "2026-09-08T04:26:34+00:00",
+      "summary": "\"Bloomberg: The Asia Trade\" brings you everything you need to know to get ahead as the trading day begins in Asia. Bloomberg TV is live from Tokyo and Sydney with Paul Allen and Haidi Stroud-Watts, getting insight and analysis from newsmakers and industry leaders on the biggest stories shaping global markets. (Source: Bloomberg)",
+      "summary_zh": "加拿大对数百种美国商品加征最高50%的关税。",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-08/the-asia-trade-9-8-2026-video",
+      "category": "地缘政治与风险事件",
+      "selected": true
+    },
+    {
+      "candidate_id": "eaaa1a84ab276c5b",
+      "title": "Wheat Jumps as Russia Focused on Ukraine War Despite US Talks",
+      "title_zh": "俄罗斯继续乌克兰战争的迹象推动小麦价格上涨。",
+      "source": "Bloomberg Markets",
+      "published_at": "2026-09-08T02:29:12+00:00",
+      "summary": "Wheat surged the most in more than a week on signs Russia remains committed to continuing its war in Ukraine, heightening concerns about prolonged disruptions to grain shipments from the Black Sea.",
+      "summary_zh": "俄罗斯继续乌克兰战争的迹象推动小麦价格上涨。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-08/wheat-jumps-as-russia-focused-on-ukraine-war-despite-us-talks",
       "category": "宏观 / 利率",
       "selected": true
     },
     {
-      "candidate_id": "44c2a106139ca77f",
-      "title": "Canada Set to Hit Back at Trump Tariffs, Risking Wider Trade War",
-      "title_zh": "Canada Set to Hit Back at Trump Tariffs, Risking Wider Trade War",
-      "source": "Bloomberg Economics",
-      "published_at": "2026-09-07T14:35:53+00:00",
-      "summary": "Canada is poised to impose tariffs of 15% to 50% on hundreds of products from the US on Tuesday, as Prime Minister Mark Carney bets that standing up to President Donald Trump will eventually help Ottawa’s negotiating position with its biggest trading partner.",
-      "summary_zh": "Canada Set to Hit Back at Trump Tariffs, Risking Wider Trade War",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-07/canada-set-to-hit-back-at-trump-tariffs-risking-wider-trade-war",
-      "category": "宏观 / 利率",
+      "candidate_id": "5876942c5523608c",
+      "title": "Iran foreign ministry takes aim at Canada for support of U.S. actions in Strait of Hormuz",
+      "title_zh": "伊朗外交部批评加拿大支持美国在霍尔木兹海峡采取的行动。",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-08T01:50:07+00:00",
+      "summary": "Canada had condemned Iran’s \"destabilizing actions\" in the Middle East, saying that it would work with partners to maintain significant pressure on Iran.",
+      "summary_zh": "伊朗外交部批评加拿大支持美国在霍尔木兹海峡采取的行动。",
+      "url": "https://www.cnbc.com/2026/09/08/us-iran-war-trump-hormuz-canada-trade-talks-greenland.html",
+      "category": "地缘政治与风险事件",
       "selected": true
     },
     {
       "candidate_id": "033a8d954c64d876",
       "title": "U.S. Energy Secretary Wright says Iran nuclear deal may never happen",
-      "title_zh": "U.S. Energy Secretary Wright says Iran nuclear deal may never happen",
+      "title_zh": "美国能源部长表示伊朗核协议可能无法达成。",
       "source": "CNBC Top News",
       "published_at": "2026-09-07T07:35:18+00:00",
       "summary": "Iran warned of faster, heavier retaliation against U.S. attacks while acknowledging the war’s mounting toll on its economy.",
-      "summary_zh": "U.S. Energy Secretary Wright says Iran nuclear deal may never happen",
+      "summary_zh": "美国能源部长表示伊朗核协议可能无法达成。",
       "url": "https://www.cnbc.com/2026/09/06/iran-us-response-oil-tanker-strikes.html",
       "category": "地缘政治与风险事件",
       "selected": true
     },
     {
-      "candidate_id": "9c2ddbe1db23bcfc",
-      "title": "Fed Latest: Warsh’s speech contrasts with New York Fed president’s take",
-      "title_zh": "Fed Latest: Warsh’s speech contrasts with New York Fed president’s tak",
-      "source": "Bloomberg Economics",
-      "published_at": "2026-09-07T11:00:01+00:00",
-      "summary": "Chair Warsh’s speech contrasts with New York Fed president’s take.",
-      "summary_zh": "Fed Latest: Warsh’s speech contrasts with New York Fed president’s take",
-      "url": "https://www.bloomberg.com/news/newsletters/2026-09-07/fed-latest-warsh-s-speech-contrasts-with-new-york-fed-president-s-take",
-      "category": "宏观 / 利率",
+      "candidate_id": "4ca73037d8455bc0",
+      "title": "Mistral bags $24 billion valuation as Samsung leads funding for Europe's AI champion",
+      "title_zh": "Mistral获三星领投，估值升至240亿美元",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-08T05:00:01+00:00",
+      "summary": "Mistral is betting on open-weight AI models to help it compete with players like OpenAI and Anthropic.",
+      "summary_zh": "欧洲AI公司Mistral在三星领投的融资后估值达到240亿美元，并押注开放权重模型与OpenAI、Anthropic竞争。",
+      "url": "https://www.cnbc.com/2026/09/08/mistral-ai-funding-valuation-samsung.html",
+      "category": "AI / 科技",
       "selected": true
     },
     {
-      "candidate_id": "91b8bf5457ce2afb",
-      "title": "Global Reserves Shift From Dollar Overstated, NY Fed Study Says",
-      "title_zh": "Global Reserves Shift From Dollar Overstated, NY Fed Study Says",
-      "source": "Bloomberg Economics",
-      "published_at": "2026-09-07T10:32:14+00:00",
-      "summary": "The decline in the dollar’s share of foreign-exchange reserves doesn’t reflect a widespread reallocation away from the currency, but rather moves by a small number of reserve managers, according to research from the Federal Reserve Bank of New York.",
-      "summary_zh": "Global Reserves Shift From Dollar Overstated, NY Fed Study Says",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-07/global-reserves-shift-from-dollar-overstated-ny-fed-study-says",
-      "category": "宏观 / 利率",
-      "selected": true
-    },
-    {
-      "candidate_id": "b9da4295557b030f",
-      "title": "Sapporo Breweries CSO on Tariffs, Iran War",
-      "title_zh": "Sapporo Breweries CSO on Tariffs, Iran War",
+      "candidate_id": "8705c8f414f4db2c",
+      "title": "Copper Ascends to New Heights on Tight Supply and Tariff Fears",
+      "title_zh": "铜价连续创纪录，供应紧张与美国关税预期推升价格",
       "source": "Bloomberg Markets",
-      "published_at": "2026-09-07T21:00:56+00:00",
-      "summary": "Sapporo Breweries is shifting some production to the US from Canada due to 50% tariffs imposed on beer exports from the country, Chief Strategy Officer Rieko Shofu said. She spoke exclusively with Bloomberg's Shery Ahn on being impacted by tariffs, as well as the Iran war. (Source: Bloomberg)",
-      "summary_zh": "Sapporo Breweries is shifting some production to the US from Canada due to 50% tariffs imposed on beer exports from the country, Chief Strategy Officer Rieko Shofu said. She spoke exclusively with Bloomberg's Shery Ahn on being impacted by tariffs, as well as the Iran war. (Source: Bloomberg)",
-      "url": "https://www.bloomberg.com/news/videos/2026-09-07/sapporo-breweries-cso-on-tariffs-iran-war-video",
+      "published_at": "2026-09-08T03:09:18+00:00",
+      "summary": "Copper extended gains, hitting a record high for a second straight session, as tight near-term supplies and expectations the US will tariff imports of refined metal buoyed prices.",
+      "summary_zh": "铜价连续第二个交易日创纪录高位，摘要称短期供应紧张以及美国可能对精炼铜进口征收关税的预期共同推动涨势。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-08/copper-ascends-to-new-heights-on-tight-supply-and-tariff-fears",
       "category": "宏观 / 利率",
+      "selected": true
+    },
+    {
+      "candidate_id": "f3af1c0aa73068f9",
+      "title": "Japan’s Katayama Says Will Aim to Maintain Orderly FX Market",
+      "title_zh": "Japan’s Katayama Says Will Aim to Maintain Orderly FX Market",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-08T01:48:02+00:00",
+      "summary": "Japan’s stance on currencies hasn’t shifted since it conducted joint intervention with its US counterparts, and authorities will work to maintain orderly markets, Finance Minister Satsuki Katayama said after the yen strengthened briskly to its strongest level since February.",
+      "summary_zh": "Japan’s stance on currencies hasn’t shifted since it conducted joint intervention with its US counterparts, and authorities will work to maintain orderly markets, Finance Minister Satsuki Katayama said after the yen strengthened briskly to its strongest level since February.",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-08/japan-s-katayama-says-will-aim-to-maintain-orderly-fx-market",
+      "category": "其他",
       "selected": false
     },
     {
-      "candidate_id": "2dc3b7de97b8601a",
-      "title": "IQE CEO Warns of Emerging China Supply Risk for Chip Industry",
-      "title_zh": "IQE CEO Warns of Emerging China Supply Risk for Chip Industry",
-      "source": "Bloomberg Technology",
-      "published_at": "2026-09-07T08:51:49+00:00",
-      "summary": "IQE Plc Chief Executive Officer Jutta Meier said access to indium phosphide substrates is emerging as a key risk for the semiconductor industry as Chinese export controls create uncertainty over supplies.",
-      "summary_zh": "IQE Plc Chief Executive Officer Jutta Meier said access to indium phosphide substrates is emerging as a key risk for the semiconductor industry as Chinese export controls create uncertainty over supplies.",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-07/iqe-ceo-warns-of-emerging-china-supply-risk-for-chip-industry",
-      "category": "AI / 科技",
+      "candidate_id": "9c2ddbe1db23bcfc",
+      "title": "Fed Latest: Warsh’s speech contrasts with New York Fed president’s take",
+      "title_zh": "Fed Latest: Warsh’s speech contrasts with New York Fed president’s take",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-07T11:00:01+00:00",
+      "summary": "Chair Warsh’s speech contrasts with New York Fed president’s take.",
+      "summary_zh": "Chair Warsh’s speech contrasts with New York Fed president’s take.",
+      "url": "https://www.bloomberg.com/news/newsletters/2026-09-07/fed-latest-warsh-s-speech-contrasts-with-new-york-fed-president-s-take",
+      "category": "宏观 / 利率",
       "selected": false
     },
     {
@@ -1342,6 +1349,18 @@
       "summary": "The head of chip designer Arm says modelling how a DNA marker is impacted by cancer cannot be done now, but computers are \"going to solve it\".",
       "summary_zh": "The head of chip designer Arm says modelling how a DNA marker is impacted by cancer cannot be done now, but computers are \"going to solve it\".",
       "url": "https://www.bbc.co.uk/news/articles/c0m39g7xzevo?at_medium=RSS&at_campaign=rss",
+      "category": "AI / 科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "16ed74ba7c0c229d",
+      "title": "Yen Climbs to Six-Month High, Chip Stocks Advance: Markets Wrap",
+      "title_zh": "Yen Climbs to Six-Month High, Chip Stocks Advance: Markets Wrap",
+      "source": "Bloomberg Markets",
+      "published_at": "2026-09-07T22:08:43+00:00",
+      "summary": "The yen extended Monday’s rally to reach the strongest level since February, aided by rising expectations of a Bank of Japan interest-rate increase next week. Gains in South Korean chip stocks helped support Asian equities.",
+      "summary_zh": "The yen extended Monday’s rally to reach the strongest level since February, aided by rising expectations of a Bank of Japan interest-rate increase next week. Gains in South Korean chip stocks helped support Asian equities.",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-07/stock-market-today-dow-s-p-live-updates",
       "category": "AI / 科技",
       "selected": false
     },
@@ -1380,144 +1399,132 @@
       "url": "https://arstechnica.com/features/2026/09/the-ai-data-center-boom-is-causing-new-accountability-problems/",
       "category": "AI / 科技",
       "selected": false
-    },
-    {
-      "candidate_id": "ddf12dc5a36cb447",
-      "title": "Malaysia Eyes Huawei Chips for AI Project Despite US Warning",
-      "title_zh": "Malaysia Eyes Huawei Chips for AI Project Despite US Warning",
-      "source": "Bloomberg Technology",
-      "published_at": "2026-09-07T07:01:38+00:00",
-      "summary": "Malaysia is leaning toward relying on Huawei Technologies Co.’s artificial intelligence chips to power its sovereign AI efforts, in what would be a major victory for Chinese AI technology in the face of strong opposition from President Donald Trump’s administration.",
-      "summary_zh": "Malaysia is leaning toward relying on Huawei Technologies Co.’s artificial intelligence chips to power its sovereign AI efforts, in what would be a major victory for Chinese AI technology in the face of strong opposition from President Donald Trump’s administration.",
-      "url": "https://www.bloomberg.com/news/articles/2026-09-07/malaysia-eyes-huawei-chips-for-ai-project-despite-us-warning",
-      "category": "AI / 科技",
-      "selected": false
     }
   ],
   "news_degraded": true,
   "stage_b_fallback_used": true,
-  "stage_b_ai_selected_count": 0,
-  "stage_b_fallback_selected_count": 8,
-  "stage_b_failed_batch_count": 5,
+  "stage_b_ai_selected_count": 2,
+  "stage_b_fallback_selected_count": 6,
+  "stage_b_failed_batch_count": 2,
   "news_source_diagnostics": [],
   "event_clustering_diagnostics": {
     "fallback_used": true,
-    "reason": "batch 1/3: ⚠️ 新闻事件级去重暂时失败，已使用基础去重结果继续生成日报。 原因：Error code: 403 - {'balance': -0.01350627, 'code': 'INSUFFICIENT_BALANCE', 'error': {'code': 'insufficient_quota', 'message': '【账户余额不足】当前可用余额 $-0.01\\n按量计费需要可用余额 > 0 才能发起请求。\\n去充值：https://api.lmuai.com/purchase?recharge=1', 'param': None, 'type': 'insufficient_quota'}, 'frozen_balance': 0, 'message': '【账户余额不足】当前可用余额 $-0.01\\n按量计费需要可用余额 > 0 才能发起请求。\\n去充值：https://api.lmuai.com/purchase?recharge=1', 'reason': 'Insufficient account balance', 'recharge_url': 'https://api.lmuai.com/purchase?recharge=1'}; batch 2/3: ⚠️ 新闻事件级去重暂时失败，已使用基础去重结果继续生成日报。 原因：Error code: 403 - {'balance': -0.01350627, 'code': 'INSUFFICIENT_BALANCE', 'error': {'code': 'insufficient_quota', 'message': '【账户余额不足】当前可用余额 $-0.01\\n按量计费需要可用余额 > 0 才能发起请求。\\n去充值：https://api.lmuai.com/purchase?recharge=1', 'param': None, 'type': 'insufficient_quota'}, 'frozen_balance': 0, 'message': '【账户余额不足】当前可用余额 $-0.01\\n按量计费需要可用余额 > 0 才能发起请求。\\n去充值：https://api.lmuai.com/purchase?recharge=1', 'reason': 'Insufficient account balance', 'recharge_url': 'https://api.lmuai.com/purchase?recharge=1'}; batch 3/3: ⚠️ 新闻事件级去重暂时失败，已使用基础去重结果继续生成日报。 原因：Error code: 403 - {'balance': -0.01350627, 'code': 'INSUFFICIENT_BALANCE', 'error': {'code': 'insufficient_quota', 'message': '【账户余额不足】当前可用余额 $-0.01\\n按量计费需要可用余额 > 0 才能发起请求。\\n去充值：https://api.lmuai.com/purchase?recharge=1', 'param': None, 'type': 'insufficient_quota'}, 'frozen_balance': 0, 'message': '【账户余额不足】当前可用余额 $-0.01\\n按量计费需要可用余额 > 0 才能发起请求。\\n去充值：https://api.lmuai.com/purchase?recharge=1', 'reason': 'Insufficient account balance', 'recharge_url': 'https://api.lmuai.com/purchase?recharge=1'}"
+    "reason": "batch 2/3: ⚠️ 新闻事件级去重暂时失败，已使用基础去重结果继续生成日报。 原因：Request timed out."
   },
   "news_review_diagnostics": {
-    "unselected_candidate_count": 112,
+    "unselected_candidate_count": 109,
     "review_candidate_count": 7,
-    "review_filtered_count": 105,
+    "review_filtered_count": 102,
     "review_translation_requested_count": 7,
     "review_translation_success_count": 0,
     "review_translation_failed_count": 7,
     "review_filtered_candidates": [
       {
-        "candidate_id": "c3b081b16303c603",
-        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+        "candidate_id": "5429b43f9c904dc6",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
       },
       {
-        "candidate_id": "8764a9f011475b5d",
+        "candidate_id": "c3b081b16303c603",
         "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
       },
       {
-        "candidate_id": "100dbf4194c224ca",
+        "candidate_id": "8764a9f011475b5d",
+        "filter_reason": "no_qualifying_signal:topic_group=CORPORATE_EARNINGS"
+      },
+      {
+        "candidate_id": "0e40a21f98bfb4fe",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "def7040efea95b30",
+        "filter_reason": "no_qualifying_signal:topic_group=CORPORATE_EARNINGS"
+      },
+      {
+        "candidate_id": "b6ecf141cac9610c",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "b8a69bb12367fe05",
-        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+        "candidate_id": "ffa66ae32010c786",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
       },
       {
         "candidate_id": "580f25dcfd3e2d2a",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "287ea331915ba7bd",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "100dbf4194c224ca",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
       },
       {
         "candidate_id": "213b231f7741a814",
         "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
       },
       {
-        "candidate_id": "192e56fcf90ff389",
-        "filter_reason": "no_qualifying_signal:topic_group=CORPORATE_EARNINGS"
-      },
-      {
-        "candidate_id": "52548e104d98c705",
-        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
-      },
-      {
-        "candidate_id": "5b1a80a83516642c",
-        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
-      },
-      {
         "candidate_id": "62e767814f4f2ffd",
-        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
-      },
-      {
-        "candidate_id": "993c9952c05e1d9d",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+        "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
       },
       {
         "candidate_id": "64a7d5c3694507f4",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
-      },
-      {
-        "candidate_id": "b6ecf141cac9610c",
-        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+        "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
       },
       {
         "candidate_id": "273efa3bcce264ed",
         "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
       },
       {
-        "candidate_id": "47c2e37038ee0ccb",
-        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+        "candidate_id": "6830a4e271824f04",
+        "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
       },
       {
-        "candidate_id": "23a5af60b9335c57",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
-      },
-      {
-        "candidate_id": "dfc306a8f8c1b285",
+        "candidate_id": "fea3272d61e8bad4",
         "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
       },
       {
         "candidate_id": "eaadb90ec75b9a06",
-        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+        "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
       },
       {
         "candidate_id": "dc0cb61b98065ce8",
         "filter_reason": "no_qualifying_signal:topic_group=ENERGY_COMMODITIES"
       },
       {
-        "candidate_id": "cbeed973db82d0b5",
-        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
-      },
-      {
-        "candidate_id": "fea3272d61e8bad4",
+        "candidate_id": "5c9129cd1488d0c8",
         "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
       },
       {
+        "candidate_id": "75484a4d663931d0",
+        "filter_reason": "no_qualifying_signal:topic_group=ENERGY_COMMODITIES"
+      },
+      {
         "candidate_id": "59cec08e80b0bd1c",
-        "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "40e59154a811ac07",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "8d7dc77c7e0ca564",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
       },
       {
         "candidate_id": "cb75ae5c9278d7a1",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "a9cc669b23a2f022",
+        "candidate_id": "cb7ddadcab743a84",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
-      },
-      {
-        "candidate_id": "e5a8e881dee5e3f8",
-        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
       },
       {
         "candidate_id": "47b8b151026b0c74",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "a5ac83c8068cfdc3",
+        "candidate_id": "e5a8e881dee5e3f8",
         "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
       },
       {
@@ -1529,27 +1536,51 @@
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "83c6b4844094c0af",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+        "candidate_id": "dba287c911a4f204",
+        "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
       },
       {
         "candidate_id": "2910ec49bf90ac18",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "0030fc805d42ffa4",
+        "candidate_id": "23d5e68a01a76f77",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "02d4bb0d362b6d85",
-        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+        "candidate_id": "92b626f48fb03e27",
+        "filter_reason": "no_qualifying_signal:topic_group=ENERGY_COMMODITIES"
+      },
+      {
+        "candidate_id": "634f064de39db6db",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "d6cb5417a4de7f2f",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "9ba6ea54020a8383",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
         "candidate_id": "897de1a6acd2bfa7",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "f3883102e52281b4",
+        "candidate_id": "f8eb702538eb240e",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "bc83b41d5d3de66e",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "d19361928ba8da1c",
+        "filter_reason": "no_qualifying_signal:topic_group=ENERGY_COMMODITIES"
+      },
+      {
+        "candidate_id": "83c6b4844094c0af",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
@@ -1557,15 +1588,15 @@
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "65e83902ff7a4ae9",
+        "candidate_id": "7bc256e166b51ed5",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "a852b79046413faf",
-        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+        "candidate_id": "38801aca0ec7173a",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "97504b42ff5cc5f7",
+        "candidate_id": "0030fc805d42ffa4",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
@@ -1573,19 +1604,15 @@
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "c17489912e332d83",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+        "candidate_id": "fcbcf5062b86326b",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
       },
       {
-        "candidate_id": "5388484182d76131",
-        "filter_reason": "no_qualifying_signal:topic_group=CORPORATE_EARNINGS"
+        "candidate_id": "a852b79046413faf",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
       },
       {
         "candidate_id": "89cc2387c9855e66",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
-      },
-      {
-        "candidate_id": "e82726cc8aa972a6",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
@@ -1593,7 +1620,15 @@
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "3b3764b51a197241",
+        "candidate_id": "b32870e158d492dc",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "5388484182d76131",
+        "filter_reason": "no_qualifying_signal:topic_group=CORPORATE_EARNINGS"
+      },
+      {
+        "candidate_id": "f3883102e52281b4",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
@@ -1601,19 +1636,15 @@
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "edfa6a373ecad206",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
-      },
-      {
-        "candidate_id": "9c5ec95b83dba77a",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
-      },
-      {
         "candidate_id": "176d658e556e3767",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "2938ffffb35a2ece",
+        "candidate_id": "535d1311c3ece1c1",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "edfa6a373ecad206",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
@@ -1621,11 +1652,7 @@
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "fb5be6dcff3fe9e0",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
-      },
-      {
-        "candidate_id": "bddcde4413320570",
+        "candidate_id": "9c5ec95b83dba77a",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
@@ -1633,7 +1660,7 @@
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "268a5d9fc4d51275",
+        "candidate_id": "c1dd369a9ad48550",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
@@ -1641,20 +1668,16 @@
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
+        "candidate_id": "bddcde4413320570",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
         "candidate_id": "8b145b57348ecb04",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "037b32ea8729ab72",
+        "candidate_id": "d4d8b4d3dd6f713a",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
-      },
-      {
-        "candidate_id": "066cc6e9ec7bccb4",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
-      },
-      {
-        "candidate_id": "16ed74ba7c0c229d",
-        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
       },
       {
         "candidate_id": "faf6c20a0b3331e9",
@@ -1665,11 +1688,15 @@
         "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
       },
       {
-        "candidate_id": "3f8b2a673888fb77",
+        "candidate_id": "037b32ea8729ab72",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "f3105694d7301f1b",
+        "candidate_id": "da3054409f3653fa",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "65e83902ff7a4ae9",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
@@ -1681,11 +1708,7 @@
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "aa48fd78d5a3c8da",
-        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
-      },
-      {
-        "candidate_id": "d4a49b292fc45939",
+        "candidate_id": "a81adfb5936024e2",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
@@ -1697,60 +1720,44 @@
         "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
       },
       {
-        "candidate_id": "44d249cf7cec3f89",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
-      },
-      {
-        "candidate_id": "77ec433833ef8545",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
-      },
-      {
-        "candidate_id": "3356d0098e013a31",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
-      },
-      {
-        "candidate_id": "aa56d6a1cdb502da",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
-      },
-      {
         "candidate_id": "eee8ed53c63509f0",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "7c12d9bce9b33f9e",
-        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
-      },
-      {
-        "candidate_id": "1ee9ce6f1dd9e6ae",
+        "candidate_id": "44d249cf7cec3f89",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
-      },
-      {
-        "candidate_id": "d0c484f5e34db94b",
-        "filter_reason": "no_qualifying_signal:topic_group=ENERGY_COMMODITIES"
       },
       {
         "candidate_id": "a6d15bc96027bd7d",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+        "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
       },
       {
-        "candidate_id": "aa27a2b1222f7bbf",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
-      },
-      {
-        "candidate_id": "e6cfb9c6bf55476c",
+        "candidate_id": "066cc6e9ec7bccb4",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
         "candidate_id": "ce8c63a5d110b9ef",
+        "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
+      },
+      {
+        "candidate_id": "a06e025c456606bc",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "fe52d0ae65057e43",
         "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
       },
       {
-        "candidate_id": "e7354262e6d4e912",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+        "candidate_id": "e123df9d4aa46e0c",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
       },
       {
-        "candidate_id": "b2c43e6c5cb592f1",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+        "candidate_id": "e62875692f0eb405",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "20eb5a816fdc91b2",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
       },
       {
         "candidate_id": "3360f71cebd5e40c",
@@ -1758,11 +1765,11 @@
       },
       {
         "candidate_id": "46c1de5ccbcec3fc",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+        "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
       },
       {
         "candidate_id": "1ba4f089ae2cf72d",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
       },
       {
         "candidate_id": "feb18d7f15583f56",
@@ -1770,7 +1777,7 @@
       },
       {
         "candidate_id": "f8c3be5a77ca3ce3",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
       },
       {
         "candidate_id": "38bbcba4af3e97e3",
@@ -1778,11 +1785,11 @@
       },
       {
         "candidate_id": "4c829f892b232d9e",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
       },
       {
         "candidate_id": "d13e4612d6704ad6",
-        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
       },
       {
         "candidate_id": "c8c3a621f16ba167",
@@ -1790,23 +1797,11 @@
       },
       {
         "candidate_id": "50e2bad87fbca8c6",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
       },
       {
         "candidate_id": "faeb0dc7f42d7737",
         "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
-      },
-      {
-        "candidate_id": "b14f175b29a5f10d",
-        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
-      },
-      {
-        "candidate_id": "6122915037b33298",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
-      },
-      {
-        "candidate_id": "552c8a7faaa1adef",
-        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
       },
       {
         "candidate_id": "11147936aa911180",
@@ -1814,15 +1809,15 @@
       },
       {
         "candidate_id": "2be377a0f12f54a1",
-        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
       },
       {
         "candidate_id": "fcaefa90288e8259",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+        "filter_reason": "no_qualifying_signal:topic_group=ENERGY_COMMODITIES"
       },
       {
         "candidate_id": "19f64442bc4972f1",
-        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
       },
       {
         "candidate_id": "0e2b0393e1924727",
@@ -1830,11 +1825,11 @@
       },
       {
         "candidate_id": "47ae05fd7626c5bf",
-        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
       }
     ]
   },
   "warnings": [
-    "batch 1/5: ⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：api_error_403: Error code: 403 - {'balance': -0.01350627, 'code': 'INSUFFICIENT_BALANCE', 'error': {'code': 'insufficient_quota', 'message': '【账户余额不足】当前可用余额 $-0.01\\n按量计费需要可用余额 > 0 才能发起请求。\\n去充值：https://api.lmuai.com/purchase?recharge=1', 'param': None, 'type': 'insufficient_quota'}, 'frozen_balance': 0, 'message': '【账户余额不足】当前可用余额 $-0.01\\n按量计费需要可用余额 > 0 才能发起请求。\\n去充值：https://api.lmuai.com/purchase?recharge=1', 'reason': 'Insufficient account balance', 'recharge_url': 'https://api.lmuai.com/purchase?recharge=1'}（已使用规则降级结果补足 6 条新闻）"
+    "batch 1/5: ⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：timeout: Request timed out.（已使用规则降级结果补足 6 条新闻）"
   ]
 }
