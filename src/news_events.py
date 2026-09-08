@@ -14,6 +14,7 @@ from .deepseek_client import (
     DEEPSEEK_MAX_ATTEMPTS, NEWS_REASONING_EFFORT, NonRetryableAPIError, SUMMARY_ZH_LIMIT, TITLE_ZH_LIMIT,
     DeepSeekUsageTracker, call_deepseek, invoke_model,
 )
+from .news_dedupe import normalize_title
 from .news_event_prompt import SYSTEM_PROMPT
 
 
@@ -569,6 +570,90 @@ def _merge_cross_batch_duplicate_events(events: list[dict]) -> list[dict]:
         if len(event.get("event_summary") or "") > len(match.get("event_summary") or ""):
             match["event_summary"] = event["event_summary"]
     return merged
+
+
+# Calibrated offline against 7 days of real Stage A output (2026-08-31 through
+# 2026-09-06; see experiments/calibrate_clustering.py and IMPLEMENTATION_PLAN.md
+# section 6.2 for the method, and PR 2's writeup for why this is title-only).
+#
+# The calibration's ground truth (which raw candidates Stage A considered the
+# same real-world event) had to be reconstructed from GitHub Actions job logs,
+# because the snapshot artifact only persists one representative article per
+# event, not the full pre-clustering pool -- so every candidate an event's
+# LLM-run merged away (i.e. didn't pick as representative) has no summary text
+# recorded anywhere, ever. That rules out validating a summary-corroborated
+# "soft" title-match band against real data, so this function deliberately
+# does not have one: only a single hard title-similarity threshold, decided
+# entirely by raw title text.
+#
+# Against that reconstructed ground truth (127 real same-event pairs, restricted
+# to the subset of candidates Stage A actually evaluated -- STAGE_A_MAX_INPUT
+# silently drops the rest before clustering, so "not merged" for those isn't a
+# real negative), title similarity produces exactly one over-merge candidate
+# at every threshold from 0.56 up through 0.88 -- a Bloomberg live-blog and its
+# own later "key takeaways" wrap-up of the same jobs report, confirmed by hand
+# to be the same real event, i.e. not a real error. Below 0.54 real over-merges
+# (e.g. a UK inflation story merged with a Eurozone one) start appearing and
+# grow quickly. 0.84 sits well clear of that observed edge -- recall is nearly
+# flat across the whole 0.66-0.88 safe range (this data set's cross-outlet
+# title-similarity recall for genuine duplicates is low either way, ~6-8%; see
+# PR 2 writeup), so there is little to trade away for the extra margin.
+TITLE_MERGE_THRESHOLD = 0.84
+
+
+def _candidates_are_likely_duplicates(a: dict, b: dict, *, title_merge_threshold: float = TITLE_MERGE_THRESHOLD) -> bool:
+    """Deterministic same-real-event check on raw article titles (as opposed
+    to _events_are_likely_duplicates, which compares already-LLM-normalized
+    event_summary text -- raw titles vary far more in wording across outlets,
+    which is why this threshold is calibrated separately, see above)."""
+    title_ratio = difflib.SequenceMatcher(
+        None, normalize_title(a["title"]), normalize_title(b["title"])
+    ).ratio()
+    return title_ratio >= title_merge_threshold
+
+
+def cluster_candidates_local(candidates: list[dict], *, title_merge_threshold: float = TITLE_MERGE_THRESHOLD) -> list[dict]:
+    """Pure-code replacement for Stage A's LLM clustering: greedily merges
+    candidates describing the same real-world event based on raw title
+    similarity, conservative by design (see threshold comment above).
+
+    Not yet wired into main.py (see IMPLEMENTATION_PLAN.md PR 2/PR 3 split).
+    Output is shaped to match cluster_news_events_batched's output so it drops
+    into build_event_representatives()/event_selection_candidates() unchanged:
+    each event has event_id / candidate_ids / event_summary / topic_group /
+    event_category. event_summary has no LLM to author it, so (like
+    _fallback_events) it is just the representative article's own title.
+    """
+    events: list[dict] = []
+    for index, candidate in enumerate(candidates, 1):
+        topic_group, event_category = _classify_fallback_topic(candidate)
+        title = candidate.get("title", "")
+        match = next((
+            event for event in events
+            if _candidates_are_likely_duplicates(
+                {"title": event["_rep_title"]}, candidate, title_merge_threshold=title_merge_threshold,
+            )
+        ), None)
+        if match is None:
+            events.append({
+                "event_id": f"local_{index:03d}",
+                "candidate_ids": [candidate["candidate_id"]],
+                "event_summary": title or "新闻事件",
+                "topic_group": topic_group,
+                "event_category": event_category,
+                "_rep_title": title,
+            })
+            continue
+        match["candidate_ids"].append(candidate["candidate_id"])
+        if match["topic_group"] == "OTHER_SYSTEMIC" and topic_group != "OTHER_SYSTEMIC":
+            match["topic_group"] = topic_group
+            match["event_category"] = event_category
+        if len(title) > len(match["_rep_title"]):
+            match["_rep_title"] = title
+            match["event_summary"] = title
+    for event in events:
+        del event["_rep_title"]
+    return events
 
 
 def cluster_news_events_batched(candidates: list[dict], api_key: str,

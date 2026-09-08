@@ -12,3 +12,5 @@ secrets.json
 .DS_Store
 work/
 .worktrees/
+experiments/snapshots/
+experiments/run_logs/
