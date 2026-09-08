@@ -10,7 +10,7 @@ could not possibly succeed, with 5-10s backoff sleeps in between.
 
 import pytest
 
-from src import deepseek_client, market_summary, news_candidate_translation, news_events
+from src import deepseek_client, market_summary, news_candidate_translation
 from src.deepseek_client import NonRetryableAPIError, is_non_retryable
 
 
@@ -111,92 +111,12 @@ def test_invoke_model_wraps_non_retryable_and_still_records_usage():
 
 
 # --------------------------------------------------------------------------
-# Stage B
+# Scoring (news_scoring.score_candidates) -- see tests/test_news_scoring.py
+# for the full call-count regression suite (batching, invalid/missing items,
+# concurrency). The non-retryable-abort and retry-once cases specifically are
+# also covered there (test_non_retryable_aborts_without_retry_and_stops_new_dispatches,
+# test_retry_only_once_on_timeout); not duplicated here.
 # --------------------------------------------------------------------------
-
-def test_stage_b_single_pass_makes_one_call_and_does_not_sleep():
-    call_model, calls = counting_raiser(lambda: FakeAPIError("no balance", 403))
-    with pytest.raises(NonRetryableAPIError):
-        deepseek_client.select_news(
-            [candidate("a")], "key", call_model=call_model, sleep_fn=no_sleep,
-        )
-    assert len(calls) == 1
-
-
-def test_stage_b_two_pass_does_not_fall_back_to_another_single_pass():
-    """The generic orchestration handler re-runs the whole selection as a single
-    pass -- that path must not be reachable for a non-retryable error."""
-    call_model, calls = counting_raiser(lambda: FakeAPIError("no balance", 403))
-    with pytest.raises(NonRetryableAPIError):
-        deepseek_client.select_news_two_pass(
-            [candidate("a")], "key", call_model=call_model, sleep_fn=no_sleep,
-        )
-    # Two concurrent samples are already in flight when the error lands; nothing
-    # beyond them (no retry, no review, no single-pass rerun) may be dispatched.
-    assert len(calls) == 2
-
-
-def test_stage_b_multi_batch_stops_dispatching_after_non_retryable():
-    """Three batches, failure on the first: only the first batch's two samples
-    may ever reach the API. Under the old behaviour this was
-    3 batches x 2 samples x 2 attempts = 12 requests."""
-    pool = [candidate(str(index)) for index in range(84)]
-    call_model, calls = counting_raiser(lambda: FakeAPIError("no balance", 403))
-    observability = {}
-
-    news, warning = deepseek_client.select_news_multi_batch(
-        pool, "key", call_model=call_model, sleep_fn=no_sleep,
-        observability=observability, batch_size=28,
-    )
-
-    assert observability["stage_b_batch_count"] == 3
-    assert len(calls) == 2
-    assert observability["stage_b_non_retryable_abort"] is True
-    assert observability["stage_b_aborted_at_batch"] == 1
-    assert warning is not None and "已中止" in warning
-    # Every candidate still reaches a deterministic decision -- the page degrades
-    # exactly as it already did for a failed batch.
-    assert observability["stage_b_uncovered_candidate_count"] == 0
-
-
-def test_stage_b_multi_batch_still_retries_a_timeout_once_per_sample():
-    """The abort path must not have removed ordinary retry behaviour."""
-    slept = []
-    call_model, calls = counting_raiser(lambda: TimeoutError("read timeout"))
-
-    deepseek_client.select_news_multi_batch(
-        [candidate("a")], "key", call_model=call_model, sleep_fn=slept.append,
-        batch_size=28,
-    )
-
-    # 2 samples x DEEPSEEK_MAX_ATTEMPTS(2)
-    assert len(calls) == 2 * deepseek_client.DEEPSEEK_MAX_ATTEMPTS
-    assert slept, "a retryable failure must still back off between attempts"
-
-
-# --------------------------------------------------------------------------
-# Stage A
-# --------------------------------------------------------------------------
-
-def test_stage_a_batched_stops_dispatching_after_non_retryable():
-    pool = [candidate(str(index)) for index in range(120)]
-    call_model, calls = counting_raiser(lambda: FakeAPIError("no balance", 403))
-    observability = {}
-
-    events, warning = news_events.cluster_news_events_batched(
-        pool, "key", call_model=call_model, sleep_fn=no_sleep,
-        observability=observability, batch_size=50,
-    )
-
-    assert observability["stage_a_batch_count"] == 3
-    assert len(calls) == 1
-    assert observability["stage_a_non_retryable_abort"] is True
-    # Deterministic one-event-per-candidate fallback still covers everything.
-    assert observability["stage_a_uncovered_candidate_count"] == 0
-    covered = {cid for event in events for cid in event["candidate_ids"]}
-    assert covered == {item["candidate_id"] for item in pool}
-    assert warning is not None
-
 
 # --------------------------------------------------------------------------
 # Candidate Pool Translation

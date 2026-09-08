@@ -55,7 +55,7 @@ def test_stage_b_snapshot_is_written_with_replayable_schema(tmp_path):
     assert loaded["stage_a_events"] == sample_snapshot()["stage_a_events"]
 
 
-def test_replay_restores_same_stage_b_candidates_without_rss_or_stage_a(tmp_path, monkeypatch):
+def test_replay_restores_same_candidates_without_rss_or_clustering(tmp_path, monkeypatch):
     path = write_stage_b_snapshot(tmp_path, sample_snapshot())
     calls = {}
 
@@ -65,22 +65,23 @@ def test_replay_restores_same_stage_b_candidates_without_rss_or_stage_a(tmp_path
         return inner
 
     monkeypatch.setattr(main, "fetch_candidates", fail("RSS"))
-    monkeypatch.setattr(main, "cluster_news_events_batched", fail("Stage A"))
+    monkeypatch.setattr(main, "cluster_candidates_local", fail("clustering"))
 
-    def fake_select(candidates, api_key, recent_selected=None, market_context=None, **kwargs):
+    def fake_score(candidates, api_key, focus_rules, **kwargs):
         calls["candidates"] = candidates
-        calls["recent_selected"] = recent_selected
-        calls["market_context"] = market_context
-        return [], None
+        calls["focus_rules"] = focus_rules
+        return {}
 
-    monkeypatch.setattr(main, "select_news_multi_batch", fake_select)
+    monkeypatch.setattr(main, "score_candidates", fake_score)
 
-    result = main.replay_stage_b_snapshot(path, api_key="test-key")
+    result = main.replay_scoring_snapshot(path, api_key="test-key")
 
-    assert result == []
+    # score_candidates() returned no results, so the one candidate surfaces
+    # unscored (score=None) rather than being dropped -- see _merge_scores.
+    assert [item["candidate_id"] for item in result] == ["event-1"]
+    assert result[0]["score"] is None
     assert calls["candidates"] == sample_snapshot()["stage_b"]["candidates"]
-    assert calls["recent_selected"] == []
-    assert calls["market_context"] == sample_snapshot()["stage_b"]["market_context"]
+    assert calls["focus_rules"]
     assert not (tmp_path / "data" / "reports").exists()
     assert not (tmp_path / "site").exists()
 
@@ -99,13 +100,13 @@ def test_snapshot_replay_preserves_old_report_schema(tmp_path, monkeypatch):
     report_path.write_text(json.dumps(report), encoding="utf-8")
     path = write_stage_b_snapshot(tmp_path, sample_snapshot())
 
-    monkeypatch.setattr(main, "select_news_multi_batch", lambda *args, **kwargs: ([], None))
-    main.replay_stage_b_snapshot(path, api_key="test-key")
+    monkeypatch.setattr(main, "score_candidates", lambda *args, **kwargs: {})
+    main.replay_scoring_snapshot(path, api_key="test-key")
 
     assert json.loads(report_path.read_text(encoding="utf-8")) == report
 
 
-def test_production_pipeline_writes_snapshot_before_stage_b(tmp_path, monkeypatch):
+def test_production_pipeline_writes_snapshot_before_scoring(tmp_path, monkeypatch):
     monkeypatch.setenv("DEEPSEEK_API_KEY", "test-key")
     now = main.datetime.fromisoformat("2026-08-12T10:00:00").replace(tzinfo=main.SHANGHAI)
     market_config = main._load_yaml(main.ROOT / "config" / "market.yaml")
@@ -128,22 +129,20 @@ def test_production_pipeline_writes_snapshot_before_stage_b(tmp_path, monkeypatc
     monkeypatch.setattr(main, "fetch_candidates", lambda *args: ([candidate], []))
     monkeypatch.setattr(main, "filter_final_candidates", lambda candidates, now: candidates)
     monkeypatch.setattr(main, "dedupe_candidates", lambda candidates: candidates)
-    monkeypatch.setattr(main, "stage_a_input_counts", lambda candidates: (1, 1))
-    monkeypatch.setattr(main, "cluster_news_events_batched", lambda *args, **kwargs: (events, None))
+    monkeypatch.setattr(main, "cluster_candidates_local", lambda candidates: events)
     event_representatives = [{**candidate, "candidate_ids": ["event-1"]}]
     monkeypatch.setattr(main, "build_event_representatives", lambda events, candidates: event_representatives)
     monkeypatch.setattr(main, "event_selection_candidates", lambda events: selection_candidates)
     monkeypatch.setattr(main, "generate_market_summary", lambda *args, **kwargs: {"degraded": True})
     monkeypatch.setattr(main, "render_site", lambda *args, **kwargs: None)
 
-    def fake_select(candidates, *args, **kwargs):
+    def fake_score(candidates, *args, **kwargs):
         path = tmp_path / "data" / "news_snapshots" / "2026-08-12.json"
         assert path.exists()
         assert load_stage_b_snapshot(path)["stage_b"]["candidates"] == candidates
-        return [], None
+        return {}
 
-    monkeypatch.setattr(main, "select_news_multi_batch", fake_select)
-    monkeypatch.setattr(main, "translate_candidates", lambda candidates, api_key, **kwargs: {})
+    monkeypatch.setattr(main, "score_candidates", fake_score)
     main.generate_daily_report(base_dir=tmp_path, report_date="2026-08-12")
 
     snapshot = load_stage_b_snapshot(tmp_path / "data" / "news_snapshots" / "2026-08-12.json")

@@ -11,10 +11,7 @@ from zoneinfo import ZoneInfo
 
 import yaml
 
-from .deepseek_client import (
-    DeepSeekUsageTracker, select_news, select_news_multi_batch, select_news_two_pass,
-    select_news_with_fallback, validate_selection,
-)
+from .deepseek_client import DeepSeekUsageTracker
 from .drawdown import compute_suggested_topup, reserve_used_total, summarize_index_state, update_drawdown_state
 from .market import (
     build_sparkline,
@@ -30,15 +27,13 @@ from .market_signals import build_market_context_for_ai, calculate_market_signal
 from .market_summary import derive_portfolio_action, generate_market_summary
 from .news_dedupe import dedupe_candidates
 from .news_events import (
+    _rank_stage_a_candidates,
     build_event_representatives,
-    cluster_news_events_batched,
+    cluster_candidates_local,
     event_selection_candidates,
-    stage_a_input_counts,
-    validate_event_clusters,
 )
-from .news_candidate_translation import translate_candidates
 from .news_candidates import build_news_candidates
-from .news_review_filter import select_review_pool
+from .news_scoring import rule_based_top_news, score_candidates
 from .news_snapshot import load_stage_b_snapshot, write_stage_b_snapshot
 from .report import load_reports, retain_latest_reports, write_report
 from .renderer import render_site
@@ -47,6 +42,14 @@ from .rss_news import fetch_candidates, filter_final_candidates
 
 ROOT = Path(__file__).resolve().parents[1]
 SHANGHAI = ZoneInfo("Asia/Shanghai")
+
+# No historical fixed count existed before PR 3 -- the old LLM decided how many
+# candidates cleared its bar, with no top-level cap (see the removed
+# select_news_with_fallback's "no artificial maximum item count" test). Recent
+# real daily counts ran 7-12 (excluding total-failure days); 10 sits inside
+# that range as Layer 1's new pure-code cutoff. Tune here, not by re-deriving
+# from scratch.
+NEWS_TOP_N = 10
 
 # A single supplementary (non-P0) RSS source failing should not, by itself,
 # flip the page-top status banner as long as the remaining sources still
@@ -98,23 +101,46 @@ def _write_json(path: Path, payload) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def replay_stage_b_snapshot(snapshot_path: Path, api_key: str) -> list[dict]:
-    """Replay Stage B (batched, two-pass, with deterministic fallback) from a
-    persisted production input snapshot. `stage_b.candidates` holds the full
-    Stage A representative pool (no longer pre-capped -- see
-    select_news_multi_batch), so replay reproduces exactly what production ran,
-    batch-by-batch, for every candidate."""
+def _merge_scores(selection_candidates: list[dict], scores: dict[str, dict]) -> list[dict]:
+    """Attach each candidate's Layer 1 scoring result. A candidate_id absent
+    from `scores` (dropped as invalid, or its batch failed/was skipped -- see
+    score_candidates) gets score=None rather than being omitted, so it still
+    surfaces in the "more news" pool with its original English text."""
+    merged = []
+    for item in selection_candidates:
+        result = scores.get(item["candidate_id"])
+        if result is None:
+            merged.append({**item, "score": None, "category": None, "title_zh": None, "summary_zh": None, "reason": None})
+        else:
+            merged.append({**item, **result})
+    return merged
+
+
+def _select_top_news(scored_candidates: list[dict], limit: int) -> list[dict]:
+    """Code, not the model, decides how many candidates make "今日重要新闻" and
+    in what order: sort by score descending (unscored candidates always sort
+    last), then take the top `limit`. Ties keep their incoming relative order
+    (Python's sort is stable) -- there is no secondary ranking signal here by
+    design, matching the plan's literal sort/select contract."""
+    ranked = sorted(
+        scored_candidates,
+        key=lambda item: (item["score"] is not None, item["score"] if item["score"] is not None else -1),
+        reverse=True,
+    )
+    return [{**item, "rank": rank} for rank, item in enumerate(ranked[:limit], start=1)]
+
+
+def replay_scoring_snapshot(snapshot_path: Path, api_key: str) -> list[dict]:
+    """Replay Scoring from a persisted production input snapshot.
+    `stage_b.candidates` holds the full event-clustered representative pool
+    (the snapshot's field names predate PR 3's architecture change -- see
+    IMPLEMENTATION_PLAN.md section 3/6.1 -- but the schema itself is unchanged
+    this PR), so replay reproduces exactly what production scored."""
     snapshot = load_stage_b_snapshot(snapshot_path)
     candidates = snapshot["stage_b"]["candidates"]
-    selected, warning = select_news_multi_batch(
-        candidates,
-        api_key,
-        recent_selected=snapshot["stage_b"].get("recent_7_days_events", []),
-        market_context=snapshot["stage_b"].get("market_context"),
-    )
-    if warning:
-        print(warning)
-    return selected
+    focus_text = _load_yaml(ROOT / "config" / "news_focus.yaml")["focus_text"]
+    scores = score_candidates(candidates, api_key, focus_text)
+    return _select_top_news(_merge_scores(candidates, scores), NEWS_TOP_N)
 
 
 def _offline_market(now: datetime, core_config: dict, context_config: dict):
@@ -249,61 +275,31 @@ def _recent_news_events(reports: list[dict], current_report_date: str) -> list[d
 
 
 def _log_news_pipeline(rss_raw_count: int, within_24h_count: int, deduplicated_count: int,
-                       stage_a_pre_cap_count: int, stage_a_actual_input_count: int,
-                       event_representatives: list[dict], stage_b_candidates: list[dict],
-                       stage_b_raw_count: int, stage_b_validated_count: int,
-                       recent_events: list[dict], selected: list[dict],
-                       stage_b_observability: dict | None = None,
-                       stage_a_observability: dict | None = None) -> None:
+                       event_representatives: list[dict], selection_candidates: list[dict],
+                       selected: list[dict], scoring_observability: dict | None = None) -> None:
     print("[NEWS PIPELINE]")
     print(f"rss_raw_count: {rss_raw_count}")
     print(f"within_24h_count: {within_24h_count}")
     print(f"deduplicated_count: {deduplicated_count}")
-    print(f"stage_a_pre_cap_count: {stage_a_pre_cap_count}")
-    print(f"stage_a_actual_input_count: {stage_a_actual_input_count}")
     print(f"duplicates_removed: {within_24h_count - deduplicated_count}")
-    print(f"stage_a_cap_dropped: {stage_a_pre_cap_count - stage_a_actual_input_count}")
     print("[EVENT CLUSTERING]")
-    if stage_a_observability:
-        for key in (
-            "stage_a_total_candidate_count", "stage_a_batch_count", "stage_a_batch_sizes",
-            "stage_a_batch_output_counts", "stage_a_batch_fallback_used",
-            "stage_a_uncovered_candidate_count", "stage_a_final_event_count",
-        ):
-            if key in stage_a_observability:
-                print(f"{key}: {stage_a_observability.get(key)}")
-    print(f"stage_a_output_event_count: {len(event_representatives)}")
-    print(f"clustering_collapsed: {max(stage_a_actual_input_count - len(event_representatives), 0)}")
+    print(f"clustered_event_count: {len(event_representatives)}")
+    print(f"clustering_collapsed: {max(deduplicated_count - len(event_representatives), 0)}")
     print("Largest clusters:")
     for event in sorted(event_representatives, key=lambda item: len(item["candidate_ids"]), reverse=True)[:5]:
         print(f"{event['event_summary']}: {len(event['candidate_ids'])} articles")
-    print("[STAGE A EVENTS]")
+    print("[CLUSTERED EVENTS]")
     for event in event_representatives:
         print(f"event_id={event.get('event_id')} | category={event.get('event_category', 'other')} | title={event.get('event_summary', '')}")
-    print("[STAGE B INPUT EVENTS]")
-    print(f"stage_b_input_count: {len(stage_b_candidates)}")
-    for item in stage_b_candidates:
-        print(f"candidate_id={item.get('candidate_id')} | category={item.get('event_category', 'other')} | title={item.get('title', '')}")
-    print(f"stage_b_raw_count: {stage_b_raw_count}")
-    print(f"stage_b_validated_count: {stage_b_validated_count}")
-    if stage_b_observability:
+    print("[SCORING INPUT]")
+    print(f"scoring_input_count: {len(selection_candidates)}")
+    if scoring_observability:
         for key in (
-            "stage_b_total_candidate_count", "stage_b_batch_count", "stage_b_batch_sizes",
-            "stage_b_batch_selected_counts", "stage_b_batches_fallback_used_count",
-            "stage_b_uncovered_candidate_count", "stage_b_final_reviewed_count",
-            "stage_b_selected_count", "stage_b_reserve_count", "stage_b_selected_valid_count",
-            "stage_b_backfilled_count", "stage_b_final_count", "stage_b_target_count",
-            "stage_b_sample_a_count", "stage_b_sample_b_count", "stage_b_intersection_count",
-            "stage_b_borderline_count", "stage_b_review_keep_count",
-            "stage_b_fallback_used", "stage_b_fallback_count",
-            "stage_b_ai_selected_count", "stage_b_fallback_selected_count", "stage_b_failed_batch_count",
+            "scoring_total_candidate_count", "scoring_batch_count", "scoring_batch_sizes",
+            "scoring_scored_count", "scoring_failed_batch_count", "scoring_non_retryable_abort",
         ):
-            if key in stage_b_observability:
-                print(f"{key}: {stage_b_observability.get(key, 0)}")
-        if "two_pass_degraded" in stage_b_observability:
-            print(f"two_pass_degraded: {stage_b_observability['two_pass_degraded']}")
-    print("[EVENT HISTORY]")
-    print(f"Recent events checked: {len(recent_events)}")
+            if key in scoring_observability:
+                print(f"{key}: {scoring_observability.get(key)}")
     print("[TOPIC DISTRIBUTION]")
     distribution = {}
     for item in selected:
@@ -314,52 +310,59 @@ def _log_news_pipeline(rss_raw_count: int, within_24h_count: int, deduplicated_c
     print("[NEWS SELECTED]")
     print(f"Final saved news count: {len(selected)}")
     for item in selected:
-        print(f"{item['rank']}. {item.get('title_zh', '')} | {item['source']} | {item['original_title']} | {item.get('topic_group')}")
+        print(f"{item['rank']}. {item.get('title_zh', '')} | {item.get('source', '')} | {item.get('title', '')} | {item.get('topic_group')}")
 
 
 def _offline_news():
+    # Title wording is deliberately close within each pair (unlike a real day's
+    # cross-outlet coverage) so cluster_candidates_local's pure title-similarity
+    # match actually merges them -- demonstrating event-level dedup end to end
+    # without a mocked/hand-fed clustering result. See IMPLEMENTATION_PLAN.md
+    # section 6 for why cross-outlet merging is otherwise weak by design.
     candidates = [
         {"candidate_id": "offline-fed-reuters", "source": "Reuters", "priority": "P0",
-         "title": "Fed holds rates", "summary": "Federal Reserve held interest rates unchanged after its meeting.",
+         "title": "Fed holds interest rates steady after meeting",
+         "summary": "The Federal Reserve held interest rates unchanged after its policy meeting.",
          "published_at": "2026-08-12T01:00:00+00:00", "url": "https://example.com/offline-fed-reuters"},
         {"candidate_id": "offline-fed-bbc", "source": "BBC News", "priority": "P0",
-         "title": "Federal Reserve leaves rates unchanged", "summary": "Fed leaves benchmark rates unchanged.",
+         "title": "Federal Reserve holds interest rates steady after meeting",
+         "summary": "The Fed left its benchmark interest rate unchanged.",
          "published_at": "2026-08-12T00:30:00+00:00", "url": "https://example.com/offline-fed-bbc"},
         {"candidate_id": "offline-nvidia-techcrunch", "source": "TechCrunch", "priority": "P0",
-         "title": "Nvidia launches AI chip", "summary": "Nvidia introduced a new AI chip for data centers.",
+         "title": "Nvidia unveils new AI chip for data centers",
+         "summary": "Nvidia introduced a new AI chip for data centers.",
          "published_at": "2026-08-12T02:00:00+00:00", "url": "https://example.com/offline-nvidia-techcrunch"},
         {"candidate_id": "offline-nvidia-ars", "source": "Ars Technica", "priority": "P1",
-         "title": "Nvidia unveils new AI processor", "summary": "Nvidia revealed its latest AI processor.",
+         "title": "Nvidia introduces new AI chip for data centers",
+         "summary": "Nvidia revealed its latest AI chip for data centers.",
          "published_at": "2026-08-12T02:10:00+00:00", "url": "https://example.com/offline-nvidia-ars"},
         {"candidate_id": "offline-oil-bbc", "source": "BBC News", "priority": "P0",
          "title": "Oil rises after Middle East escalation", "summary": "Oil prices rose following a Middle East escalation.",
          "published_at": "2026-08-12T03:00:00+00:00", "url": "https://example.com/offline-oil-bbc"},
     ]
-    events = validate_event_clusters({"events": [
-        {"event_id": "event_001", "candidate_ids": ["offline-fed-reuters", "offline-fed-bbc"],
-         "event_summary": "Federal Reserve held rates unchanged after its meeting.", "topic_group": "US_MARKET_MACRO"},
-        {"event_id": "event_002", "candidate_ids": ["offline-nvidia-techcrunch", "offline-nvidia-ars"],
-         "event_summary": "Nvidia introduced a new AI processor for data centers.", "topic_group": "AI_CHIPS"},
-        {"event_id": "event_003", "candidate_ids": ["offline-oil-bbc"],
-         "event_summary": "Oil prices rose after a Middle East escalation.", "topic_group": "GEOPOLITICS"},
-    ]}, candidates)
+    events = cluster_candidates_local(candidates)
     selection_candidates = event_selection_candidates(build_event_representatives(events, candidates))
-    payload = {"news": [
-        {"rank": 1, "candidate_id": "offline-fed-reuters", "category": "美联储 / 利率",
-         "title_zh": "美联储维持利率", "summary_zh": "此条目仅用于验证事件级新闻去重后的离线日报生成流程，不代表真实新闻或投资信息。",
-         "focus": "FOMC · 美债收益率", "tags": ["Fed", "美债", "估值"],
-         "investment_relevance_score": 92, "selection_reason": "演示用宏观代表事件，利率路径影响折现率。"},
-        {"rank": 2, "candidate_id": "offline-nvidia-techcrunch", "category": "AI / 资本开支",
-         "title_zh": "英伟达推出新 AI 芯片", "summary_zh": "此条目仅用于验证同一公司同一次事件被合并为单一代表文章，不代表真实新闻或投资信息。",
-         "focus": "AI 资本开支 · 数据中心", "tags": ["AI", "半导体", "资本开支"],
-         "investment_relevance_score": 85, "selection_reason": "演示用科技代表事件，验证事件级合并结果。"},
-        {"rank": 3, "candidate_id": "offline-oil-bbc", "category": "地缘政治",
-         "title_zh": "中东局势升级推动油价上涨", "summary_zh": "此条目仅用于验证独立地缘事件保留为单独新闻事件，不代表真实新闻或投资信息。",
-         "focus": "中东局势 · 油价", "tags": ["地缘政治", "油价", "通胀"],
-         "investment_relevance_score": 78, "selection_reason": "演示用独立地缘事件，验证主题分散保留。"},
-    ]}
-    news = validate_selection(payload, selection_candidates)
-    return news, build_news_candidates(selection_candidates, news)
+    disclaimer = "不代表真实新闻或投资信息"
+    scores = {
+        "offline-fed-reuters": {
+            "score": 92, "category": "美联储 / 利率", "title_zh": "美联储维持利率不变",
+            "summary_zh": f"此条目仅用于验证事件级新闻去重后的离线日报生成流程，{disclaimer}。",
+            "reason": "演示用宏观代表事件，验证跨来源合并结果。",
+        },
+        "offline-nvidia-techcrunch": {
+            "score": 85, "category": "AI / 资本开支", "title_zh": "英伟达推出新 AI 芯片",
+            "summary_zh": f"此条目仅用于验证同一事件跨来源合并为单一代表文章，{disclaimer}。",
+            "reason": "演示用科技代表事件，验证事件级合并结果。",
+        },
+        "offline-oil-bbc": {
+            "score": 78, "category": "地缘政治", "title_zh": "中东局势升级推动油价上涨",
+            "summary_zh": f"此条目仅用于验证独立事件保留为单独新闻，{disclaimer}。",
+            "reason": "演示用独立地缘事件，验证主题分散保留。",
+        },
+    }
+    scored_candidates = _merge_scores(selection_candidates, scores)
+    news = _select_top_news(scored_candidates, NEWS_TOP_N)
+    return news, build_news_candidates(scored_candidates, news)
 
 
 def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
@@ -429,18 +432,12 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
     retained = load_reports(base_dir / "data" / "reports") if (base_dir / "data" / "reports").exists() else []
     warnings = [*market_warnings, *breadth_warnings]
     news_degraded = False
+    scoring_fallback_used = False
     api_key = os.environ.get("DEEPSEEK_API_KEY")
     usage_tracker = DeepSeekUsageTracker()
-    stage_b_observability = {"raw_count": 0, "validated_count": 0}
-    stage_a_observability: dict = {}
+    scoring_observability: dict = {}
     news_source_diagnostics = []
-    event_clustering_diagnostics = {"fallback_used": False, "reason": None}
     news_candidates = []
-    news_review_diagnostics = {
-        "unselected_candidate_count": 0, "review_candidate_count": 0, "review_filtered_count": 0,
-        "review_translation_requested_count": 0, "review_translation_success_count": 0,
-        "review_translation_failed_count": 0, "review_filtered_candidates": [],
-    }
     if offline_fixture:
         news, news_candidates = _offline_news()
     else:
@@ -453,47 +450,18 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         candidates = filter_final_candidates(candidates, now)
         window_candidate_count = len(candidates)
         candidates = dedupe_candidates(candidates)
-        stage_a_pre_cap_count, stage_a_actual_input_count = stage_a_input_counts(candidates)
+        # Kept for the snapshot's forensic value and potential future use, but
+        # (per IMPLEMENTATION_PLAN.md section 4) not fed into Scoring -- Layer 1's
+        # input is candidate text + focus rules only, no cross-day history.
         recent_events = _recent_news_events(retained, report_date)
         if not api_key:
             news, ai_warning = [], "⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：未配置 AI 凭据。"
             event_representatives = []
             selection_candidates = []
-            stage_a_actual_input_count = 0
         else:
-            events, clustering_warning = cluster_news_events_batched(
-                candidates, api_key, usage_tracker=usage_tracker, observability=stage_a_observability,
-            )
-            # The fallback (one event per candidate) always preserves basic
-            # (exact-URL-level) dedup -- `dedupe_candidates` already ran above
-            # unconditionally -- and can never leave the pipeline empty for a
-            # non-empty candidate pool, so this never rises to a page-top
-            # banner; it's still fully captured for troubleshooting. Its one
-            # real cost is a quality nuance, not a broken/incomplete result:
-            # articles from different outlets about the same real event may
-            # surface as separate Stage B events instead of being merged into
-            # one, when it would normally have been merged.
-            event_clustering_diagnostics = {
-                "fallback_used": clustering_warning is not None,
-                "reason": clustering_warning,
-            }
+            events = cluster_candidates_local(candidates)
             event_representatives = build_event_representatives(events, candidates)
             selection_candidates = event_selection_candidates(event_representatives)
-            ai_market_context = None
-            if validity_summary["context_any_valid"] or market_breadth["health"].get("valid"):
-                ai_market_context = {
-                    "core_market": snapshots,
-                    "market_context": context_snapshots,
-                    "market_signals": market_signals,
-                    "market_context_text": build_market_context_for_ai(
-                        snapshots, context_snapshots, market_signals
-                    ),
-                    "market_breadth": market_breadth,
-                    "market_breadth_text": build_market_breadth_text(
-                        market_breadth["stocks"], market_breadth["sectors"], market_breadth["health"]
-                    ),
-                }
-                print("[NEWS]\nMarket-driven context generated")
             snapshot = {
                 "schema_version": 1,
                 "report_date": report_date,
@@ -502,8 +470,12 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
                     "rss_raw": rss_candidate_count,
                     "within_24h": window_candidate_count,
                     "deduplicated": len(candidates),
-                    "stage_a_pre_cap": stage_a_pre_cap_count,
-                    "stage_a_actual_input": stage_a_actual_input_count,
+                    # No candidate is ever capped out of clustering any more
+                    # (cluster_candidates_local runs the full pool in one pass),
+                    # so these two are always equal -- kept as separate keys
+                    # rather than reshaping the schema (see PR 2/PR 3 split).
+                    "stage_a_pre_cap": len(candidates),
+                    "stage_a_actual_input": len(candidates),
                     "stage_a_events": len(events),
                     "stage_b_input": len(selection_candidates),
                 },
@@ -511,71 +483,31 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
                 "stage_b": {
                     "candidates": selection_candidates,
                     "recent_7_days_events": recent_events,
-                    "market_context": ai_market_context,
+                    "market_context": None,
                 },
             }
-            # Snapshot persistence is fail-fast: a report without a replayable Stage B input is incomplete.
+            # Snapshot persistence is fail-fast: a report without a replayable Scoring input is incomplete.
             write_stage_b_snapshot(base_dir, snapshot)
-            news, ai_warning = select_news_multi_batch(
-                selection_candidates, api_key, recent_events, market_context=ai_market_context,
-                usage_tracker=usage_tracker, observability=stage_b_observability,
+            focus_text = _load_yaml(config_root / "news_focus.yaml")["focus_text"]
+            scores = score_candidates(
+                selection_candidates, api_key, focus_text,
+                usage_tracker=usage_tracker, observability=scoring_observability,
             )
-            selected_candidate_ids = {item["candidate_id"] for item in news}
-            selected_pool_items = [
-                candidate for candidate in selection_candidates
-                if candidate["candidate_id"] in selected_candidate_ids
-            ]
-            unselected_candidates = [
-                candidate for candidate in selection_candidates
-                if candidate["candidate_id"] not in selected_candidate_ids
-            ]
-            # Review Filter sits strictly between Stage B's final selection and
-            # Candidate Pool Translation: it never affects what Stage A/B saw or
-            # selected (unselected_candidates above already reflects Stage B's full,
-            # untouched decision) -- it only decides which of the leftover
-            # candidates are worth a human's time in the "more news" drawer, so
-            # translation is requested for that smaller review pool instead of
-            # every unselected candidate.
-            review_result = select_review_pool(unselected_candidates, {
-                "borderline_ids": stage_b_observability.get("stage_b_borderline_dropped_ids", []),
-                "reserve_ids": stage_b_observability.get("stage_b_reserve_ids", []),
-                "topic_cap_dropped_ids": stage_b_observability.get("stage_b_topic_cap_dropped_ids", []),
-            })
-            review_candidates = review_result["review_candidates"]
-            print(
-                "[NEWS REVIEW FILTER SUMMARY] "
-                f"unselected={review_result['unselected_candidate_count']} "
-                f"review={review_result['review_candidate_count']} "
-                f"filtered={review_result['review_filtered_count']}"
-            )
-            translation_observability: dict = {}
-            candidate_translations = translate_candidates(
-                review_candidates, api_key, usage_tracker=usage_tracker, observability=translation_observability,
-            )
-            print(
-                "[NEWS CANDIDATE TRANSLATION SUMMARY] "
-                f"requested={translation_observability.get('translation_requested_count', 0)} "
-                f"batches={translation_observability.get('translation_batch_count', 0)} "
-                f"success={translation_observability.get('translation_success_count', 0)} "
-                f"failed={translation_observability.get('translation_failed_count', 0)}"
-            )
-            for failure in translation_observability.get("translation_batch_failures", []):
-                print(f"[NEWS CANDIDATE TRANSLATION SUMMARY] batch {failure['batch']} failed | reason={failure['reason']}")
-            news_candidates = build_news_candidates(selected_pool_items + review_candidates, news, candidate_translations)
-            news_review_diagnostics = {
-                "unselected_candidate_count": review_result["unselected_candidate_count"],
-                "review_candidate_count": review_result["review_candidate_count"],
-                "review_filtered_count": review_result["review_filtered_count"],
-                "review_translation_requested_count": translation_observability.get("translation_requested_count", 0),
-                "review_translation_success_count": translation_observability.get("translation_success_count", 0),
-                "review_translation_failed_count": translation_observability.get("translation_failed_count", 0),
-                "review_filtered_candidates": review_result["filtered_candidates"],
-            }
+            scored_candidates = _merge_scores(selection_candidates, scores)
+            if not scores and selection_candidates:
+                # Every batch failed outright -- fall back to the pure-code rank
+                # rather than let "今日重要新闻" render empty (see rule_based_top_news).
+                ranked_pool = [item for item, *_ in _rank_stage_a_candidates(selection_candidates)]
+                news = rule_based_top_news(ranked_pool, NEWS_TOP_N)
+                ai_warning = "⚠️ 新闻评分 AI 处理暂时失败；已使用规则降级结果生成日报。"
+            else:
+                news = _select_top_news(scored_candidates, NEWS_TOP_N)
+                ai_warning = None
+                scoring_fallback_used = scoring_observability.get("scoring_failed_batch_count", 0) > 0
+            news_candidates = build_news_candidates(scored_candidates, news)
         _log_news_pipeline(
-            rss_candidate_count, window_candidate_count, len(candidates), stage_a_pre_cap_count,
-            stage_a_actual_input_count, event_representatives, selection_candidates,
-            stage_b_observability["raw_count"], stage_b_observability["validated_count"],
-            recent_events, news, stage_b_observability, stage_a_observability,
+            rss_candidate_count, window_candidate_count, len(candidates),
+            event_representatives, selection_candidates, news, scoring_observability,
         )
         if ai_warning:
             warnings.append(ai_warning)
@@ -647,13 +579,8 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         "news": news,
         "news_candidates": news_candidates,
         "news_degraded": news_degraded,
-        "stage_b_fallback_used": stage_b_observability.get("stage_b_fallback_used", False),
-        "stage_b_ai_selected_count": stage_b_observability.get("stage_b_ai_selected_count", 0),
-        "stage_b_fallback_selected_count": stage_b_observability.get("stage_b_fallback_selected_count", 0),
-        "stage_b_failed_batch_count": stage_b_observability.get("stage_b_failed_batch_count", 0),
+        "scoring_fallback_used": scoring_fallback_used,
         "news_source_diagnostics": news_source_diagnostics,
-        "event_clustering_diagnostics": event_clustering_diagnostics,
-        "news_review_diagnostics": news_review_diagnostics,
         "warnings": warnings,
     }
     reports_dir = base_dir / "data" / "reports"
@@ -674,8 +601,8 @@ def main() -> int:
         api_key = os.environ.get("DEEPSEEK_API_KEY")
         if not api_key:
             parser.error("--stage-b-snapshot requires DEEPSEEK_API_KEY")
-        selected = replay_stage_b_snapshot(args.stage_b_snapshot, api_key)
-        print(f"Replayed Stage B: {len(selected)} selected news items")
+        selected = replay_scoring_snapshot(args.stage_b_snapshot, api_key)
+        print(f"Replayed Scoring: {len(selected)} selected news items")
         return 0
     path = generate_daily_report(args.base_dir, args.offline_fixture, args.report_date)
     print(f"Generated {path}")

@@ -2,7 +2,8 @@
 
 This is a read-only view over data the pipeline already produces: it does not
 issue new RSS fetches or model calls, and it does not change which articles
-Stage A/Stage B select. See `build_news_candidates` for the exact source stage.
+Layer 1 scoring rates highest. See `build_news_candidates` for the exact
+source stage.
 """
 
 from __future__ import annotations
@@ -18,8 +19,8 @@ CATEGORY_ORDER = (
     CATEGORY_OTHER,
 )
 
-# Stage B assigns one of these (finer-grained) categories only to the articles
-# it actually selects; bucket them down to the six display groups above.
+# Scoring assigns one of these (finer-grained) categories to every candidate;
+# bucket them down to the six display groups above.
 _CATEGORY_BY_ALLOWED_CATEGORY = {
     "美联储 / 利率": "宏观 / 利率",
     "就业 / 通胀": "宏观 / 利率",
@@ -30,19 +31,21 @@ _CATEGORY_BY_ALLOWED_CATEGORY = {
     "AI / 资本开支": "AI / 科技",
     "半导体": "AI / 科技",
     "地缘政治": "地缘政治与风险事件",
-    # Stage B is instructed to only use "政策 / 监管" for system-wide/macro
+    # Scoring is instructed to only use "政策 / 监管" for system-wide/macro
     # regulatory changes (financial stability, market-structure/trading rules,
     # broad multi-company impact, or major macro/trade/Fed/Treasury policy) --
     # a regulatory event specific to one of the tracked mega-cap companies is
-    # instructed to use "大型科技" instead (see news_prompt.py's Category
-    # section). So "政策 / 监管" belongs with the macro bucket, not geopolitics;
-    # it was previously mismapped to "地缘政治与风险事件", which made routine
-    # US financial-market/regulatory news display as a geopolitical risk event.
+    # instructed to use "大型科技" instead (see news_score_prompt.py). So
+    # "政策 / 监管" belongs with the macro bucket, not geopolitics; it was
+    # previously mismapped to "地缘政治与风险事件", which made routine US
+    # financial-market/regulatory news display as a geopolitical risk event.
     "政策 / 监管": "宏观 / 利率",
 }
 
-# Unselected candidates only carry Stage A's topic_group (no AI category was
-# ever assigned to them), so they are bucketed through this coarser table.
+# A candidate scoring never returned a result for (dropped as invalid, or its
+# batch failed/was skipped -- see build_news_candidates) only carries the
+# clustering step's topic_group, no scoring category, so it is bucketed
+# through this coarser table instead.
 _CATEGORY_BY_TOPIC_GROUP = {
     "US_MARKET_MACRO": "宏观 / 利率",
     "MEGA_CAP_TECH": "大型科技",
@@ -60,51 +63,38 @@ def _bucket_category(selected_category: str | None, topic_group: str | None) -> 
     return _CATEGORY_BY_TOPIC_GROUP.get(topic_group, CATEGORY_OTHER)
 
 
-def build_news_candidates(selection_candidates: list[dict], selected_news: list[dict],
-                          translations: dict[str, dict] | None = None) -> list[dict]:
-    """Flatten the Stage B input pool into the review-drawer candidate list.
+def build_news_candidates(scored_candidates: list[dict], selected_news: list[dict]) -> list[dict]:
+    """Flatten the scored candidate pool into the review-drawer candidate list.
 
-    `selection_candidates` is the same pool persisted as the Stage B snapshot's
-    `stage_b.candidates` (one representative article per Stage A event, i.e.
-    already deduplicated and event-clustered). Each item is flagged `selected`
-    based on whether its candidate_id survived into the final, post-topic-cap
-    `selected_news` list that is shown on the page.
+    `scored_candidates` is the full event-clustered pool (event_selection_candidates'
+    output) with each item's Layer 1 scoring result merged in -- every candidate
+    already carries its own title_zh/summary_zh/category/score/reason from
+    score_candidates(), since Layer 1 scores (and translates) the whole pool, not
+    just what ends up selected. A candidate score_candidates() never returned a
+    result for (dropped as invalid, or its batch failed/was skipped) has score=None
+    and no category; its title_zh/summary_zh fall back to the original English.
 
-    Chinese title/summary are resolved with no new translation for anything Stage
-    B already translated: selected candidates reuse Stage B's own title_zh/
-    summary_zh outright. `translations` (candidate_id -> {"title_zh", "summary_zh"})
-    covers only candidates Stage B never selected; any candidate_id absent from it
-    (translation skipped, failed, or never attempted) falls back to the original
-    English title/summary, which are always kept alongside for reference.
+    Each item is flagged `selected` based on whether its candidate_id survived
+    into the final, ranked `selected_news` list shown as "今日重要新闻".
     """
-    translations = translations or {}
-    selected_by_id = {item["candidate_id"]: item for item in selected_news}
+    selected_ids = {item["candidate_id"] for item in selected_news}
     candidates = []
-    for item in selection_candidates:
+    for item in scored_candidates:
         candidate_id = item.get("candidate_id")
-        selected_item = selected_by_id.get(candidate_id)
         title = item.get("title", "")
         summary = item.get("summary", "")
-        if selected_item is not None:
-            title_zh = selected_item.get("title_zh") or title
-            summary_zh = selected_item.get("summary_zh") or summary
-        else:
-            translated = translations.get(candidate_id, {})
-            title_zh = translated.get("title_zh") or title
-            summary_zh = translated.get("summary_zh") or summary
         candidates.append({
             "candidate_id": candidate_id,
             "title": title,
-            "title_zh": title_zh,
+            "title_zh": item.get("title_zh") or title,
             "source": item.get("source", ""),
             "published_at": item.get("published_at", ""),
             "summary": summary,
-            "summary_zh": summary_zh,
+            "summary_zh": item.get("summary_zh") or summary,
             "url": item.get("url", ""),
-            "category": _bucket_category(
-                selected_item.get("category") if selected_item else None,
-                item.get("topic_group"),
-            ),
-            "selected": selected_item is not None,
+            "category": _bucket_category(item.get("category"), item.get("topic_group")),
+            "score": item.get("score"),
+            "reason": item.get("reason", ""),
+            "selected": candidate_id in selected_ids,
         })
     return candidates

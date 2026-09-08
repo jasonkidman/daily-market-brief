@@ -145,15 +145,15 @@ def test_news_empty_and_degraded_states_render_without_crashing(tmp_path):
 
 
 def test_news_degraded_with_fallback_news_shows_soft_banner_not_failure(tmp_path):
-    """A Stage B deterministic fallback that still produced news must not read as
-    a total failure: the page should show the softer degraded-result banner and
-    still render the fallback news list, not the "AI 处理暂时失败...无新闻" alert."""
+    """A scoring fallback that still produced news must not read as a total
+    failure: the page should show the softer degraded-result banner and still
+    render the fallback news list, not the "AI 处理暂时失败...无新闻" alert."""
     reports = tmp_path / "reports"
     reports.mkdir()
     payload = report("2026-08-12")
     payload["news"] = [modern_news_item(1)]
     payload["news_degraded"] = True
-    payload["stage_b_fallback_used"] = True
+    payload["scoring_fallback_used"] = True
     (reports / "2026-08-12.json").write_text(json.dumps(payload), encoding="utf-8")
     site = tmp_path / "site"
     render(reports, site)

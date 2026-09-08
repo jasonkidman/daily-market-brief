@@ -3,26 +3,67 @@ import json
 import pytest
 
 import src.main as main
-from src.main import _classify_rss_warnings, _log_news_pipeline, assess_market_validity, generate_daily_report
+from src.main import (
+    _classify_rss_warnings, _log_news_pipeline, _recent_news_events, assess_market_validity, generate_daily_report,
+)
+from src.market_summary import generate_market_summary as _real_generate_market_summary
+from src.news_scoring import score_candidates as _real_score_candidates
 from src.smoke import validate_generated
 
 
 def test_news_pipeline_logs_distinct_stage_counts(capsys):
-    _log_news_pipeline(89, 85, 79, 79, 50, [], [], 6, 5, [], [])
+    _log_news_pipeline(89, 85, 79, [], [], [])
 
     output = capsys.readouterr().out
     assert "rss_raw_count: 89" in output
     assert "within_24h_count: 85" in output
     assert "deduplicated_count: 79" in output
-    assert "stage_a_pre_cap_count: 79" in output
-    assert "stage_a_actual_input_count: 50" in output
-    assert "stage_a_cap_dropped: 29" in output
-    assert "stage_a_output_event_count: 0" in output
-    assert "clustering_collapsed: 50" in output
-    assert "stage_b_input_count: 0" in output
-    assert "stage_b_raw_count: 6" in output
-    assert "stage_b_validated_count: 5" in output
-    assert "Duplicates collapsed" not in output
+    assert "duplicates_removed: 6" in output
+    assert "clustered_event_count: 0" in output
+    assert "clustering_collapsed: 79" in output
+    assert "scoring_input_count: 0" in output
+
+
+def test_recent_news_events_supports_legacy_and_v2_reports():
+    events = _recent_news_events([
+        {"report_date": "2026-08-12", "news": [{
+            "original_title": "Legacy Fed headline", "url": "https://legacy.example",
+        }]},
+        {"report_date": "2026-08-11", "news": [{
+            "original_title": "New headline", "event_summary": "Fed held rates", "topic_group": "US_MARKET_MACRO",
+        }]},
+    ], "2026-08-13")
+
+    assert events == [
+        {"report_date": "2026-08-12", "event_summary": "Legacy Fed headline", "topic_group": None,
+         "original_title": "Legacy Fed headline"},
+        {"report_date": "2026-08-11", "event_summary": "Fed held rates", "topic_group": "US_MARKET_MACRO",
+         "original_title": "New headline"},
+    ]
+
+
+def test_recent_news_events_excludes_same_day_reports():
+    events = _recent_news_events([
+        {"report_date": "2026-08-27", "news": [{
+            "original_title": "Already published earlier today", "event_summary": "Nvidia earnings",
+        }]},
+        {"report_date": "2026-08-26", "news": [{
+            "original_title": "Yesterday headline", "event_summary": "Fed held rates",
+        }]},
+    ], "2026-08-27")
+
+    assert [event["report_date"] for event in events] == ["2026-08-26"]
+
+
+def test_recent_news_events_takes_seven_days_strictly_before_current_date():
+    reports = [{"report_date": f"2026-08-{day:02d}", "news": [{"event_summary": f"Event {day}"}]}
+               for day in range(27, 19, -1)]
+
+    events = _recent_news_events(reports, "2026-08-27")
+
+    assert [event["report_date"] for event in events] == [
+        "2026-08-26", "2026-08-25", "2026-08-24", "2026-08-23", "2026-08-22", "2026-08-21", "2026-08-20",
+    ]
 
 
 def test_offline_fixture_runs_complete_pipeline(tmp_path):
@@ -63,13 +104,13 @@ def test_offline_fixture_runs_complete_pipeline(tmp_path):
         "offline-fed-reuters", "offline-nvidia-techcrunch", "offline-oil-bbc",
     ]
     assert [item["topic_group"] for item in report["news"]] == [
-        "US_MARKET_MACRO", "AI_CHIPS", "GEOPOLITICS",
+        "US_MARKET_MACRO", "MEGA_CAP_TECH", "ENERGY_COMMODITIES",
     ]
+    assert [item["rank"] for item in report["news"]] == [1, 2, 3]
     assert all(item["event_summary"] for item in report["news"])
     for item in report["news"]:
-        assert item["focus"]
-        assert item["tags"]
-        assert 50 <= item["investment_relevance_score"] <= 100
+        assert item["category"]
+        assert 50 <= item["score"] <= 100
         assert "不代表真实新闻或投资信息" in item["summary_zh"]
     assert report["portfolio_action"] == "hold"
     assert report["market_summary"]["degraded"] is True
@@ -270,11 +311,10 @@ def test_end_to_end_supplementary_rss_failure_does_not_flip_status_or_show_banne
     )
     monkeypatch.setattr(main, "filter_final_candidates", lambda candidates, now: candidates)
     monkeypatch.setattr(main, "dedupe_candidates", lambda candidates: candidates)
-    monkeypatch.setattr(main, "stage_a_input_counts", lambda candidates: (len(candidates), len(candidates)))
-    monkeypatch.setattr(main, "cluster_news_events_batched", lambda *args, **kwargs: ([], None))
+    monkeypatch.setattr(main, "cluster_candidates_local", lambda candidates: [])
     monkeypatch.setattr(main, "build_event_representatives", lambda events, candidates: [])
     monkeypatch.setattr(main, "event_selection_candidates", lambda events: [])
-    monkeypatch.setattr(main, "select_news_multi_batch", lambda *args, **kwargs: ([], None))
+    monkeypatch.setattr(main, "score_candidates", lambda *args, **kwargs: {})
     monkeypatch.setattr(main, "generate_market_summary", lambda *args, **kwargs: {"degraded": True})
     monkeypatch.setattr(main, "render_site", lambda *args, **kwargs: None)
 
@@ -290,100 +330,7 @@ def test_end_to_end_supplementary_rss_failure_does_not_flip_status_or_show_banne
     }]
 
 
-def test_event_clustering_fallback_does_not_flip_status_or_show_banner_warning(tmp_path, monkeypatch):
-    """Stage A clustering falling back to one-event-per-candidate always keeps
-    basic (URL-level) dedup intact and never empties the pipeline, so it must
-    stay diagnostics-only -- never a page-top banner or status flip."""
-    monkeypatch.setenv("DEEPSEEK_API_KEY", "test-key")
-    now = main.datetime.fromisoformat("2026-08-12T10:00:00").replace(tzinfo=main.SHANGHAI)
-    market_config = main._load_yaml(main.ROOT / "config" / "market.yaml")
-    breadth_config = main._load_yaml(main.ROOT / "config" / "market_breadth.yaml")
-    snapshots, histories, contexts, _ = main._offline_market(
-        now, market_config["core"], market_config["context"]
-    )
-    healthy_candidates = [
-        {
-            "candidate_id": f"c{i}",
-            "title": f"Story {i}",
-            "summary": "Summary",
-            "source": "BBC News",
-            "priority": "P0",
-            "published_at": "2026-08-12T01:00:00+00:00",
-            "url": f"https://example.com/{i}",
-        }
-        for i in range(5)
-    ]
-    fallback_events = [
-        {"event_id": f"fallback_{i:03d}", "candidate_ids": [c["candidate_id"]],
-         "event_summary": c["title"], "topic_group": "OTHER_SYSTEMIC", "event_category": "other"}
-        for i, c in enumerate(healthy_candidates, 1)
-    ]
-    clustering_reason = (
-        "⚠️ 新闻事件级去重暂时失败，已使用基础去重结果继续生成日报。 原因：所有 candidate 必须恰好被一个 event 覆盖。"
-    )
-
-    monkeypatch.setattr(main, "fetch_market", lambda *args: (snapshots, histories, []))
-    monkeypatch.setattr(main, "fetch_market_context", lambda *args: (contexts, []))
-    monkeypatch.setattr(
-        main, "build_market_breadth",
-        lambda *args: main.build_offline_market_breadth(
-            breadth_config, "2026-08-11", snapshots["sp500"]["daily_return"]
-        ),
-    )
-    monkeypatch.setattr(main, "fetch_candidates", lambda sources, now: (healthy_candidates, []))
-    monkeypatch.setattr(main, "filter_final_candidates", lambda candidates, now: candidates)
-    monkeypatch.setattr(main, "dedupe_candidates", lambda candidates: candidates)
-    monkeypatch.setattr(main, "stage_a_input_counts", lambda candidates: (len(candidates), len(candidates)))
-    monkeypatch.setattr(
-        main, "cluster_news_events_batched",
-        lambda *args, **kwargs: (fallback_events, clustering_reason),
-    )
-    monkeypatch.setattr(main, "build_event_representatives", lambda events, candidates: [])
-    monkeypatch.setattr(main, "event_selection_candidates", lambda events: [])
-    monkeypatch.setattr(main, "select_news_multi_batch", lambda *args, **kwargs: ([], None))
-    monkeypatch.setattr(main, "generate_market_summary", lambda *args, **kwargs: {"degraded": True})
-    monkeypatch.setattr(main, "render_site", lambda *args, **kwargs: None)
-
-    generate_daily_report(base_dir=tmp_path, report_date="2026-08-12")
-
-    report = json.loads((tmp_path / "data" / "reports" / "2026-08-12.json").read_text(encoding="utf-8"))
-    assert not any("事件级去重" in warning for warning in report["warnings"])
-    assert report["status"] != "partial"
-    assert report["event_clustering_diagnostics"] == {
-        "fallback_used": True, "reason": clustering_reason,
-    }
-
-
-def test_report_news_candidates_covers_selected_plus_review_pool_only(tmp_path, monkeypatch):
-    """The review-drawer candidate pool covers Stage B's selected articles plus
-    only the unselected ones the deterministic Review Filter (news_review_filter.py)
-    judges worth a human's time -- not every article that reached Stage B. Built
-    from data already produced by Stage A/B, with no extra RSS fetch or model call."""
-    monkeypatch.setenv("DEEPSEEK_API_KEY", "test-key")
-    now = main.datetime.fromisoformat("2026-08-12T10:00:00").replace(tzinfo=main.SHANGHAI)
-    market_config = main._load_yaml(main.ROOT / "config" / "market.yaml")
-    breadth_config = main._load_yaml(main.ROOT / "config" / "market_breadth.yaml")
-    snapshots, histories, contexts, _ = main._offline_market(
-        now, market_config["core"], market_config["context"]
-    )
-    selection_candidates = [
-        {"candidate_id": "c1", "title": "Fed holds rates", "summary": "Summary 1",
-         "source": "Reuters", "url": "https://example.com/c1",
-         "published_at": "2026-08-12T01:00:00+00:00", "topic_group": "US_MARKET_MACRO"},
-        {"candidate_id": "c2", "title": "Nvidia launches chip", "summary": "Summary 2",
-         "source": "TechCrunch", "url": "https://example.com/c2",
-         "published_at": "2026-08-12T02:00:00+00:00", "topic_group": "AI_CHIPS"},
-        {"candidate_id": "c3", "title": "Local festival draws crowds", "summary": "Summary 3",
-         "source": "BBC News", "url": "https://example.com/c3",
-         "published_at": "2026-08-12T03:00:00+00:00", "topic_group": "OTHER_SYSTEMIC"},
-    ]
-    selected_news = [{
-        "rank": 1, "candidate_id": "c1", "category": "美联储 / 利率", "title_zh": "美联储维持利率",
-        "summary_zh": "摘要", "url": "https://example.com/c1", "source": "Reuters",
-        "published_at": "2026-08-12T01:00:00+00:00", "topic_group": "US_MARKET_MACRO",
-        "original_title": "Fed holds rates",
-    }]
-
+def _patch_common_pipeline(monkeypatch, snapshots, histories, contexts, breadth_config, selection_candidates):
     monkeypatch.setattr(main, "fetch_market", lambda *args: (snapshots, histories, []))
     monkeypatch.setattr(main, "fetch_market_context", lambda *args: (contexts, []))
     monkeypatch.setattr(
@@ -395,98 +342,168 @@ def test_report_news_candidates_covers_selected_plus_review_pool_only(tmp_path, 
     monkeypatch.setattr(main, "fetch_candidates", lambda sources, now: (selection_candidates, []))
     monkeypatch.setattr(main, "filter_final_candidates", lambda candidates, now: candidates)
     monkeypatch.setattr(main, "dedupe_candidates", lambda candidates: candidates)
-    monkeypatch.setattr(main, "stage_a_input_counts", lambda candidates: (len(candidates), len(candidates)))
-    monkeypatch.setattr(main, "cluster_news_events_batched", lambda *args, **kwargs: ([], None))
+    monkeypatch.setattr(main, "cluster_candidates_local", lambda candidates: [])
     monkeypatch.setattr(main, "build_event_representatives", lambda events, candidates: [])
     monkeypatch.setattr(main, "event_selection_candidates", lambda events: selection_candidates)
-    monkeypatch.setattr(main, "select_news_multi_batch", lambda *args, **kwargs: (selected_news, None))
     monkeypatch.setattr(main, "generate_market_summary", lambda *args, **kwargs: {"degraded": True})
     monkeypatch.setattr(main, "render_site", lambda *args, **kwargs: None)
 
-    translate_calls = []
 
-    def fake_translate(candidates, api_key, observability=None, **kwargs):
-        translate_calls.append([c["candidate_id"] for c in candidates])
-        result = {
-            "c2": {"title_zh": "英伟达推出新芯片", "summary_zh": "摘要2中文"},
-            "c3": {"title_zh": "本地节日吸引人群", "summary_zh": "摘要3中文"},
-        }
-        if observability is not None:
-            observability.update({
-                "translation_requested_count": len(candidates),
-                "translation_success_count": len(candidates),
-                "translation_failed_count": 0,
-            })
-        return result
-
-    monkeypatch.setattr(main, "translate_candidates", fake_translate)
+def test_scoring_total_failure_falls_back_to_rule_based_top_news_and_flags_degraded(tmp_path, monkeypatch):
+    """Every scoring batch failing must never leave "今日重要新闻" empty -- the
+    pure-code rank fills it in, and the page is flagged as degraded rather than
+    silently looking like a fully healthy AI-scored report."""
+    monkeypatch.setenv("DEEPSEEK_API_KEY", "test-key")
+    now = main.datetime.fromisoformat("2026-08-12T10:00:00").replace(tzinfo=main.SHANGHAI)
+    market_config = main._load_yaml(main.ROOT / "config" / "market.yaml")
+    breadth_config = main._load_yaml(main.ROOT / "config" / "market_breadth.yaml")
+    snapshots, histories, contexts, _ = main._offline_market(now, market_config["core"], market_config["context"])
+    selection_candidates = [
+        {"candidate_id": "c1", "title": "Fed holds rates", "summary": "Summary 1",
+         "source": "Reuters", "priority": "P0", "url": "https://example.com/c1",
+         "published_at": "2026-08-12T01:00:00+00:00", "topic_group": "US_MARKET_MACRO"},
+    ]
+    _patch_common_pipeline(monkeypatch, snapshots, histories, contexts, breadth_config, selection_candidates)
+    monkeypatch.setattr(main, "score_candidates", lambda *args, **kwargs: {})
 
     generate_daily_report(base_dir=tmp_path, report_date="2026-08-12")
 
-    # c2 ("Nvidia launches chip") clears the Review Filter's AI/semiconductor
-    # signal and goes to translation; c3 ("Local festival...", OTHER_SYSTEMIC,
-    # no qualifying signal) is filtered out before translation ever sees it;
-    # c1 already has a Stage B title_zh/summary_zh and must not be re-translated.
-    assert translate_calls == [["c2"]]
+    report = json.loads((tmp_path / "data" / "reports" / "2026-08-12.json").read_text(encoding="utf-8"))
+    assert report["news_degraded"] is True
+    assert any("评分" in warning for warning in report["warnings"])
+    assert len(report["news"]) == 1
+    assert report["news"][0]["candidate_id"] == "c1"
+    assert report["news"][0]["selection_mode"] == "rule_based"
+    assert report["news"][0]["title_zh"] == "Fed holds rates"
+    assert report["news"][0]["score"] is None
+
+
+def test_report_news_candidates_covers_the_full_scored_pool_with_selected_flag(tmp_path, monkeypatch):
+    """The review-drawer candidate pool covers every scored candidate, not just
+    the ones that made "今日重要新闻" -- Layer 1 scores (and translates) the
+    whole pool, so there is no separate review-filter/translation step left."""
+    monkeypatch.setenv("DEEPSEEK_API_KEY", "test-key")
+    now = main.datetime.fromisoformat("2026-08-12T10:00:00").replace(tzinfo=main.SHANGHAI)
+    market_config = main._load_yaml(main.ROOT / "config" / "market.yaml")
+    breadth_config = main._load_yaml(main.ROOT / "config" / "market_breadth.yaml")
+    snapshots, histories, contexts, _ = main._offline_market(now, market_config["core"], market_config["context"])
+    selection_candidates = [
+        {"candidate_id": "c1", "title": "Fed holds rates", "summary": "Summary 1",
+         "source": "Reuters", "priority": "P0", "url": "https://example.com/c1",
+         "published_at": "2026-08-12T01:00:00+00:00", "topic_group": "US_MARKET_MACRO"},
+        {"candidate_id": "c2", "title": "Nvidia launches chip", "summary": "Summary 2",
+         "source": "TechCrunch", "priority": "P0", "url": "https://example.com/c2",
+         "published_at": "2026-08-12T02:00:00+00:00", "topic_group": "AI_CHIPS"},
+        {"candidate_id": "c3", "title": "Local festival draws crowds", "summary": "Summary 3",
+         "source": "BBC News", "priority": "P2", "url": "https://example.com/c3",
+         "published_at": "2026-08-12T03:00:00+00:00", "topic_group": "OTHER_SYSTEMIC"},
+    ]
+    _patch_common_pipeline(monkeypatch, snapshots, histories, contexts, breadth_config, selection_candidates)
+    scores = {
+        "c1": {"score": 92, "category": "美联储 / 利率", "title_zh": "美联储维持利率", "summary_zh": "摘要", "reason": ""},
+        "c2": {"score": 60, "category": "半导体", "title_zh": "英伟达推出新芯片", "summary_zh": "摘要2中文", "reason": ""},
+        "c3": {"score": 5, "category": "", "title_zh": "本地节日吸引人群", "summary_zh": "摘要3中文", "reason": ""},
+    }
+    monkeypatch.setattr(main, "score_candidates", lambda *args, **kwargs: scores)
+
+    generate_daily_report(base_dir=tmp_path, report_date="2026-08-12")
 
     report = json.loads((tmp_path / "data" / "reports" / "2026-08-12.json").read_text(encoding="utf-8"))
     candidates_by_id = {item["candidate_id"]: item for item in report["news_candidates"]}
-    assert set(candidates_by_id) == {"c1", "c2"}
+    assert set(candidates_by_id) == {"c1", "c2", "c3"}
     assert candidates_by_id["c1"]["selected"] is True
     assert candidates_by_id["c1"]["category"] == "宏观 / 利率"
     assert candidates_by_id["c1"]["title_zh"] == "美联储维持利率"
-    assert candidates_by_id["c2"]["selected"] is False
+    assert candidates_by_id["c2"]["selected"] is True
     assert candidates_by_id["c2"]["category"] == "AI / 科技"
-    assert candidates_by_id["c2"]["title_zh"] == "英伟达推出新芯片"
-
-    diagnostics = report["news_review_diagnostics"]
-    assert diagnostics["unselected_candidate_count"] == 2
-    assert diagnostics["review_candidate_count"] == 1
-    assert diagnostics["review_filtered_count"] == 1
-    assert diagnostics["review_translation_requested_count"] == 1
-    assert diagnostics["review_filtered_candidates"] == [
-        {"candidate_id": "c3", "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"},
-    ]
+    assert candidates_by_id["c3"]["selected"] is True
+    # All three scored candidates fit within NEWS_TOP_N, so all three are "selected".
+    assert [item["candidate_id"] for item in report["news"]] == ["c1", "c2", "c3"]
 
 
-def test_report_generation_survives_candidate_translation_failure_with_english_fallback(tmp_path, monkeypatch):
-    """A translation failure must degrade to the original English title/summary,
-    never fail report generation -- mirrors how Stage A clustering degrades."""
+def test_report_generation_falls_back_to_english_when_scoring_omits_a_candidate(tmp_path, monkeypatch):
+    """A candidate score_candidates() has no result for (dropped as invalid, or
+    its batch failed/was skipped) must degrade to the original English
+    title/summary in the "more news" pool, never break report generation."""
     monkeypatch.setenv("DEEPSEEK_API_KEY", "test-key")
     now = main.datetime.fromisoformat("2026-08-12T10:00:00").replace(tzinfo=main.SHANGHAI)
     market_config = main._load_yaml(main.ROOT / "config" / "market.yaml")
     breadth_config = main._load_yaml(main.ROOT / "config" / "market_breadth.yaml")
-    snapshots, histories, contexts, _ = main._offline_market(
-        now, market_config["core"], market_config["context"]
-    )
+    snapshots, histories, contexts, _ = main._offline_market(now, market_config["core"], market_config["context"])
     selection_candidates = [{
         "candidate_id": "c1", "title": "Federal Reserve holds interest rates steady", "summary": "Summary 1",
-        "source": "BBC News", "url": "https://example.com/c1",
+        "source": "BBC News", "priority": "P0", "url": "https://example.com/c1",
         "published_at": "2026-08-12T01:00:00+00:00", "topic_group": "US_MARKET_MACRO",
     }]
-
-    monkeypatch.setattr(main, "fetch_market", lambda *args: (snapshots, histories, []))
-    monkeypatch.setattr(main, "fetch_market_context", lambda *args: (contexts, []))
-    monkeypatch.setattr(
-        main, "build_market_breadth",
-        lambda *args: main.build_offline_market_breadth(
-            breadth_config, "2026-08-11", snapshots["sp500"]["daily_return"]
-        ),
-    )
-    monkeypatch.setattr(main, "fetch_candidates", lambda sources, now: (selection_candidates, []))
-    monkeypatch.setattr(main, "filter_final_candidates", lambda candidates, now: candidates)
-    monkeypatch.setattr(main, "dedupe_candidates", lambda candidates: candidates)
-    monkeypatch.setattr(main, "stage_a_input_counts", lambda candidates: (len(candidates), len(candidates)))
-    monkeypatch.setattr(main, "cluster_news_events_batched", lambda *args, **kwargs: ([], None))
-    monkeypatch.setattr(main, "build_event_representatives", lambda events, candidates: [])
-    monkeypatch.setattr(main, "event_selection_candidates", lambda events: selection_candidates)
-    monkeypatch.setattr(main, "select_news_multi_batch", lambda *args, **kwargs: ([], None))
-    monkeypatch.setattr(main, "translate_candidates", lambda candidates, api_key, **kwargs: {})
-    monkeypatch.setattr(main, "generate_market_summary", lambda *args, **kwargs: {"degraded": True})
-    monkeypatch.setattr(main, "render_site", lambda *args, **kwargs: None)
+    _patch_common_pipeline(monkeypatch, snapshots, histories, contexts, breadth_config, selection_candidates)
+    monkeypatch.setattr(main, "score_candidates", lambda *args, **kwargs: {})
 
     report_path = generate_daily_report(base_dir=tmp_path, report_date="2026-08-12")
 
     report = json.loads(report_path.read_text(encoding="utf-8"))
     assert report["news_candidates"][0]["title_zh"] == "Federal Reserve holds interest rates steady"
     assert report["news_candidates"][0]["summary_zh"] == "Summary 1"
+
+
+def test_full_run_makes_at_most_4_llm_calls(tmp_path, monkeypatch):
+    """PR 3's core regression: a normal run must be 3 scoring batches (100
+    candidates -> 40+40+20) + 1 Layer 2 call = 4 total, down from the old
+    architecture's Stage A/B/translation fan-out (confirmed live to reach 40+
+    calls on an ordinary day, worse on failure). Exercises the real
+    score_candidates()/generate_market_summary() batching and validation
+    logic end to end, with only the transport faked."""
+    monkeypatch.setenv("DEEPSEEK_API_KEY", "test-key")
+    now = main.datetime.fromisoformat("2026-08-12T10:00:00").replace(tzinfo=main.SHANGHAI)
+    market_config = main._load_yaml(main.ROOT / "config" / "market.yaml")
+    breadth_config = main._load_yaml(main.ROOT / "config" / "market_breadth.yaml")
+    snapshots, histories, contexts, _ = main._offline_market(now, market_config["core"], market_config["context"])
+    selection_candidates = [
+        {"candidate_id": f"c{i}", "title": f"Story {i}", "summary": "Summary",
+         "source": "BBC News", "priority": "P0", "url": f"https://example.com/{i}",
+         "published_at": "2026-08-12T01:00:00+00:00", "topic_group": "US_MARKET_MACRO"}
+        for i in range(100)
+    ]
+
+    calls = []
+
+    def fake_call_model(system_prompt, user_payload, api_key, **kwargs):
+        calls.append(1)
+        payload = json.loads(user_payload)
+        if "candidates" in payload:
+            ids = [item["candidate_id"] for item in payload["candidates"]]
+            return json.dumps({"scores": [
+                {"candidate_id": cid, "score": 60, "category": "美国经济", "title_zh": "标题", "summary_zh": "摘要", "reason": ""}
+                for cid in ids
+            ]})
+        return json.dumps({"summary": "标普500当日下跌0.5%，纳指100当日下跌0.5%。市场同时关注上述新闻。"})
+
+    monkeypatch.setattr(main, "fetch_market", lambda *args: (snapshots, histories, []))
+    monkeypatch.setattr(main, "fetch_market_context", lambda *args: (contexts, []))
+    monkeypatch.setattr(
+        main, "build_market_breadth",
+        lambda *args: main.build_offline_market_breadth(
+            breadth_config, "2026-08-11", snapshots["sp500"]["daily_return"]
+        ),
+    )
+    monkeypatch.setattr(main, "fetch_candidates", lambda sources, now: (selection_candidates, []))
+    monkeypatch.setattr(main, "filter_final_candidates", lambda candidates, now: candidates)
+    monkeypatch.setattr(main, "dedupe_candidates", lambda candidates: candidates)
+    monkeypatch.setattr(main, "cluster_candidates_local", lambda candidates: [])
+    monkeypatch.setattr(main, "build_event_representatives", lambda events, candidates: [])
+    monkeypatch.setattr(main, "event_selection_candidates", lambda events: selection_candidates)
+    monkeypatch.setattr(main, "render_site", lambda *args, **kwargs: None)
+    monkeypatch.setattr(
+        main, "score_candidates",
+        lambda candidates, api_key, focus_rules, **kwargs: _real_score_candidates(
+            candidates, api_key, focus_rules, call_model=fake_call_model, sleep_fn=lambda _: None,
+            usage_tracker=kwargs.get("usage_tracker"), observability=kwargs.get("observability"),
+        ),
+    )
+    monkeypatch.setattr(
+        main, "generate_market_summary",
+        lambda *args, **kwargs: _real_generate_market_summary(*args, call_model=fake_call_model),
+    )
+
+    generate_daily_report(base_dir=tmp_path, report_date="2026-08-12")
+
+    assert len(calls) <= 4

@@ -1,0 +1,22 @@
+# User focus rules injected into news_score_prompt.py's scoring dimension 3
+# ("用户关注度"). Editing this file changes what the scoring prompt considers
+# relevant to the user without touching any code -- see IMPLEMENTATION_PLAN.md
+# section 5.2. This is a starting version; the user's actual focus areas are
+# expected to be tuned here over time.
+
+focus_text: |
+  受众是长期持有 SPY 与 Nasdaq-100 的美股投资者。以下范围内的新闻应获得更高的用户关注度评分：
+  - 美国金融市场：美股指数、主要板块、个股定价的直接或间接影响
+  - 美国宏观与政策：美联储、利率、通胀（CPI/PCE）、就业、GDP、财政、税收、贸易、关税、国债
+  - 重点科技公司：Apple、Microsoft、Alphabet（Google）、Amazon、Meta、Nvidia、Tesla、SpaceX
+    的财报、产品发布、资本开支、并购、监管、高管变动等实质性事件
+  - AI 与半导体：影响全球 AI / 半导体 / 云计算 / 数据中心供需、竞争格局或供应链的结构性事件
+  - 地缘政治：可能明显影响美国金融市场、油价、美元或全球风险偏好的重大事件（战争升级、
+    美国军事介入、重大制裁、能源供应中断、重大出口管制等）
+
+  以下范围默认不属于用户关注重点，用户关注度应评为低分（除非同时满足上述范围之一）：
+  - 非美国单一国家或地区的本地宏观数据（GDP、通胀、就业、出口等），即使标题包含
+    AI / 芯片 / 半导体关键词，也不因此自动提高关注度
+  - 中国国内政策新闻，除非直接影响上述重点科技公司或美国上市公司且传导关系明确
+  - 地方性产业项目、普通公司融资、常规监管执法、程序性诉讼等低信息量内容
+  - 与美国市场、宏观、重点科技公司均无关的泛国际新闻、人物花边、生活方式内容
