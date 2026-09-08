@@ -19,6 +19,11 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Without this the job has GitHub's default 6-hour ceiling: run #89
+    # (2026-09-08) spent 1557s inside "Generate daily report" before being
+    # cancelled by hand. 25 minutes is well above a healthy run and still
+    # stops a stuck run from burning API budget unattended.
+    timeout-minutes: 25
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -43,10 +48,24 @@ jobs:
       - name: Resolve generated snapshot
         id: snapshot
         run: |
-          snapshot=$(find data/news_snapshots -maxdepth 1 -type f -name '*.json' -print -quit)
-          test -n "$snapshot"
+          # src/main.py names the snapshot after the Asia/Shanghai report date,
+          # so resolve it directly instead of taking whatever file `find` happens
+          # to return first. The old `-print -quit` form only worked because the
+          # directory holds exactly one file; once snapshots are committed and
+          # retained it would pick an arbitrary historical date and make the
+          # commit step read the wrong report.
+          date="$(TZ=Asia/Shanghai date +%F)"
+          snapshot="data/news_snapshots/${date}.json"
+          if [ ! -f "$snapshot" ]; then
+            # Only reachable if the run straddles Shanghai midnight. Fall back to
+            # the most recently written snapshot -- never an arbitrary one.
+            snapshot=$(ls -t data/news_snapshots/*.json 2>/dev/null | head -n 1)
+            test -n "$snapshot"
+            date="$(basename "$snapshot" .json)"
+            echo "[snapshot] today's file missing, using most recent: $snapshot"
+          fi
           echo "path=$snapshot" >> "$GITHUB_OUTPUT"
-          echo "date=$(basename "$snapshot" .json)" >> "$GITHUB_OUTPUT"
+          echo "date=$date" >> "$GITHUB_OUTPUT"
 
       - name: Run tests
         run: python -m pytest -v

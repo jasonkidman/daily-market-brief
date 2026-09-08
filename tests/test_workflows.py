@@ -84,3 +84,37 @@ def test_constituent_reference_workflow_is_weekly_manual_and_does_not_deploy_pag
     assert "data/reference/sp500_constituents.csv" in text
     assert "deploy-pages" not in text
     assert "upload-pages-artifact" not in text
+
+
+def test_daily_workflow_has_a_wall_clock_timeout():
+    """Without this the job inherits GitHub's 6-hour default: run #89 spent
+    1557s inside "Generate daily report" before being cancelled by hand."""
+    workflow = load_workflow("daily-report.yml")
+    timeout = workflow["jobs"]["build"]["timeout-minutes"]
+    assert isinstance(timeout, int)
+    assert 0 < timeout <= 30
+
+
+def test_snapshot_step_resolves_todays_shanghai_date_not_arbitrary_find_order():
+    """`find -print -quit` returns whatever file the filesystem yields first.
+    It only worked because the directory held exactly one file; once snapshots
+    are committed and retained it would pick an arbitrary historical date and
+    make the commit step read the wrong report."""
+    text = (ROOT / ".github" / "workflows" / "daily-report.yml").read_text(encoding="utf-8")
+    step = text[text.index("Resolve generated snapshot"):text.index("Run tests")]
+    # Comment lines legitimately name the old form when explaining why it went.
+    executable = "\n".join(
+        line for line in step.splitlines() if not line.strip().startswith("#")
+    )
+    assert "-print -quit" not in executable
+    assert 'TZ=Asia/Shanghai date +%F' in step
+    assert 'data/news_snapshots/${date}.json' in step
+    # The midnight-straddle fallback must still be deterministic (newest file),
+    # never an arbitrary one.
+    assert "ls -t data/news_snapshots/*.json" in step
+
+
+def test_snapshot_directory_is_no_longer_git_ignored():
+    """Prerequisite for committing snapshots in PR 4; harmless on its own."""
+    ignored = (ROOT / ".gitignore").read_text(encoding="utf-8").splitlines()
+    assert "data/news_snapshots/" not in ignored

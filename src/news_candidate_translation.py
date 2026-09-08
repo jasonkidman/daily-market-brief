@@ -15,7 +15,8 @@ from functools import partial
 from typing import Any, Callable
 
 from .deepseek_client import (
-    CANDIDATE_TRANSLATION_TIMEOUT, DEEPSEEK_MAX_ATTEMPTS, DeepSeekUsageTracker, call_deepseek, invoke_model,
+    CANDIDATE_TRANSLATION_TIMEOUT, DEEPSEEK_MAX_ATTEMPTS, NEWS_REASONING_EFFORT, NonRetryableAPIError,
+    DeepSeekUsageTracker, call_deepseek, invoke_model,
 )
 from .news_candidate_translation_prompt import SYSTEM_PROMPT
 
@@ -116,7 +117,8 @@ def _translate_batch(candidates: list[dict], api_key: str, call_model: Callable,
     for attempt in range(max_attempts):
         try:
             raw = invoke_model(
-                call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=False, reasoning_effort=None,
+                call_model, SYSTEM_PROMPT, user_payload, api_key,
+                thinking_enabled=False, reasoning_effort=NEWS_REASONING_EFFORT,
                 stage="Candidate Pool Translation", attempt=attempt + 1, usage_tracker=usage_tracker,
             )
             translations = validate_translations(raw, translation_input)
@@ -125,6 +127,9 @@ def _translate_batch(candidates: list[dict], api_key: str, call_model: Callable,
                 f"candidates in {time.monotonic() - started:.1f}s"
             )
             return translations, None
+        except NonRetryableAPIError:
+            print("[NEWS CANDIDATE TRANSLATION] batch aborted on non-retryable API error, no further attempts")
+            raise
         except Exception as exc:
             last_error = exc
             print(
@@ -169,6 +174,7 @@ def translate_candidates(candidates: list[dict], api_key: str,
             "translation_success_count": 0,
             "translation_failed_count": 0,
             "translation_batch_failures": [],
+            "translation_non_retryable_abort": False,
         })
     if not candidates or not api_key:
         return {}
@@ -176,8 +182,29 @@ def translate_candidates(candidates: list[dict], api_key: str,
     if observability is not None:
         observability["translation_batch_count"] = len(batches)
     merged: dict[str, dict] = {}
+    aborted_reason: str | None = None
     for index, batch in enumerate(batches, start=1):
-        translations, failure_reason = _translate_batch(batch, api_key, call_model, sleep_fn, usage_tracker, max_attempts)
+        if aborted_reason is not None:
+            # Remaining batches keep their original English text, which is
+            # exactly what a failed translation batch already degraded to.
+            print(
+                f"[NEWS CANDIDATE TRANSLATION BATCH] batch={index}/{len(batches)} input={len(batch)} "
+                f"skipped=non_retryable_abort"
+            )
+            if observability is not None:
+                observability["translation_batch_failures"].append(
+                    {"batch": index, "reason": aborted_reason}
+                )
+            continue
+        try:
+            translations, failure_reason = _translate_batch(
+                batch, api_key, call_model, sleep_fn, usage_tracker, max_attempts
+            )
+        except NonRetryableAPIError as exc:
+            aborted_reason = f"non_retryable: {exc}"
+            translations, failure_reason = {}, aborted_reason
+            if observability is not None:
+                observability["translation_non_retryable_abort"] = True
         merged.update(translations)
         print(
             f"[NEWS CANDIDATE TRANSLATION BATCH] batch={index}/{len(batches)} input={len(batch)} "

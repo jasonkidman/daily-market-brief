@@ -72,8 +72,57 @@ DEEPSEEK_PRICE_CNY_PER_MILLION = {
 OBSERVED_STAGES = ("Stage A", "Stage B", "Stage B (sample A)", "Stage B (sample B)", "Stage B Review", "Layer 2")
 
 
+# Every news-side stage (Stage A / Stage B / Stage B Review / Candidate Pool
+# Translation) sends this explicitly. terra is always a reasoning model and
+# these stages used to pass reasoning_effort=None, which left the depth at the
+# provider default -- the single largest contributor to both per-request
+# latency and completion-token cost. Layer 2 keeps its own explicit "high":
+# it is one request per run and it writes the page's top-level conclusion.
+NEWS_REASONING_EFFORT = "low"
+
+
 class NewsSelectionError(ValueError):
     """Raised when model output violates the candidate-only contract."""
+
+
+class NonRetryableAPIError(Exception):
+    """A transport failure that retrying cannot fix -- bad credentials, or an
+    account with no balance. Confirmed live on 2026-09-08: a 403
+    INSUFFICIENT_BALANCE was handled as an ordinary exception, so every Stage A
+    batch, both Stage B samples of every batch, their retries, and every
+    translation batch each re-sent a request that could not possibly succeed,
+    with 5-10s backoff sleeps in between.
+
+    Raised by invoke_model and handled by each stage's own retry loop: the loop
+    stops immediately (no further attempt, no backoff) and the enclosing batch
+    loop stops dispatching new batches, degrading the remaining ones through the
+    same deterministic, non-LLM path a failed batch already used.
+    """
+
+    def __init__(self, original: Exception):
+        super().__init__(str(original))
+        self.original = original
+        self.status_code = getattr(original, "status_code", None)
+
+
+_NON_RETRYABLE_STATUS = {401, 402, 403}
+_NON_RETRYABLE_MARKERS = (
+    "insufficient_quota",
+    "INSUFFICIENT_BALANCE",
+    "Insufficient account balance",
+    "账户余额不足",
+)
+
+
+def is_non_retryable(exc: Exception) -> bool:
+    """Credential/balance failures only. Timeouts, connection errors, 429 and
+    5xx are all still retryable -- this must never widen to those."""
+    if isinstance(exc, NonRetryableAPIError):
+        return True
+    if getattr(exc, "status_code", None) in _NON_RETRYABLE_STATUS:
+        return True
+    message = str(exc)
+    return any(marker in message for marker in _NON_RETRYABLE_MARKERS)
 
 
 class _ItemValidationError(NewsSelectionError):
@@ -233,6 +282,17 @@ def invoke_model(call_model: Callable, system_prompt: str, user_payload: str, ap
                 thinking_enabled=thinking_enabled, reasoning_effort=reasoning_effort,
                 elapsed_ms=round((time.monotonic() - started) * 1000), exc=exc,
             )
+        # Single choke point: every stage reaches the provider through here, so
+        # classifying once means no stage can accidentally retry a credential or
+        # balance failure. The usage record above is still written first -- an
+        # aborted run must still show what it attempted.
+        if is_non_retryable(exc):
+            print(
+                f"[DEEPSEEK NON-RETRYABLE] stage={_format_value(stage)} attempt={_format_value(attempt)} "
+                f"http_status={_format_value(getattr(exc, 'status_code', None))} "
+                f"exception_type={type(exc).__name__} -- aborting without retry"
+            )
+            raise NonRetryableAPIError(exc) from exc
         raise
     if usage_tracker is not None and stage is not None and attempt is not None:
         usage_tracker.record_success(
@@ -586,7 +646,8 @@ def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict
     for attempt in range(DEEPSEEK_MAX_ATTEMPTS):
         try:
             raw = invoke_model(
-                call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=False, reasoning_effort=None,
+                call_model, SYSTEM_PROMPT, user_payload, api_key,
+                thinking_enabled=False, reasoning_effort=NEWS_REASONING_EFFORT,
                 stage=stage_label, attempt=attempt + 1, usage_tracker=usage_tracker,
             )
             _log_stage_b_raw_response(raw)
@@ -646,6 +707,11 @@ def select_news(candidates: list[dict], api_key: str, recent_selected: list[dict
             print("[NEWS STAGE B] validate_selection: passed")
             print(f"[NEWS AI] selection succeeded in {time.monotonic() - started:.1f}s")
             return selected, None
+        except NonRetryableAPIError:
+            # Propagates past select_news_two_pass / select_news_with_fallback to
+            # select_news_multi_batch, which stops dispatching further batches.
+            print(f"[NEWS AI] {stage_label} aborted on non-retryable API error, no further attempts")
+            raise
         except Exception as exc:
             last_error = exc
             print(
@@ -688,7 +754,7 @@ def _review_borderline(borderline_items: list[dict], recent_selected: list[dict]
     user_payload = json.dumps(payload, ensure_ascii=False)
     raw = invoke_model(
         call_model, BORDERLINE_REVIEW_PROMPT, user_payload, api_key,
-        thinking_enabled=False, reasoning_effort=None,
+        thinking_enabled=False, reasoning_effort=NEWS_REASONING_EFFORT,
         stage="Stage B Review", attempt=1, usage_tracker=usage_tracker,
     )
     data = _parse_payload(raw)
@@ -766,6 +832,13 @@ def select_news_two_pass(candidates: list[dict], api_key: str, recent_selected: 
             )
             sample_a, warning_a = future_a.result()
             sample_b, warning_b = future_b.result()
+    except NonRetryableAPIError:
+        # The generic handler below re-runs the whole selection as a single
+        # pass -- exactly the fan-out this class of error must not cause.
+        print("[NEWS STAGE B TWO-PASS] non-retryable API error, aborting without single-pass fallback")
+        if observability is not None:
+            observability["two_pass_degraded"] = "non_retryable_api_error"
+        raise
     except Exception as exc:
         print(f"[NEWS STAGE B TWO-PASS] unexpected orchestration error, falling back to single pass | reason={exc}")
         if observability is not None:
@@ -839,6 +912,9 @@ def select_news_two_pass(candidates: list[dict], api_key: str, recent_selected: 
                 borderline_items, recent_selected, market_context, api_key,
                 call_model=review_call_model, usage_tracker=usage_tracker,
             )
+        except NonRetryableAPIError:
+            print("[NEWS STAGE B TWO-PASS] borderline review hit non-retryable API error, aborting")
+            raise
         except Exception as exc:
             print(f"[NEWS STAGE B TWO-PASS] borderline review failed, dropping all borderline | reason={exc}")
             review_result = {}
@@ -1018,6 +1094,7 @@ def select_news_multi_batch(candidates: list[dict], api_key: str, recent_selecte
                 "stage_b_failed_batch_count": 0,
                 "stage_b_borderline_dropped_ids": [], "stage_b_reserve_ids": [],
                 "stage_b_topic_cap_dropped_ids": [],
+                "stage_b_non_retryable_abort": False, "stage_b_aborted_at_batch": None,
             })
         return [], None
 
@@ -1028,6 +1105,8 @@ def select_news_multi_batch(candidates: list[dict], api_key: str, recent_selecte
         observability["stage_b_batch_selected_counts"] = []
         observability["stage_b_batches_fallback_used_count"] = 0
         observability["stage_b_failed_batch_count"] = 0
+        observability["stage_b_non_retryable_abort"] = False
+        observability["stage_b_aborted_at_batch"] = None
         # Aggregated across every batch below for the news-candidates Review
         # Filter (see news_review_filter.py) -- pure bookkeeping of what Stage B
         # already decided, never fed back into selection.
@@ -1038,12 +1117,48 @@ def select_news_multi_batch(candidates: list[dict], api_key: str, recent_selecte
     merged: list[dict] = []
     batch_warnings: list[str] = []
     covered_ids: set[str] = set()
+    if fallback_builder is None:
+        from .news_events import build_deterministic_fallback_selection
+        fallback_builder = build_deterministic_fallback_selection
+    aborted = False
     for index, batch in enumerate(batches, start=1):
         batch_observability: dict = {}
-        batch_selected, batch_warning = select_news_with_fallback(
-            batch, api_key, recent_selected, market_context,
-            call_model, review_call_model, sleep_fn, usage_tracker, batch_observability, fallback_builder,
-        )
+        if aborted:
+            # A non-retryable error already proved the API unusable for this run.
+            # Remaining batches still get their deterministic, zero-API fallback
+            # so the page degrades exactly as a failed batch already did -- they
+            # just never send a request that cannot succeed.
+            batch_selected = fallback_builder(batch)
+            batch_warning = None
+            print(
+                f"[NEWS STAGE B BATCH] batch={index}/{len(batches)} input={len(batch)} "
+                f"skipped=non_retryable_abort deterministic_fallback={len(batch_selected)}"
+            )
+            covered_ids.update(item["candidate_id"] for item in batch)
+            merged.extend(batch_selected)
+            if observability is not None:
+                observability["stage_b_batch_selected_counts"].append(len(batch_selected))
+                observability["stage_b_failed_batch_count"] += 1
+                if batch_selected:
+                    observability["stage_b_batches_fallback_used_count"] += 1
+            continue
+        try:
+            batch_selected, batch_warning = select_news_with_fallback(
+                batch, api_key, recent_selected, market_context,
+                call_model, review_call_model, sleep_fn, usage_tracker, batch_observability, fallback_builder,
+            )
+        except NonRetryableAPIError as exc:
+            aborted = True
+            batch_selected = fallback_builder(batch)
+            batch_warning = (
+                f"⚠️ 新闻 AI 处理已中止；原因：api_error_{exc.status_code or 'auth'}: {exc}"
+                f"（已停止后续 API 调用，使用规则降级结果补足 {len(batch_selected)} 条新闻）"
+            )
+            batch_observability["stage_b_ai_failed"] = True
+            batch_observability["stage_b_fallback_used"] = bool(batch_selected)
+            if observability is not None:
+                observability["stage_b_non_retryable_abort"] = True
+                observability["stage_b_aborted_at_batch"] = index
         covered_ids.update(item["candidate_id"] for item in batch)
         merged.extend(batch_selected)
         print(

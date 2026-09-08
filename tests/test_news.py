@@ -925,7 +925,10 @@ def test_deepseek_payload_includes_market_driven_context_and_selection_reason():
     assert captured["payload"]["market_signals"] == market_context["market_signals"]
     assert "不得根据时间共现" in captured["prompt"]
     assert news[0]["selection_reason"] == "与利率明显上升相关"
-    assert captured["kwargs"] == {"thinking_enabled": False, "reasoning_effort": None}
+    assert captured["kwargs"] == {
+        "thinking_enabled": False,
+        "reasoning_effort": deepseek_client.NEWS_REASONING_EFFORT,
+    }
 
 
 def test_stage_b_logs_input_raw_return_and_validation(capsys):

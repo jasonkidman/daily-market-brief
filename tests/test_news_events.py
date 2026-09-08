@@ -2,6 +2,7 @@ from datetime import datetime
 
 import pytest
 
+from src import deepseek_client
 from src.news_events import (
     STAGE_A_MAX_INPUT,
     STAGE_B_MAX_INPUT,
@@ -156,7 +157,10 @@ def test_cluster_calls_shared_transport_without_urls_and_returns_validated_event
     } for item in pool]}
     assert "https://example.com" not in __import__("json").dumps(captured["payload"])
     assert "现实世界事件聚类" in captured["prompt"]
-    assert captured["kwargs"] == {"thinking_enabled": False, "reasoning_effort": None}
+    assert captured["kwargs"] == {
+        "thinking_enabled": False,
+        "reasoning_effort": deepseek_client.NEWS_REASONING_EFFORT,
+    }
 
 
 def test_stage_a_logs_input_and_complete_output_events(capsys):

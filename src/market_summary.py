@@ -6,7 +6,7 @@ import json
 import time
 from typing import Any, Callable
 
-from .deepseek_client import DeepSeekUsageTracker, call_deepseek, invoke_model
+from .deepseek_client import DeepSeekUsageTracker, NonRetryableAPIError, call_deepseek, invoke_model
 from .market_summary_prompt import SYSTEM_PROMPT
 
 
@@ -153,6 +153,11 @@ def generate_market_summary(market_data: dict, market_context: dict, market_brea
                 if usage_tracker is not None:
                     usage_tracker.record_validation_failure("Layer 2", attempt + 1, exc)
                 raise
+        except NonRetryableAPIError:
+            # Layer 2 is the last LLM stage of a run, so there is nothing left to
+            # abort -- it just stops retrying and uses the program-owned summary.
+            print("[MARKET SUMMARY] Layer 2 aborted on non-retryable API error, using deterministic summary")
+            break
         except Exception:
             if attempt < 2:
                 sleep_fn((5, 10)[attempt])

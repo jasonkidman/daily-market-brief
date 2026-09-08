@@ -11,7 +11,8 @@ from functools import lru_cache
 from typing import Any, Callable, Optional
 
 from .deepseek_client import (
-    DEEPSEEK_MAX_ATTEMPTS, SUMMARY_ZH_LIMIT, TITLE_ZH_LIMIT, DeepSeekUsageTracker, call_deepseek, invoke_model,
+    DEEPSEEK_MAX_ATTEMPTS, NEWS_REASONING_EFFORT, NonRetryableAPIError, SUMMARY_ZH_LIMIT, TITLE_ZH_LIMIT,
+    DeepSeekUsageTracker, call_deepseek, invoke_model,
 )
 from .news_event_prompt import SYSTEM_PROMPT
 
@@ -479,7 +480,8 @@ def cluster_news_events(candidates: list[dict], api_key: str,
     for attempt in range(max_attempts):
         try:
             raw = invoke_model(
-                call_model, SYSTEM_PROMPT, user_payload, api_key, thinking_enabled=False, reasoning_effort=None,
+                call_model, SYSTEM_PROMPT, user_payload, api_key,
+                thinking_enabled=False, reasoning_effort=NEWS_REASONING_EFFORT,
                 stage="Stage A", attempt=attempt + 1, usage_tracker=usage_tracker,
             )
             try:
@@ -492,6 +494,11 @@ def cluster_news_events(candidates: list[dict], api_key: str,
             _log_stage_a_mapping(events)
             print(f"[NEWS AI] event clustering succeeded in {time.monotonic() - started:.1f}s")
             return events, None
+        except NonRetryableAPIError:
+            # Handled by cluster_news_events_batched: no further attempt here and
+            # no further batch there.
+            print("[NEWS AI] event clustering aborted on non-retryable API error, no further attempts")
+            raise
         except Exception as exc:
             last_error = exc
             print(
@@ -595,6 +602,7 @@ def cluster_news_events_batched(candidates: list[dict], api_key: str,
             observability.update({
                 "stage_a_batch_count": 0, "stage_a_batch_sizes": [], "stage_a_batch_fallback_used": [],
                 "stage_a_uncovered_candidate_count": 0, "stage_a_final_event_count": 0,
+                "stage_a_non_retryable_abort": False, "stage_a_aborted_at_batch": None,
             })
         return [], None
 
@@ -604,12 +612,43 @@ def cluster_news_events_batched(candidates: list[dict], api_key: str,
         observability["stage_a_batch_sizes"] = [len(batch) for batch in batches]
         observability["stage_a_batch_fallback_used"] = []
         observability["stage_a_batch_output_counts"] = []
+        observability["stage_a_non_retryable_abort"] = False
+        observability["stage_a_aborted_at_batch"] = None
 
     all_events: list[dict] = []
     batch_warnings: list[str] = []
     covered_ids: set[str] = set()
+    aborted = False
     for index, batch in enumerate(batches, start=1):
-        events, warning = cluster_news_events(batch, api_key, call_model, sleep_fn, usage_tracker, max_attempts)
+        if aborted:
+            # Same deterministic one-event-per-candidate fallback a failed batch
+            # already used -- just without sending a request that cannot succeed.
+            events = _fallback_events(_cluster_candidate_input(batch))
+            covered_ids.update(item["candidate_id"] for item in batch)
+            all_events.extend(events)
+            print(
+                f"[NEWS STAGE A BATCH] batch={index}/{len(batches)} input={len(batch)} "
+                f"output_events={len(events)} skipped=non_retryable_abort fallback_used=True"
+            )
+            if observability is not None:
+                observability["stage_a_batch_fallback_used"].append(True)
+                observability["stage_a_batch_output_counts"].append(len(events))
+            continue
+        if True:
+            try:
+                events, warning = cluster_news_events(
+                    batch, api_key, call_model, sleep_fn, usage_tracker, max_attempts
+                )
+            except NonRetryableAPIError as exc:
+                aborted = True
+                events = _fallback_events(_cluster_candidate_input(batch))
+                warning = (
+                    "⚠️ 新闻事件级去重已中止，已使用基础去重结果继续生成日报。"
+                    f" 原因：api_error_{exc.status_code or 'auth'}: {exc}"
+                )
+                if observability is not None:
+                    observability["stage_a_non_retryable_abort"] = True
+                    observability["stage_a_aborted_at_batch"] = index
         covered_ids.update(item["candidate_id"] for item in batch)
         all_events.extend(events)
         fallback_used = warning is not None
