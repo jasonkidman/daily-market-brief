@@ -323,9 +323,9 @@
       {% set ratio = reserve.get('ratio') %}
       <div class="reserve">
         <div class="donut" style="--reserve-deg:{{ ((ratio or 0) * 360)|round(1) }}deg" data-pct="{{ (ratio * 100)|round|int ~ '%' if ratio is not none else '—' }}"></div>
-        <div>
-          <p>可用金额</p><strong>{{ reserve.get('remaining')|money }}</strong>
-          <p style="margin-top:10px">总备用金</p><strong>{{ reserve.get('total')|money }}</strong>
+        <div class="reserve-info">
+          <div><p>可用金额</p><strong>{{ reserve.get('remaining')|money }}</strong></div>
+          <div><p>总备用金</p><strong>{{ reserve.get('total')|money }}</strong></div>
         </div>
       </div>
       <div class="small" style="margin-top:8px">已使用 {{ reserve.get('used')|money }} · 初始 {{ reserve.get('total')|money }}</div>
