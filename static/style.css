@@ -182,9 +182,9 @@ section{margin-top:40px}
 .advance-stat strong{font-size:15px;font-weight:800}
 .breadth>div+div{border-left:1px solid var(--line-soft)}
 .breadth h4,.risk-card h4{margin:0 0 12px;font-size:13px}
-.big-green{font-size:32px;font-weight:800;color:var(--green);line-height:1}
+.big-green{margin-top:auto;font-size:32px;font-weight:800;color:var(--green);line-height:1}
 .risk-note{margin-top:10px;color:#6f8396;font-size:12px;line-height:1.55}
-.advance-coverage{margin-top:auto}
+.advance-coverage{margin-top:48px}
 .ratio{margin-top:8px;height:8px;border-radius:6px;background:linear-gradient(90deg,#16a05d 0 70%,#e04a45 70% 100%)}
 .sector-row{display:grid;grid-template-columns:78px 1fr 58px;gap:10px;align-items:center;margin:8px 0;font-size:12px}
 .sector-bar{height:6px;border-radius:4px;background:#dfe7ed;overflow:hidden}
