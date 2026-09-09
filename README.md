@@ -1,10 +1,11 @@
 # Daily Market Brief
 
-一个每天生成的个人投资日报静态站点：展示美国三大指数、四项 Market Context、最多 8 条全球重要新闻，以及 S&P 500 / Nasdaq-100 的独立回撤加仓状态。系统只管理 ¥200,000 回撤备用金，不包含固定月度定投，也不提供投资建议或自动交易。
+一个每天生成的个人投资日报静态站点：展示美国三大指数、六项 Market Context、最多 8 条全球重要新闻，以及 S&P 500 / Nasdaq-100 的独立回撤加仓状态。系统只管理 ¥200,000 回撤备用金，不包含固定月度定投，也不提供投资建议或自动交易。
 
 ## 工作方式
 
-- 行情：yfinance 日线 `Close`，由本地程序计算单日涨跌、YTD、历史最高收盘价和回撤；Russell 2000、VIX、美元指数和 10Y 美债作为独立的市场环境数据，不参与回撤判断。
+- 行情：yfinance 日线 `Close`，由本地程序计算单日涨跌、YTD、历史最高收盘价和回撤；Russell 2000、VIX、美元指数、10Y 美债、黄金、WTI 原油作为独立的市场环境数据，不参与回撤判断。
+- 市场好坏有两个独立指标，展示时不要混为一谈：**Market Health**（`market_health.py`）只看 S&P 500 成分股 + 板块 ETF 的涨跌比例，回答"这次上涨/下跌参与度广不广"；**Market Sentiment**（`market_sentiment.py`）是 VIX（35%）+ Health 分数（30%）+ 20 日动量（20%）+ 小盘相对强弱（15%）的加权情绪分，回答"市场现在整体偏贪婪还是偏恐慌"。两者输入有重叠但用途不同，只有 Market Sentiment 完全独立于 LLM 总结（不作为 Layer 2 输入）。
 - 新闻：仅从 `config/news_sources.yaml` 中的 RSS 获取候选，本地先去重，再结合程序计算的 Market Context / Market Signals 交给灵眸（gpt-5.6-terra 模型）筛选、分类、翻译与摘要。模型只返回候选 ID，原文 URL 由程序映射回来。
 - 状态：`state/drawdown_state.json` 保存当前两个独立回撤周期，`state/drawdown_history.json` 保存已结束周期。行情校验失败时不会产生或修改任何新回撤信号。
 - 输出：`data/reports/YYYY-MM-DD.json` 保存日报，`site/` 是唯一 Pages 发布目录。仅保留最近 7 个自然日。
@@ -62,7 +63,7 @@ python -m src.smoke --base-dir work/smoke
 
 ## 配置
 
-- `config/market.yaml`：分别配置三个核心指数与四项 Market Context 的名称和 yfinance ticker。
+- `config/market.yaml`：分别配置三个核心指数与六项 Market Context（Russell 2000、VIX、美元指数、10Y 美债、黄金、WTI 原油）的名称和 yfinance ticker。
 - `config/drawdown_rules.yaml`：总备用金、70/30 资金池与各档阈值/比例。
 - `config/news_sources.yaml`：RSS URL 与 P0/P1/P2 优先级。单源失败只产生 warning，不会改用网页爬虫。
 

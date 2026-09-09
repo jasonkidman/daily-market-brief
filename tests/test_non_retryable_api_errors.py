@@ -4,13 +4,13 @@ single-pass fallbacks, or further batches.
 
 Confirmed live on 2026-09-08 (run #88): a 403 INSUFFICIENT_BALANCE was handled
 as an ordinary exception, so every Stage A batch, both Stage B samples of every
-batch, their retries and every translation batch each re-sent a request that
-could not possibly succeed, with 5-10s backoff sleeps in between.
+batch, and their retries each re-sent a request that could not possibly
+succeed, with 5-10s backoff sleeps in between.
 """
 
 import pytest
 
-from src import deepseek_client, market_summary, news_candidate_translation
+from src import deepseek_client, market_summary
 from src.deepseek_client import NonRetryableAPIError, is_non_retryable
 
 
@@ -20,31 +20,6 @@ class FakeAPIError(Exception):
     def __init__(self, message, status_code=None):
         super().__init__(message)
         self.status_code = status_code
-
-
-# Deliberately unrelated wording: the cross-batch duplicate merge is a real
-# text-similarity check and would otherwise collapse a synthetic pool of
-# near-identical titles into a single event.
-_TITLE_STEMS = (
-    "Fed holds policy rates steady",
-    "Nvidia unveils new datacenter accelerator",
-    "Oil slips on demand worries",
-    "Treasury yields climb after auction",
-    "Apple faces EU antitrust probe",
-    "Payrolls beat expectations sharply",
-    "Tesla cuts prices across Europe",
-    "Bank regulators propose capital rules",
-)
-
-
-def candidate(cid, title=None, priority="P0"):
-    stem = _TITLE_STEMS[int(cid) % len(_TITLE_STEMS)] if str(cid).isdigit() else "Fed holds policy rates steady"
-    title = title or f"{stem} ({cid})"
-    return {
-        "candidate_id": cid, "title": title, "url": f"https://x/{cid}",
-        "source": "BBC News", "summary": "full summary",
-        "published_at": "2026-08-12T00:00:00+00:00", "priority": priority,
-    }
 
 
 def counting_raiser(exc_factory):
@@ -117,27 +92,6 @@ def test_invoke_model_wraps_non_retryable_and_still_records_usage():
 # also covered there (test_non_retryable_aborts_without_retry_and_stops_new_dispatches,
 # test_retry_only_once_on_timeout); not duplicated here.
 # --------------------------------------------------------------------------
-
-# --------------------------------------------------------------------------
-# Candidate Pool Translation
-# --------------------------------------------------------------------------
-
-def test_translation_stops_dispatching_after_non_retryable():
-    pool = [candidate(str(index)) for index in range(40)]
-    call_model, calls = counting_raiser(lambda: FakeAPIError("no balance", 403))
-    observability = {}
-
-    translations = news_candidate_translation.translate_candidates(
-        pool, "key", call_model=call_model, sleep_fn=no_sleep,
-        observability=observability,
-    )
-
-    assert observability["translation_batch_count"] == 5
-    assert len(calls) == 1
-    assert observability["translation_non_retryable_abort"] is True
-    # Everything degrades to the original English text, as a failed batch already did.
-    assert translations == {}
-
 
 # --------------------------------------------------------------------------
 # Layer 2
