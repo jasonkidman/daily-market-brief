@@ -33,8 +33,10 @@ from .news_events import (
     event_selection_candidates,
 )
 from .news_candidates import build_news_candidates
+from .news_prefilter import filter_off_topic_candidates
 from .news_scoring import rule_based_top_news, score_candidates
 from .news_snapshot import load_stage_b_snapshot, write_stage_b_snapshot
+from .news_top_dedup import dedupe_top_candidates
 from .report import load_reports, retain_latest_reports, write_report
 from .renderer import render_site
 from .rss_news import fetch_candidates, filter_final_candidates
@@ -116,17 +118,25 @@ def _merge_scores(selection_candidates: list[dict], scores: dict[str, dict]) -> 
     return merged
 
 
+def _rank_by_score(candidates: list[dict]) -> list[dict]:
+    """Score descending, unscored candidates always last; ties keep their
+    incoming relative order (Python's sort is stable)."""
+    return sorted(
+        candidates,
+        key=lambda item: (item["score"] is not None, item["score"] if item["score"] is not None else -1),
+        reverse=True,
+    )
+
+
 def _select_top_news(scored_candidates: list[dict], limit: int) -> list[dict]:
     """Code, not the model, decides how many candidates make "今日重要新闻" and
     in what order: sort by score descending (unscored candidates always sort
     last), then take the top `limit`. Ties keep their incoming relative order
-    (Python's sort is stable) -- there is no secondary ranking signal here by
-    design, matching the plan's literal sort/select contract."""
-    ranked = sorted(
-        scored_candidates,
-        key=lambda item: (item["score"] is not None, item["score"] if item["score"] is not None else -1),
-        reverse=True,
-    )
+    -- there is no secondary ranking signal here by design, matching the
+    plan's literal sort/select contract. (Near-duplicate suppression, when
+    it happens, is applied by the caller *before* this function via
+    news_top_dedup -- this function only ever sorts and slices.)"""
+    ranked = _rank_by_score(scored_candidates)
     return [{**item, "rank": rank} for rank, item in enumerate(ranked[:limit], start=1)]
 
 
@@ -274,7 +284,7 @@ def _recent_news_events(reports: list[dict], current_report_date: str) -> list[d
     return events
 
 
-def _log_news_pipeline(rss_raw_count: int, within_24h_count: int, deduplicated_count: int,
+def _log_news_pipeline(rss_raw_count: int, within_24h_count: int, deduplicated_count: int, prefiltered_count: int,
                        event_representatives: list[dict], selection_candidates: list[dict],
                        selected: list[dict], scoring_observability: dict | None = None) -> None:
     print("[NEWS PIPELINE]")
@@ -282,9 +292,11 @@ def _log_news_pipeline(rss_raw_count: int, within_24h_count: int, deduplicated_c
     print(f"within_24h_count: {within_24h_count}")
     print(f"deduplicated_count: {deduplicated_count}")
     print(f"duplicates_removed: {within_24h_count - deduplicated_count}")
+    print(f"prefiltered_count: {prefiltered_count}")
+    print(f"off_topic_removed: {deduplicated_count - prefiltered_count}")
     print("[EVENT CLUSTERING]")
     print(f"clustered_event_count: {len(event_representatives)}")
-    print(f"clustering_collapsed: {max(deduplicated_count - len(event_representatives), 0)}")
+    print(f"clustering_collapsed: {max(prefiltered_count - len(event_representatives), 0)}")
     print("Largest clusters:")
     for event in sorted(event_representatives, key=lambda item: len(item["candidate_ids"]), reverse=True)[:5]:
         print(f"{event['event_summary']}: {len(event['candidate_ids'])} articles")
@@ -450,6 +462,10 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
         candidates = filter_final_candidates(candidates, now)
         window_candidate_count = len(candidates)
         candidates = dedupe_candidates(candidates)
+        deduplicated_count = len(candidates)
+        prefilter_rules = _load_yaml(config_root / "news_prefilter.yaml")["rules"]
+        candidates = filter_off_topic_candidates(candidates, prefilter_rules)
+        prefiltered_count = len(candidates)
         # Kept for the snapshot's forensic value and potential future use, but
         # (per IMPLEMENTATION_PLAN.md section 4) not fed into Scoring -- Layer 1's
         # input is candidate text + focus rules only, no cross-day history.
@@ -469,7 +485,8 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
                 "candidate_counts": {
                     "rss_raw": rss_candidate_count,
                     "within_24h": window_candidate_count,
-                    "deduplicated": len(candidates),
+                    "deduplicated": deduplicated_count,
+                    "prefiltered": prefiltered_count,
                     # No candidate is ever capped out of clustering any more
                     # (cluster_candidates_local runs the full pool in one pass),
                     # so these two are always equal -- kept as separate keys
@@ -501,12 +518,26 @@ def generate_daily_report(base_dir: Path = ROOT, offline_fixture: bool = False,
                 news = rule_based_top_news(ranked_pool, NEWS_TOP_N)
                 ai_warning = "⚠️ 新闻评分 AI 处理暂时失败；已使用规则降级结果生成日报。"
             else:
-                news = _select_top_news(scored_candidates, NEWS_TOP_N)
+                # Pure text-similarity clustering cannot reliably catch the same
+                # real-world story reported under very differently worded
+                # headlines (confirmed on real 2026-09-09 data -- known
+                # duplicate pairs scored 0.23-0.36 on title similarity, no
+                # better than genuinely distinct stories); this bounded,
+                # top-ranked-only LLM call is the one place that dedup
+                # reintroduces semantic judgment after Scoring. It never drops
+                # a candidate from scoring output or "更多新闻" -- it only
+                # decides who additionally gets a "今日重要新闻" slot.
+                ranked_scored = _rank_by_score(scored_candidates)
+                dedup_map = dedupe_top_candidates(ranked_scored, api_key, usage_tracker=usage_tracker)
+                deduped_for_top_news = [
+                    item for item in scored_candidates if dedup_map.get(item["candidate_id"]) is None
+                ]
+                news = _select_top_news(deduped_for_top_news, NEWS_TOP_N)
                 ai_warning = None
                 scoring_fallback_used = scoring_observability.get("scoring_failed_batch_count", 0) > 0
             news_candidates = build_news_candidates(scored_candidates, news)
         _log_news_pipeline(
-            rss_candidate_count, window_candidate_count, len(candidates),
+            rss_candidate_count, window_candidate_count, deduplicated_count, prefiltered_count,
             event_representatives, selection_candidates, news, scoring_observability,
         )
         if ai_warning:

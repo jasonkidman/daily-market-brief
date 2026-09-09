@@ -11,8 +11,13 @@ from typing import Any, Callable
 import httpx
 
 
-# The ten categories Scoring (news_scoring.py) assigns to every candidate;
-# news_candidates.py buckets them down to six display groups.
+# The eleven categories Scoring (news_scoring.py) assigns to every candidate;
+# news_candidates.py buckets them down to six display groups. "公司新闻 / 其他"
+# exists so content with no real fit elsewhere (single-company news outside the
+# tracked mega-cap list, content-moderation/legal stories, etc.) has a category
+# that doesn't misrepresent it as macro/rates -- see news_score_prompt.py for
+# the disambiguation rule that keeps this bucket from becoming a dumping ground
+# for content that actually belongs in "大型科技".
 ALLOWED_CATEGORIES = {
     "美联储 / 利率",
     "就业 / 通胀",
@@ -24,25 +29,19 @@ ALLOWED_CATEGORIES = {
     "半导体",
     "地缘政治",
     "政策 / 监管",
+    "公司新闻 / 其他",
 }
 
 # Single source of truth for a call site's per-request read timeout, so
 # individual callers never hardcode their own magic number. LLM_TIMEOUT is the
 # default every call_deepseek() invocation gets unless it explicitly overrides
 # `timeout` -- currently only Layer 2 (market_summary.py) relies on this
-# default; Candidate Pool Translation gets a shorter one on purpose (see
-# CANDIDATE_TRANSLATION_TIMEOUT) so a stuck translation call can't eat into the
-# rest of the workflow's time, and Scoring builds its own from
-# news_scoring.SCORING_TIMEOUT (a plain float, easy to tune) rather than a
+# default; Scoring and TopDedup build their own from news_scoring.SCORING_TIMEOUT
+# / news_top_dedup.DEDUP_TIMEOUT (plain floats, easy to tune) rather than a
 # derived constant here. SDK-level retries stay at 0 (DEEPSEEK_MAX_RETRIES) --
 # every stage controls its own retry/backoff/fallback behavior instead.
 STAGE_TIMEOUT_SECONDS = {
     "default": 90.0,
-    # Raised from 45s after real 2026-09-07 production data showed multiple
-    # successful translation-batch requests taking 36-44s -- dangerously close
-    # to the old ceiling, which caused ~2 of 5 real batches to time out
-    # outright (see TRANSLATION_BATCH_SIZE in news_candidate_translation.py).
-    "candidate_translation": 60.0,
 }
 
 
@@ -51,7 +50,6 @@ def _llm_timeout(read_seconds: float) -> httpx.Timeout:
 
 
 LLM_TIMEOUT = _llm_timeout(STAGE_TIMEOUT_SECONDS["default"])
-CANDIDATE_TRANSLATION_TIMEOUT = _llm_timeout(STAGE_TIMEOUT_SECONDS["candidate_translation"])
 DEEPSEEK_MAX_RETRIES = 0
 DEEPSEEK_MAX_ATTEMPTS = 2
 DEEPSEEK_MODEL = "gpt-5.6-terra"
@@ -66,7 +64,7 @@ DEEPSEEK_PRICE_CNY_PER_MILLION = {
     "deepseek-v4-flash": {"cache_hit": 0.02, "cache_miss": 1.0, "completion": 2.0},
     "deepseek-v4-pro": {"cache_hit": 0.025, "cache_miss": 3.0, "completion": 6.0},
 }
-OBSERVED_STAGES = ("Scoring", "Layer 2")
+OBSERVED_STAGES = ("Scoring", "TopDedup", "Layer 2")
 
 
 # Every news-side stage (Stage A / Stage B / Stage B Review / Candidate Pool

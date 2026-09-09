@@ -1,0 +1,44 @@
+# Deterministic, zero-LLM-cost early relevance filter (src/news_prefilter.py).
+# Runs on raw English title+summary, before clustering/scoring, so a
+# candidate matching a rule here never costs a scoring call and never
+# appears in "更多新闻" -- which is a stronger, less reversible action than a
+# low score (a low score is still visible and reviewable; a pre-filter drop
+# is not). Keep every rule narrow and high-precision: it should only match
+# content that is *almost never* relevant to a US-stock/macro/big-tech
+# investor, regardless of context. When in doubt, leave it out of this file
+# and let Scoring's dimension-3 judgment call it low-relevance instead.
+#
+# Starting version (2026-09-09), based on real noise observed in production
+# (content-moderation stories, crypto-theft stories with no tracked-company
+# tie-in). Tune by editing this file, not code -- each drop is logged as
+# [NEWS CANDIDATE] ... stage=prefilter ... reason=<reason>, so a wrongly
+# dropped story is discoverable in the run log.
+rules:
+  - reason: content_moderation_child_safety
+    # A recognizable, narrow genre (platform child-safety/content-moderation
+    # reporting) that is consistently social/regulatory-ethics coverage, not
+    # market-moving news, even when it names a tracked mega-cap company.
+    phrases:
+      - "child sexual abuse"
+      - "csam"
+      - "nude images of children"
+      - "child abuse material"
+      - "sexualize minors"
+      - "sexualized images of children"
+
+  - reason: crypto_theft_unrelated_to_tracked_companies
+    # Crypto hack/theft wire stories with no connection to a tracked,
+    # US-listed company -- exempted if a tracked name appears, since a hack
+    # actually hitting one of these would be genuinely relevant.
+    phrases:
+      - "crypto heist"
+      - "hackers stole"
+      - "hacker stole"
+      - "stolen crypto"
+      - "bitcoin bridge"
+      - "crypto bridge hack"
+    exempt_if_mentions:
+      - "coinbase"
+      - "circle"
+      - "microstrategy"
+      - "robinhood"

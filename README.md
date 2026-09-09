@@ -6,7 +6,7 @@
 
 - 行情：yfinance 日线 `Close`，由本地程序计算单日涨跌、YTD、历史最高收盘价和回撤；Russell 2000、VIX、美元指数、10Y 美债、黄金、WTI 原油作为独立的市场环境数据，不参与回撤判断。
 - 市场好坏有两个独立指标，展示时不要混为一谈：**Market Health**（`market_health.py`）只看 S&P 500 成分股 + 板块 ETF 的涨跌比例，回答"这次上涨/下跌参与度广不广"；**Market Sentiment**（`market_sentiment.py`）是 VIX（35%）+ Health 分数（30%）+ 20 日动量（20%）+ 小盘相对强弱（15%）的加权情绪分，回答"市场现在整体偏贪婪还是偏恐慌"。两者输入有重叠但用途不同，只有 Market Sentiment 完全独立于 LLM 总结（不作为 Layer 2 输入）。
-- 新闻：仅从 `config/news_sources.yaml` 中的 RSS 获取候选，本地先去重，再结合程序计算的 Market Context / Market Signals 交给灵眸（gpt-5.6-terra 模型）筛选、分类、翻译与摘要。模型只返回候选 ID，原文 URL 由程序映射回来。
+- 新闻：仅从 `config/news_sources.yaml` 中的 RSS 获取候选，本地依次去重、按 `config/news_prefilter.yaml` 做零成本关键词前置过滤、再按标题相似度聚类。之后交给灵眸（gpt-5.6-terra 模型）逐条打分、分类、翻译；分数前 25 的候选再额外做一次小规模语义去重（识别标题差异很大但实为同一事件的报道），最终由程序按分数排序选出当日新闻。模型只返回候选 ID，原文 URL 由程序映射回来；Market Context / Market Signals 不参与新闻打分，只用于 Layer 2 的市场总结。
 - 状态：`state/drawdown_state.json` 保存当前两个独立回撤周期，`state/drawdown_history.json` 保存已结束周期。行情校验失败时不会产生或修改任何新回撤信号。
 - 输出：`data/reports/YYYY-MM-DD.json` 保存日报，`site/` 是唯一 Pages 发布目录。仅保留最近 7 个自然日。
 

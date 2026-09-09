@@ -36,6 +36,12 @@ def build_system_prompt(focus_text: str, categories: Iterable[str]) -> str:
 4. 事件新鲜度：新进展 or 既有事件的重复报道
 
 【分类】category 必须从以下类别中选择一个：{categories_text}
+- 与追踪的大型科技公司（Apple / Microsoft / Alphabet / Amazon / Meta / Nvidia /
+  Tesla / SpaceX）相关的事件，即使是监管调查、诉讼、内容安全等非财务性质，
+  也归类为"大型科技"，不要因为不是财报/产品新闻就归为其他类别。
+- 不在上述范围内的单一公司新闻（个股表现、财报、产品等），如果没有明显的
+  宏观 / 政策 / 科技属地，归类为"公司新闻 / 其他"，不要为了凑一个看似相关
+  的类别而归入"金融市场"或"美国经济"。
 
 【中文字段】
 title_zh   ：中文标题，40 字以内

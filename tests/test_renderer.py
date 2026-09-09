@@ -64,7 +64,6 @@ def modern_news_item(rank, title_prefix="新闻", summary="摘要"):
         "url": f"https://example.com/{rank}",
         "published_at": "2026-08-12T09:00:00+00:00",
         "focus": "离线夹具关注项",
-        "tags": ["离线夹具", "渲染"],
         "investment_relevance_score": max(50, 92 - rank + 1),
         "selection_reason": "仅用于验证现代新闻字段渲染，不代表真实投资建议。",
     }
@@ -90,11 +89,10 @@ def test_renders_one_news_item_per_report_entry(tmp_path):
     assert html.count('class="news-item"') == 8
     assert "今日重要新闻" in html
     assert "（按重要性排序）" in html
-    assert html.count('class="chips"') == 8
     assert 'href="https://persisted.example/news-1"' in html
 
 
-def test_news_item_shows_rank_category_title_desc_and_chips_without_fabricated_impact(tmp_path):
+def test_news_item_shows_rank_category_title_and_desc_for_legacy_fields(tmp_path):
     reports = tmp_path / "reports"
     reports.mkdir()
     payload = report("2026-08-12")
@@ -119,10 +117,6 @@ def test_news_item_shows_rank_category_title_desc_and_chips_without_fabricated_i
     assert "旧版新闻标题" in html
     assert "旧版报告保留的摘要。" in html
     assert '<div class="time">3小时前</div>' in html
-    assert 'class="chips"' not in html
-    # No fabricated 利好/利空 verdict is invented when there is no real sentiment signal.
-    assert "impact-up" not in html and "impact-down" not in html
-    assert '<div class="impact-label">市场影响：</div>' in html
     assert 'href="https://legacy.example/report"' in html
 
 
@@ -705,7 +699,7 @@ def test_v5_visual_contract_is_the_rendered_dom_and_css_baseline(tmp_path):
         "indices", "index-card", "index-value", "index-bottom", "day-change", "ytd", "spark",
         "summary-text", "strategy", "strategy-main", "strategy-tag", "strategy-row",
         "strategy-link", "section-head", "section-title", "bar", "news-item", "rank",
-        "category", "time", "news-title", "news-desc", "impact", "metric-grid", "metric",
+        "category", "time", "news-title", "news-desc", "metric-grid", "metric",
         "metric-value", "metric-change", "breadth", "big-green", "sector-row", "sector-fill",
         "gauge", "risk-grid", "risk-card", "risk-value", "reserve", "donut", "checks",
         "check-row", "check-ok",

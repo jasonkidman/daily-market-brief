@@ -8,19 +8,22 @@ from src.main import (
 )
 from src.market_summary import generate_market_summary as _real_generate_market_summary
 from src.news_scoring import score_candidates as _real_score_candidates
+from src.news_top_dedup import dedupe_top_candidates as _real_dedupe_top_candidates
 from src.smoke import validate_generated
 
 
 def test_news_pipeline_logs_distinct_stage_counts(capsys):
-    _log_news_pipeline(89, 85, 79, [], [], [])
+    _log_news_pipeline(89, 85, 79, 72, [], [], [])
 
     output = capsys.readouterr().out
     assert "rss_raw_count: 89" in output
     assert "within_24h_count: 85" in output
     assert "deduplicated_count: 79" in output
     assert "duplicates_removed: 6" in output
+    assert "prefiltered_count: 72" in output
+    assert "off_topic_removed: 7" in output
     assert "clustered_event_count: 0" in output
-    assert "clustering_collapsed: 79" in output
+    assert "clustering_collapsed: 72" in output
     assert "scoring_input_count: 0" in output
 
 
@@ -445,13 +448,15 @@ def test_report_generation_falls_back_to_english_when_scoring_omits_a_candidate(
     assert report["news_candidates"][0]["summary_zh"] == "Summary 1"
 
 
-def test_full_run_makes_at_most_4_llm_calls(tmp_path, monkeypatch):
-    """PR 3's core regression: a normal run must be 3 scoring batches (100
-    candidates -> 40+40+20) + 1 Layer 2 call = 4 total, down from the old
-    architecture's Stage A/B/translation fan-out (confirmed live to reach 40+
-    calls on an ordinary day, worse on failure). Exercises the real
-    score_candidates()/generate_market_summary() batching and validation
-    logic end to end, with only the transport faked."""
+def test_full_run_makes_at_most_5_llm_calls(tmp_path, monkeypatch):
+    """PR 3's core regression, extended for the TopDedup stage added after real
+    2026-09-09 production data showed unmerged same-event duplicates crowding
+    out "今日重要新闻": a normal run must be 3 scoring batches (100 candidates
+    -> 40+40+20) + 1 bounded TopDedup call + 1 Layer 2 call = 5 total, down
+    from the old architecture's Stage A/B/translation fan-out (confirmed live
+    to reach 40+ calls on an ordinary day, worse on failure). Exercises the
+    real score_candidates()/dedupe_top_candidates()/generate_market_summary()
+    batching and validation logic end to end, with only the transport faked."""
     monkeypatch.setenv("DEEPSEEK_API_KEY", "test-key")
     now = main.datetime.fromisoformat("2026-08-12T10:00:00").replace(tzinfo=main.SHANGHAI)
     market_config = main._load_yaml(main.ROOT / "config" / "market.yaml")
@@ -469,13 +474,15 @@ def test_full_run_makes_at_most_4_llm_calls(tmp_path, monkeypatch):
     def fake_call_model(system_prompt, user_payload, api_key, **kwargs):
         calls.append(1)
         payload = json.loads(user_payload)
-        if "candidates" in payload:
-            ids = [item["candidate_id"] for item in payload["candidates"]]
-            return json.dumps({"scores": [
-                {"candidate_id": cid, "score": 60, "category": "美国经济", "title_zh": "标题", "summary_zh": "摘要", "reason": ""}
-                for cid in ids
-            ]})
-        return json.dumps({"summary": "标普500当日下跌0.5%，纳指100当日下跌0.5%。市场同时关注上述新闻。"})
+        if "candidates" not in payload:
+            return json.dumps({"summary": "标普500当日下跌0.5%，纳指100当日下跌0.5%。市场同时关注上述新闻。"})
+        ids = [item["candidate_id"] for item in payload["candidates"]]
+        if "duplicate_of" in system_prompt:
+            return json.dumps({"items": [{"candidate_id": cid, "duplicate_of": None} for cid in ids]})
+        return json.dumps({"scores": [
+            {"candidate_id": cid, "score": 60, "category": "美国经济", "title_zh": "标题", "summary_zh": "摘要", "reason": ""}
+            for cid in ids
+        ]})
 
     monkeypatch.setattr(main, "fetch_market", lambda *args: (snapshots, histories, []))
     monkeypatch.setattr(main, "fetch_market_context", lambda *args: (contexts, []))
@@ -503,7 +510,13 @@ def test_full_run_makes_at_most_4_llm_calls(tmp_path, monkeypatch):
         main, "generate_market_summary",
         lambda *args, **kwargs: _real_generate_market_summary(*args, call_model=fake_call_model),
     )
+    monkeypatch.setattr(
+        main, "dedupe_top_candidates",
+        lambda ranked_candidates, api_key, **kwargs: _real_dedupe_top_candidates(
+            ranked_candidates, api_key, call_model=fake_call_model, usage_tracker=kwargs.get("usage_tracker"),
+        ),
+    )
 
     generate_daily_report(base_dir=tmp_path, report_date="2026-08-12")
 
-    assert len(calls) <= 4
+    assert len(calls) <= 5

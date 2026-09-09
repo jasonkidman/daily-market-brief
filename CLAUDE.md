@@ -62,15 +62,17 @@ Entry point is `src/main.py:generate_daily_report`, a single-pass orchestration 
 
 2. **Drawdown state machine** (`src/drawdown.py`) — `update_drawdown_state` reads/writes `state/drawdown_state.json` (current open cycles per index) and archives closed cycles into `state/drawdown_history.json`. Only runs when market validity for that index holds; a failed validation never creates or mutates a drawdown signal (fail-closed).
 
-3. **News pipeline** — a multi-stage funnel, all pure-code except one LLM call:
+3. **News pipeline** — a multi-stage funnel, pure-code except two bounded LLM calls:
    - `src/rss_news.py` fetches candidates from `config/news_sources.yaml` (RSS only, no scraper fallback), each tagged P0/P1/P2 priority.
    - `src/news_dedupe.py` deduplicates locally.
-   - `src/news_events.py` clusters candidates into events by local title-similarity (`cluster_candidates_local`) — this is what collapses multi-outlet coverage of the same story into one representative before scoring.
+   - `src/news_prefilter.py` (`filter_off_topic_candidates`) drops candidates matching a narrow, high-precision off-topic rule from `config/news_prefilter.yaml` (e.g. content-moderation/child-safety stories, unrelated crypto-theft wire stories) -- zero LLM cost, logged, and deliberately conservative: anything not an exact match still flows through to Scoring rather than being silently dropped.
+   - `src/news_events.py` clusters candidates into events by local title-similarity (`cluster_candidates_local`) — this collapses multi-outlet coverage of the same story into one representative before scoring, but only catches near-identical titles (see the TopDedup note below for what it misses).
    - `src/news_candidates.py` builds the final Stage B candidate pool passed to the LLM.
-   - `src/news_scoring.py` (`score_candidates`) is the **only** LLM call in the news path: sends candidate text + `config/news_focus.yaml` focus rules to 灵眸 (an OpenAI-SDK-compatible endpoint, model `gpt-5.6-terra`, JSON output, `reasoning_effort` instead of `temperature`). The model returns only candidate IDs + score/category/translation — it never invents URLs; those are mapped back from the RSS-fetched originals.
-   - Selection of the top N (`NEWS_TOP_N = 10` in `src/main.py`) is done by code (`_select_top_news`: sort by score desc, stable order for ties), not by the model.
-   - `src/news_snapshot.py` persists the exact Stage B input (`data/news_snapshots/YYYY-MM-DD.json`) before scoring, fail-fast — this is what `--stage-b-snapshot` replays against.
-   - If no API key or the LLM call fails entirely, `rule_based_top_news` provides a pure-code fallback ranking rather than an empty news section.
+   - `src/news_scoring.py` (`score_candidates`) sends candidate text + `config/news_focus.yaml` focus rules to 灵眸 (an OpenAI-SDK-compatible endpoint, model `gpt-5.6-terra`, JSON output, `reasoning_effort` instead of `temperature`). The model returns only candidate IDs + score/category/translation — it never invents URLs; those are mapped back from the RSS-fetched originals.
+   - `src/news_top_dedup.py` (`dedupe_top_candidates`) is a second, bounded LLM call over only the top ~25 scored candidates: pure text-similarity clustering cannot tell that two very differently worded headlines describe the same real-world event/announcement (confirmed on real 2026-09-09 data), so this stage asks the model directly, scoped narrowly enough that it never reopens the old full-pool multi-stage cost problem. It never removes a candidate from Scoring's output or "更多新闻" -- it only decides who additionally gets a "今日重要新闻" slot.
+   - Selection of the top N (`NEWS_TOP_N = 10` in `src/main.py`) is done by code (`_select_top_news`: sort by score desc, stable order for ties, after TopDedup's near-duplicates are excluded), not by the model.
+   - `src/news_snapshot.py` persists the exact Stage B input (`data/news_snapshots/YYYY-MM-DD.json`) before scoring, fail-fast — this is what `--stage-b-snapshot` replays against (pre-TopDedup, since that snapshot is Scoring's input, not the final selection).
+   - If no API key or the LLM call fails entirely, `rule_based_top_news` provides a pure-code fallback ranking rather than an empty news section (TopDedup does not run on this path).
 
 4. **Market summary** (`src/market_summary.py`) — the second and last LLM call, generates the narrative summary from already-computed market/breadth/news data.
 
@@ -84,6 +86,7 @@ Page-level status (`ok`/`partial`/`critical`) is derived from `validity_summary`
 - `config/drawdown_rules.yaml` — total reserve, 70/30 pool split, per-tier thresholds/ratios.
 - `config/news_sources.yaml` — RSS URLs with P0/P1/P2 priority.
 - `config/news_focus.yaml` — focus text sent to the scoring LLM.
+- `config/news_prefilter.yaml` — narrow, zero-LLM-cost off-topic exclusion rules applied before clustering/scoring (see `src/news_prefilter.py`).
 - `config/market_breadth.yaml` — S&P 500 constituent reference file location and sector-breadth minimums.
 
 ## CI

@@ -40,6 +40,7 @@ _CATEGORY_BY_ALLOWED_CATEGORY = {
     # previously mismapped to "地缘政治与风险事件", which made routine US
     # financial-market/regulatory news display as a geopolitical risk event.
     "政策 / 监管": "宏观 / 利率",
+    "公司新闻 / 其他": CATEGORY_OTHER,
 }
 
 # A candidate scoring never returned a result for (dropped as invalid, or its
@@ -97,4 +98,12 @@ def build_news_candidates(scored_candidates: list[dict], selected_news: list[dic
             "reason": item.get("reason", ""),
             "selected": candidate_id in selected_ids,
         })
+    # Score descending (unscored last) so each category group in the "more
+    # news" drawer reads highest-relevance-first instead of raw fetch order --
+    # the drawer keeps every candidate for calibration, but an unsorted list
+    # of 100+ items reads as noise regardless of how complete it is.
+    candidates.sort(
+        key=lambda item: (item["score"] is not None, item["score"] if item["score"] is not None else -1),
+        reverse=True,
+    )
     return candidates

@@ -180,10 +180,6 @@
         <div class="news-title"><a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.title_zh }}</a></div>
         <div class="news-desc">{{ item.summary_zh }}</div>
       </div>
-      <div class="impact">
-        <div class="impact-label">市场影响：</div>
-        {% if item.get('tags') %}<div class="chips">{% for tag in item.get('tags') %}<span class="chip">{{ tag }}</span>{% endfor %}</div>{% endif %}
-      </div>
     </div>
     {% endfor %}
     {% else %}

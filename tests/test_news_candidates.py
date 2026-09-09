@@ -66,6 +66,18 @@ def test_unscored_candidate_falls_back_to_topic_group_bucket():
     assert result[0]["selected"] is False
 
 
+def test_company_news_other_category_buckets_to_other():
+    """Regression: before this category existed, Scoring had no legitimate
+    bucket for single-company news outside the tracked mega-cap list (e.g.
+    "礼来表现抗跌，波音交付数据喜忧参半"), so it got miscategorized as
+    macro/rates content instead."""
+    candidates = [scored_candidate("a", "OTHER_SYSTEMIC", category="公司新闻 / 其他")]
+
+    result = build_news_candidates(candidates, [])
+
+    assert result[0]["category"] == "其他"
+
+
 def test_unmapped_topic_group_falls_back_to_other_without_fabricating_a_category():
     candidates = [scored_candidate("a", None, category=None)]
 
@@ -142,3 +154,19 @@ def test_unscored_candidate_falls_back_to_english_title_and_summary():
 
 def test_empty_pool_yields_empty_candidate_list():
     assert build_news_candidates([], []) == []
+
+
+def test_more_news_drawer_sorts_by_score_descending_unscored_last():
+    """Regression: the "更多新闻" drawer used to preserve raw clustering/fetch
+    order, so a 79-scored candidate and a 1-scored one appeared in arbitrary
+    order within the same category -- reads as noise once the pool is large."""
+    candidates = [
+        scored_candidate("low", "OTHER_SYSTEMIC", category=None, score=5),
+        scored_candidate("unscored", "OTHER_SYSTEMIC", category=None, score=None),
+        scored_candidate("high", "OTHER_SYSTEMIC", category=None, score=79),
+        scored_candidate("mid", "OTHER_SYSTEMIC", category=None, score=40),
+    ]
+
+    result = build_news_candidates(candidates, [])
+
+    assert [item["candidate_id"] for item in result] == ["high", "mid", "low", "unscored"]
