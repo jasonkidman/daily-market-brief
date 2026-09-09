@@ -1,0 +1,1835 @@
+{
+  "report_date": "2026-09-08",
+  "generated_at": "2026-09-08 13:28 CST",
+  "market_date": "2026-09-04",
+  "status": "partial",
+  "status_label": "🟠 部分数据源异常",
+  "market_data_valid": true,
+  "core_market_valid": true,
+  "context_market_valid": true,
+  "drawdown_market_valid": true,
+  "market": {
+    "sp500": {
+      "market_date": "2026-09-04",
+      "close": 7718.60009765625,
+      "daily_return": -0.0037572216084515997,
+      "ytd_return": 0.12754365607424578,
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "drawdown": 0.010307762197780512,
+      "name": "S&P 500",
+      "ticker": "^GSPC",
+      "valid": true,
+      "sparkline": {
+        "line": "M0.0,39.16 L14.48,37.74 L28.97,48.0 L43.45,36.93 L57.93,32.18 L72.41,22.09 L86.9,9.69 L101.38,10.87 L115.86,12.11 L130.34,7.77 L144.83,8.18 L159.31,10.45 L173.79,8.6 L188.28,4.0 L202.76,5.21 L217.24,8.91 L231.72,13.77 L246.21,12.29 L260.69,18.38 L275.17,15.36 L289.66,17.32 L304.14,15.09 L318.62,15.24 L333.1,10.2 L347.59,11.95 L362.07,14.28 L376.55,19.27 L391.03,16.06 L405.52,8.67 L420.0,11.33",
+        "area": "M0.0,39.16 L14.48,37.74 L28.97,48.0 L43.45,36.93 L57.93,32.18 L72.41,22.09 L86.9,9.69 L101.38,10.87 L115.86,12.11 L130.34,7.77 L144.83,8.18 L159.31,10.45 L173.79,8.6 L188.28,4.0 L202.76,5.21 L217.24,8.91 L231.72,13.77 L246.21,12.29 L260.69,18.38 L275.17,15.36 L289.66,17.32 L304.14,15.09 L318.62,15.24 L333.1,10.2 L347.59,11.95 L362.07,14.28 L376.55,19.27 L391.03,16.06 L405.52,8.67 L420.0,11.33 L420.0,52 L0.0,52 Z",
+        "points": [
+          {
+            "x": 0.0,
+            "y": 39.16,
+            "date": "2026-07-27",
+            "close": 7413.1802,
+            "change": null
+          },
+          {
+            "x": 14.48,
+            "y": 37.74,
+            "date": "2026-07-28",
+            "close": 7428.7798,
+            "change": 0.002104
+          },
+          {
+            "x": 28.97,
+            "y": 48.0,
+            "date": "2026-07-29",
+            "close": 7316.1499,
+            "change": -0.015161
+          },
+          {
+            "x": 43.45,
+            "y": 36.93,
+            "date": "2026-07-30",
+            "close": 7437.6299,
+            "change": 0.016604
+          },
+          {
+            "x": 57.93,
+            "y": 32.18,
+            "date": "2026-07-31",
+            "close": 7489.7202,
+            "change": 0.007004
+          },
+          {
+            "x": 72.41,
+            "y": 22.09,
+            "date": "2026-08-03",
+            "close": 7600.5,
+            "change": 0.014791
+          },
+          {
+            "x": 86.9,
+            "y": 9.69,
+            "date": "2026-08-04",
+            "close": 7736.52,
+            "change": 0.017896
+          },
+          {
+            "x": 101.38,
+            "y": 10.87,
+            "date": "2026-08-05",
+            "close": 7723.5498,
+            "change": -0.001676
+          },
+          {
+            "x": 115.86,
+            "y": 12.11,
+            "date": "2026-08-06",
+            "close": 7709.96,
+            "change": -0.00176
+          },
+          {
+            "x": 130.34,
+            "y": 7.77,
+            "date": "2026-08-07",
+            "close": 7757.6401,
+            "change": 0.006184
+          },
+          {
+            "x": 144.83,
+            "y": 8.18,
+            "date": "2026-08-10",
+            "close": 7753.1099,
+            "change": -0.000584
+          },
+          {
+            "x": 159.31,
+            "y": 10.45,
+            "date": "2026-08-11",
+            "close": 7728.2002,
+            "change": -0.003213
+          },
+          {
+            "x": 173.79,
+            "y": 8.6,
+            "date": "2026-08-12",
+            "close": 7748.5,
+            "change": 0.002627
+          },
+          {
+            "x": 188.28,
+            "y": 4.0,
+            "date": "2026-08-13",
+            "close": 7798.9902,
+            "change": 0.006516
+          },
+          {
+            "x": 202.76,
+            "y": 5.21,
+            "date": "2026-08-14",
+            "close": 7785.7598,
+            "change": -0.001696
+          },
+          {
+            "x": 217.24,
+            "y": 8.91,
+            "date": "2026-08-17",
+            "close": 7745.0601,
+            "change": -0.005227
+          },
+          {
+            "x": 231.72,
+            "y": 13.77,
+            "date": "2026-08-18",
+            "close": 7691.7598,
+            "change": -0.006882
+          },
+          {
+            "x": 246.21,
+            "y": 12.29,
+            "date": "2026-08-19",
+            "close": 7707.98,
+            "change": 0.002109
+          },
+          {
+            "x": 260.69,
+            "y": 18.38,
+            "date": "2026-08-20",
+            "close": 7641.1602,
+            "change": -0.008669
+          },
+          {
+            "x": 275.17,
+            "y": 15.36,
+            "date": "2026-08-21",
+            "close": 7674.3701,
+            "change": 0.004346
+          },
+          {
+            "x": 289.66,
+            "y": 17.32,
+            "date": "2026-08-24",
+            "close": 7652.8599,
+            "change": -0.002803
+          },
+          {
+            "x": 304.14,
+            "y": 15.09,
+            "date": "2026-08-25",
+            "close": 7677.2798,
+            "change": 0.003191
+          },
+          {
+            "x": 318.62,
+            "y": 15.24,
+            "date": "2026-08-26",
+            "close": 7675.7002,
+            "change": -0.000206
+          },
+          {
+            "x": 333.1,
+            "y": 10.2,
+            "date": "2026-08-27",
+            "close": 7730.9902,
+            "change": 0.007203
+          },
+          {
+            "x": 347.59,
+            "y": 11.95,
+            "date": "2026-08-28",
+            "close": 7711.7598,
+            "change": -0.002487
+          },
+          {
+            "x": 362.07,
+            "y": 14.28,
+            "date": "2026-08-31",
+            "close": 7686.1401,
+            "change": -0.003322
+          },
+          {
+            "x": 376.55,
+            "y": 19.27,
+            "date": "2026-09-01",
+            "close": 7631.4702,
+            "change": -0.007113
+          },
+          {
+            "x": 391.03,
+            "y": 16.06,
+            "date": "2026-09-02",
+            "close": 7666.6001,
+            "change": 0.004603
+          },
+          {
+            "x": 405.52,
+            "y": 8.67,
+            "date": "2026-09-03",
+            "close": 7747.71,
+            "change": 0.01058
+          },
+          {
+            "x": 420.0,
+            "y": 11.33,
+            "date": "2026-09-04",
+            "close": 7718.6001,
+            "change": -0.003757
+          }
+        ]
+      }
+    },
+    "nasdaq100": {
+      "market_date": "2026-09-04",
+      "close": 29544.150390625,
+      "daily_return": 0.002097191722687519,
+      "ytd_return": 0.1700723310310559,
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "drawdown": 0.03641315672145651,
+      "name": "Nasdaq-100",
+      "ticker": "^NDX",
+      "valid": true,
+      "sparkline": {
+        "line": "M0.0,35.12 L14.48,39.32 L28.97,48.0 L43.45,34.09 L57.93,31.54 L72.41,23.89 L86.9,9.35 L101.38,13.08 L115.86,14.82 L130.34,9.51 L144.83,11.04 L159.31,12.5 L173.79,9.2 L188.28,4.0 L202.76,4.58 L217.24,5.36 L231.72,13.03 L246.21,14.02 L260.69,17.26 L275.17,15.8 L289.66,20.15 L304.14,17.32 L318.62,17.08 L333.1,10.74 L347.59,13.9 L362.07,13.55 L376.55,19.32 L391.03,18.32 L405.52,13.16 L420.0,12.22",
+        "area": "M0.0,35.12 L14.48,39.32 L28.97,48.0 L43.45,34.09 L57.93,31.54 L72.41,23.89 L86.9,9.35 L101.38,13.08 L115.86,14.82 L130.34,9.51 L144.83,11.04 L159.31,12.5 L173.79,9.2 L188.28,4.0 L202.76,4.58 L217.24,5.36 L231.72,13.03 L246.21,14.02 L260.69,17.26 L275.17,15.8 L289.66,20.15 L304.14,17.32 L318.62,17.08 L333.1,10.74 L347.59,13.9 L362.07,13.55 L376.55,19.32 L391.03,18.32 L405.52,13.16 L420.0,12.22 L420.0,52 L0.0,52 Z",
+        "points": [
+          {
+            "x": 0.0,
+            "y": 35.12,
+            "date": "2026-07-27",
+            "close": 28039.2109,
+            "change": null
+          },
+          {
+            "x": 14.48,
+            "y": 39.32,
+            "date": "2026-07-28",
+            "close": 27763.1309,
+            "change": -0.009846
+          },
+          {
+            "x": 28.97,
+            "y": 48.0,
+            "date": "2026-07-29",
+            "close": 27192.3105,
+            "change": -0.02056
+          },
+          {
+            "x": 43.45,
+            "y": 34.09,
+            "date": "2026-07-30",
+            "close": 28106.3496,
+            "change": 0.033614
+          },
+          {
+            "x": 57.93,
+            "y": 31.54,
+            "date": "2026-07-31",
+            "close": 28274.1992,
+            "change": 0.005972
+          },
+          {
+            "x": 72.41,
+            "y": 23.89,
+            "date": "2026-08-03",
+            "close": 28776.8008,
+            "change": 0.017776
+          },
+          {
+            "x": 86.9,
+            "y": 9.35,
+            "date": "2026-08-04",
+            "close": 29733.1602,
+            "change": 0.033234
+          },
+          {
+            "x": 101.38,
+            "y": 13.08,
+            "date": "2026-08-05",
+            "close": 29487.7891,
+            "change": -0.008252
+          },
+          {
+            "x": 115.86,
+            "y": 14.82,
+            "date": "2026-08-06",
+            "close": 29373.3301,
+            "change": -0.003882
+          },
+          {
+            "x": 130.34,
+            "y": 9.51,
+            "date": "2026-08-07",
+            "close": 29722.3008,
+            "change": 0.011881
+          },
+          {
+            "x": 144.83,
+            "y": 11.04,
+            "date": "2026-08-10",
+            "close": 29621.8008,
+            "change": -0.003381
+          },
+          {
+            "x": 159.31,
+            "y": 12.5,
+            "date": "2026-08-11",
+            "close": 29525.4805,
+            "change": -0.003252
+          },
+          {
+            "x": 173.79,
+            "y": 9.2,
+            "date": "2026-08-12",
+            "close": 29742.5996,
+            "change": 0.007354
+          },
+          {
+            "x": 188.28,
+            "y": 4.0,
+            "date": "2026-08-13",
+            "close": 30084.5,
+            "change": 0.011495
+          },
+          {
+            "x": 202.76,
+            "y": 4.58,
+            "date": "2026-08-14",
+            "close": 30046.1406,
+            "change": -0.001275
+          },
+          {
+            "x": 217.24,
+            "y": 5.36,
+            "date": "2026-08-17",
+            "close": 29995.3809,
+            "change": -0.001689
+          },
+          {
+            "x": 231.72,
+            "y": 13.03,
+            "date": "2026-08-18",
+            "close": 29490.9609,
+            "change": -0.016817
+          },
+          {
+            "x": 246.21,
+            "y": 14.02,
+            "date": "2026-08-19",
+            "close": 29426.0195,
+            "change": -0.002202
+          },
+          {
+            "x": 260.69,
+            "y": 17.26,
+            "date": "2026-08-20",
+            "close": 29213.1602,
+            "change": -0.007234
+          },
+          {
+            "x": 275.17,
+            "y": 15.8,
+            "date": "2026-08-21",
+            "close": 29308.8594,
+            "change": 0.003276
+          },
+          {
+            "x": 289.66,
+            "y": 20.15,
+            "date": "2026-08-24",
+            "close": 29023.1797,
+            "change": -0.009747
+          },
+          {
+            "x": 304.14,
+            "y": 17.32,
+            "date": "2026-08-25",
+            "close": 29209.2305,
+            "change": 0.00641
+          },
+          {
+            "x": 318.62,
+            "y": 17.08,
+            "date": "2026-08-26",
+            "close": 29224.5195,
+            "change": 0.000523
+          },
+          {
+            "x": 333.1,
+            "y": 10.74,
+            "date": "2026-08-27",
+            "close": 29641.5605,
+            "change": 0.01427
+          },
+          {
+            "x": 347.59,
+            "y": 13.9,
+            "date": "2026-08-28",
+            "close": 29433.4297,
+            "change": -0.007022
+          },
+          {
+            "x": 362.07,
+            "y": 13.55,
+            "date": "2026-08-31",
+            "close": 29456.9707,
+            "change": 0.0008
+          },
+          {
+            "x": 376.55,
+            "y": 19.32,
+            "date": "2026-09-01",
+            "close": 29077.2207,
+            "change": -0.012892
+          },
+          {
+            "x": 391.03,
+            "y": 18.32,
+            "date": "2026-09-02",
+            "close": 29143.3301,
+            "change": 0.002274
+          },
+          {
+            "x": 405.52,
+            "y": 13.16,
+            "date": "2026-09-03",
+            "close": 29482.3203,
+            "change": 0.011632
+          },
+          {
+            "x": 420.0,
+            "y": 12.22,
+            "date": "2026-09-04",
+            "close": 29544.1504,
+            "change": 0.002097
+          }
+        ]
+      }
+    },
+    "dow": {
+      "market_date": "2026-09-04",
+      "close": 53414.25,
+      "daily_return": -0.0050638680687596915,
+      "ytd_return": 0.11133155973869746,
+      "ath": 54349.12109375,
+      "ath_date": "2026-08-05",
+      "drawdown": 0.017201218252221318,
+      "name": "Dow Jones",
+      "ticker": "^DJI",
+      "valid": true,
+      "sparkline": {
+        "line": "M0.0,38.16 L14.48,29.58 L28.97,48.0 L43.45,38.2 L57.93,33.77 L72.41,22.7 L86.9,8.2 L101.38,4.0 L115.86,11.41 L130.34,8.99 L144.83,9.96 L159.31,12.9 L173.79,13.24 L188.28,12.13 L202.76,13.85 L217.24,18.2 L231.72,20.06 L246.21,18.15 L260.69,29.39 L275.17,21.12 L289.66,18.88 L304.14,16.33 L318.62,18.14 L333.1,16.45 L347.59,16.6 L362.07,22.58 L376.55,29.27 L391.03,24.56 L405.52,14.59 L420.0,18.93",
+        "area": "M0.0,38.16 L14.48,29.58 L28.97,48.0 L43.45,38.2 L57.93,33.77 L72.41,22.7 L86.9,8.2 L101.38,4.0 L115.86,11.41 L130.34,8.99 L144.83,9.96 L159.31,12.9 L173.79,13.24 L188.28,12.13 L202.76,13.85 L217.24,18.2 L231.72,20.06 L246.21,18.15 L260.69,29.39 L275.17,21.12 L289.66,18.88 L304.14,16.33 L318.62,18.14 L333.1,16.45 L347.59,16.6 L362.07,22.58 L376.55,29.27 L391.03,24.56 L405.52,14.59 L420.0,18.93 L420.0,52 L0.0,52 Z",
+        "points": [
+          {
+            "x": 0.0,
+            "y": 38.16,
+            "date": "2026-07-27",
+            "close": 52210.0781,
+            "change": null
+          },
+          {
+            "x": 14.48,
+            "y": 29.58,
+            "date": "2026-07-28",
+            "close": 52747.3203,
+            "change": 0.01029
+          },
+          {
+            "x": 28.97,
+            "y": 48.0,
+            "date": "2026-07-29",
+            "close": 51594.1406,
+            "change": -0.021862
+          },
+          {
+            "x": 43.45,
+            "y": 38.2,
+            "date": "2026-07-30",
+            "close": 52208.0586,
+            "change": 0.011899
+          },
+          {
+            "x": 57.93,
+            "y": 33.77,
+            "date": "2026-07-31",
+            "close": 52485.0312,
+            "change": 0.005305
+          },
+          {
+            "x": 72.41,
+            "y": 22.7,
+            "date": "2026-08-03",
+            "close": 53178.4102,
+            "change": 0.013211
+          },
+          {
+            "x": 86.9,
+            "y": 8.2,
+            "date": "2026-08-04",
+            "close": 54085.8789,
+            "change": 0.017065
+          },
+          {
+            "x": 101.38,
+            "y": 4.0,
+            "date": "2026-08-05",
+            "close": 54349.1211,
+            "change": 0.004867
+          },
+          {
+            "x": 115.86,
+            "y": 11.41,
+            "date": "2026-08-06",
+            "close": 53885.1016,
+            "change": -0.008538
+          },
+          {
+            "x": 130.34,
+            "y": 8.99,
+            "date": "2026-08-07",
+            "close": 54036.9297,
+            "change": 0.002818
+          },
+          {
+            "x": 144.83,
+            "y": 9.96,
+            "date": "2026-08-10",
+            "close": 53975.9805,
+            "change": -0.001128
+          },
+          {
+            "x": 159.31,
+            "y": 12.9,
+            "date": "2026-08-11",
+            "close": 53791.8516,
+            "change": -0.003411
+          },
+          {
+            "x": 173.79,
+            "y": 13.24,
+            "date": "2026-08-12",
+            "close": 53770.2695,
+            "change": -0.000401
+          },
+          {
+            "x": 188.28,
+            "y": 12.13,
+            "date": "2026-08-13",
+            "close": 53839.9883,
+            "change": 0.001297
+          },
+          {
+            "x": 202.76,
+            "y": 13.85,
+            "date": "2026-08-14",
+            "close": 53732.4102,
+            "change": -0.001998
+          },
+          {
+            "x": 217.24,
+            "y": 18.2,
+            "date": "2026-08-17",
+            "close": 53459.7812,
+            "change": -0.005074
+          },
+          {
+            "x": 231.72,
+            "y": 20.06,
+            "date": "2026-08-18",
+            "close": 53343.3984,
+            "change": -0.002177
+          },
+          {
+            "x": 246.21,
+            "y": 18.15,
+            "date": "2026-08-19",
+            "close": 53463.0508,
+            "change": 0.002243
+          },
+          {
+            "x": 260.69,
+            "y": 29.39,
+            "date": "2026-08-20",
+            "close": 52759.2109,
+            "change": -0.013165
+          },
+          {
+            "x": 275.17,
+            "y": 21.12,
+            "date": "2026-08-21",
+            "close": 53277.0117,
+            "change": 0.009814
+          },
+          {
+            "x": 289.66,
+            "y": 18.88,
+            "date": "2026-08-24",
+            "close": 53417.1602,
+            "change": 0.002631
+          },
+          {
+            "x": 304.14,
+            "y": 16.33,
+            "date": "2026-08-25",
+            "close": 53577.3984,
+            "change": 0.003
+          },
+          {
+            "x": 318.62,
+            "y": 18.14,
+            "date": "2026-08-26",
+            "close": 53463.8789,
+            "change": -0.002119
+          },
+          {
+            "x": 333.1,
+            "y": 16.45,
+            "date": "2026-08-27",
+            "close": 53569.4414,
+            "change": 0.001974
+          },
+          {
+            "x": 347.59,
+            "y": 16.6,
+            "date": "2026-08-28",
+            "close": 53559.9883,
+            "change": -0.000176
+          },
+          {
+            "x": 362.07,
+            "y": 22.58,
+            "date": "2026-08-31",
+            "close": 53185.8984,
+            "change": -0.006985
+          },
+          {
+            "x": 376.55,
+            "y": 29.27,
+            "date": "2026-09-01",
+            "close": 52766.8789,
+            "change": -0.007878
+          },
+          {
+            "x": 391.03,
+            "y": 24.56,
+            "date": "2026-09-02",
+            "close": 53061.9492,
+            "change": 0.005592
+          },
+          {
+            "x": 405.52,
+            "y": 14.59,
+            "date": "2026-09-03",
+            "close": 53686.1094,
+            "change": 0.011763
+          },
+          {
+            "x": 420.0,
+            "y": 18.93,
+            "date": "2026-09-04",
+            "close": 53414.25,
+            "change": -0.005064
+          }
+        ]
+      }
+    }
+  },
+  "market_context": {
+    "russell2000": {
+      "market_date": "2026-09-04",
+      "close": 2975.64990234375,
+      "daily_return": 0.00248625723533924,
+      "name": "Russell 2000",
+      "ticker": "^RUT",
+      "valid": true
+    },
+    "vix": {
+      "market_date": "2026-09-07",
+      "close": 15.300000190734863,
+      "daily_return": 0.05299383839742289,
+      "name": "VIX",
+      "ticker": "^VIX",
+      "valid": true
+    },
+    "dxy": {
+      "market_date": "2026-09-08",
+      "close": 98.8030014038086,
+      "daily_return": -0.0036002646744274225,
+      "name": "美元指数",
+      "ticker": "DX-Y.NYB",
+      "valid": true
+    },
+    "us10y": {
+      "market_date": "2026-09-04",
+      "close": 4.783999919891357,
+      "yield_change_bp": 2.199983596801758,
+      "name": "10Y 美债",
+      "ticker": "^TNX",
+      "valid": true
+    },
+    "gold": {
+      "market_date": "2026-09-08",
+      "close": 4474.39990234375,
+      "daily_return": 0.010068197124631917,
+      "name": "黄金 (COMEX)",
+      "ticker": "GC=F",
+      "valid": true
+    },
+    "wti": {
+      "market_date": "2026-09-08",
+      "close": 93.16000366210938,
+      "daily_return": 0.018364672535273296,
+      "name": "原油 (WTI)",
+      "ticker": "CL=F",
+      "valid": true
+    }
+  },
+  "market_signals": {
+    "tech_relative": 0.005854413331139119,
+    "small_cap_relative": 0.0062434788437908395,
+    "vix_daily_return": 0.05299383839742289,
+    "dxy_daily_return": -0.0036002646744274225,
+    "us10y_bp_change": 2.199983596801758,
+    "signals": [
+      {
+        "key": "tech_relative",
+        "value": 0.005854413331139119,
+        "level": "significant",
+        "message": "Nasdaq-100 比 S&P 500 领先 0.59 个百分点，科技/成长相对占优"
+      },
+      {
+        "key": "small_cap_relative",
+        "value": 0.0062434788437908395,
+        "level": "significant",
+        "message": "Russell 2000 比 S&P 500 领先 0.62 个百分点，小盘相对占优"
+      }
+    ]
+  },
+  "market_breadth": {
+    "market_date": "2026-09-04",
+    "stocks": {
+      "market_date": "2026-09-04",
+      "constituent_date": "2026-09-03",
+      "total_constituents": 505,
+      "valid_count": 503,
+      "invalid_count": 2,
+      "advancers": 175,
+      "decliners": 327,
+      "unchanged": 1,
+      "advance_ratio": 0.34791252485089463,
+      "decline_ratio": 0.6500994035785288,
+      "unchanged_ratio": 0.0019880715705765406,
+      "coverage_ratio": 0.996039603960396,
+      "status": "ok"
+    },
+    "sectors": {
+      "market_date": "2026-09-04",
+      "items": [
+        {
+          "key": "technology",
+          "name": "科技",
+          "ticker": "XLK",
+          "valid": true,
+          "daily_return": 0.007044133731219926,
+          "direction": "up",
+          "bar_strength": 0.23480445770733088
+        },
+        {
+          "key": "industrials",
+          "name": "工业",
+          "ticker": "XLI",
+          "valid": true,
+          "daily_return": 0.004067407904430498,
+          "direction": "up",
+          "bar_strength": 0.1355802634810166
+        },
+        {
+          "key": "utilities",
+          "name": "公用事业",
+          "ticker": "XLU",
+          "valid": true,
+          "daily_return": 0.0011620509685412728,
+          "direction": "up",
+          "bar_strength": 0.03873503228470909
+        },
+        {
+          "key": "materials",
+          "name": "材料",
+          "ticker": "XLB",
+          "valid": true,
+          "daily_return": -0.0034207584346169773,
+          "direction": "down",
+          "bar_strength": 0.11402528115389925
+        },
+        {
+          "key": "real_estate",
+          "name": "房地产",
+          "ticker": "XLRE",
+          "valid": true,
+          "daily_return": -0.007231631521451232,
+          "direction": "down",
+          "bar_strength": 0.2410543840483744
+        },
+        {
+          "key": "financials",
+          "name": "金融",
+          "ticker": "XLF",
+          "valid": true,
+          "daily_return": -0.007855240580300404,
+          "direction": "down",
+          "bar_strength": 0.2618413526766802
+        },
+        {
+          "key": "consumer_staples",
+          "name": "必需消费",
+          "ticker": "XLP",
+          "valid": true,
+          "daily_return": -0.007975607414239305,
+          "direction": "down",
+          "bar_strength": 0.2658535804746435
+        },
+        {
+          "key": "energy",
+          "name": "能源",
+          "ticker": "XLE",
+          "valid": true,
+          "daily_return": -0.00866612757948082,
+          "direction": "down",
+          "bar_strength": 0.2888709193160274
+        },
+        {
+          "key": "health_care",
+          "name": "医疗保健",
+          "ticker": "XLV",
+          "valid": true,
+          "daily_return": -0.010446713701831145,
+          "direction": "down",
+          "bar_strength": 0.3482237900610382
+        },
+        {
+          "key": "communication_services",
+          "name": "通信服务",
+          "ticker": "XLC",
+          "valid": true,
+          "daily_return": -0.011906848710744655,
+          "direction": "down",
+          "bar_strength": 0.39689495702482186
+        },
+        {
+          "key": "consumer_discretionary",
+          "name": "非必需消费",
+          "ticker": "XLY",
+          "valid": true,
+          "daily_return": -0.013309251541716138,
+          "direction": "down",
+          "bar_strength": 0.44364171805720465
+        }
+      ],
+      "valid_count": 11,
+      "advancers": 3,
+      "decliners": 8,
+      "unchanged": 0,
+      "advance_ratio": 0.2727272727272727
+    },
+    "health": {
+      "valid": true,
+      "score": 0.31783842400144585,
+      "level": "weak",
+      "label": "市场偏弱",
+      "divergence": null,
+      "summary": "多数股票或板块表现偏弱，市场参与度下降。"
+    }
+  },
+  "market_sentiment": {
+    "vix_score": 73.5,
+    "breadth_score": 31.8,
+    "momentum_score": 47.2,
+    "risk_appetite_score": 81.2,
+    "market_sentiment_score": 56.9,
+    "market_sentiment_label": "中性"
+  },
+  "drawdown": {
+    "sp500": {
+      "index": "sp500",
+      "name": "S&P 500",
+      "cycle_id": "sp500-2026-08-13-77989902",
+      "started_at": "2026-08-14T10:42:09.022326+08:00",
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "last_market_date": "2026-09-04",
+      "last_updated_at": "2026-09-08T13:28:25.812177+08:00",
+      "current_close": 7718.60009765625,
+      "current_drawdown": 0.010307762197780512,
+      "pool": 140000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.1,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.15,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.25,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 140000,
+      "next_threshold": 0.1,
+      "distance_to_next": 0.0896922378022195,
+      "status": "normal",
+      "status_label": "🟢 未触发",
+      "already_invested": 0,
+      "suggested_amount": 0
+    },
+    "nasdaq100": {
+      "index": "nasdaq100",
+      "name": "Nasdaq-100",
+      "cycle_id": "nasdaq100-2026-06-02-306605996",
+      "started_at": "2026-08-12T10:00:00+08:00",
+      "ath": 30660.599609375,
+      "ath_date": "2026-06-02",
+      "last_market_date": "2026-09-04",
+      "last_updated_at": "2026-09-08T13:28:25.812177+08:00",
+      "current_close": 29544.150390625,
+      "current_drawdown": 0.03641315672145651,
+      "pool": 60000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.15,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.3,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.4,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "pending_tiers": [],
+      "executed_tiers": [],
+      "pending_amount": 0,
+      "executed_amount": 0,
+      "remaining_amount": 60000,
+      "next_threshold": 0.15,
+      "distance_to_next": 0.11358684327854349,
+      "status": "normal",
+      "status_label": "🟢 未触发",
+      "already_invested": 7500,
+      "suggested_amount": 0
+    }
+  },
+  "reserve": {
+    "total": 200000,
+    "remaining": 192500,
+    "used": 7500,
+    "ratio": 0.9625
+  },
+  "discipline": {
+    "monthly_dca": 10000,
+    "holding_years_min": 20
+  },
+  "portfolio_action": "hold",
+  "market_summary": {
+    "summary": "今日新闻主线集中在地缘与贸易风险：美国能源部长称伊朗核协议可能无法达成，加拿大拟对数百种美国商品加征最高50%的关税；与此同时，铜价因供应紧张与关税预期连续创纪录高位，相关定价显示商品与通胀扰动仍受关注。跨资产表现较为分化，随后可用数据中10年期美债收益率上升2.2个基点，美元指数下跌0.36%，VIX上升5.3%，黄金和WTI原油分别上涨1.01%和1.84%。美股内部同样缺乏一致性，标普500下跌0.38%至7718.60点，而纳斯达克100逆势上涨0.21%，科技板块上涨0.70%，并较标普领先0.59个百分点；但标普成分股仅175家上涨、327家下跌，金融、能源、医疗和非必需消费等板块走弱。当前市场更接近高位震荡、宽度偏弱且科技相对占优的阶段，尚未显示为全面回撤结构。",
+    "action": "未触发额外回撤加仓，维持正常定投，备用金保持不动。",
+    "degraded": false
+  },
+  "news": [
+    {
+      "rank": 1,
+      "candidate_id": "4ca73037d8455bc0",
+      "category": "AI / 资本开支",
+      "title_zh": "Mistral获三星领投，估值升至240亿美元",
+      "summary_zh": "欧洲AI公司Mistral在三星领投的融资后估值达到240亿美元，并押注开放权重模型与OpenAI、Anthropic竞争。",
+      "focus": "后续关注融资规模、模型商业化进展及与三星的产业合作",
+      "tags": [
+        "Mistral",
+        "AI融资",
+        "开放权重模型",
+        "三星"
+      ],
+      "investment_relevance_score": 78,
+      "source": "CNBC Top News",
+      "url": "https://www.cnbc.com/2026/09/08/mistral-ai-funding-valuation-samsung.html",
+      "published_at": "2026-09-08T05:00:01+00:00",
+      "original_title": "Mistral bags $24 billion valuation as Samsung leads funding for Europe's AI champion",
+      "selection_reason": "AI产业：重要AI公司获得超大规模融资并达到240亿美元估值，涉及开放权重模型竞争格局与重大投资。",
+      "event_summary": "Mistral bags $24 billion valuation as Samsung leads funding for Europe's AI champion",
+      "topic_group": "AI_CHIPS",
+      "event_category": "high_tech",
+      "source_channel": null,
+      "selection_mode": "ai"
+    },
+    {
+      "rank": 2,
+      "candidate_id": "8705c8f414f4db2c",
+      "category": "美国经济",
+      "title_zh": "铜价连续创纪录，供应紧张与美国关税预期推升价格",
+      "summary_zh": "铜价连续第二个交易日创纪录高位，摘要称短期供应紧张以及美国可能对精炼铜进口征收关税的预期共同推动涨势。",
+      "focus": "美国精炼铜关税政策是否落地及铜供应收紧能否持续",
+      "tags": [
+        "铜价",
+        "美国关税",
+        "工业成本"
+      ],
+      "investment_relevance_score": 78,
+      "source": "Bloomberg Markets",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-08/copper-ascends-to-new-heights-on-tight-supply-and-tariff-fears",
+      "published_at": "2026-09-08T03:09:18+00:00",
+      "original_title": "Copper Ascends to New Heights on Tight Supply and Tariff Fears",
+      "selection_reason": "美国市场相关性：精炼铜供应收紧推动价格连续创纪录；摘要同时指向美国精炼铜关税预期，关联美国贸易政策与工业成本。",
+      "event_summary": "Copper Ascends to New Heights on Tight Supply and Tariff Fears",
+      "topic_group": "US_MARKET_MACRO",
+      "event_category": "macro_policy",
+      "source_channel": null,
+      "selection_mode": "ai"
+    },
+    {
+      "rank": 3,
+      "candidate_id": "033a8d954c64d876",
+      "category": "地缘政治",
+      "title_zh": "美国能源部长表示伊朗核协议可能无法达成。",
+      "summary_zh": "美国能源部长表示伊朗核协议可能无法达成。",
+      "focus": "",
+      "tags": [],
+      "investment_relevance_score": null,
+      "source": "CNBC Top News",
+      "url": "https://www.cnbc.com/2026/09/06/iran-us-response-oil-tanker-strikes.html",
+      "published_at": "2026-09-07T07:35:18+00:00",
+      "original_title": "U.S. Energy Secretary Wright says Iran nuclear deal may never happen",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「geopolitics_region_and_market_transmission」 | composite_score=8 (priority_base=6, importance_score=2, source_penalty=2, signals=geopolitics_policy)",
+      "event_summary": "美国能源部长表示伊朗核协议可能无法达成。",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other",
+      "source_channel": null,
+      "fallback": true,
+      "selection_mode": "deterministic_fallback"
+    },
+    {
+      "rank": 4,
+      "candidate_id": "5876942c5523608c",
+      "category": "地缘政治",
+      "title_zh": "伊朗外交部批评加拿大支持美国在霍尔木兹海峡采取的行动。",
+      "summary_zh": "伊朗外交部批评加拿大支持美国在霍尔木兹海峡采取的行动。",
+      "focus": "",
+      "tags": [],
+      "investment_relevance_score": null,
+      "source": "CNBC Top News",
+      "url": "https://www.cnbc.com/2026/09/08/us-iran-war-trump-hormuz-canada-trade-talks-greenland.html",
+      "published_at": "2026-09-08T01:50:07+00:00",
+      "original_title": "Iran foreign ministry takes aim at Canada for support of U.S. actions in Strait of Hormuz",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「geopolitics_region_and_market_transmission」 | composite_score=8.25 (priority_base=6, importance_score=2, source_penalty=1.75, signals=geopolitics_policy)",
+      "event_summary": "伊朗外交部批评加拿大支持美国在霍尔木兹海峡采取的行动。",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other",
+      "source_channel": null,
+      "fallback": true,
+      "selection_mode": "deterministic_fallback"
+    },
+    {
+      "rank": 5,
+      "candidate_id": "78bf602e34fda248",
+      "category": "大型科技",
+      "title_zh": "苹果即将举行发布会，预计推出折叠屏iPhone并更新AirPods和HomePods。",
+      "summary_zh": "苹果即将举行发布会，预计推出折叠屏iPhone并更新AirPods和HomePods。",
+      "focus": "",
+      "tags": [],
+      "investment_relevance_score": null,
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/09/07/what-we-expect-from-the-upcoming-apple-launch/",
+      "published_at": "2026-09-07T15:58:00+00:00",
+      "original_title": "What we expect from the upcoming Apple launch",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「mega_cap_major_event」 | composite_score=11.75 (priority_base=6, importance_score=3, source_penalty=0.25, signals=mega_cap_tech)",
+      "event_summary": "苹果即将举行发布会，预计推出折叠屏iPhone并更新AirPods和HomePods。",
+      "topic_group": "MEGA_CAP_TECH",
+      "event_category": "other",
+      "source_channel": null,
+      "fallback": true,
+      "selection_mode": "deterministic_fallback"
+    },
+    {
+      "rank": 6,
+      "candidate_id": "8e4a5fd62629f31b",
+      "category": "美国经济",
+      "title_zh": "德国火箭初创公司Isar Aerospace在第二次试飞中成功进入轨道。",
+      "summary_zh": "德国火箭初创公司Isar Aerospace在第二次试飞中成功进入轨道。",
+      "focus": "",
+      "tags": [],
+      "investment_relevance_score": null,
+      "source": "CNBC Top News",
+      "url": "https://www.cnbc.com/2026/09/07/isar-aerospace-spacex-rival-rocket-launch.html",
+      "published_at": "2026-09-07T12:26:40+00:00",
+      "original_title": "SpaceX rival launches rocket in historic first, says industry is 'desperate' for more",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「mega_cap_major_event」 | composite_score=10.75 (priority_base=6, importance_score=3, source_penalty=1.25, signals=mega_cap_tech)",
+      "event_summary": "德国火箭初创公司Isar Aerospace在第二次试飞中成功进入轨道。",
+      "topic_group": "OTHER_SYSTEMIC",
+      "event_category": "other",
+      "source_channel": null,
+      "fallback": true,
+      "selection_mode": "deterministic_fallback"
+    },
+    {
+      "rank": 7,
+      "candidate_id": "d673a619b71c185e",
+      "category": "地缘政治",
+      "title_zh": "加拿大对数百种美国商品加征最高50%的关税。",
+      "summary_zh": "加拿大对数百种美国商品加征最高50%的关税。",
+      "focus": "",
+      "tags": [],
+      "investment_relevance_score": null,
+      "source": "Bloomberg Markets",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-08/the-asia-trade-9-8-2026-video",
+      "published_at": "2026-09-08T04:26:34+00:00",
+      "original_title": "Yen Rally Continues, Canada To Retaliate Against US Tariffs | The Asia Trade 9/8/2026",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「us_macro_fed_treasury」 | composite_score=9.5 (priority_base=6, importance_score=2, source_penalty=0.5, signals=geopolitics_policy)",
+      "event_summary": "加拿大对数百种美国商品加征最高50%的关税。",
+      "topic_group": "GEOPOLITICS",
+      "event_category": "other",
+      "source_channel": null,
+      "fallback": true,
+      "selection_mode": "deterministic_fallback"
+    },
+    {
+      "rank": 8,
+      "candidate_id": "eaaa1a84ab276c5b",
+      "category": "美国经济",
+      "title_zh": "俄罗斯继续乌克兰战争的迹象推动小麦价格上涨。",
+      "summary_zh": "俄罗斯继续乌克兰战争的迹象推动小麦价格上涨。",
+      "focus": "",
+      "tags": [],
+      "investment_relevance_score": null,
+      "source": "Bloomberg Markets",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-08/wheat-jumps-as-russia-focused-on-ukraine-war-despite-us-talks",
+      "published_at": "2026-09-08T02:29:12+00:00",
+      "original_title": "Wheat Jumps as Russia Focused on Ukraine War Despite US Talks",
+      "selection_reason": "确定性降级选取（AI 筛选失败）：命中高置信规则「geopolitics_region_and_market_transmission」 | composite_score=9.25 (priority_base=6, importance_score=2, source_penalty=0.75, signals=geopolitics_policy)",
+      "event_summary": "俄罗斯继续乌克兰战争的迹象推动小麦价格上涨。",
+      "topic_group": "ENERGY_COMMODITIES",
+      "event_category": "other",
+      "source_channel": null,
+      "fallback": true,
+      "selection_mode": "deterministic_fallback"
+    }
+  ],
+  "news_candidates": [
+    {
+      "candidate_id": "78bf602e34fda248",
+      "title": "What we expect from the upcoming Apple launch",
+      "title_zh": "苹果即将举行发布会，预计推出折叠屏iPhone并更新AirPods和HomePods。",
+      "source": "TechCrunch",
+      "published_at": "2026-09-07T15:58:00+00:00",
+      "summary": "While Apple's first foldable iPhone Ultra will headline the September 9 launch, we're also expecting news about AirPods and HomePods.",
+      "summary_zh": "苹果即将举行发布会，预计推出折叠屏iPhone并更新AirPods和HomePods。",
+      "url": "https://techcrunch.com/2026/09/07/what-we-expect-from-the-upcoming-apple-launch/",
+      "category": "大型科技",
+      "selected": true
+    },
+    {
+      "candidate_id": "8e4a5fd62629f31b",
+      "title": "SpaceX rival launches rocket in historic first, says industry is 'desperate' for more",
+      "title_zh": "德国火箭初创公司Isar Aerospace在第二次试飞中成功进入轨道。",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-07T12:26:40+00:00",
+      "summary": "Isar Aerospace reached orbit on its second test flight as the German rocket startup looks to scale production amid booming satellite launch demand.",
+      "summary_zh": "德国火箭初创公司Isar Aerospace在第二次试飞中成功进入轨道。",
+      "url": "https://www.cnbc.com/2026/09/07/isar-aerospace-spacex-rival-rocket-launch.html",
+      "category": "宏观 / 利率",
+      "selected": true
+    },
+    {
+      "candidate_id": "d673a619b71c185e",
+      "title": "Yen Rally Continues, Canada To Retaliate Against US Tariffs | The Asia Trade 9/8/2026",
+      "title_zh": "加拿大对数百种美国商品加征最高50%的关税。",
+      "source": "Bloomberg Markets",
+      "published_at": "2026-09-08T04:26:34+00:00",
+      "summary": "\"Bloomberg: The Asia Trade\" brings you everything you need to know to get ahead as the trading day begins in Asia. Bloomberg TV is live from Tokyo and Sydney with Paul Allen and Haidi Stroud-Watts, getting insight and analysis from newsmakers and industry leaders on the biggest stories shaping global markets. (Source: Bloomberg)",
+      "summary_zh": "加拿大对数百种美国商品加征最高50%的关税。",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-08/the-asia-trade-9-8-2026-video",
+      "category": "地缘政治与风险事件",
+      "selected": true
+    },
+    {
+      "candidate_id": "eaaa1a84ab276c5b",
+      "title": "Wheat Jumps as Russia Focused on Ukraine War Despite US Talks",
+      "title_zh": "俄罗斯继续乌克兰战争的迹象推动小麦价格上涨。",
+      "source": "Bloomberg Markets",
+      "published_at": "2026-09-08T02:29:12+00:00",
+      "summary": "Wheat surged the most in more than a week on signs Russia remains committed to continuing its war in Ukraine, heightening concerns about prolonged disruptions to grain shipments from the Black Sea.",
+      "summary_zh": "俄罗斯继续乌克兰战争的迹象推动小麦价格上涨。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-08/wheat-jumps-as-russia-focused-on-ukraine-war-despite-us-talks",
+      "category": "宏观 / 利率",
+      "selected": true
+    },
+    {
+      "candidate_id": "5876942c5523608c",
+      "title": "Iran foreign ministry takes aim at Canada for support of U.S. actions in Strait of Hormuz",
+      "title_zh": "伊朗外交部批评加拿大支持美国在霍尔木兹海峡采取的行动。",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-08T01:50:07+00:00",
+      "summary": "Canada had condemned Iran’s \"destabilizing actions\" in the Middle East, saying that it would work with partners to maintain significant pressure on Iran.",
+      "summary_zh": "伊朗外交部批评加拿大支持美国在霍尔木兹海峡采取的行动。",
+      "url": "https://www.cnbc.com/2026/09/08/us-iran-war-trump-hormuz-canada-trade-talks-greenland.html",
+      "category": "地缘政治与风险事件",
+      "selected": true
+    },
+    {
+      "candidate_id": "033a8d954c64d876",
+      "title": "U.S. Energy Secretary Wright says Iran nuclear deal may never happen",
+      "title_zh": "美国能源部长表示伊朗核协议可能无法达成。",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-07T07:35:18+00:00",
+      "summary": "Iran warned of faster, heavier retaliation against U.S. attacks while acknowledging the war’s mounting toll on its economy.",
+      "summary_zh": "美国能源部长表示伊朗核协议可能无法达成。",
+      "url": "https://www.cnbc.com/2026/09/06/iran-us-response-oil-tanker-strikes.html",
+      "category": "地缘政治与风险事件",
+      "selected": true
+    },
+    {
+      "candidate_id": "4ca73037d8455bc0",
+      "title": "Mistral bags $24 billion valuation as Samsung leads funding for Europe's AI champion",
+      "title_zh": "Mistral获三星领投，估值升至240亿美元",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-08T05:00:01+00:00",
+      "summary": "Mistral is betting on open-weight AI models to help it compete with players like OpenAI and Anthropic.",
+      "summary_zh": "欧洲AI公司Mistral在三星领投的融资后估值达到240亿美元，并押注开放权重模型与OpenAI、Anthropic竞争。",
+      "url": "https://www.cnbc.com/2026/09/08/mistral-ai-funding-valuation-samsung.html",
+      "category": "AI / 科技",
+      "selected": true
+    },
+    {
+      "candidate_id": "8705c8f414f4db2c",
+      "title": "Copper Ascends to New Heights on Tight Supply and Tariff Fears",
+      "title_zh": "铜价连续创纪录，供应紧张与美国关税预期推升价格",
+      "source": "Bloomberg Markets",
+      "published_at": "2026-09-08T03:09:18+00:00",
+      "summary": "Copper extended gains, hitting a record high for a second straight session, as tight near-term supplies and expectations the US will tariff imports of refined metal buoyed prices.",
+      "summary_zh": "铜价连续第二个交易日创纪录高位，摘要称短期供应紧张以及美国可能对精炼铜进口征收关税的预期共同推动涨势。",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-08/copper-ascends-to-new-heights-on-tight-supply-and-tariff-fears",
+      "category": "宏观 / 利率",
+      "selected": true
+    },
+    {
+      "candidate_id": "f3af1c0aa73068f9",
+      "title": "Japan’s Katayama Says Will Aim to Maintain Orderly FX Market",
+      "title_zh": "Japan’s Katayama Says Will Aim to Maintain Orderly FX Market",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-08T01:48:02+00:00",
+      "summary": "Japan’s stance on currencies hasn’t shifted since it conducted joint intervention with its US counterparts, and authorities will work to maintain orderly markets, Finance Minister Satsuki Katayama said after the yen strengthened briskly to its strongest level since February.",
+      "summary_zh": "Japan’s stance on currencies hasn’t shifted since it conducted joint intervention with its US counterparts, and authorities will work to maintain orderly markets, Finance Minister Satsuki Katayama said after the yen strengthened briskly to its strongest level since February.",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-08/japan-s-katayama-says-will-aim-to-maintain-orderly-fx-market",
+      "category": "其他",
+      "selected": false
+    },
+    {
+      "candidate_id": "9c2ddbe1db23bcfc",
+      "title": "Fed Latest: Warsh’s speech contrasts with New York Fed president’s take",
+      "title_zh": "Fed Latest: Warsh’s speech contrasts with New York Fed president’s take",
+      "source": "Bloomberg Economics",
+      "published_at": "2026-09-07T11:00:01+00:00",
+      "summary": "Chair Warsh’s speech contrasts with New York Fed president’s take.",
+      "summary_zh": "Chair Warsh’s speech contrasts with New York Fed president’s take.",
+      "url": "https://www.bloomberg.com/news/newsletters/2026-09-07/fed-latest-warsh-s-speech-contrasts-with-new-york-fed-president-s-take",
+      "category": "宏观 / 利率",
+      "selected": false
+    },
+    {
+      "candidate_id": "4a7b091ab7a6f603",
+      "title": "AI cancer cures slowed by chip shortage, says UK's biggest tech boss",
+      "title_zh": "AI cancer cures slowed by chip shortage, says UK's biggest tech boss",
+      "source": "BBC News",
+      "published_at": "2026-09-07T23:05:12+00:00",
+      "summary": "The head of chip designer Arm says modelling how a DNA marker is impacted by cancer cannot be done now, but computers are \"going to solve it\".",
+      "summary_zh": "The head of chip designer Arm says modelling how a DNA marker is impacted by cancer cannot be done now, but computers are \"going to solve it\".",
+      "url": "https://www.bbc.co.uk/news/articles/c0m39g7xzevo?at_medium=RSS&at_campaign=rss",
+      "category": "AI / 科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "16ed74ba7c0c229d",
+      "title": "Yen Climbs to Six-Month High, Chip Stocks Advance: Markets Wrap",
+      "title_zh": "Yen Climbs to Six-Month High, Chip Stocks Advance: Markets Wrap",
+      "source": "Bloomberg Markets",
+      "published_at": "2026-09-07T22:08:43+00:00",
+      "summary": "The yen extended Monday’s rally to reach the strongest level since February, aided by rising expectations of a Bank of Japan interest-rate increase next week. Gains in South Korean chip stocks helped support Asian equities.",
+      "summary_zh": "The yen extended Monday’s rally to reach the strongest level since February, aided by rising expectations of a Bank of Japan interest-rate increase next week. Gains in South Korean chip stocks helped support Asian equities.",
+      "url": "https://www.bloomberg.com/news/articles/2026-09-07/stock-market-today-dow-s-p-live-updates",
+      "category": "AI / 科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "1fca6b5f55b61231",
+      "title": "Data centers in space: Four big obstacles and Elon Musk's ambitious timeline",
+      "title_zh": "Data centers in space: Four big obstacles and Elon Musk's ambitious timeline",
+      "source": "CNBC Top News",
+      "published_at": "2026-09-07T05:56:40+00:00",
+      "summary": "",
+      "summary_zh": "",
+      "url": "https://www.cnbc.com/2026/09/07/data-centers-space-elon-musk-obstacles.html",
+      "category": "AI / 科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "679041afbc51e23d",
+      "title": "Preferred Networks CEO Eyes IPO Amid AI Chip Race",
+      "title_zh": "Preferred Networks CEO Eyes IPO Amid AI Chip Race",
+      "source": "Bloomberg Technology",
+      "published_at": "2026-09-07T12:01:05+00:00",
+      "summary": "Japanese startup Preferred Networks is seeking to go public to mass-produce its chips, reflecting the rising cost and scale needed to stay competitive in the global AI race, CEO Daisuke Okanohara said in an interview with Bloomberg News. (Source: Bloomberg)",
+      "summary_zh": "Japanese startup Preferred Networks is seeking to go public to mass-produce its chips, reflecting the rising cost and scale needed to stay competitive in the global AI race, CEO Daisuke Okanohara said in an interview with Bloomberg News. (Source: Bloomberg)",
+      "url": "https://www.bloomberg.com/news/videos/2026-09-07/preferred-networks-ceo-eyes-ipo-amid-ai-chip-race-video",
+      "category": "AI / 科技",
+      "selected": false
+    },
+    {
+      "candidate_id": "69cad8f3b5a8cff9",
+      "title": "The complex corporate web behind a $3.2 billion AI data center",
+      "title_zh": "The complex corporate web behind a $3.2 billion AI data center",
+      "source": "Ars Technica",
+      "published_at": "2026-09-07T11:00:03+00:00",
+      "summary": "When multiple companies are behind one project, who bears responsibility for problems?",
+      "summary_zh": "When multiple companies are behind one project, who bears responsibility for problems?",
+      "url": "https://arstechnica.com/features/2026/09/the-ai-data-center-boom-is-causing-new-accountability-problems/",
+      "category": "AI / 科技",
+      "selected": false
+    }
+  ],
+  "news_degraded": true,
+  "stage_b_fallback_used": true,
+  "stage_b_ai_selected_count": 2,
+  "stage_b_fallback_selected_count": 6,
+  "stage_b_failed_batch_count": 2,
+  "news_source_diagnostics": [],
+  "event_clustering_diagnostics": {
+    "fallback_used": true,
+    "reason": "batch 2/3: ⚠️ 新闻事件级去重暂时失败，已使用基础去重结果继续生成日报。 原因：Request timed out."
+  },
+  "news_review_diagnostics": {
+    "unselected_candidate_count": 109,
+    "review_candidate_count": 7,
+    "review_filtered_count": 102,
+    "review_translation_requested_count": 7,
+    "review_translation_success_count": 0,
+    "review_translation_failed_count": 7,
+    "review_filtered_candidates": [
+      {
+        "candidate_id": "5429b43f9c904dc6",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "c3b081b16303c603",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "8764a9f011475b5d",
+        "filter_reason": "no_qualifying_signal:topic_group=CORPORATE_EARNINGS"
+      },
+      {
+        "candidate_id": "0e40a21f98bfb4fe",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "def7040efea95b30",
+        "filter_reason": "no_qualifying_signal:topic_group=CORPORATE_EARNINGS"
+      },
+      {
+        "candidate_id": "b6ecf141cac9610c",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "ffa66ae32010c786",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "580f25dcfd3e2d2a",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "287ea331915ba7bd",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "100dbf4194c224ca",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "213b231f7741a814",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "62e767814f4f2ffd",
+        "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
+      },
+      {
+        "candidate_id": "64a7d5c3694507f4",
+        "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
+      },
+      {
+        "candidate_id": "273efa3bcce264ed",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "6830a4e271824f04",
+        "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
+      },
+      {
+        "candidate_id": "fea3272d61e8bad4",
+        "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
+      },
+      {
+        "candidate_id": "eaadb90ec75b9a06",
+        "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
+      },
+      {
+        "candidate_id": "dc0cb61b98065ce8",
+        "filter_reason": "no_qualifying_signal:topic_group=ENERGY_COMMODITIES"
+      },
+      {
+        "candidate_id": "5c9129cd1488d0c8",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "75484a4d663931d0",
+        "filter_reason": "no_qualifying_signal:topic_group=ENERGY_COMMODITIES"
+      },
+      {
+        "candidate_id": "59cec08e80b0bd1c",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "40e59154a811ac07",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "8d7dc77c7e0ca564",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "cb75ae5c9278d7a1",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "cb7ddadcab743a84",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "47b8b151026b0c74",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "e5a8e881dee5e3f8",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "f6f1d24bf32aac27",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "11204b08bfba2bc9",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "dba287c911a4f204",
+        "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
+      },
+      {
+        "candidate_id": "2910ec49bf90ac18",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "23d5e68a01a76f77",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "92b626f48fb03e27",
+        "filter_reason": "no_qualifying_signal:topic_group=ENERGY_COMMODITIES"
+      },
+      {
+        "candidate_id": "634f064de39db6db",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "d6cb5417a4de7f2f",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "9ba6ea54020a8383",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "897de1a6acd2bfa7",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "f8eb702538eb240e",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "bc83b41d5d3de66e",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "d19361928ba8da1c",
+        "filter_reason": "no_qualifying_signal:topic_group=ENERGY_COMMODITIES"
+      },
+      {
+        "candidate_id": "83c6b4844094c0af",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "293684f51b392074",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "7bc256e166b51ed5",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "38801aca0ec7173a",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "0030fc805d42ffa4",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "33d82f310d546797",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "fcbcf5062b86326b",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "a852b79046413faf",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "89cc2387c9855e66",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "c67b1f2da6df10fd",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "b32870e158d492dc",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "5388484182d76131",
+        "filter_reason": "no_qualifying_signal:topic_group=CORPORATE_EARNINGS"
+      },
+      {
+        "candidate_id": "f3883102e52281b4",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "b11f9c6f557e9342",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "176d658e556e3767",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "535d1311c3ece1c1",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "edfa6a373ecad206",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "e5fc70c11301f29d",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "9c5ec95b83dba77a",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "21e7df83c71516c4",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "c1dd369a9ad48550",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "0dc597a890cb78c0",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "bddcde4413320570",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "8b145b57348ecb04",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "d4d8b4d3dd6f713a",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "faf6c20a0b3331e9",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "2a66441ab46975eb",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "037b32ea8729ab72",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "da3054409f3653fa",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "65e83902ff7a4ae9",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "aa7629b690e81db1",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "80c3cfae212f6952",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "a81adfb5936024e2",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "1907ce8ce285a718",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "1c5e2822d4920b2a",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "eee8ed53c63509f0",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "44d249cf7cec3f89",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "a6d15bc96027bd7d",
+        "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
+      },
+      {
+        "candidate_id": "066cc6e9ec7bccb4",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "ce8c63a5d110b9ef",
+        "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
+      },
+      {
+        "candidate_id": "a06e025c456606bc",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "fe52d0ae65057e43",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "e123df9d4aa46e0c",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "e62875692f0eb405",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "20eb5a816fdc91b2",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "3360f71cebd5e40c",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "46c1de5ccbcec3fc",
+        "filter_reason": "no_qualifying_signal:topic_group=GEOPOLITICS"
+      },
+      {
+        "candidate_id": "1ba4f089ae2cf72d",
+        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+      },
+      {
+        "candidate_id": "feb18d7f15583f56",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "f8c3be5a77ca3ce3",
+        "filter_reason": "no_qualifying_signal:topic_group=US_MARKET_MACRO"
+      },
+      {
+        "candidate_id": "38bbcba4af3e97e3",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "4c829f892b232d9e",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "d13e4612d6704ad6",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "c8c3a621f16ba167",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "50e2bad87fbca8c6",
+        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+      },
+      {
+        "candidate_id": "faeb0dc7f42d7737",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "11147936aa911180",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "2be377a0f12f54a1",
+        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+      },
+      {
+        "candidate_id": "fcaefa90288e8259",
+        "filter_reason": "no_qualifying_signal:topic_group=ENERGY_COMMODITIES"
+      },
+      {
+        "candidate_id": "19f64442bc4972f1",
+        "filter_reason": "no_qualifying_signal:topic_group=AI_CHIPS"
+      },
+      {
+        "candidate_id": "0e2b0393e1924727",
+        "filter_reason": "no_qualifying_signal:topic_group=OTHER_SYSTEMIC"
+      },
+      {
+        "candidate_id": "47ae05fd7626c5bf",
+        "filter_reason": "no_qualifying_signal:topic_group=MEGA_CAP_TECH"
+      }
+    ]
+  },
+  "warnings": [
+    "batch 1/5: ⚠️ 新闻 AI 处理暂时失败；RSS 数据已获取，等待下一次更新。原因：timeout: Request timed out.（已使用规则降级结果补足 6 条新闻）"
+  ]
+}
