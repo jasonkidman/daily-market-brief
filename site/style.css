@@ -59,7 +59,21 @@ body{
 .spark svg{width:100%;height:100%;display:block;overflow:visible}
 .spark-hit{cursor:crosshair}
 .spark-guide{stroke:#c3ccd4;stroke-width:1;vector-effect:non-scaling-stroke}
-.spark-marker{fill:#fff;stroke:#15975a;stroke-width:1.6;vector-effect:non-scaling-stroke}
+.spark-line{stroke:var(--green)}
+.spark-stop-a{stop-color:var(--green);stop-opacity:.18}
+.spark-stop-b{stop-color:var(--green);stop-opacity:.08}
+.spark-stop-c{stop-color:var(--green);stop-opacity:0}
+.spark-marker{fill:#fff;stroke:var(--green);stroke-width:1.6;vector-effect:non-scaling-stroke}
+.spark-down .spark-line{stroke:var(--red)}
+.spark-down .spark-stop-a{stop-color:var(--red);stop-opacity:.18}
+.spark-down .spark-stop-b{stop-color:var(--red);stop-opacity:.08}
+.spark-down .spark-stop-c{stop-color:var(--red);stop-opacity:0}
+.spark-down .spark-marker{stroke:var(--red)}
+.spark-flat .spark-line{stroke:var(--text)}
+.spark-flat .spark-stop-a{stop-color:var(--text);stop-opacity:.18}
+.spark-flat .spark-stop-b{stop-color:var(--text);stop-opacity:.08}
+.spark-flat .spark-stop-c{stop-color:var(--text);stop-opacity:0}
+.spark-flat .spark-marker{stroke:var(--text)}
 .spark-tooltip{
   position:absolute;top:-6px;transform:translate(-50%,-100%);
   background:#fff;border:1px solid var(--line);border-radius:8px;

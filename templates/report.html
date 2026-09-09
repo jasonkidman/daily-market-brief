@@ -100,17 +100,17 @@
           <div class="ytd {{ ytd_direction }}">{{ item.ytd_return|percent(true) }} <span class="small">YTD</span></div>
         </div>
         {% if item.sparkline %}
-        <div class="spark" data-spark{% if item.sparkline.points %} data-points='{{ item.sparkline.points|tojson }}'{% endif %}>
+        <div class="spark spark-{{ direction }}" data-spark{% if item.sparkline.points %} data-points='{{ item.sparkline.points|tojson }}'{% endif %}>
           <svg viewBox="0 0 420 52" preserveAspectRatio="none">
             <defs>
               <linearGradient id="spark-{{ key }}" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#15975a" stop-opacity="0.18"/>
-                <stop offset="55%" stop-color="#15975a" stop-opacity="0.08"/>
-                <stop offset="100%" stop-color="#15975a" stop-opacity="0"/>
+                <stop class="spark-stop-a" offset="0%"/>
+                <stop class="spark-stop-b" offset="55%"/>
+                <stop class="spark-stop-c" offset="100%"/>
               </linearGradient>
             </defs>
             <path d="{{ item.sparkline.area }}" fill="url(#spark-{{ key }})"/>
-            <path d="{{ item.sparkline.line }}" fill="none" stroke="#15975a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path class="spark-line" d="{{ item.sparkline.line }}" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <line class="spark-guide" x1="0" y1="0" x2="0" y2="52" hidden />
             <circle class="spark-marker" r="3.2" hidden />
             <rect class="spark-hit" x="0" y="0" width="420" height="52" fill="transparent" />
