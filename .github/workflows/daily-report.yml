@@ -2,7 +2,10 @@ name: Daily Market Report
 
 on:
   schedule:
-    - cron: "0 22 * * *"
+    # UTC 周日~周五 22:00 = Asia/Shanghai 周一~周六 06:00。星期字段比直觉早一天，
+    # 因为 22:00 UTC 加 8 小时已跨天；写成 1-6 会变成北京时间周二至周日。
+    # 跳过北京时间周日：那天美股无新收盘，报告内容与周六重复。
+    - cron: "0 22 * * 0-5"
   repository_dispatch:
     types: [daily-brief-trigger]
   workflow_dispatch:
