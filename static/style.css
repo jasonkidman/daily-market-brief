@@ -80,7 +80,7 @@ body{
 .summary-copy{font-size:15px;line-height:1.65;color:#38536a}
 
 /* 今日策略：采用已确认的第一版标签式样 */
-.strategy{padding:20px 18px 0;display:flex;flex-direction:column}
+.strategy{padding:20px 18px 0;display:flex;flex-direction:column;justify-content:space-evenly}
 .strategy-title{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:800}
 .target{width:34px;height:34px;border-radius:50%;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center}
 .strategy-main{padding:16px 0 18px}
@@ -121,7 +121,7 @@ body{
 .strategy-row .value{font-weight:800}
 .strategy-row .value.good{color:var(--green)}
 .strategy-row .value.critical{color:var(--red)}
-.strategy-link{margin-top:auto;border:0;border-top:1px solid var(--line-soft);background:none;width:100%;text-align:center;padding:17px 0 18px;font-size:13px;color:var(--blue);font-weight:700;cursor:pointer;font-family:inherit}
+.strategy-link{border:0;border-top:1px solid var(--line-soft);background:none;width:100%;text-align:center;padding:17px 0 18px;font-size:13px;color:var(--blue);font-weight:700;cursor:pointer;font-family:inherit}
 .strategy-link:hover{color:#194b73}
 .strategy-link:focus-visible{outline:2px solid rgba(47,111,179,.35);outline-offset:2px}
 
@@ -150,13 +150,14 @@ section{margin-top:26px}
 .empty,.unavailable{margin:0;padding:16px 20px;color:var(--muted);font-size:13px}
 
 .metric-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-.metric{padding:16px}
-.metric-name{color:#587084;font-size:12px;font-weight:700}
-.metric-value{margin-top:4px;font-size:24px;font-weight:800}
-.metric-change{margin-top:5px;font-size:13px;font-weight:800}
+.metric{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.metric-name{color:#587084;font-size:12px;font-weight:700;min-width:0}
+.metric-figures{flex:0 0 auto;text-align:right}
+.metric-value{font-size:20px;font-weight:800;white-space:nowrap}
+.metric-change{margin-top:2px;font-size:12px;font-weight:800;white-space:nowrap}
 .up{color:var(--green)} .down{color:var(--red)} .flat{color:var(--text)}
 
-.breadth{display:grid;grid-template-columns:1.1fr 1.35fr 1fr;overflow:hidden}
+.breadth{display:grid;grid-template-columns:1.1fr 1.6fr 0.9fr;overflow:hidden}
 .breadth>div{padding:18px}
 .breadth>div+div{border-left:1px solid var(--line-soft)}
 .breadth h4,.risk-card h4{margin:0 0 12px;font-size:13px}
@@ -175,6 +176,9 @@ section{margin-top:26px}
 .gauge-text strong{display:block;font-size:28px}
 .gauge-text span{color:var(--green);font-size:12px}
 .gauge-text.unavailable strong,.gauge-text.unavailable span{color:var(--muted)}
+.sentiment-breakdown{margin-top:16px;display:grid;gap:8px}
+.sentiment-row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+.sentiment-row span:last-child{font-weight:700;color:var(--text)}
 
 .risk-grid{display:grid;grid-template-columns:1fr 1.1fr 1.1fr 1fr;gap:10px}
 .risk-card{padding:16px}

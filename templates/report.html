@@ -200,17 +200,23 @@
       {% if key == 'us10y' %}
       {% set change = item.get('yield_change_bp') %}
       {% set direction = 'up' if change is not none and change >= 0 else 'down' %}
-      <div class="metric-value">{{ item.close|number }}%</div>
-      <div class="metric-change {{ direction }}">{% if direction == 'up' %}▲{% else %}▼{% endif %} {{ '%+.0f'|format(change) }}bp</div>
+      <div class="metric-figures">
+        <div class="metric-value">{{ item.close|number }}%</div>
+        <div class="metric-change {{ direction }}">{% if direction == 'up' %}▲{% else %}▼{% endif %} {{ '%+.0f'|format(change) }}bp</div>
+      </div>
       {% else %}
       {% set change = item.get('daily_return') %}
       {% set direction = 'up' if change is not none and change > 0 else ('down' if change is not none and change < 0 else 'flat') %}
-      <div class="metric-value">{{ item.close|number }}</div>
-      <div class="metric-change {{ direction }}">{% if direction == 'up' %}▲{% elif direction == 'down' %}▼{% else %}→{% endif %} {{ item.daily_return|percent(true) }}</div>
+      <div class="metric-figures">
+        <div class="metric-value">{{ item.close|number }}</div>
+        <div class="metric-change {{ direction }}">{% if direction == 'up' %}▲{% elif direction == 'down' %}▼{% else %}→{% endif %} {{ item.daily_return|percent(true) }}</div>
+      </div>
       {% endif %}
       {% else %}
-      <div class="metric-value">—</div>
-      <div class="metric-change">数据暂不可用</div>
+      <div class="metric-figures">
+        <div class="metric-value">—</div>
+        <div class="metric-change">数据暂不可用</div>
+      </div>
       {% endif %}
     </div>
     {% endfor %}
@@ -226,8 +232,11 @@
     <div>
       <h4>美股上涨比例（按市值）</h4>
       <div class="big-green">{{ stocks.advance_ratio|percent }}</div>
-      <div class="risk-note">上涨 <strong>{{ stocks.advancers }}</strong>　 下跌 <strong>{{ stocks.decliners }}</strong></div>
+      <div class="risk-note">上涨 <strong>{{ stocks.advancers }}</strong>　 下跌 <strong>{{ stocks.decliners }}</strong>{% if stocks.get('unchanged') is not none %}　 平盘 <strong>{{ stocks.unchanged }}</strong>{% endif %}</div>
       <div class="ratio" style="background:linear-gradient(90deg,#16a05d 0 {{ (stocks.advance_ratio * 100)|round(1) }}%,#e04a45 {{ (stocks.advance_ratio * 100)|round(1) }}% 100%)"></div>
+      {% if stocks.get('coverage_ratio') is not none %}
+      <div class="risk-note" style="margin-top:14px">数据覆盖 {{ (stocks.coverage_ratio * 100)|round(1) }}%（{{ stocks.valid_count }}/{{ stocks.total_constituents }} 只成分股）</div>
+      {% endif %}
     </div>
     <div>
       <h4>板块表现（1日）</h4>
@@ -251,6 +260,14 @@
       {% set gauge_fill = '#26a467' if sentiment_score is not none else '#c3cdd6' %}
       <div class="gauge"><div class="gauge-circle" style="background:conic-gradient(from 270deg at 50% 100%,{{ gauge_fill }} 0deg {{ gauge_deg|round(1) }}deg,#e5eaee {{ gauge_deg|round(1) }}deg 180deg)"></div></div>
       <div class="gauge-text{% if sentiment_score is none %} unavailable{% endif %}"><strong>{{ sentiment_score|round|int if sentiment_score is not none else '—' }}</strong><span>{{ sentiment.get('market_sentiment_label') or '数据不足，暂无法评分' }}</span></div>
+      {% if sentiment_score is not none %}
+      <div class="sentiment-breakdown">
+        <div class="sentiment-row"><span>VIX</span><span>{{ sentiment.get('vix_score')|round|int if sentiment.get('vix_score') is not none else '—' }}</span></div>
+        <div class="sentiment-row"><span>市场广度</span><span>{{ sentiment.get('breadth_score')|round|int if sentiment.get('breadth_score') is not none else '—' }}</span></div>
+        <div class="sentiment-row"><span>动量</span><span>{{ sentiment.get('momentum_score')|round|int if sentiment.get('momentum_score') is not none else '—' }}</span></div>
+        <div class="sentiment-row"><span>风险偏好</span><span>{{ sentiment.get('risk_appetite_score')|round|int if sentiment.get('risk_appetite_score') is not none else '—' }}</span></div>
+      </div>
+      {% endif %}
     </div>
   </div>
   {% else %}
