@@ -86,7 +86,9 @@ def test_renders_one_news_item_per_report_entry(tmp_path):
     render(reports, site)
 
     html = (site / "index.html").read_text(encoding="utf-8")
-    assert html.count('class="news-item"') == 8
+    # Top 3 ranked items get extra visual weight ("news-item-featured"); the rest stay plain.
+    assert html.count('class="news-item news-item-featured"') == 3
+    assert html.count('class="news-item"') == 5
     assert "今日重要新闻" in html
     assert "（按重要性排序）" in html
     assert 'href="https://persisted.example/news-1"' in html

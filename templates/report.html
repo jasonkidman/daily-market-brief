@@ -169,7 +169,7 @@
     <div class="alert">⚠️ 新闻 AI 筛选超时，已使用规则降级结果</div>
     {% endif %}
     {% for item in report.news %}
-    <div class="news-item">
+    <div class="news-item{% if loop.index <= 3 %} news-item-featured{% endif %}">
       <div class="rank">{{ item.rank }}</div>
       <div>
         <div class="category">{{ item.category }}</div>
