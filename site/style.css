@@ -139,7 +139,7 @@ body{
 .strategy-link:hover{color:#194b73}
 .strategy-link:focus-visible{outline:2px solid rgba(47,111,179,.35);outline-offset:2px}
 
-section{margin-top:26px}
+section{margin-top:40px}
 .section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .section-title{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800}
 .bar{width:4px;height:22px;border-radius:2px;background:#3a8bc7}
