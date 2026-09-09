@@ -167,11 +167,10 @@ section{margin-top:40px}
 .empty,.unavailable{margin:0;padding:16px 20px;color:var(--muted);font-size:13px}
 
 .metric-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-.metric{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.metric-name{color:#587084;font-size:12px;font-weight:700;min-width:0}
-.metric-figures{flex:0 0 auto;text-align:right}
-.metric-value{font-size:20px;font-weight:800;white-space:nowrap}
-.metric-change{margin-top:2px;font-size:12px;font-weight:800;white-space:nowrap}
+.metric{padding:16px}
+.metric-name{color:#587084;font-size:12px;font-weight:700}
+.metric-value{margin-top:4px;font-size:24px;font-weight:800}
+.metric-change{margin-top:5px;font-size:13px;font-weight:800}
 .up{color:var(--green)} .down{color:var(--red)} .flat{color:var(--text)}
 
 .breadth{display:grid;grid-template-columns:1.1fr 1.6fr 0.9fr;overflow:hidden}

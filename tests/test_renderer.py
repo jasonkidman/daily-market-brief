@@ -717,7 +717,7 @@ def test_v5_visual_contract_is_the_rendered_dom_and_css_baseline(tmp_path):
     assert ".sp500-day-change{font-size:29px}" in compact_css
     assert ".day-change{font-weight:800;font-size:22px}" in compact_css
     assert ".strategy-mainstrong{" in compact_css and "font-size:34px" in compact_css
-    assert ".metric-value{font-size:20px" in compact_css
+    assert ".metric-value{margin-top:4px;font-size:24px" in compact_css
     assert ".section-title{display:flex;align-items:center;gap:10px;font-size:20px" in compact_css
     assert "@media(max-width:1100px)" in compact_css
     assert "@media(max-width:760px)" in compact_css

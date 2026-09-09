@@ -200,23 +200,17 @@
       {% if key == 'us10y' %}
       {% set change = item.get('yield_change_bp') %}
       {% set direction = 'up' if change is not none and change >= 0 else 'down' %}
-      <div class="metric-figures">
-        <div class="metric-value">{{ item.close|number }}%</div>
-        <div class="metric-change {{ direction }}">{% if direction == 'up' %}▲{% else %}▼{% endif %} {{ '%+.0f'|format(change) }}bp</div>
-      </div>
+      <div class="metric-value">{{ item.close|number }}%</div>
+      <div class="metric-change {{ direction }}">{% if direction == 'up' %}▲{% else %}▼{% endif %} {{ '%+.0f'|format(change) }}bp</div>
       {% else %}
       {% set change = item.get('daily_return') %}
       {% set direction = 'up' if change is not none and change > 0 else ('down' if change is not none and change < 0 else 'flat') %}
-      <div class="metric-figures">
-        <div class="metric-value">{{ item.close|number }}</div>
-        <div class="metric-change {{ direction }}">{% if direction == 'up' %}▲{% elif direction == 'down' %}▼{% else %}→{% endif %} {{ item.daily_return|percent(true) }}</div>
-      </div>
+      <div class="metric-value">{{ item.close|number }}</div>
+      <div class="metric-change {{ direction }}">{% if direction == 'up' %}▲{% elif direction == 'down' %}▼{% else %}→{% endif %} {{ item.daily_return|percent(true) }}</div>
       {% endif %}
       {% else %}
-      <div class="metric-figures">
-        <div class="metric-value">—</div>
-        <div class="metric-change">数据暂不可用</div>
-      </div>
+      <div class="metric-value">—</div>
+      <div class="metric-change">数据暂不可用</div>
       {% endif %}
     </div>
     {% endfor %}
