@@ -91,4 +91,4 @@ Page-level status (`ok`/`partial`/`critical`) is derived from `validity_summary`
 
 ## CI
 
-`.github/workflows/daily-report.yml` runs daily at UTC `0 1 * * *` (09:00 Asia/Shanghai), and `.github/workflows/confirm-drawdown.yml` is manually triggered after a real top-up buy. Both share the `investment-report-state` concurrency group with `cancel-in-progress: false` to avoid concurrent state mutation. The daily workflow only commits `data/reports/`, `state/`, `site/` and only deploys Pages when `core_market_valid` is true for that day's report.
+`.github/workflows/daily-report.yml` runs daily at UTC `0 22 * * *` (06:00 Asia/Shanghai), and `.github/workflows/confirm-drawdown.yml` is manually triggered after a real top-up buy. Both share the `investment-report-state` concurrency group with `cancel-in-progress: false` to avoid concurrent state mutation. The daily workflow only commits `data/reports/`, `state/`, `site/` and only deploys Pages when `core_market_valid` is true for that day's report.

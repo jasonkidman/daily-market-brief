@@ -13,7 +13,7 @@ def load_workflow(name):
 def test_daily_workflow_commits_then_deploys_site_to_github_pages():
     workflow = load_workflow("daily-report.yml")
     text = (ROOT / ".github" / "workflows" / "daily-report.yml").read_text(encoding="utf-8")
-    assert 'cron: "0 1 * * *"' in text
+    assert 'cron: "0 22 * * *"' in text
     assert "timezone:" not in text
     assert workflow["concurrency"]["group"] == "investment-report-state"
     assert workflow["concurrency"]["cancel-in-progress"] is False
