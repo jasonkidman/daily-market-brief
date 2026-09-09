@@ -91,7 +91,7 @@ body{
 .summary-text{display:flex;gap:14px;padding:16px 22px 18px;align-items:flex-start}
 .summary-icon{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#edf3f7;color:#5d7d99;flex:0 0 auto;font-size:18px}
 .summary-title{font-weight:800;font-size:16px;margin-bottom:4px}
-.summary-copy{font-size:15px;line-height:1.65;color:#38536a;column-width:34ch;column-gap:32px}
+.summary-copy{font-size:15px;line-height:1.65;color:#38536a}
 
 /* 今日策略：采用已确认的第一版标签式样 */
 .strategy{padding:20px 18px 0;display:flex;flex-direction:column;justify-content:space-evenly}
