@@ -226,10 +226,16 @@
     <div>
       <h4>美股上涨比例（按市值）</h4>
       <div class="big-green">{{ stocks.advance_ratio|percent }}</div>
-      <div class="risk-note">上涨 <strong>{{ stocks.advancers }}</strong>　 下跌 <strong>{{ stocks.decliners }}</strong>{% if stocks.get('unchanged') is not none %}　 平盘 <strong>{{ stocks.unchanged }}</strong>{% endif %}</div>
+      <div class="advance-stats">
+        <div class="advance-stat"><span>上涨</span><strong class="up">{{ stocks.advancers }}</strong></div>
+        <div class="advance-stat"><span>下跌</span><strong class="down">{{ stocks.decliners }}</strong></div>
+        {% if stocks.get('unchanged') is not none %}
+        <div class="advance-stat"><span>平盘</span><strong>{{ stocks.unchanged }}</strong></div>
+        {% endif %}
+      </div>
       <div class="ratio" style="background:linear-gradient(90deg,#16a05d 0 {{ (stocks.advance_ratio * 100)|round(1) }}%,#e04a45 {{ (stocks.advance_ratio * 100)|round(1) }}% 100%)"></div>
       {% if stocks.get('coverage_ratio') is not none %}
-      <div class="risk-note">数据覆盖 {{ (stocks.coverage_ratio * 100)|round(1) }}%（{{ stocks.valid_count }}/{{ stocks.total_constituents }} 只成分股）</div>
+      <div class="risk-note advance-coverage">数据覆盖 {{ (stocks.coverage_ratio * 100)|round(1) }}%（{{ stocks.valid_count }}/{{ stocks.total_constituents }} 只成分股）</div>
       {% endif %}
     </div>
     <div>

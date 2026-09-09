@@ -175,11 +175,16 @@ section{margin-top:40px}
 
 .breadth{display:grid;grid-template-columns:1.1fr 1.6fr 0.9fr;overflow:hidden}
 .breadth>div{padding:18px}
-.breadth>div:first-child{display:flex;flex-direction:column;justify-content:space-evenly}
+.breadth>div:first-child{display:flex;flex-direction:column}
+.advance-stats{display:flex;flex-wrap:wrap;gap:18px;margin-top:12px}
+.advance-stat{display:flex;align-items:baseline;gap:6px}
+.advance-stat span{color:#60778c;font-size:12px}
+.advance-stat strong{font-size:15px;font-weight:800}
 .breadth>div+div{border-left:1px solid var(--line-soft)}
 .breadth h4,.risk-card h4{margin:0 0 12px;font-size:13px}
-.big-green{font-size:30px;font-weight:800;color:var(--green)}
+.big-green{font-size:32px;font-weight:800;color:var(--green);line-height:1}
 .risk-note{margin-top:10px;color:#6f8396;font-size:12px;line-height:1.55}
+.advance-coverage{margin-top:auto}
 .ratio{margin-top:8px;height:8px;border-radius:6px;background:linear-gradient(90deg,#16a05d 0 70%,#e04a45 70% 100%)}
 .sector-row{display:grid;grid-template-columns:78px 1fr 58px;gap:10px;align-items:center;margin:8px 0;font-size:12px}
 .sector-bar{height:6px;border-radius:4px;background:#dfe7ed;overflow:hidden}
