@@ -49,9 +49,13 @@ SHANGHAI = ZoneInfo("Asia/Shanghai")
 # candidates cleared its bar, with no top-level cap (see the removed
 # select_news_with_fallback's "no artificial maximum item count" test). Recent
 # real daily counts ran 7-12 (excluding total-failure days); 10 sits inside
-# that range as Layer 1's new pure-code cutoff. Tune here, not by re-deriving
+# that range as Layer 1's upper bound. Tune here, not by re-deriving
 # from scratch.
 NEWS_TOP_N = 10
+# 70-79 is the scoring rubric's first "clearly worth following" band.
+# The top-N cap must not force merely related stories into the daily brief.
+NEWS_MIN_SCORE = 70
+NEWS_PRIORITY_EVENT_MIN_SCORE = 50
 
 # A single supplementary (non-P0) RSS source failing should not, by itself,
 # flip the page-top status banner as long as the remaining sources still
@@ -128,16 +132,41 @@ def _rank_by_score(candidates: list[dict]) -> list[dict]:
     )
 
 
+def _is_priority_starship_event(item: dict) -> bool:
+    """Keep substantive Starship flight news visible for this report's audience."""
+    title = (item.get("title") or "").lower()
+    return (
+        "spacex" in title
+        and "starship" in title
+        and any(term in title for term in ("flight", "launch", "orbit", "mission", "test"))
+        and not any(term in title for term in ("ups and downs", "previous", "history", "recap", "look back"))
+    )
+
+
 def _select_top_news(scored_candidates: list[dict], limit: int) -> list[dict]:
     """Code, not the model, decides how many candidates make "今日重要新闻" and
-    in what order: sort by score descending (unscored candidates always sort
-    last), then take the top `limit`. Ties keep their incoming relative order
-    -- there is no secondary ranking signal here by design, matching the
-    plan's literal sort/select contract. (Near-duplicate suppression, when
-    it happens, is applied by the caller *before* this function via
+    in what order: keep scores in the rubric's clearly-relevant band and
+    substantive Starship flight news with a moderate score, then take at most
+    `limit` in score order. Ties keep their incoming relative order
+    -- a priority exception changes eligibility, not the score or order.
+    (Near-duplicate suppression, when it happens, is applied by the caller *before* this function via
     news_top_dedup -- this function only ever sorts and slices.)"""
-    ranked = _rank_by_score(scored_candidates)
-    return [{**item, "rank": rank} for rank, item in enumerate(ranked[:limit], start=1)]
+    eligible = [
+        item for item in scored_candidates
+        if item.get("score") is not None and (
+            item["score"] >= NEWS_MIN_SCORE
+            or (item["score"] >= NEWS_PRIORITY_EVENT_MIN_SCORE and _is_priority_starship_event(item))
+        )
+    ]
+    ranked = _rank_by_score(eligible)
+    return [
+        {
+            **item,
+            "rank": rank,
+            **({"selection_basis": "starship_priority"} if item["score"] < NEWS_MIN_SCORE else {}),
+        }
+        for rank, item in enumerate(ranked[:limit], start=1)
+    ]
 
 
 def replay_scoring_snapshot(snapshot_path: Path, api_key: str) -> list[dict]:

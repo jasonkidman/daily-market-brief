@@ -76,10 +76,9 @@ def test_replay_restores_same_candidates_without_rss_or_clustering(tmp_path, mon
 
     result = main.replay_scoring_snapshot(path, api_key="test-key")
 
-    # score_candidates() returned no results, so the one candidate surfaces
-    # unscored (score=None) rather than being dropped -- see _merge_scores.
-    assert [item["candidate_id"] for item in result] == ["event-1"]
-    assert result[0]["score"] is None
+    # Replay restores the exact input pool, but unscored items cannot enter
+    # today's important news after the relevance gate.
+    assert result == []
     assert calls["candidates"] == sample_snapshot()["stage_b"]["candidates"]
     assert calls["focus_rules"]
     assert not (tmp_path / "data" / "reports").exists()

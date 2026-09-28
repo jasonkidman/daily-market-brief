@@ -27,6 +27,43 @@ def test_news_pipeline_logs_distinct_stage_counts(capsys):
     assert "scoring_input_count: 0" in output
 
 
+def test_top_news_keeps_only_clearly_relevant_scored_items():
+    candidates = [
+        {"candidate_id": "media", "score": 62},
+        {"candidate_id": "space", "score": 70},
+        {"candidate_id": "macro", "score": 91},
+        {"candidate_id": "unscored", "score": None},
+    ]
+
+    selected = main._select_top_news(candidates, limit=10)
+
+    assert [(item["candidate_id"], item["rank"]) for item in selected] == [
+        ("macro", 1), ("space", 2),
+    ]
+
+
+def test_top_news_keeps_the_ten_item_cap_above_relevance_floor():
+    candidates = [{"candidate_id": str(i), "score": 80 - i} for i in range(12)]
+
+    selected = main._select_top_news(candidates, limit=10)
+
+    assert [item["candidate_id"] for item in selected] == [str(i) for i in range(10)]
+
+
+def test_substantive_spacex_starship_flight_is_selected_ahead_of_unrelated_media_story():
+    candidates = [
+        {"candidate_id": "media", "title": "Paramount Warner Deal Tests Hollywood's Future", "summary": "Industry analysis", "score": 62},
+        {"candidate_id": "space", "title": "SpaceX Starship Flight 14 attempts to reach orbit", "summary": "Launch mission", "score": 61},
+        {"candidate_id": "smalltalk", "title": "SpaceX executive discusses favorite films", "summary": "Interview", "score": 58},
+        {"candidate_id": "recap", "title": "Watch: The ups and downs of SpaceX's 13 Starship test flights", "summary": "Previous flights reviewed", "score": 58},
+    ]
+
+    selected = main._select_top_news(candidates, limit=10)
+
+    assert [item["candidate_id"] for item in selected] == ["space"]
+    assert selected[0]["score"] == 61  # Keep the model's raw score auditable.
+
+
 def test_recent_news_events_supports_legacy_and_v2_reports():
     events = _recent_news_events([
         {"report_date": "2026-08-12", "news": [{
@@ -402,6 +439,7 @@ def test_report_news_candidates_covers_the_full_scored_pool_with_selected_flag(t
          "published_at": "2026-08-12T03:00:00+00:00", "topic_group": "OTHER_SYSTEMIC"},
     ]
     _patch_common_pipeline(monkeypatch, snapshots, histories, contexts, breadth_config, selection_candidates)
+    monkeypatch.setattr(main, "dedupe_top_candidates", lambda *args, **kwargs: {})
     scores = {
         "c1": {"score": 92, "category": "美联储 / 利率", "title_zh": "美联储维持利率", "summary_zh": "摘要", "reason": ""},
         "c2": {"score": 60, "category": "半导体", "title_zh": "英伟达推出新芯片", "summary_zh": "摘要2中文", "reason": ""},
@@ -417,11 +455,11 @@ def test_report_news_candidates_covers_the_full_scored_pool_with_selected_flag(t
     assert candidates_by_id["c1"]["selected"] is True
     assert candidates_by_id["c1"]["category"] == "宏观 / 利率"
     assert candidates_by_id["c1"]["title_zh"] == "美联储维持利率"
-    assert candidates_by_id["c2"]["selected"] is True
+    assert candidates_by_id["c2"]["selected"] is False
     assert candidates_by_id["c2"]["category"] == "AI / 科技"
-    assert candidates_by_id["c3"]["selected"] is True
-    # All three scored candidates fit within NEWS_TOP_N, so all three are "selected".
-    assert [item["candidate_id"] for item in report["news"]] == ["c1", "c2", "c3"]
+    assert candidates_by_id["c3"]["selected"] is False
+    # The candidate pool retains lower-scored stories, but the brief does not pad to ten.
+    assert [item["candidate_id"] for item in report["news"]] == ["c1"]
 
 
 def test_report_generation_falls_back_to_english_when_scoring_omits_a_candidate(tmp_path, monkeypatch):

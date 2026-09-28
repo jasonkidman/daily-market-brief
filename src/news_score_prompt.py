@@ -35,6 +35,9 @@ def build_system_prompt(focus_text: str, categories: Iterable[str]) -> str:
 3. 用户关注度：{focus_text.strip()}
 4. 事件新鲜度：新进展 or 既有事件的重复报道
 
+“有助于某家公司股价定价”本身不能代替用户关注度；对重点跟踪对象的重要里程碑也不能只因
+短期公开市场影响有限而压低分数。报道发布时间新，不等于事件本身有新进展。
+
 【分类】category 必须从以下类别中选择一个：{categories_text}
 - 与追踪的大型科技公司（Apple / Microsoft / Alphabet / Amazon / Meta / Nvidia /
   Tesla / SpaceX）相关的事件，即使是监管调查、诉讼、内容安全等非财务性质，
