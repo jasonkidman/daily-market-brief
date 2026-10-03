@@ -103,6 +103,58 @@
         "ath": 30732.396484375,
         "date": "2026-09-22"
       }
+    },
+    {
+      "index": "nasdaq100",
+      "name": "Nasdaq-100",
+      "cycle_id": "nasdaq100-2026-09-22-307323965",
+      "started_at": "2026-09-23T07:53:31.837012+08:00",
+      "ath": 30732.396484375,
+      "ath_date": "2026-09-22",
+      "last_market_date": "2026-10-01",
+      "last_updated_at": "2026-10-02T09:07:26.875856+08:00",
+      "current_close": 30501.560546875,
+      "current_drawdown": 0.007511159685101743,
+      "pool": 60000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.15,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.3,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.4,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "ended_at": "2026-10-03T08:46:52.834117+08:00",
+      "ended_by_new_ath": {
+        "ath": 30807.931640625,
+        "date": "2026-10-02"
+      }
     }
   ]
 }
