@@ -207,6 +207,110 @@
         "ath": 31076.44140625,
         "date": "2026-10-05"
       }
+    },
+    {
+      "index": "sp500",
+      "name": "S&P 500",
+      "cycle_id": "sp500-2026-08-13-77989902",
+      "started_at": "2026-08-14T10:42:09.022326+08:00",
+      "ath": 7798.990234375,
+      "ath_date": "2026-08-13",
+      "last_market_date": "2026-10-05",
+      "last_updated_at": "2026-10-06T09:57:31.102981+08:00",
+      "current_close": 7773.9501953125,
+      "current_drawdown": 0.0032106770633116843,
+      "pool": 140000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.1,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.15,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 42000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.25,
+          "allocation": 0.2,
+          "amount": 28000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "ended_at": "2026-10-07T09:03:38.901441+08:00",
+      "ended_by_new_ath": {
+        "ath": 7818.93017578125,
+        "date": "2026-10-06"
+      }
+    },
+    {
+      "index": "nasdaq100",
+      "name": "Nasdaq-100",
+      "cycle_id": "nasdaq100-2026-10-05-310764414",
+      "started_at": "2026-10-06T09:57:31.102981+08:00",
+      "ath": 31076.44140625,
+      "ath_date": "2026-10-05",
+      "last_market_date": "2026-10-05",
+      "last_updated_at": "2026-10-06T09:57:31.102981+08:00",
+      "current_close": 31076.44140625,
+      "current_drawdown": 0.0,
+      "pool": 60000,
+      "tiers": {
+        "tier_1": {
+          "threshold": 0.15,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_2": {
+          "threshold": 0.2,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_3": {
+          "threshold": 0.3,
+          "allocation": 0.3,
+          "amount": 18000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        },
+        "tier_4": {
+          "threshold": 0.4,
+          "allocation": 0.2,
+          "amount": 12000,
+          "status": "not_triggered",
+          "triggered_at": null,
+          "executed_at": null
+        }
+      },
+      "ended_at": "2026-10-07T09:03:38.901441+08:00",
+      "ended_by_new_ath": {
+        "ath": 31224.685546875,
+        "date": "2026-10-06"
+      }
     }
   ]
 }
